@@ -1,0 +1,34 @@
+<meta charset="utf-8">
+
+<div class="col-sm-3 sidenav">
+    <h4>GetBasket</h4>
+    <ul class="nav nav-pills nav-stacked">
+		<li class="active">
+			<a href="#">
+				Inicio 
+				<span class="sr-only">(current)</span>
+			</a>
+		</li>
+		<li>
+			<a href="{% url 'materiais:index' %}">
+				Materiais
+			</a>
+		</li>
+		<li>
+			<a href="{% url 'produtos:index' %}">
+				Produtos
+			</a>
+		</li>
+		<li>
+			<a href="{% url 'orcamentos:index' %}">
+				Orçamentos
+			</a>
+		</li>		
+		<li>
+			<a href="{% url 'autenticacao:logout_view' %}">
+				Sair
+			</a>
+		</li>
+	</ul>
+    <br>
+ </div>
