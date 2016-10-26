@@ -1,0 +1,17 @@
+<meta charset="utf-8">
+{% extends "base_page.html" %}
+{% block content %}
+<h1>Login</h1>
+<form action="{% url 'autenticacao:login' %}" method="post">
+	{% csrf_token %}
+	<div class="input-group">
+		  <span class="input-group-addon" id="basic-addon1">Login</span>
+		  <input type="text" class="form-control" name="login">
+	</div>
+	<div class="input-group">
+		  <span class="input-group-addon" id="basic-addon1">Senha</span>
+		  <input type="password" class="form-control" name="senha">
+	</div>
+	<button class="btn-default">Logar</button>
+</form>
+{% endblock %}
