@@ -1,0 +1,47 @@
+<meta charset="utf-8">
+{% extends "base_page.html" %}
+
+{% block content %}
+
+<style>
+table tr {
+    cursor: pointer;
+}
+</style>
+
+<form class="navbar-form" action="{% url 'recursos:novo' %}" method="post">
+	{% csrf_token %} 
+	<button class="btn btn-default" value="Novo">Novo</button>
+</form>
+
+<table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Endereço</th>
+        <th>Cidade</th>
+        <th>Estado</th>
+        <th>CEP</th>
+        <th>Salário</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for funcionario in funcionarios %}
+      <tr href="{% url 'recursos:editar' funcionario.id %}">
+        <td>{{funcionario.nome}}</td>
+        <td>{{funcionario.endereco}}</td>
+        <td>{{funcionario.cidade}}</td>
+        <td>{{funcionario.estado}}</td>
+        <td>{{funcionario.cep}}</td>
+        <td>{{funcionario.salario}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+  <script type="text/javascript">
+  	$('table tr').on('click', function () {
+  		window.location.replace($(this).attr('href'));	
+  	});
+  </script>
+{% endblock %}
