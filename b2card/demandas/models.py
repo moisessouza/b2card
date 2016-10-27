@@ -10,6 +10,8 @@ class Demanda(models.Model):
     numero_demanda = models.CharField(max_length=30)
     coordenador = models.ForeignKey(Funcionario, blank=False)
     nomde_documento_resumido = models.CharField(max_length=30)
+    informacoes_nfe = models.TextField()
+    observacoes = models.TextField()
 
 class Orcamento(models.Model):
     data_orcamento = models.DateField()
@@ -22,3 +24,13 @@ class Propostas(models.Model):
     eh_corrente = models.BooleanField()
     demanda = models.ForeignKey(Demanda, blank = False)
     
+class Atividades(models.Model):
+    descricao_atividade = models.CharField(max_length=30)
+    responsavel = models.ForeignKey(Funcionario, blank=False)
+    tipo_atividade = models.CharField(max_length=30)
+    demanda = models.ForeignKey(Demanda, blank=False)
+       
+class DespesasExtras(models.Model):
+    descricao = models.CharField(max_length=30)
+    tipo_despesa = models.CharField(max_length=30)
+    valor = models.FloatField(max_length=10)

@@ -5,5 +5,5 @@ from django.shortcuts import render
 def index(request):
     return render(request, 'demandas/index.html')
     
-def editar(request):
-    pass
+def novo(request):
+    return render(request, 'demandas/demanda.html')
