@@ -4,6 +4,7 @@
 {% block script %}
 	<script src="/static/js/apps/demandas/demandas.js"></script>
 	<script src="/static/js/apps/demandas/demandas-services.js"></script>
+	<script src="/static/js/angular/ui-bootstrap-tpls-2.2.0.min.js"></script>
 {% endblock %}
 
 {%block content%}
@@ -12,12 +13,82 @@
 
 <h1>Demanda</h1>
 
-<form ng-app="demandas" ng-controller="DemandaController">
-  <div class="form-group">
-    <label for="cliente">Cliente</label>
-    <select id="cliente" class="form-control" ng-model="demanda.cliente.id" ng-options="c.id as c.razao_social for c in listaclientes"></select>
-  </div>
-</form>
+<div class="panel panel-default">
+<div class="panel-body">
+	<form ng-app="demandas" ng-controller="DemandaController as $ctrl">
+	  <div class="form-group">
+	    <label for="cliente">Cliente</label>
+	    <select id="cliente" class="form-control" ng-model="demanda.cliente.id" ng-options="c.id as c.razao_social for c in listaclientes"></select>
+	  </div>
+	  <div class="form-group">
+	    <label for="identificacao_cliente">Identificacao do cliente</label>
+	    <input type="text"  id="identificacao_cliente" class="form-control" ng-model="demanda.identificacao_cliente"/>
+	  </div>
+	  <div class="form-group">
+	    <label for="descricao_cliente">Descricao no cliente</label>
+	    <input type="text"  id="descricao_cliente" class="form-control" ng-model="demanda.descricao_cliente"/>
+	  </div>
+	  <div class="form-group">
+	    <label for="numero_demanda">Número da demanda</label>
+	    <input type="text"  id="numero_demanda" class="form-control" ng-model="demanda.numero_demanda"/>
+	  </div>
+	  <div class="form-group">
+	    <label for="unidade_administrativa">Unidade administrativa</label>
+	    <input type="text"  id="numero_demanda" class="form-control" ng-model="demanda.unidade_administrativa"/>
+	  </div>
+	  <div class="form-group">
+	    <label for="coordenador">Coordenador</label>
+	    <select id="coordenador" class="form-control" ng-model="demanda.coordenador.id" ng-options="c.id as c.nome for c in listacoordenador"></select>
+	  </div>
+	  <button type="button" class="btn btn-info" ng-click="open()">Adicionar proposta</button>
+	  <table class="table">
+	  	<thead>
+	  		<tr>
+		  		<th>Número da proposta</th>
+		  		<th>Data da proposta</th>
+		  		<th>Corrente</th>
+	  		</tr>
+	  	</thead>
+	  	<tbody>
+	  		<tr ng-repeat="proposta in demanda.proposta">
+	  			<td ng-bind="proposta.numero_proposta"></td>
+	  			<td ng-bind="proposta.data_proposta"></td>
+	  			<td ng-bind="proposta.eh_corrente ? 'X' : ''"></td>
+	  		</tr>
+	  	</tbody>
+	  </table>
+	  <div class="form-group">
+	    <label for="informacoes_nfe">Informações que devem constar na Nfe</label>
+	    <textarea id="informacoes_nfe" rows="5" class="form-control" ng-model="demanda.informacoes_nfe"></textarea>
+	  </div>
+	  <div class="form-group">
+	    <label for="observacoes">Observações</label>
+	    <textarea id="observacoes" rows="5" class="form-control" ng-model="demanda.informacoes_nfe"></textarea>
+	  </div>
+	  
+	  <script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modal-title">Nova Proposta</h3>
+        </div>
+        <div class="modal-body" id="modal-body">
+           <div class="form-group">
+	    	<label for="numero_proposta">Número da proposta</label>
+	    	<input type="text" id="numero_proposta" class="form-control" ng-model="$ctrl.proposta.numero_proposta"/>
+	  	   </div>
+	  	   <div class="form-group">
+	    	<label for="data_proposta">Data da proposta</label>
+	    	<input type="text" id="data_proposta" class="form-control" ng-model="$ctrl.proposta.data_proposta"/>
+	  	   </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
+            <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+        </div>
+      </script>
+	  
+	</form>
+</div>
+</div>
 
 {%endverbatim%}
 

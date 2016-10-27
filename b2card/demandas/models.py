@@ -8,20 +8,21 @@ class Demanda(models.Model):
     identificacao_cliente = models.CharField(max_length=30)
     descricao_cliente = models.CharField(max_length=30)
     numero_demanda = models.CharField(max_length=30)
+    unidade_administrativa = models.CharField(max_length=30)
     coordenador = models.ForeignKey(Funcionario, blank=False)
     nomde_documento_resumido = models.CharField(max_length=30)
     informacoes_nfe = models.TextField()
     observacoes = models.TextField()
 
 class Orcamento(models.Model):
-    data_orcamento = models.DateField()
-    unidade_administrativa = models.CharField(max_length=30)
     centro_custo = models.CharField(max_length=30)
     centro_resultado = models.CharField(max_length=30)
 
 class Propostas(models.Model):
     numero_proposta = models.CharField(max_length=30)
     eh_corrente = models.BooleanField()
+    data_proposta = models.DateField()
+    orcamento = models.ForeignKey(Orcamento, blank = False)
     demanda = models.ForeignKey(Demanda, blank = False)
     
 class Atividades(models.Model):

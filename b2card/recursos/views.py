@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from recursos.models import Funcionario
 from recursos.forms import FuncionarioForm
+from rest_framework.views import APIView
+from recursos import serializers
+from rest_framework.response import Response
 
 # Create your views here.
 def index(request):
@@ -49,3 +52,12 @@ def executar(request):
         funcionario = Funcionario.objects.get(pk=request.POST['id'])
         funcionario.delete()
         return redirect('recursos:inicial')
+    
+''' 
+    API REST
+''' 
+class FuncionarioList(APIView):
+    def get(self, request, format=None):
+        funcionarios = Funcionario.objects.all()
+        serializer = serializers.FuncionarioSerializer(funcionarios, many=True)
+        return Response(serializer.data)

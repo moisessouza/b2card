@@ -12,9 +12,14 @@ demandasservices.config(['$httpProvider', function($httpProvider) {
 
 demandasservices.service('DemandaService', function($resource){
 	return {
-		buscarclientes: function(orcamento_id, callback){
+		buscarclientes: function(callback){
 			Clientes = $resource('/clientes/api/list')
-			var result = Clientes.query({id:orcamento_id}, callback);
+			var result = Clientes.query(callback);
+			return result;
+		},
+		buscarfuncionarios: function(callback){
+			Recursos = $resource('/recursos/api/list')
+			var result = Recursos.query(callback);
 			return result;
 		}
 	}
