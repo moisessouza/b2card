@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'autenticacao.apps.AutenticacaoConfig',
     'inicial.apps.InicialConfig',
-    'clientes.apps.ClientesConfig'
+    'recursos.apps.RecursosConfig',
+    'clientes.apps.ClientesConfig',
 ]
 
 MIDDLEWARE = [
@@ -51,7 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'autenticacao.middleware.AuthenticationGetBasketMiddleware'
+    'autenticacao.middleware.AuthenticationB2CardMiddleware'
 ]
 
 ROOT_URLCONF = 'b2card.urls'

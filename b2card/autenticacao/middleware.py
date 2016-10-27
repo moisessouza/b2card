@@ -4,7 +4,7 @@
 
 from django.shortcuts import redirect
 
-class AuthenticationGetBasketMiddleware(object):
+class AuthenticationB2CardMiddleware(object):
     
     urls_permited = ['/autenticacao/', '/autenticacao/login/']
     
@@ -19,9 +19,12 @@ class AuthenticationGetBasketMiddleware(object):
         if request.path in self.urls_permited:
             return self.get_response(request)
 
-        if request.user.is_authenticated:
-            response = self.get_response(request)
 
+        if request.user.is_authenticated:
+            if request.path == '/':
+                response = redirect('inicial:inicial')
+            else:
+                response = self.get_response(request)
         # Code to be executed for each request/response after
         # the view is called.
 
