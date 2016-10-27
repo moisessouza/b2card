@@ -2,6 +2,13 @@
 {% extends "base_page.html" %}
 
 {% block content %}
+
+<style>
+table tr {
+    cursor: pointer;
+}
+</style>
+
 <form class="navbar-form" action="{% url 'clientes:novo' %}" method="post">
 	{% csrf_token %} 
 	<button class="btn btn-default" value="Novo">Novo</button>
@@ -20,7 +27,7 @@
     </thead>
     <tbody>
       {% for cliente in clientes %}
-      <tr>
+      <tr href="{% url 'clientes:editar' cliente.id %}">
         <td>{{cliente.cnpj}}</td>
         <td>{{cliente.razao_social}}</td>
         <td>{{cliente.endereco}}</td>
@@ -31,5 +38,10 @@
       {% endfor %}
     </tbody>
   </table>
-
+  
+  <script type="text/javascript">
+  	$('table tr').on('click', function () {
+  		window.location.replace($(this).attr('href'));	
+  	});
+  </script>
 {% endblock %}

@@ -23,7 +23,8 @@ app_name='clientes'
 urlpatterns = [
     url(r'^$', views.index, name='inicial'),
     url(r'^novo/$', views.novo, name='novo'),
-    url(r'^gravar/$', views.gravar, name='gravar')
+    url(r'^gravar/$', views.executar, name='gravar'),
+    url(r'^(?P<cliente_id>[0-9]+)/$', views.editar, name='editar')
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

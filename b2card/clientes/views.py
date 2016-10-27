@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template.context_processors import request
 from .models import Cliente
 from .forms import ClienteForm
@@ -17,14 +17,35 @@ def index(request):
 def novo(request):
     return render(request, 'clientes/cliente.html')
 
-def gravar(request):
+def editar(request, cliente_id):
     
-    form = ClienteForm(request.POST)
-    form.save()
+    cliente = Cliente.objects.get(pk=cliente_id)
     
     context = {
-        'success':{
-            'message': 'Cliente gravado com sucesso!'
-        }
+        'cliente': cliente
     }
+
     return render(request, 'clientes/cliente.html', context)
+    
+def executar(request):
+    
+    if 'gravar' in request.POST:
+    
+        if 'id' in request.POST and request.POST['id']:
+            cliente = Cliente.objects.get(pk=request.POST['id'])
+            form = ClienteForm(request.POST, instance=cliente)
+        else:
+            form = ClienteForm(request.POST)
+        form.save()
+        
+        context = {
+            'success':{
+                'message': 'Cliente gravado com sucesso!'
+            }
+        }
+        return render(request, 'clientes/cliente.html', context)
+    
+    elif 'deletar' in request.POST:
+        cliente = Cliente.objects.get(pk=request.POST['id'])
+        cliente.delete()
+        return redirect('clientes:inicial')
