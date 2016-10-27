@@ -22,7 +22,7 @@ app_name='demandas'
 
 urlpatterns = [
     url(r'^$', views.index, name='inicial'),
-    url(r'^novo/$', views.novo, name='inicial'),
+    url(r'^novo/$', views.novo, name='novo'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

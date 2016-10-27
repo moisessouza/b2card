@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.template.context_processors import request
 from .models import Cliente
 from .forms import ClienteForm
+from rest_framework.views import APIView
+from clientes import serializers
+from rest_framework.response import Response
 
 # Create your views here.
 
@@ -49,3 +52,13 @@ def executar(request):
         cliente = Cliente.objects.get(pk=request.POST['id'])
         cliente.delete()
         return redirect('clientes:inicial')
+    
+
+''' 
+    API REST
+''' 
+class ClienteList(APIView):
+    def get(self, request, format=None):
+        materiais = Cliente.objects.all()
+        serializer = serializers.ClienteSerializer(materiais, many=True)
+        return Response(serializer.data)
