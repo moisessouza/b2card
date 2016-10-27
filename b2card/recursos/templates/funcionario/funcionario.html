@@ -2,37 +2,37 @@
 {% extends "base_page.html" %}
 {%block content%}
 
-<h1>Novo cliente</h1>
+<h1>Funcionário</h1>
 
-<form action="{% url 'clientes:gravar' %}" method="post">
+<form action="{% url 'recursos:gravar' %}" method="post">
   {% csrf_token %} 
-  <input type="hidden" name="id" value="{{cliente.id}}"/>
+  <input type="hidden" name="id" value="{{funcionario.id}}"/>
   <div class="form-group">
-    <label for="cnpj">CNPJ</label>
-    <input type="text" class="form-control" id="cnpj" name="cnpj" value="{{cliente.cnpj}}" placeholder="CNPJ">
+    <label for="nome">Nome</label>
+    <input type="text" class="form-control" id="nome" name="nome" value="{{funcionario.nome}}" placeholder="CNPJ">
   </div>
   <div class="form-group">
-    <label for="razao_social">Razão Social</label>
-    <input type="text" class="form-control" id="razao_social" name="razao_social" value="{{cliente.razao_social}}" placeholder="Razão Social">
-  </div>
-   <div class="form-group">
     <label for="endereco">Endereço</label>
-    <input type="text" class="form-control" id="endereco" name="endereco" value="{{cliente.endereco}}" placeholder="Endereço">
+    <input type="text" class="form-control" id="endereco" name="endereco" value="{{funcionario.endereco}}" placeholder="Endereço">
   </div>
-   <div class="form-group">
+  <div class="form-group">
     <label for="cidade">Cidade</label>
-    <input type="text" class="form-control" id="cidade" name="cidade" value="{{cliente.cidade}}" placeholder="Cidade">
+    <input type="text" class="form-control" id="cidade" name="cidade" value="{{funcionario.cidade}}" placeholder="Cidade">
   </div>
-   <div class="form-group">
+  <div class="form-group">
     <label for="estado">Estado</label>
-    <input type="text" class="form-control" id="estado" name="estado" value="{{cliente.estado}}" placeholder="Estado">
+    <input type="text" class="form-control" id="estado" name="estado" value="{{funcionario.estado}}" placeholder="Estado">
   </div>
-   <div class="form-group">
+  <div class="form-group">
     <label for="cep">CEP</label>
-    <input type="text" class="form-control" id="cep" name="cep" value="{{cliente.cep}}" placeholder="CEP">
+    <input type="text" class="form-control" id="cep" name="cep" value="{{funcionario.cep}}" placeholder="CEP">
+  </div>
+  <div class="form-group">
+    <label for="salario">Salário</label>
+    <input type="text" class="form-control" id="salario" name="salario" value="{{funcionario.salario}}" placeholder="Salário">
   </div>
   <button type="submit" class="btn btn-default" name="gravar">Gravar</button>
-  {% if cliente.id %}
+  {% if funcionario.id %}
   	<button type="submit" class="btn btn-default" name="deletar">Deletar</button>
   {% endif %}
 </form>

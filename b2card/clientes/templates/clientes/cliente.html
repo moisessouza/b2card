@@ -2,7 +2,7 @@
 {% extends "base_page.html" %}
 {%block content%}
 
-<h1>Novo cliente</h1>
+<h1>Cliente</h1>
 
 <form action="{% url 'clientes:gravar' %}" method="post">
   {% csrf_token %} 
