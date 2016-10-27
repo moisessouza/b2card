@@ -35,11 +35,30 @@
 </head>
 
 <body>
-	
 	<div class="container-fluid">
 		<div class="row content">
 			{% include "link_menu.html" %}
-			<div class="col-sm-9">
+			<div id="messagens" class="col-sm-9">
+				{% if success %}
+				<div class="alert alert-success">
+				  <strong>Sucesso!</strong> {{ success.message }}
+				</div>
+				{% endif %}
+				{% if info %}
+				<div class="alert alert-info">
+				  <strong>Informação!</strong> {{ info.message }}
+				</div>
+				{% endif %}
+				{% if perigo %}
+				<div class="alert alert-warning">
+				  <strong>Perigo!</strong> {{ perigo.message }}
+				</div>
+				{% endif %}
+				{% if error %}
+				<div class="alert alert-danger">
+				  <strong>Erro!</strong> {{ error.message }}
+				</div>
+				{% endif %}
 				{% block content %}{% endblock %}
 			</div>
 		</div>

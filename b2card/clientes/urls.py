@@ -21,7 +21,9 @@ from . import views
 app_name='clientes'
 
 urlpatterns = [
-    url(r'^$', views.index, name='inicial')
+    url(r'^$', views.index, name='inicial'),
+    url(r'^novo/$', views.novo, name='novo'),
+    url(r'^gravar/$', views.gravar, name='gravar')
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
