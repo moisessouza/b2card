@@ -1,0 +1,3 @@
+PYTHONPATH=\$OPENSHIFT_REPO_DIR/b2card
+django-admin.py migrate --settings='b2card.production' --pythonpath=\$PYTHONPATH
+python \$PYTHONPATH/manage.py collectstatic -c --noinput --settings='b2card.production' --pythonpath=\$PYTHONPATH
