@@ -14,5 +14,5 @@ class Funcionario (models.Model):
     cidade = models.CharField(max_length=20)
     estado = models.CharField(max_length=20)
     cep = models.CharField(max_length=10)
-    salario = models.FloatField(max_length=10)
-    #data_admissao = models.DateField(default=None)
+    salario = models.CharField(max_length=20)
+    data_admissao = models.DateField(default=None, blank=True)

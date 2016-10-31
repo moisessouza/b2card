@@ -29,7 +29,8 @@ urlpatterns = [
     url(r'^api/new/$', views.FuncionarioDetail.as_view()),
     url(r'^api/(?P<funcionario_id>[0-9]+)/$', views.FuncionarioDetail.as_view()),
     url(r'^api/cargo/list/$', views.CargoList.as_view()),
-    url(r'^api/cargo/new/$', views.CargoDetail.as_view()),    
+    url(r'^api/cargo/new/$', views.CargoDetail.as_view()),
+    url(r'^api/cargo/(?P<cargo_id>[0-9]+)/$', views.CargoDetail.as_view()),       
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

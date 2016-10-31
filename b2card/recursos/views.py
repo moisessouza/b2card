@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from recursos import serializers
 from rest_framework.response import Response
 from recursos.serializers import CargoSerializer, FuncionarioSerializer
+from _datetime import datetime
 
 
 
@@ -69,7 +70,11 @@ class FuncionarioDetail(APIView):
     def get(self, request, funcionario_id, format=None):
         funcionario = Funcionario.objects.get(pk=funcionario_id)
         serializer = serializers.FuncionarioSerializer(funcionario)
-        return Response(serializer.data)
+        data = serializer.data
+        data['dia'] = funcionario.data_admissao.day
+        data['mes'] = funcionario.data_admissao.month
+        data['ano'] = funcionario.data_admissao.year
+        return Response(data)
     def post(self, request, format=None):
         
         if 'id' in request.data:
@@ -89,7 +94,15 @@ class FuncionarioDetail(APIView):
         funcionario.cidade = request.data['cidade']
         funcionario.estado = request.data['estado']
         funcionario.cep = request.data['cep']
-        funcionario.salario = request.data['salario']
+        
+        salario = request.data['salario']
+        funcionario.salario = salario
+        
+        data_string = request.data['data_admissao']
+        data_string = data_string[:data_string.index('T')]
+        
+        data_admissao = datetime.strptime(data_string, '%Y-%m-%d')
+        funcionario.data_admissao = data_admissao
         
         funcionario.save()
         
@@ -108,6 +121,7 @@ class CargoDetail(APIView):
         cargo = Cargo.objects.get(pk=cargo_id)
         serializer = serializers.CargoSerializer(cargo)
         return Response(serializer.data)
+    
     def post(self, request, format=None):
         
         if 'id' in request.data:
@@ -120,3 +134,11 @@ class CargoDetail(APIView):
             serializer.save();
             
         return Response(serializer.data)
+    
+    def delete(self, request, cargo_id, format=None):
+        cargo = Cargo.objects.get(pk=cargo_id)
+        cargo.delete();
+        
+        serializer = serializers.CargoSerializer(cargo)
+        return Response(serializer.data)
+        

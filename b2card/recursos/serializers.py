@@ -15,4 +15,4 @@ class FuncionarioSerializer(serializers.ModelSerializer):
     cargo = CargoSerializer(read_only=True)
     class Meta:
         model = Funcionario
-        fields = ('id', 'nome', 'cpf', 'rg','endereco', 'cidade', 'estado', 'cep', 'salario', 'cargo')
+        fields = ('id', 'nome', 'cpf', 'rg','endereco', 'cidade', 'estado', 'cep', 'salario', 'cargo', 'data_admissao')

@@ -14,7 +14,10 @@ recursos.controller('RecursosController', function ($scope, $uibModal, RecursosS
 	}
 	
 	if (funcionario_id){
-		$ctrl.funcionario = RecursosService.buscarfuncionario(funcionario_id);
+		$ctrl.funcionario = RecursosService.buscarfuncionario(funcionario_id, function (data){
+			data.data_admissao = new Date(data.ano, data.mes, data.dia, 0, 0, 0, 0);	
+		});
+		
 	} else {
 		$ctrl.funcionario = {};	
 	}
@@ -40,7 +43,7 @@ recursos.controller('RecursosController', function ($scope, $uibModal, RecursosS
 	    modalInstance.result.then(function (proposta) {
 	    	$ctrl.listacargos = RecursosService.buscarcargos();
 	    }, function () {
-	        $log.info('Modal dismissed at: ' + new Date());
+	        //$log.info('Modal dismissed at: ' + new Date());
 	    });
 	};	
 	
@@ -61,11 +64,23 @@ recursos.controller('RecursosController', function ($scope, $uibModal, RecursosS
 	$ctrl.listacargos = RecursosService.buscarcargos();
 	
 	$ctrl.salvar = function () {
+		
+		if (!$ctrl.cargo)
+			$ctrl.cargo = {}
+		
 		$ctrl.cargo.nome_cargo = $ctrl.nome_cargo;
 		RecursosService.salvarcargo($ctrl.cargo, function (data){
 			if (!$ctrl.cargo.edit){
 				$ctrl.listacargos.push(data);
 			}
+			$ctrl.cargo = {}
+			$ctrl.nome_cargo = "";
+		});
+	}
+	
+	$ctrl.deletar = function () {
+		RecursosService.deletarcargo($ctrl.cargo, function (data){
+			$ctrl.listacargos.splice($ctrl.listacargos.indexOf($ctrl.cargo), 1);
 			$ctrl.cargo = {}
 			$ctrl.nome_cargo = "";
 		});
@@ -80,4 +95,21 @@ recursos.controller('RecursosController', function ($scope, $uibModal, RecursosS
 	$ctrl.close = function () {
 	   $uibModalInstance.close({});
 	};
+}).directive('gbMoney', function () {
+    return {
+        require: '?ngModel',
+        link: function (scope, elem, attrs, ctrl) {
+            if (!ctrl) return;
+            ctrl.$parsers.unshift(function (viewValue) {
+
+          elem.priceFormat({
+            prefix: '',
+            centsSeparator: ',',
+            thousandsSeparator: '.'
+        });                
+
+                return elem[0].value;
+            });
+        }
+    };
 });
