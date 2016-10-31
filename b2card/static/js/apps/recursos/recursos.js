@@ -15,7 +15,7 @@ recursos.controller('RecursosController', function ($scope, $uibModal, RecursosS
 	
 	if (funcionario_id){
 		$ctrl.funcionario = RecursosService.buscarfuncionario(funcionario_id, function (data){
-			data.data_admissao = new Date(data.ano, data.mes, data.dia, 0, 0, 0, 0);	
+			data.data_admissao = new Date(data.ano, data.mes-1, data.dia, 0, 0, 0, 0);	
 		});
 		
 	} else {
