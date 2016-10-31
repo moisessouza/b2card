@@ -86,6 +86,14 @@ recursos.controller('RecursosController', function ($scope, $uibModal, RecursosS
 		});
 	}
 	
+	$ctrl.deletar = function () {
+		RecursosService.deletarcargo($ctrl.cargo, function (data){
+			$ctrl.listacargos.splice($ctrl.listacargos.indexOf($ctrl.cargo), 1);
+			$ctrl.cargo = {}
+			$ctrl.nome_cargo = "";
+		});
+	}
+	
 	$ctrl.edit = function (cargo) {
 		$ctrl.cargo = cargo;
 		$ctrl.cargo.edit=true;
