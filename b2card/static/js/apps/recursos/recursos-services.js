@@ -20,6 +20,10 @@ recursosservices.service('RecursosService', function($resource){
 			var Cargo = $resource('/recursos/api/cargo/new/');
 			Cargo.save(cargo, callback);
 		},
+		deletarcargo: function (cargo, callback) {
+			var Cargo = $resource('/recursos/api/cargo/:id/')
+			return Cargo.remove({'id':cargo.id}, callback);
+		},
 		salvarfuncionario: function (funcionario, callback) {
 			var Funcionario = $resource('/recursos/api/new/');
 			Funcionario.save(funcionario, callback);

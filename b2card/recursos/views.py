@@ -108,6 +108,7 @@ class CargoDetail(APIView):
         cargo = Cargo.objects.get(pk=cargo_id)
         serializer = serializers.CargoSerializer(cargo)
         return Response(serializer.data)
+    
     def post(self, request, format=None):
         
         if 'id' in request.data:
@@ -120,3 +121,11 @@ class CargoDetail(APIView):
             serializer.save();
             
         return Response(serializer.data)
+    
+    def delete(self, request, cargo_id, format=None):
+        cargo = Cargo.objects.get(pk=cargo_id)
+        cargo.delete();
+        
+        serializer = serializers.CargoSerializer(cargo)
+        return Response(serializer.data)
+        

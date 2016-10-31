@@ -105,6 +105,7 @@
 				<input type="text" id="numero_proposta" class="form-control" ng-model="$ctrl.nome_cargo" placeholder="Nome do cargo"/>
 			</div>
 			<button class="btn btn-primary" type="button" ng-click="$ctrl.salvar()">Salvar</button>
+			<button class="btn btn-danger" type="button" ng-show="$ctrl.cargo.id" ng-click="$ctrl.deletar()">Deletar</button>
 			<table class="table">
  				<thead>
  					<tr>
