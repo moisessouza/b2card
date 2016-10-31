@@ -1,40 +1,129 @@
 <meta charset="utf-8">
 {% extends "base_page.html" %}
+
+{% block script %}
+	<script src="/static/js/apps/recursos/recursos.js"></script>
+	<script src="/static/js/apps/recursos/recursos-services.js"></script>
+	<script src="/static/js/angular/ui-bootstrap-tpls-2.2.0.min.js"></script>
+{% endblock %}
+
 {%block content%}
+
+<style>
+  .typeahead-demo .custom-popup-wrapper {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    background-color: #f9f9f9;
+  }
+
+  .typeahead-demo .custom-popup-wrapper > .message {
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd;
+    color: #868686;
+  }
+
+  .typeahead-demo .custom-popup-wrapper > .dropdown-menu {
+    position: static;
+    float: none;
+    display: block;
+    min-width: 160px;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+</style>
+
+<script>
+	
+	var funcionario_id = {{funcionario.id}}
+
+</script>
+
+{%verbatim%}
 
 <h1>Funcionário</h1>
 
-<form action="{% url 'recursos:gravar' %}" method="post">
-  {% csrf_token %} 
-  <input type="hidden" name="id" value="{{funcionario.id}}"/>
-  <div class="form-group">
-    <label for="nome">Nome</label>
-    <input type="text" class="form-control" id="nome" name="nome" value="{{funcionario.nome}}" placeholder="Nome">
-  </div>
-  <div class="form-group">
-    <label for="endereco">Endereço</label>
-    <input type="text" class="form-control" id="endereco" name="endereco" value="{{funcionario.endereco}}" placeholder="Endereço">
-  </div>
-  <div class="form-group">
-    <label for="cidade">Cidade</label>
-    <input type="text" class="form-control" id="cidade" name="cidade" value="{{funcionario.cidade}}" placeholder="Cidade">
-  </div>
-  <div class="form-group">
-    <label for="estado">Estado</label>
-    <input type="text" class="form-control" id="estado" name="estado" value="{{funcionario.estado}}" placeholder="Estado">
-  </div>
-  <div class="form-group">
-    <label for="cep">CEP</label>
-    <input type="text" class="form-control" id="cep" name="cep" value="{{funcionario.cep}}" placeholder="CEP">
-  </div>
-  <div class="form-group">
-    <label for="salario">Salário</label>
-    <input type="text" class="form-control" id="salario" name="salario" value="{{funcionario.salario}}" placeholder="Salário">
-  </div>
-  <button type="submit" class="btn btn-default" name="gravar">Gravar</button>
-  {% if funcionario.id %}
-  	<button type="submit" class="btn btn-default" name="deletar">Deletar</button>
-  {% endif %}
-</form>
+<div class="panel panel-default" ng-app="recursos" ng-controller="RecursosController as $ctrl">
+	<div class="panel-body">
+	  <div class="form-group form-group-sm">
+	    <label for="nome">Nome</label>
+	    <input type="text" class="form-control" id="nome" ng-model="$ctrl.funcionario.nome" name="nome" placeholder="Nome">
+	  </div>
+	  <div class="form-group">
+	  	<label for="coordenador">Cargo</label>
+	  	<div class="input-group">
+		    <select id="coordenador" class="form-control" ng-model="$ctrl.funcionario.cargo.id" ng-options="c.id as c.nome_cargo for c in $ctrl.listacargos">
+		    	<option value="">Selecione um cargo...</option>
+		    </select>
+		    <span class="input-group-btn">
+	        	<button class="btn btn-secondary" type="button" ng-click="open()">+</button>
+	     	 </span>
+        </div>
+	  </div>
+	  <div class="form-group form-group-sm">
+	    <label for="nome">RG</label>
+	    <input type="text" class="form-control" id="rg" name="rg" ng-model="$ctrl.funcionario.rg" placeholder="RG">
+	  </div>
+	  <div class="form-group form-group-sm">
+	    <label for="nome">CPF</label>
+	    <input type="text" class="form-control" id="cpf" ng-model="$ctrl.funcionario.cpf" name="cpf" placeholder="CPF">
+	  </div>
+	  <div class="form-group form-group-sm">
+	    <label for="endereco">Endereço</label>
+	    <input type="text" class="form-control" id="endereco" name="endereco" ng-model="$ctrl.funcionario.endereco" placeholder="Endereço">
+	  </div>
+	  <div class="form-group form-group-sm">
+	    <label for="cidade">Cidade</label>
+	    <input type="text" class="form-control" id="cidade" ng-model="$ctrl.funcionario.cidade" placeholder="Cidade">
+	  </div>
+	  <div class="form-group">
+	    <label for="estado">Estado</label>
+	    <input type="text" class="form-control" id="estado" name="estado" ng-model="$ctrl.funcionario.estado" placeholder="Estado">
+	  </div>
+	  <div class="form-group">
+	    <label for="cep">CEP</label>
+	    <input type="text" class="form-control" id="cep" name="cep" ng-model="$ctrl.funcionario.cep" placeholder="CEP">
+	  </div>
+	  <div class="form-group">
+	    <label for="salario">Salário</label>
+	    <input type="text" class="form-control" id="salario" name="salario" ng-model="$ctrl.funcionario.salario" placeholder="Salário">
+	  </div>
+	  <button type="submit" class="btn btn-default" name="gravar" ng-click="$ctrl.salvar()">Salvar</button>
+	  <div class="label {{$ctrl.clazz}}" ng-bind="$ctrl.message" ></div>
+	</div>
+	<script type="text/ng-template" id="myModalContent.html">
+		<div class="modal-header">
+			<h3 class="modal-title" id="modal-title">Cargos</h3>
+		</div>
+		<div class="modal-body" id="modal-body">
+			<div class="form-group">
+				<label for="numero_proposta">Nome do cargo</label>
+				<input type="text" id="numero_proposta" class="form-control" ng-model="$ctrl.nome_cargo" placeholder="Nome do cargo"/>
+			</div>
+			<button class="btn btn-primary" type="button" ng-click="$ctrl.salvar()">Salvar</button>
+			<table class="table">
+ 				<thead>
+ 					<tr>
+	  					<th>Nome do cargo</th>
+ 					</tr>
+ 				</thead>
+ 				<tbody>
+ 					<tr ng-repeat="cargo in $ctrl.listacargos" ng-click="$ctrl.edit(cargo)">
+ 						<td ng-bind="cargo.nome_cargo"></td>
+ 					</tr>
+ 				</tbody>
+ 			</table>
+		</div>
+		<div class="modal-footer">
+    		<button class="btn btn-primary" type="button" ng-click="$ctrl.close()">Sair</button>
+		</div> 
+	</script>
+</div>
+
+{%endverbatim%}
 
 {%endblock%}

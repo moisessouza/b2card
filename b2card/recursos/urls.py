@@ -26,6 +26,10 @@ urlpatterns = [
     url(r'^gravar/$', views.executar, name='gravar'),
     url(r'^(?P<cliente_id>[0-9]+)/$', views.editar, name='editar'),
     url(r'^api/list/$', views.FuncionarioList.as_view()),
+    url(r'^api/new/$', views.FuncionarioDetail.as_view()),
+    url(r'^api/(?P<funcionario_id>[0-9]+)/$', views.FuncionarioDetail.as_view()),
+    url(r'^api/cargo/list/$', views.CargoList.as_view()),
+    url(r'^api/cargo/new/$', views.CargoDetail.as_view()),    
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
