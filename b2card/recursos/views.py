@@ -102,7 +102,7 @@ class FuncionarioDetail(APIView):
         data_string = data_string[:data_string.index('T')]
         
         data_admissao = datetime.strptime(data_string, '%Y-%m-%d')
-        funcionario.data_admissao = data_admissao
+        funcionario.data_admissao = data_admissao.date()
         
         funcionario.save()
         
