@@ -3,6 +3,16 @@ var clientes = angular.module('clientes', ['clientes-services', 'commons', 'ui.b
 clientes.controller('ClientesController', function ($scope, $window, ClientesService){
 	var $ctrl = this;
 	
+	var messageinfo = function (msg){
+		$ctrl.clazz = 'label-primary';	
+		$ctrl.message = msg;
+	}
+	
+	var messagesuccess = function (msg) {
+		$ctrl.clazz = 'label-success';
+		$ctrl.message = msg;
+	}
+	
 	if (cliente_id) {
 		$ctrl.cliente = ClientesService.buscarcliente(cliente_id, function (data){
 			data.data_contratacao = new Date(data.ano_data_contratacao, data.mes_data_contratacao-1, data.dia_data_contratacao, 0, 0, 0, 0);
@@ -37,7 +47,7 @@ clientes.controller('ClientesController', function ($scope, $window, ClientesSer
 	}
 	
 	$ctrl.salvar = function(){
-		
+		messageinfo("salvando...");
 		var tiposvalorhora = $ctrl.cliente.tipovalorhora
 		
 		for (index in tiposvalorhora){
@@ -49,6 +59,11 @@ clientes.controller('ClientesController', function ($scope, $window, ClientesSer
 		
 		ClientesService.salvarcliente($ctrl.cliente, function(data){
 			$ctrl.cliente = data;
+			data.data_contratacao = new Date(data.ano_data_contratacao, data.mes_data_contratacao-1, data.dia_data_contratacao, 0, 0, 0, 0);
+			if (data.data_rescisao){
+				data.data_rescisao = new Date(data.ano_data_rescisao, data.mes_data_rescisao-1, data.dia_data_rescisao, 0, 0, 0, 0);
+			}
+			messagesuccess('salvo!');
 		})
 	}
 	
