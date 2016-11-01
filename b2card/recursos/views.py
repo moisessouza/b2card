@@ -72,7 +72,7 @@ class FuncionarioDetail(APIView):
         serializer = serializers.FuncionarioSerializer(funcionario)
         
         data = serializer.data
-        data['data_admissao'] = datetime.combine(funcionario.data_admissao, datetime.min.time()).strftime('%d/%m/%Y')
+        data['data_admissao'] = "{:%d/%m/%Y}".format(funcionario.data_admissao)
         
         return Response(data)
     def post(self, request, format=None):
