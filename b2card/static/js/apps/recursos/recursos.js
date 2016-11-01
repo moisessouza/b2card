@@ -1,4 +1,4 @@
-var recursos = angular.module('recursos', ['recursos-services',  'ui.bootstrap']);
+var recursos = angular.module('recursos', ['recursos-services', 'commons', 'ui.bootstrap']);
 
 recursos.controller('RecursosController', function ($scope, $uibModal, $window, $location, RecursosService){
 	var $ctrl = this;
@@ -112,21 +112,4 @@ recursos.controller('RecursosController', function ($scope, $uibModal, $window, 
 	$ctrl.close = function () {
 	   $uibModalInstance.close({});
 	};
-}).directive('gbMoney', function () {
-    return {
-        require: '?ngModel',
-        link: function (scope, elem, attrs, ctrl) {
-            if (!ctrl) return;
-            ctrl.$parsers.unshift(function (viewValue) {
-
-          elem.priceFormat({
-            prefix: '',
-            centsSeparator: ',',
-            thousandsSeparator: '.'
-        });                
-
-                return elem[0].value;
-            });
-        }
-    };
 });

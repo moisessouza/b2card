@@ -1,42 +1,98 @@
 <meta charset="utf-8">
 {% extends "base_page.html" %}
+
+{% block script %}
+	<script src="/static/js/apps/clientes/clientes.js"></script>
+	<script src="/static/js/apps/clientes/clientes-services.js"></script>
+	<script src="/static/js/commons/commons.js"></script>
+	<script src="/static/js/angular/ui-bootstrap-tpls-2.2.0.min.js"></script>
+	<script src="/static/js/jquery/priceformat/jquery.priceformat.min.js"></script>
+{% endblock %}
+
 {%block content%}
 
 {%verbatim%}
 
+<style>
+	button.margin {
+		margin-bottom: 1em;
+	}
+</style>
+
 <h1>Cliente</h1>
 
-<form action="{% url 'clientes:gravar' %}" method="post">
-  {% csrf_token %} 
-  <input type="hidden" name="id" value="{{cliente.id}}"/>
-  <div class="form-group">
-    <label for="cnpj">CNPJ</label>
-    <input type="text" class="form-control" id="cnpj" name="cnpj" value="{{cliente.cnpj}}" placeholder="CNPJ">
+<form  name="clientes" ng-app="clientes" ng-controller="ClientesController as $ctrl">
+  <div class="panel panel-default form-group-sm" >
+	  <div class="panel-body">
+		  <div class="form-group">
+		    <label for="razao_social">Razão social</label>
+		    <input type="text" class="form-control" id="razao_social" name="razao_social" ng-model="cliente.razao_social" placeholder="Razão Social">
+		  </div>
+		  <div class="form-group">
+		    <label for="cnpj">CNPJ</label>
+		    <input type="text" class="form-control" id="cnpj" name="cnpj" ng-model="cliente.cnpj" placeholder="CNPJ">
+		  </div>
+		  <div class="form-group">
+		    <label for="endereco">Endereço</label>
+		    <input type="text" class="form-control" id="endereco" name="endereco" ng-model="cliente.endereco" placeholder="Endereço">
+		  </div>
+		  <div class="form-group">
+		    <label for="cidade">Cidade</label>
+		    <input type="text" class="form-control" id="cidade" name="cidade" ng-model="cliente.cidade" placeholder="Cidade">
+		  </div>
+		  <div class="form-group">
+		    <label for="estado">Estado</label>
+		    <input type="text" class="form-control" id="estado" name="estado" ng-model="cliente.estado" placeholder="Estado">
+		  </div>
+		  <div class="form-group">
+		    <label for="cep">CEP</label>
+		    <input type="text" class="form-control" id="cep" name="cep" ng-model="cliente.cep" placeholder="CEP">
+		  </div>
+		  <div class="form-group">
+		    <label for="data_contratacao">Data da contratação</label>
+		    <input type="date" class="form-control" id="data_contratacao" name="data_contratacao" ng-model="cliente.data_contratacao" placeholder="Data da contratação">
+		  </div>
+		  <div class="form-group">
+		    <label for="data_rescisao">Data da rescisão</label>
+		    <input type="date" class="form-control" id="data_rescisao" name="data_rescisao" ng-model="cliente.data_rescisao" placeholder="Data da rescisão">
+		  </div>
+		  <div class="table-responsive">
+		  <div class="panel panel-default form-group-sm" >
+		  <div class="panel-heading">
+		  	Tipo valor hora
+		  </div>
+		  <div class="panel-body">
+		  	<div>
+			  	<button type="button" class="btn btn-default margin" ng-click="$ctrl.adicionar()">
+			  		<span class="glyphicon glyphicon-plus"></span> Adicionar
+			  	</button>
+		  	</div>
+			<table class="table table-bordered table-striped table-highlight">
+			    <thead>
+			        <th>Tipo hora</th>
+			        <th>Valor hora</th>
+			        <th></th>
+			    </thead>
+			    <tbody>
+			        <tr ng-repeat="valorhora in $ctrl.cliente.valorhora">
+			            <td><input type="text" class="form-control" placeholder="Some Long Name Here"/></td>
+			            <td><input type="text" class="form-control" placeholder="1,00"/></td>
+			            <td>
+			            	<button type="button" class="btn btn-default" ng-click="$ctrl.deletar(valorhora)">
+  								<span class="glyphicon glyphicon-trash"></span>
+							</button>
+			            </td>
+			        </tr>
+			    </tbody>
+			 </table>
+	       </div>
+        </div>
+        
+    </div>
+		  <button type="submit" class="btn btn-primary" name="gravar">Gravar</button>
+		  <button type="submit" class="btn btn-danger" name="deletar">Deletar</button>
+	  </div>
   </div>
-  <div class="form-group">
-    <label for="razao_social">Razão Social</label>
-    <input type="text" class="form-control" id="razao_social" name="razao_social" value="{{cliente.razao_social}}" placeholder="Razão Social">
-  </div>
-   <div class="form-group">
-    <label for="endereco">Endereço</label>
-    <input type="text" class="form-control" id="endereco" name="endereco" value="{{cliente.endereco}}" placeholder="Endereço">
-  </div>
-   <div class="form-group">
-    <label for="cidade">Cidade</label>
-    <input type="text" class="form-control" id="cidade" name="cidade" value="{{cliente.cidade}}" placeholder="Cidade">
-  </div>
-   <div class="form-group">
-    <label for="estado">Estado</label>
-    <input type="text" class="form-control" id="estado" name="estado" value="{{cliente.estado}}" placeholder="Estado">
-  </div>
-   <div class="form-group">
-    <label for="cep">CEP</label>
-    <input type="text" class="form-control" id="cep" name="cep" value="{{cliente.cep}}" placeholder="CEP">
-  </div>
-  <button type="submit" class="btn btn-default" name="gravar">Gravar</button>
-  {% if cliente.id %}
-  	<button type="submit" class="btn btn-default" name="deletar">Deletar</button>
-  {% endif %}
 </form>
 
 {%endverbatim%}
