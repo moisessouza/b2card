@@ -121,7 +121,8 @@
 		    <input type="date" class="form-control" id="salario" name="salario" ng-model="$ctrl.funcionario.data_admissao" placeholder="Salário" required>
 		    <span ng-show="recursos.salario.$invalid">Data admissão é obrigatório.</span>
 		  </div>
-		  <button type="submit" class="btn btn-default" name="gravar" ng-click="$ctrl.salvar()" ng-disabled="recursos.$invalid">Salvar</button>
+		  <button type="submit" class="btn btn-primary" name="gravar" ng-click="$ctrl.salvar()" ng-disabled="recursos.$invalid">Salvar</button>
+		  <button type="submit" class="btn btn-danger" name="gravar" ng-click="$ctrl.deletar()" ng-show="$ctrl.funcionario.id">Deletar</button>
 		  <div class="label {{$ctrl.clazz}}" ng-bind="$ctrl.message" ></div>
 		</div>
 		<script type="text/ng-template" id="myModalContent.html">

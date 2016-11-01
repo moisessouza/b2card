@@ -110,6 +110,15 @@ class FuncionarioDetail(APIView):
             
         return Response(serializer.data)
     
+    def delete(self, request, funcionario_id):
+        funcionario = Funcionario.objects.get(pk=funcionario_id)
+        funcionario.delete()
+        
+        serializer = FuncionarioSerializer(funcionario)
+        
+        return Response(serializer.data)
+        
+    
 class CargoList(APIView):
     def get(self, request, format=None):
         cargos = Cargo.objects.all()

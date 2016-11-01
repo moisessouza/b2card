@@ -31,6 +31,10 @@ recursosservices.service('RecursosService', function($resource){
 		buscarfuncionario: function (id, callback) {
 			var Funcionario = $resource('/recursos/api/:id/');
 			return Funcionario.get({'id':id}, callback);
+		},
+		deletarfuncionario: function (id, callback) {
+			var Funcionario = $resource('/recursos/api/:id/');
+			return Funcionario.remove({'id':id}, callback);
 		}
 	}
 });

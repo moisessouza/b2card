@@ -1,6 +1,6 @@
 var recursos = angular.module('recursos', ['recursos-services',  'ui.bootstrap']);
 
-recursos.controller('RecursosController', function ($scope, $uibModal, RecursosService){
+recursos.controller('RecursosController', function ($scope, $uibModal, $window, $location, RecursosService){
 	var $ctrl = this;
 	
 	var messageinfo = function (msg){
@@ -55,6 +55,15 @@ recursos.controller('RecursosController', function ($scope, $uibModal, RecursosS
 			
 		});
 	}
+	
+	$ctrl.deletar = function () {
+		var confirm = $window.confirm("Tem certeza que deseja deletar esse funcionário?");
+		if (confirm){
+			RecursosService.deletarfuncionario($ctrl.funcionario.id, function (data){
+				$window.location.href = '/recursos/';
+			});
+		}
+	};
 	
 	
 }).controller('ModalInstanceCtrl', function($scope, $uibModalInstance, RecursosService){
