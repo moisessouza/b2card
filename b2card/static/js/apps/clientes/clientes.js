@@ -14,11 +14,14 @@ clientes.controller('ClientesController', function ($scope, $window, ClientesSer
 	}
 	
 	if (cliente_id) {
-		$ctrl.cliente = ClientesService.buscarcliente(cliente_id);
+		$ctrl.cliente = ClientesService.buscarcliente(cliente_id, function(){
+			$ctrl.show = true;
+		});
 	} else {
 		$ctrl.cliente = {
 			'tipovalorhora': []
 		}
+		$ctrl.show = true;
 	}
 	
 	$ctrl.adicionar = function () {

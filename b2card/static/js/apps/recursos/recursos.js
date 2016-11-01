@@ -14,9 +14,12 @@ recursos.controller('RecursosController', function ($scope, $uibModal, $window, 
 	}
 	
 	if (funcionario_id){
-		$ctrl.funcionario = RecursosService.buscarfuncionario(funcionario_id);
+		$ctrl.funcionario = RecursosService.buscarfuncionario(funcionario_id, function (){
+			$ctrl.show = true;
+		});
 	} else {
-		$ctrl.funcionario = {};	
+		$ctrl.funcionario = {};
+		$ctrl.show = true;
 	}
 	
 	$ctrl.listacargos = RecursosService.buscarcargos();
