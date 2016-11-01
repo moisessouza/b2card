@@ -12,6 +12,21 @@ clientesservices.config(['$httpProvider', function($httpProvider) {
 
 clientesservices.service('ClientesService', function($resource){
 	return {
-		
+		buscarcliente: function(id, callback){
+			Cliente = $resource('/clientes/api/:id/');
+			return Cliente.get({id:id}, callback);
+		},
+		salvarcliente: function(cliente, callback){
+			Cliente = $resource('/clientes/api/new/');
+			return Cliente.save(cliente, callback);
+		},
+		deletarcliente: function(cliente, callback){
+			Cliente = $resource('/clientes/api/:id/');
+			return Cliente.remove({id: cliente.id}, callback);
+		},
+		deletartipovalorhora: function(id, callback) {
+			Cliente = $resource('/clientes/api/valorhora/:id/');
+			return Cliente.remove({id:id}, callback);
+		}
 	}
 });

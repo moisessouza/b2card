@@ -11,13 +11,27 @@
 
 {%block content%}
 
+
+{% if cliente %}
+<script type="text/javascript">
+	
+	var cliente_id = {{cliente.id}}
+	
+</script>
+{% else %}
+<script type="text/javascript">
+	
+	var cliente_id = null;
+	
+</script>
+{% endif %}
+
 {%verbatim%}
 
 <style>
 	button.margin {
 		margin-bottom: 1em;
 	}
-	
 	span.red { 
    		color:red;
   	}
@@ -30,42 +44,42 @@
 	  <div class="panel-body">
 		  <div class="form-group">
 		    <label for="razao_social">Razão social</label>
-		    <input type="text" class="form-control" id="razao_social" name="razao_social" ng-model="cliente.razao_social" placeholder="Razão Social" required>
+		    <input type="text" class="form-control" id="razao_social" name="razao_social" ng-model="$ctrl.cliente.razao_social" placeholder="Razão Social" required>
 		    <span class="red" ng-show="clientes.razao_social.$invalid">Nome é obrigatório.</span>
 		  </div>
 		  <div class="form-group">
 		    <label for="cnpj">CNPJ</label>
-		    <input type="text" class="form-control" id="cnpj" name="cnpj" ng-model="cliente.cnpj" placeholder="CNPJ" required>
+		    <input type="text" class="form-control" id="cnpj" name="cnpj" ng-model="$ctrl.cliente.cnpj" placeholder="CNPJ" required>
 		    <span class="red" ng-show="clientes.cnpj.$invalid">CNPJ é obrigatório.</span>
 		  </div>
 		  <div class="form-group">
 		    <label for="endereco">Endereço</label>
-		    <input type="text" class="form-control" id="endereco" name="endereco" ng-model="cliente.endereco" placeholder="Endereço" required>
+		    <input type="text" class="form-control" id="endereco" name="endereco" ng-model="$ctrl.cliente.endereco" placeholder="Endereço" required>
 		    <span class="red" ng-show="clientes.endereco.$invalid">CNPJ é obrigatório.</span>
 		  </div>
 		  <div class="form-group">
 		    <label for="cidade">Cidade</label>
-		    <input type="text" class="form-control" id="cidade" name="cidade" ng-model="cliente.cidade" placeholder="Cidade" required>
-		    <span class="red" ng-show="clientes.endereco.$invalid">Cidade é obrigatório.</span>
+		    <input type="text" class="form-control" id="cidade" name="cidade" ng-model="$ctrl.cliente.cidade" placeholder="Cidade" required>
+		    <span class="red" ng-show="clientes.cidade.$invalid">Cidade é obrigatório.</span>
 		  </div>
 		  <div class="form-group">
 		    <label for="estado">Estado</label>
-		    <input type="text" class="form-control" id="estado" name="estado" ng-model="cliente.estado" placeholder="Estado" required>
+		    <input type="text" class="form-control" id="estado" name="estado" ng-model="$ctrl.cliente.estado" placeholder="Estado" required>
 		    <span class="red" ng-show="clientes.estado.$invalid">Estado é obrigatório.</span>
 		  </div>
 		  <div class="form-group">
 		    <label for="cep">CEP</label>
-		    <input type="text" class="form-control" id="cep" name="cep" ng-model="cliente.cep" placeholder="CEP" required>
+		    <input type="text" class="form-control" id="cep" name="cep" ng-model="$ctrl.cliente.cep" placeholder="CEP" required>
 		    <span class="red" ng-show="clientes.cep.$invalid">CEP é obrigatório.</span>
 		  </div>
 		  <div class="form-group">
 		    <label for="data_contratacao">Data da contratação</label>
-		    <input type="date" class="form-control" id="data_contratacao" name="data_contratacao" ng-model="cliente.data_contratacao" placeholder="Data da contratação" required>
+		    <input type="date" class="form-control" id="data_contratacao" name="data_contratacao" ng-model="$ctrl.cliente.data_contratacao" placeholder="Data da contratação" required>
 		    <span class="red" ng-show="clientes.data_contratacao.$invalid">Data da contratação é obrigatório.</span>
 		  </div>
 		  <div class="form-group">
 		    <label for="data_rescisao">Data da rescisão</label>
-		    <input type="date" class="form-control" id="data_rescisao" name="data_rescisao" ng-model="cliente.data_rescisao" placeholder="Data da rescisão">
+		    <input type="date" class="form-control" id="data_rescisao" name="data_rescisao" ng-model="$ctrl.cliente.data_rescisao" placeholder="Data da rescisão">
 		  </div>
 		  <div class="table-responsive">
 				<div class="panel panel-default form-group-sm" >
@@ -87,7 +101,7 @@
 						            <td><input type="text" ng-model="tipovalorhora.tipo_hora" class="form-control" placeholder="Tipo hora"/></td>
 						            <td><input type="text" ng-model="tipovalorhora.valor_hora" class="form-control" placeholder="1,00" gb-money/></td>
 						            <td>
-						            	<button type="button" class="btn btn-default" ng-click="$ctrl.deletar(valorhora)">
+						            	<button type="button" class="btn btn-default" ng-click="$ctrl.deletarvalorhora(tipovalorhora)">
 													<span class="glyphicon glyphicon-trash"></span>
 										</button>
 						            </td>
@@ -97,8 +111,8 @@
 					 </div>
 				</div>
     	  </div>
-		  <button type="submit" class="btn btn-primary" name="gravar" ng-click="$ctrl.gravar()" ng-disabled="clientes.$invalid">Gravar</button>
-		  <button type="submit" class="btn btn-danger" name="deletar">Deletar</button>
+		  <button type="submit" class="btn btn-primary" name="salvar" ng-click="$ctrl.salvar()" ng-disabled="clientes.$invalid">Salvar</button>
+		  <button type="submit" class="btn btn-danger" name="deletar" ng-show="$ctrl.cliente.id">Deletar</button>
 	 </div>
   </div>
 </form>

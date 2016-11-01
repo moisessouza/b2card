@@ -5,6 +5,8 @@ from .forms import ClienteForm
 from rest_framework.views import APIView
 from clientes import serializers
 from rest_framework.response import Response
+from clientes.models import TipoValorHora
+from datetime import datetime
 
 # Create your views here.
 
@@ -28,37 +30,109 @@ def editar(request, cliente_id):
         'cliente': cliente
     }
 
-    return render(request, 'clientes/cliente.html', context)
-    
-def executar(request):
-    
-    if 'gravar' in request.POST:
-    
-        if 'id' in request.POST and request.POST['id']:
-            cliente = Cliente.objects.get(pk=request.POST['id'])
-            form = ClienteForm(request.POST, instance=cliente)
-        else:
-            form = ClienteForm(request.POST)
-        form.save()
-        
-        context = {
-            'success':{
-                'message': 'Cliente gravado com sucesso!'
-            }
-        }
-        return render(request, 'clientes/cliente.html', context)
-    
-    elif 'deletar' in request.POST:
-        cliente = Cliente.objects.get(pk=request.POST['id'])
-        cliente.delete()
-        return redirect('clientes:inicial')
-    
-
+    return render(request, 'clientes/cliente.html', context) 
 ''' 
     API REST
 ''' 
 class ClienteList(APIView):
     def get(self, request, format=None):
-        materiais = Cliente.objects.all()
-        serializer = serializers.ClienteSerializer(materiais, many=True)
+        clientes = Cliente.objects.all()
+        serializer = serializers.ClienteMinSerializer(clientes, many=True)
         return Response(serializer.data)
+    
+class ClienteDetail(APIView):
+    def get(self, request, cliente_id, format=None):
+        
+        cliente = Cliente.objects.get(pk=cliente_id)
+        tipos_valor_hora = TipoValorHora.objects.filter(cliente=cliente)
+        clienteSerializer = serializers.ClienteSerializer(cliente)
+        
+        data = clienteSerializer.data
+        
+        data['dia_data_contratacao'] = cliente.data_contratacao.day
+        data['mes_data_contratacao'] = cliente.data_contratacao.month
+        data['ano_data_contratacao'] = cliente.data_contratacao.year
+        
+        if cliente.data_rescisao is not None:
+            data['dia_data_rescisao'] = cliente.data_rescisao.day
+            data['mes_data_rescisao'] = cliente.data_rescisao.month
+            data['ano_data_rescisao'] = cliente.data_rescisao.year
+        
+        tipos_valor_hora = serializers.TipoValorHoraSerializer(tipos_valor_hora, many=True)
+        data['tipovalorhora'] = tipos_valor_hora.data
+        
+        return Response(data)
+    
+    def post(self, request, format=None):
+                      
+        data = request.data
+        
+        if 'tipovalorhora' in request.data:
+            tipos_valor_hora = data['tipovalorhora']
+            del data['tipovalorhora']
+        
+        if 'dia_data_contratacao' in data:
+            del data['dia_data_contratacao']
+            del data['mes_data_contratacao']
+            del data['ano_data_contratacao']
+            
+        if 'dia_data_rescisao' in data:
+            del data['dia_data_rescisao']
+            del data['mes_data_rescisao']
+            del data['ano_data_rescisao']
+        
+        cliente = Cliente(**data)
+        
+        data_string = request.data['data_contratacao']
+        data_string = data_string[:data_string.index('T')]
+        data = datetime.strptime(data_string, '%Y-%m-%d')
+        cliente.data_contratacao = data.date()
+        
+        if 'data_rescisao' in request.data:
+            data_string = request.data['data_rescisao']
+            if data_string is not None:
+                data_string = data_string[:data_string.index('T')]
+                data = datetime.strptime(data_string, '%Y-%m-%d')
+                cliente.data_rescisao = data.date()
+        
+        cliente.save();
+        
+        if tipos_valor_hora is not None:
+            for tipo_valor_hora in tipos_valor_hora:
+                if (tipo_valor_hora['tipo_hora'] is not None 
+                    and tipo_valor_hora['valor_hora'] is not None):
+                    tipo_valor = TipoValorHora(**tipo_valor_hora)
+                    tipo_valor.cliente = cliente
+                    tipo_valor.save()
+                
+        return self.get(request, cliente.id, format);
+    
+    def delete(self, request, cliente_id, format=None):
+        
+        cliente = Cliente.objects.get(pk=cliente_id)
+        
+        tipos_valor_hora = TipoValorHora.objects.filter(cliente=cliente)
+        
+        for tipo_valor_hora in tipos_valor_hora:
+            tipo_valor_hora.delete()
+            
+        cliente.delete()
+        
+        serializer = serializers.ClienteSerializer(cliente)
+        return Response(serializer.data)
+    
+class TipoValorHoraDetail(APIView):
+    
+    def get(self, request, tipo_valor_hora_id, format=None):
+        tipo_valor_hora  = TipoValorHora.objects.get(pk=tipo_valor_hora_id)
+        serializer = serializers.TipoValorHoraSerializer(tipo_valor_hora)
+        return Response(serializer.data)
+    
+    def delete(self, request, tipo_valor_hora_id, format=None):
+        
+        tipo_valor_hora = TipoValorHora.objects.get(pk=tipo_valor_hora_id)
+        tipo_valor_hora.delete()
+        
+        serializer = serializers.TipoValorHoraSerializer(tipo_valor_hora)
+        return Response(serializer.data)
+    

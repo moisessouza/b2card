@@ -10,7 +10,7 @@ class Cliente(models.Model):
     estado = models.CharField(max_length=20)
     cep = models.CharField(max_length=10)
     data_contratacao = models.DateField(default=None, blank=True)
-    data_rescisao = models.DateField(default=None, blank=True)
+    data_rescisao = models.DateField(default=None, null=True)
     
 class TipoValorHora(models.Model):
     cliente = models.ForeignKey(Cliente, default=None, blank=True)
