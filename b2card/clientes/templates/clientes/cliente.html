@@ -44,7 +44,11 @@
 	  <div class="panel-body">
 		  <div class="form-group">
 		    <label for="razao_social">Razão social</label>
+<<<<<<< HEAD
 		    <input type="text" class="form-control" id="razao_social" name="razao_social" ng-model="$ctrl.cliente.razao_social" placeholder="Razão Social" required>
+=======
+		    <input type="text" class="form-control" id="razao_social" name="razao_social" ng-model="cliente.razao_social" placeholder="Razão Social" required>
+>>>>>>> branch 'master' of https://github.com/moisessouza/b2card.git
 		    <span class="red" ng-show="clientes.razao_social.$invalid">Nome é obrigatório.</span>
 		  </div>
 		  <div class="form-group">
@@ -111,8 +115,13 @@
 					 </div>
 				</div>
     	  </div>
+<<<<<<< HEAD
 		  <button type="submit" class="btn btn-primary" name="salvar" ng-click="$ctrl.salvar()" ng-disabled="clientes.$invalid">Salvar</button>
 		  <button type="submit" class="btn btn-danger" name="deletar" ng-show="$ctrl.cliente.id">Deletar</button>
+=======
+		  <button type="submit" class="btn btn-primary" name="gravar" ng-click="$ctrl.gravar()" ng-disabled="clientes.$invalid">Gravar</button>
+		  <button type="submit" class="btn btn-danger" name="deletar">Deletar</button>
+>>>>>>> branch 'master' of https://github.com/moisessouza/b2card.git
 	 </div>
   </div>
 </form>
