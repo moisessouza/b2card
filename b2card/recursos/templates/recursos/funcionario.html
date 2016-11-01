@@ -4,6 +4,7 @@
 {% block script %}
 	<script src="/static/js/apps/recursos/recursos.js"></script>
 	<script src="/static/js/apps/recursos/recursos-services.js"></script>
+	<script src="/static/js/commons/commons.js"></script>
 	<script src="/static/js/angular/ui-bootstrap-tpls-2.2.0.min.js"></script>
 	<script src="/static/js/jquery/priceformat/jquery.priceformat.min.js"></script>
 {% endblock %}
@@ -37,9 +38,15 @@
     box-shadow: none;
   }
   
-  span { 
+  span.red { 
    color:red;
   }
+  
+ 
+  table tr {
+    cursor: pointer;
+  }
+	
 </style>
 
 
@@ -79,47 +86,47 @@
 		        	<button class="btn btn-secondary" type="button" ng-click="open()">+</button>
 		     	 </span>
 	        </div>
-	        <span ng-show="recursos.cargo.$invalid">Cargo é obrigatório.</span>
+	        <span class="red" ng-show="recursos.cargo.$invalid">Cargo é obrigatório.</span>
 		  </div>
 		  <div class="form-group form-group-sm">
 		    <label for="rg">RG</label>
 		    <input type="text" class="form-control" id="rg" name="rg" ng-model="$ctrl.funcionario.rg" placeholder="RG" required/>
-		    <span ng-show="recursos.rg.$invalid">RG é obrigatório.</span>
+		    <span class="red" ng-show="recursos.rg.$invalid">RG é obrigatório.</span>
 		  </div>
 		  <div class="form-group form-group-sm">
 		    <label for="cpf">CPF</label>
 		    <input type="text"  class="form-control" id="cpf" name="cpf" ng-model="$ctrl.funcionario.cpf" placeholder="CPF" required>
-		    <span ng-show="recursos.cpf.$invalid">CPF é obrigatório.</span>
+		    <span class="red" ng-show="recursos.cpf.$invalid">CPF é obrigatório.</span>
 		  </div>
 		  <div class="form-group form-group-sm">
 		    <label for="endereco">Endereço</label>
 		    <input type="text" class="form-control" id="endereco" name="endereco" ng-model="$ctrl.funcionario.endereco" placeholder="Endereço" required>
-		    <span ng-show="recursos.endereco.$invalid">Endereço é obrigatório.</span>
+		    <span class="red" ng-show="recursos.endereco.$invalid">Endereço é obrigatório.</span>
 		  </div>
 		  <div class="form-group form-group-sm">
 		    <label for="cidade">Cidade</label>
 		    <input type="text" class="form-control" id="cidade" name="cidade" ng-model="$ctrl.funcionario.cidade" placeholder="Cidade" required>
-		    <span ng-show="recursos.cidade.$invalid">Cidade é obrigatório.</span>
+		    <span class="red" ng-show="recursos.cidade.$invalid">Cidade é obrigatório.</span>
 		  </div>
 		  <div class="form-group">
 		    <label for="estado">Estado</label>
 		    <input type="text" class="form-control" id="estado" name="estado" ng-model="$ctrl.funcionario.estado" placeholder="Estado" required>
-		    <span ng-show="recursos.estado.$invalid">Estado é obrigatório.</span>
+		    <span class="red" ng-show="recursos.estado.$invalid">Estado é obrigatório.</span>
 		  </div>
 		  <div class="form-group">
 		    <label for="cep">CEP</label>
 		    <input type="text" class="form-control" id="cep" name="cep" ng-model="$ctrl.funcionario.cep" placeholder="CEP" required>
-		    <span ng-show="recursos.cep.$invalid">CEP é obrigatório.</span>
+		    <span class="red" ng-show="recursos.cep.$invalid">CEP é obrigatório.</span>
 		  </div>
 		  <div class="form-group">
 		    <label for="salario">Salário</label>
 		    <input type="text" class="form-control" id="salario" name="salario" ng-model="$ctrl.funcionario.salario" placeholder="Salário" required gb-money>
-		    <span ng-show="recursos.salario.$invalid">Salário é obrigatório.</span>
+		    <span class="red" ng-show="recursos.salario.$invalid">Salário é obrigatório.</span>
 		  </div>
 		  <div class="form-group">
 		    <label for="salario">Data de admissão</label>
 		    <input type="date" class="form-control" id="salario" name="salario" ng-model="$ctrl.funcionario.data_admissao" placeholder="Salário" required>
-		    <span ng-show="recursos.salario.$invalid">Data admissão é obrigatório.</span>
+		    <span class="red" ng-show="recursos.salario.$invalid">Data admissão é obrigatório.</span>
 		  </div>
 		  <button type="submit" class="btn btn-primary" name="gravar" ng-click="$ctrl.salvar()" ng-disabled="recursos.$invalid">Salvar</button>
 		  <button type="submit" class="btn btn-danger" name="gravar" ng-click="$ctrl.deletar()" ng-show="$ctrl.funcionario.id">Deletar</button>
@@ -136,7 +143,7 @@
 			</div>
 			<button class="btn btn-primary" type="button" ng-click="$ctrl.salvar()">Salvar</button>
 			<button class="btn btn-danger" type="button" ng-show="$ctrl.cargo.id" ng-click="$ctrl.deletar()">Deletar</button>
-			<table class="table">
+			<table class="table table-hover">
  				<thead>
  					<tr>
 	  					<th>Nome do cargo</th>
