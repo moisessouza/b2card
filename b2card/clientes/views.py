@@ -49,15 +49,11 @@ class ClienteDetail(APIView):
         
         data = clienteSerializer.data
         
-        data['dia_data_contratacao'] = cliente.data_contratacao.day
-        data['mes_data_contratacao'] = cliente.data_contratacao.month
-        data['ano_data_contratacao'] = cliente.data_contratacao.year
+        data['data_contratacao'] = "{:%d/%m/%Y}".format(cliente.data_contratacao)
         
         if cliente.data_rescisao is not None:
-            data['dia_data_rescisao'] = cliente.data_rescisao.day
-            data['mes_data_rescisao'] = cliente.data_rescisao.month
-            data['ano_data_rescisao'] = cliente.data_rescisao.year
-        
+            data['data_rescisao'] = "{:%d/%m/%Y}".format(cliente.data_rescisao)
+            
         tipos_valor_hora = serializers.TipoValorHoraSerializer(tipos_valor_hora, many=True)
         data['tipovalorhora'] = tipos_valor_hora.data
         
@@ -84,15 +80,15 @@ class ClienteDetail(APIView):
         cliente = Cliente(**data)
         
         data_string = request.data['data_contratacao']
-        data_string = data_string[:data_string.index('T')]
-        data = datetime.strptime(data_string, '%Y-%m-%d')
+        #data_string = data_string[:data_string.index('T')]
+        data = datetime.strptime(data_string, '%d/%m/%Y')
         cliente.data_contratacao = data.date()
         
         if 'data_rescisao' in request.data:
             data_string = request.data['data_rescisao']
             if data_string is not None:
-                data_string = data_string[:data_string.index('T')]
-                data = datetime.strptime(data_string, '%Y-%m-%d')
+                #data_string = data_string[:data_string.index('T')]
+                data = datetime.strptime(data_string, '%d/%m/%Y')
                 cliente.data_rescisao = data.date()
         
         cliente.save();

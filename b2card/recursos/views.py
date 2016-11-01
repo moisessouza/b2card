@@ -70,10 +70,10 @@ class FuncionarioDetail(APIView):
     def get(self, request, funcionario_id, format=None):
         funcionario = Funcionario.objects.get(pk=funcionario_id)
         serializer = serializers.FuncionarioSerializer(funcionario)
+        
         data = serializer.data
-        data['dia'] = funcionario.data_admissao.day
-        data['mes'] = funcionario.data_admissao.month
-        data['ano'] = funcionario.data_admissao.year
+        data['data_admissao'] = datetime.combine(funcionario.data_admissao, datetime.min.time()).strftime('%d/%m/%Y')
+        
         return Response(data)
     def post(self, request, format=None):
         
@@ -99,9 +99,8 @@ class FuncionarioDetail(APIView):
         funcionario.salario = salario
         
         data_string = request.data['data_admissao']
-        data_string = data_string[:data_string.index('T')]
         
-        data_admissao = datetime.strptime(data_string, '%Y-%m-%d')
+        data_admissao = datetime.strptime(data_string, '%d/%m/%Y')
         funcionario.data_admissao = data_admissao.date()
         
         funcionario.save()

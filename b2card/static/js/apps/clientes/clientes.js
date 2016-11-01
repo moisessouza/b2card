@@ -14,12 +14,7 @@ clientes.controller('ClientesController', function ($scope, $window, ClientesSer
 	}
 	
 	if (cliente_id) {
-		$ctrl.cliente = ClientesService.buscarcliente(cliente_id, function (data){
-			data.data_contratacao = new Date(data.ano_data_contratacao, data.mes_data_contratacao-1, data.dia_data_contratacao, 0, 0, 0, 0);
-			if (data.data_rescisao){
-				data.data_rescisao = new Date(data.ano_data_rescisao, data.mes_data_rescisao-1, data.dia_data_rescisao, 0, 0, 0, 0);
-			}
-		});
+		$ctrl.cliente = ClientesService.buscarcliente(cliente_id);
 	} else {
 		$ctrl.cliente = {
 			'tipovalorhora': []

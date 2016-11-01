@@ -49,7 +49,7 @@
 		  </div>
 		  <div class="form-group">
 		    <label for="cnpj">CNPJ</label>
-		    <input type="text" class="form-control" id="cnpj" name="cnpj" ng-model="$ctrl.cliente.cnpj" placeholder="CNPJ" required>
+		    <input type="text" class="form-control" id="cnpj" name="cnpj" ng-model="$ctrl.cliente.cnpj" placeholder="CNPJ" gb-cnpj required>
 		    <span class="red" ng-show="clientes.cnpj.$invalid">CNPJ é obrigatório.</span>
 		  </div>
 		  <div class="form-group">
@@ -69,17 +69,17 @@
 		  </div>
 		  <div class="form-group">
 		    <label for="cep">CEP</label>
-		    <input type="text" class="form-control" id="cep" name="cep" ng-model="$ctrl.cliente.cep" placeholder="CEP" required>
+		    <input type="text" class="form-control" id="cep" name="cep" ng-model="$ctrl.cliente.cep" placeholder="CEP" gb-cep required>
 		    <span class="red" ng-show="clientes.cep.$invalid">CEP é obrigatório.</span>
 		  </div>
 		  <div class="form-group">
 		    <label for="data_contratacao">Data da contratação</label>
-		    <input type="date" class="form-control" id="data_contratacao" name="data_contratacao" ng-model="$ctrl.cliente.data_contratacao" placeholder="Data da contratação" required>
+		    <input type="text" class="form-control" id="data_contratacao" name="data_contratacao" ng-model="$ctrl.cliente.data_contratacao" gb-data placeholder="Data da contratação" required>
 		    <span class="red" ng-show="clientes.data_contratacao.$invalid">Data da contratação é obrigatório.</span>
 		  </div>
 		  <div class="form-group">
 		    <label for="data_rescisao">Data da rescisão</label>
-		    <input type="date" class="form-control" id="data_rescisao" name="data_rescisao" ng-model="$ctrl.cliente.data_rescisao" placeholder="Data da rescisão">
+		    <input type="text" class="form-control" id="data_rescisao" name="data_rescisao" ng-model="$ctrl.cliente.data_rescisao" gb-data placeholder="Data da rescisão">
 		  </div>
 		  <div class="table-responsive">
 				<div class="panel panel-default form-group-sm" >

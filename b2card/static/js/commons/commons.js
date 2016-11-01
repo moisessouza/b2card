@@ -17,4 +17,44 @@ commons.directive('gbMoney', function () {
             });
         }
     };
+}).directive('gbCnpj', function () {
+    return {
+        require: '?ngModel',
+        link: function (scope, elem, attrs, ctrl) {
+            if (!ctrl) return;
+            $(elem).mask('99.999.999/9999-99');
+        }
+    };
+}).directive('gbCep', function () {
+    return {
+        require: '?ngModel',
+        link: function (scope, elem, attrs, ctrl) {
+            if (!ctrl) return;
+            $(elem).mask('99.999-999');
+        }
+    };
+}).directive('gbData', function () {
+    return {
+        require: '?ngModel',
+        link: function (scope, elem, attrs, ctrl) {
+            if (!ctrl) return;
+            $(elem).mask('99/99/9999');
+        }
+    };
+}).directive('gbCpf', function () {
+    return {
+        require: '?ngModel',
+        link: function (scope, elem, attrs, ctrl) {
+            if (!ctrl) return;
+            $(elem).mask('999.999.999-99');
+        }
+    };
+}).directive('gbRg', function () {
+    return {
+        require: '?ngModel',
+        link: function (scope, elem, attrs, ctrl) {
+            if (!ctrl) return;
+            $(elem).mask('aa-99.999.999');
+        }
+    };
 });

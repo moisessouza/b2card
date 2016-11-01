@@ -90,12 +90,12 @@
 		  </div>
 		  <div class="form-group form-group-sm">
 		    <label for="rg">RG</label>
-		    <input type="text" class="form-control" id="rg" name="rg" ng-model="$ctrl.funcionario.rg" placeholder="RG" required/>
+		    <input type="text" class="form-control" id="rg" name="rg" gb-rg ng-model="$ctrl.funcionario.rg" placeholder="RG" required/>
 		    <span class="red" ng-show="recursos.rg.$invalid">RG é obrigatório.</span>
 		  </div>
 		  <div class="form-group form-group-sm">
 		    <label for="cpf">CPF</label>
-		    <input type="text"  class="form-control" id="cpf" name="cpf" ng-model="$ctrl.funcionario.cpf" placeholder="CPF" required>
+		    <input type="text"  class="form-control" id="cpf" name="cpf" ng-model="$ctrl.funcionario.cpf" gb-cpf placeholder="CPF" required>
 		    <span class="red" ng-show="recursos.cpf.$invalid">CPF é obrigatório.</span>
 		  </div>
 		  <div class="form-group form-group-sm">
@@ -115,7 +115,7 @@
 		  </div>
 		  <div class="form-group">
 		    <label for="cep">CEP</label>
-		    <input type="text" class="form-control" id="cep" name="cep" ng-model="$ctrl.funcionario.cep" placeholder="CEP" required>
+		    <input type="text" class="form-control" id="cep" name="cep" gb-cep ng-model="$ctrl.funcionario.cep" placeholder="CEP" required>
 		    <span class="red" ng-show="recursos.cep.$invalid">CEP é obrigatório.</span>
 		  </div>
 		  <div class="form-group">
@@ -124,9 +124,9 @@
 		    <span class="red" ng-show="recursos.salario.$invalid">Salário é obrigatório.</span>
 		  </div>
 		  <div class="form-group">
-		    <label for="salario">Data de admissão</label>
-		    <input type="date" class="form-control" id="salario" name="salario" ng-model="$ctrl.funcionario.data_admissao" placeholder="Salário" required>
-		    <span class="red" ng-show="recursos.salario.$invalid">Data admissão é obrigatório.</span>
+		    <label for="data_admissao">Data de admissão</label>
+		    <input type="text" class="form-control" id="data_admissao" name="data_admissao" ng-model="$ctrl.funcionario.data_admissao" gb-data placeholder="Salário" required>
+		    <span class="red" ng-show="recursos.data_admissao.$invalid">Data admissão é obrigatório.</span>
 		  </div>
 		  <button type="submit" class="btn btn-primary" name="gravar" ng-click="$ctrl.salvar()" ng-disabled="recursos.$invalid">Salvar</button>
 		  <button type="submit" class="btn btn-danger" name="gravar" ng-click="$ctrl.deletar()" ng-show="$ctrl.funcionario.id">Deletar</button>
