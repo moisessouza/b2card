@@ -72,7 +72,12 @@ class FuncionarioDetail(APIView):
         serializer = serializers.FuncionarioSerializer(funcionario)
         
         data = serializer.data
-        data['data_admissao'] = "{:%d/%m/%Y}".format(funcionario.data_admissao)
+        
+        iso = funcionario.data_admissao.isoformat()
+        tokens = iso.strip()
+        tokens = iso.split('-')
+        
+        data['data_admissao'] = "%s/%s/%s" % (tokens[2],tokens[1],tokens[0])
         
         return Response(data)
     def post(self, request, format=None):

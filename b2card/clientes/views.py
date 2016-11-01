@@ -49,10 +49,16 @@ class ClienteDetail(APIView):
         
         data = clienteSerializer.data
         
-        data['data_contratacao'] = "{:%d/%m/%Y}".format(cliente.data_contratacao)
+        iso = cliente.data_contratacao.isoformat()
+        tokens = iso.strip()
+        tokens = iso.split('-')
+        data['data_contratacao'] = "%s/%s/%s" % (tokens[2],tokens[1],tokens[0])
         
         if cliente.data_rescisao is not None:
-            data['data_rescisao'] = "{:%d/%m/%Y}".format(cliente.data_rescisao)
+            iso = cliente.data_contratacao.isoformat()
+            tokens = iso.strip()
+            tokens = iso.split('-')
+            data['data_rescisao'] = "%s/%s/%s" % (tokens[2],tokens[1],tokens[0])
             
         tipos_valor_hora = serializers.TipoValorHoraSerializer(tipos_valor_hora, many=True)
         data['tipovalorhora'] = tipos_valor_hora.data
