@@ -7,7 +7,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		$ctrl.clazz = 'label-primary';	
 		$ctrl.message = msg;
 	}
-	
+
 	var messagesuccess = function (msg) {
 		$ctrl.clazz = 'label-success';
 		$ctrl.message = msg;
