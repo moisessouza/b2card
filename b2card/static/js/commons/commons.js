@@ -57,4 +57,12 @@ commons.directive('gbMoney', function () {
             $(elem).mask('aa-99.999.999');
         }
     };
+}).service('CommonsService', function(){
+	return {
+		formatarnumero: function (numero) {
+			return numero.toFixed(2).replace(/./g, function(c, i, a) {
+			    return i && c !== "." && ((a.length - i) % 3 === 0) ? '.' + c : c === "." ? ',' : c;
+			})
+		}
+	}
 });

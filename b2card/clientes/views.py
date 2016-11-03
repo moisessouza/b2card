@@ -7,6 +7,7 @@ from clientes import serializers
 from rest_framework.response import Response
 from clientes.models import TipoValorHora
 from datetime import datetime
+from rest_framework.decorators import api_view
 
 # Create your views here.
 
@@ -138,3 +139,9 @@ class TipoValorHoraDetail(APIView):
         serializer = serializers.TipoValorHoraSerializer(tipo_valor_hora)
         return Response(serializer.data)
     
+@api_view(['GET', 'PUT', 'DELETE'])
+def buscar_valor_hora_cliente(request, cliente_id):
+    
+    tipo_valor_horas = TipoValorHora.objects.filter(cliente__id=cliente_id)
+    serializer = serializers.TipoValorHoraSerializer(tipo_valor_horas, many=True)
+    return Response(serializer.data)
