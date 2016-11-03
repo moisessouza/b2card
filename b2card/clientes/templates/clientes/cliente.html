@@ -112,7 +112,7 @@
 				</div>
     	  </div>
 		  <button type="submit" class="btn btn-primary" name="salvar" ng-click="$ctrl.salvar()" ng-disabled="clientes.$invalid">Salvar</button>
-		  <button type="submit" class="btn btn-danger" name="deletar" ng-show="$ctrl.cliente.id">Deletar</button>
+		  <button type="submit" class="btn btn-danger" name="deletar" ng-click="$ctrl.deletar()" ng-show="$ctrl.cliente.id">Deletar</button>
 		  <div class="label {{$ctrl.clazz}}" ng-bind="$ctrl.message" ></div>
 	 </div>
   </div>

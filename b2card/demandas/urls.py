@@ -23,6 +23,9 @@ app_name='demandas'
 urlpatterns = [
     url(r'^$', views.index, name='inicial'),
     url(r'^novo/$', views.novo, name='novo'),
+    url(r'^editar/(?P<demanda_id>[0-9]+)/$', views.editar, name='editar'),
+    url(r'^api/new/$', views.DemandaDetail.as_view()),
+    url(r'^api/(?P<demanda_id>[0-9]+)/$', views.DemandaDetail.as_view())
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

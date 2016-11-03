@@ -1,69 +1,76 @@
-var demandas = angular.module('demandas', ['demandas-services',  'ui.bootstrap']);
+var demandas = angular.module('demandas', ['demandas-services', 'commons', 'ui.bootstrap']);
 
-demandas.controller('DemandaController', function ($scope, $uibModal, $log, DemandaService){
-	$ctrl = this; 
-	$scope.demanda = {
-		proposta: [
-			{
-				numero_proposta: '123456',
-				data_proposta: '21/12/2015',
-				eh_corrente: false
-			},
-		    {
-		    	numero_proposta: '123456',
-		    	data_proposta: '21/12/2016',
-		    	eh_corrente: true
-			}
-		]
+demandas.controller('DemandaController', function ($scope, $window, $uibModal, $log, DemandaService, CommonsService){
+	var $ctrl = this; 
+	
+	var messageinfo = function (msg){
+		$ctrl.clazz = 'label-primary';	
+		$ctrl.message = msg;
 	}
 	
-	$scope.listaclientes= DemandaService.buscarclientes();
-	$scope.listacoordenador = DemandaService.buscarfuncionarios();
+	var messagesuccess = function (msg) {
+		$ctrl.clazz = 'label-success';
+		$ctrl.message = msg;
+	}
 	
-	$scope.open = function (size, parentSelector) {
-	    var parentElem = parentSelector ? 
-	      angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
-	    var modalInstance = $uibModal.open({
-	      animation: $ctrl.animationsEnabled,
-	      ariaLabelledBy: 'modal-title',
-	      ariaDescribedBy: 'modal-body',
-	      templateUrl: 'myModalContent.html',
-	      controller: 'ModalInstanceCtrl',
-	      controllerAs: '$ctrl',
-	      size: size,
-	      appendTo: parentElem,
-	      resolve: {
-	        demanda: function () {
-	          return $scope.demanda;
-	        }
-	      }
-	    });
-	    
-	    modalInstance.result.then(function (proposta) {
-	        console.log(proposta);
-	      }, function () {
-	        $log.info('Modal dismissed at: ' + new Date());
-	      });
-	};	
+	if (demanda_id) {
+		$ctrl.demanda = DemandaService.buscardemanda(demanda_id, function (data){
+			$ctrl.listatipovalorhora  = DemandaService.buscartipohoracliente(cliente_id, function (tiposhoravalor){
+				itens_faturamento = data.itens_faturamento;
+				for (i in itens_faturamento){
+					item = itens_faturamento[i];
+					for (e in tiposhoravalor){
+						tipo_hora = tiposhoravalor[e];
+						if (item.tipo_hora.id == tipo_hora.id){
+							item.tipo_hora = tipo_hora;
+							break;
+						}	
+					}
+				}
+			});
+			$ctrl.show=true;
+		});
+	} else {
+		$ctrl.demanda = {
+			'itens_faturamento': []
+		}
+		$ctrl.show=true;
+	}
 	
-});
-
-demandas.controller('ModalInstanceCtrl', function ($uibModalInstance, demanda) {
-	  var $ctrl = this;
-	  $ctrl.demanda = demanda;
-	  	
-	  $ctrl.ok = function () {
-		  
-		  for ( index in $ctrl.demanda.proposta ){
-			  $ctrl.demanda.proposta[index].eh_corrente=false;
-		  }		  
-		  
-		  $ctrl.proposta.eh_corrente=true;
-		  $ctrl.demanda.proposta.push($ctrl.proposta);
-		  $uibModalInstance.close($ctrl.proposta);
-	  };
+	$ctrl.adicionaritem = function () {
+		$ctrl.demanda.itens_faturamento.push({});
+	}
 	
-	  $ctrl.cancel = function () {
-	    $uibModalInstance.dismiss('cancel');
-	  };
+	$ctrl.listaclientes= DemandaService.buscarclientes();
+	$ctrl.listacoordenador = DemandaService.buscarfuncionarios();
+	
+	$ctrl.changecliente = function (){
+		$ctrl.listatipovalorhora  = DemandaService.buscartipohoracliente($ctrl.demanda.cliente.id);	
+	}
+	
+	$ctrl.changehoraproposta = function (item_faturamento) {
+		if (item_faturamento.tipo_hora){
+			var tipo_hora = item_faturamento.tipo_hora;
+			var valor_hora = parseFloat(tipo_hora.valor_hora.replace('.', '').replace(',','.'));
+			item_faturamento.valor_hora = tipo_hora.valor_hora;
+			var valor_faturamento = valor_hora * (item_faturamento.quantidade_horas ? item_faturamento.quantidade_horas : 0);
+			item_faturamento.valor_faturamento = CommonsService.formatarnumero(valor_faturamento);
+		}
+	}
+	
+	
+	$ctrl.salvardemanda = function (){
+		messageinfo("salvando...");
+		DemandaService.salvardemanda($ctrl.demanda, function(data){
+			$ctrl.demanda.id = data.id;
+			messagesuccess('salvo!');
+		});
+	}
+	
+	$ctrl.deletar = function () {
+		DemandaService.deletardemanda($ctrl.demanda.id, function(data){
+			$window.location.href = '/demandas/';
+		});
+	}
+	
 });

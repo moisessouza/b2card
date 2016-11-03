@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^(?P<cliente_id>[0-9]+)/$', views.editar, name='editar'),
     url(r'^api/list/$', views.ClienteList.as_view()),
     url(r'^api/new', views.ClienteDetail.as_view()),
+    url(r'^api/cliente/(?P<cliente_id>[0-9]+)/valorhora/$', views.buscar_valor_hora_cliente),
     url(r'^api/(?P<cliente_id>[0-9]+)/$', views.ClienteDetail.as_view()),
     url(r'^api/valorhora/(?P<tipo_valor_hora_id>[0-9]+)/$', views.TipoValorHoraDetail.as_view())
 ]

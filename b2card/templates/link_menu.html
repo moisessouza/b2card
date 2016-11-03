@@ -1,34 +1,37 @@
 <meta charset="utf-8">
 
-<div class="col-sm-3 sidenav">
-    <h4>B2Card Informática</h4>
-    <ul class="nav nav-pills nav-stacked">
-		<li> <!-- class="active" -->
-			<a href="{% url 'inicial:inicial' %}">
-				Inicio 
-				<span class="sr-only">(current)</span>
-			</a>
-		</li>
-		<li>
-			<a href="{% url 'recursos:inicial' %}">
-				Funcionários
-			</a>
-		</li>
-		<li>
-			<a href="{% url 'clientes:inicial' %}">
-				Clientes
-			</a>
-		</li>
-		<li>
-			<a href="{% url 'demandas:inicial' %}">
-				Demandas
-			</a>
-		</li>
-		<li>
-			<a href="{% url 'autenticacao:logout_view' %}">
-				Sair
-			</a>
-		</li>
-	</ul>
-    <br>
- </div>
+<nav class="navbar navbar-inverse">
+	<div class="container-fluid">
+		<div class="navbar-header">
+	      <a class="navbar-brand" href="#">B2Card</a>
+	    </div>
+	    <ul class="nav navbar-nav">
+			<li> <!-- class="active" -->
+				<a href="{% url 'inicial:inicial' %}">
+					Inicio 
+					<span class="sr-only">(current)</span>
+				</a>
+			</li>
+			<li>
+				<a href="{% url 'recursos:inicial' %}">
+					Funcionários
+				</a>
+			</li>
+			<li>
+				<a href="{% url 'clientes:inicial' %}">
+					Clientes
+				</a>
+			</li>
+			<li>
+				<a href="{% url 'demandas:inicial' %}">
+					Demandas
+				</a>
+			</li>
+			<li>
+				<a href="{% url 'autenticacao:logout_view' %}">
+					Sair
+				</a>
+			</li>
+		</ul>
+ 	</div>
+ </nav>
