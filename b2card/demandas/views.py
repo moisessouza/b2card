@@ -79,6 +79,8 @@ class DemandaDetail(APIView):
         
         for i in itens_faturamento:
             
+            tipo_valor_hora = None
+            
             if 'tipo_hora' in i:
                 tipo_valor_hora = i['tipo_hora']
                 tipo_valor_hora = TipoValorHora(pk=tipo_valor_hora['id'])
@@ -88,7 +90,7 @@ class DemandaDetail(APIView):
             faturamento_demanda = FaturamentoDemanda(**i)
             faturamento_demanda.demanda = demanda
             
-            if 'tipo_valor_hora' is locals():
+            if tipo_valor_hora is not None:
                 faturamento_demanda.tipo_hora = tipo_valor_hora
            
             if 'data' in i:
