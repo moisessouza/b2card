@@ -41,6 +41,10 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		$ctrl.demanda.itens_faturamento.unshift({});
 	}
 	
+	$ctrl.adicionartarefa = function () {
+		alert('ainda não implementado');
+	}
+	
 	$ctrl.listaclientes= DemandaService.buscarclientes();
 	$ctrl.listacoordenador = DemandaService.buscarfuncionarios();
 	
