@@ -79,30 +79,34 @@ class DemandaDetail(APIView):
         
         for i in itens_faturamento:
             
-            tipo_valor_hora = i['tipo_hora']
-            tipo_valor_hora = TipoValorHora(pk=tipo_valor_hora['id'])
+            if 'tipo_hora' in i:
+                tipo_valor_hora = i['tipo_hora']
+                tipo_valor_hora = TipoValorHora(pk=tipo_valor_hora['id'])
             
-            del i['tipo_hora']
+                del i['tipo_hora']
             
             faturamento_demanda = FaturamentoDemanda(**i)
             faturamento_demanda.demanda = demanda
-            faturamento_demanda.tipo_hora = tipo_valor_hora
+            
+            if 'tipo_valor_hora' is locals():
+                faturamento_demanda.tipo_hora = tipo_valor_hora
            
-            data_string = i['data']
-            data = datetime.strptime(data_string, '%d/%m/%Y')
-            faturamento_demanda.data = data.date()
-            
-            data_string = i['data_envio_aprovacao']
-            data = datetime.strptime(data_string, '%d/%m/%Y')
-            faturamento_demanda.data_envio_aprovacao = data.date()
-            
-            data_string = i['data_aprovacao_fatura']
-            data = datetime.strptime(data_string, '%d/%m/%Y')
-            faturamento_demanda.data_aprovacao_fatura = data.date()
-            
-            data_string = i['data_fatura']
-            data = datetime.strptime(data_string, '%d/%m/%Y')
-            faturamento_demanda.data_fatura = data.date()
+            if 'data' in i:
+                data_string = i['data']
+                data = datetime.strptime(data_string, '%d/%m/%Y')
+                faturamento_demanda.data = data.date()
+            if 'data_envio_aprovacao' in i:
+                data_string = i['data_envio_aprovacao']
+                data = datetime.strptime(data_string, '%d/%m/%Y')
+                faturamento_demanda.data_envio_aprovacao = data.date()
+            if 'data_aprovacao_fatura' in i:
+                data_string = i['data_aprovacao_fatura']
+                data = datetime.strptime(data_string, '%d/%m/%Y')
+                faturamento_demanda.data_aprovacao_fatura = data.date()
+            if 'data_fatura' in i:
+                data_string = i['data_fatura']
+                data = datetime.strptime(data_string, '%d/%m/%Y')
+                faturamento_demanda.data_fatura = data.date()
             
             faturamento_demanda.save()
             
@@ -141,7 +145,11 @@ class DemandaDetail(APIView):
         
 
 def formatar_data(data):
-    iso = data.isoformat()
-    tokens = iso.strip()
-    tokens = iso.split('-')
-    return "%s/%s/%s" % (tokens[2],tokens[1],tokens[0])
+    if data is not None:
+        iso = data.isoformat()
+        tokens = iso.strip()
+        tokens = iso.split('-')
+        return "%s/%s/%s" % (tokens[2],tokens[1],tokens[0])
+    else:
+        return None
+    
