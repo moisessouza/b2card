@@ -1,0 +1,16 @@
+MySQL 5.5 database added.  Please make note of these credentials:
+
+       Root User: adminzWjjlwQ
+   Root Password: 5G6qqBp2z5Tp
+   Database Name: b2card
+
+Connection URL: mysql://$OPENSHIFT_MYSQL_DB_HOST:$OPENSHIFT_MYSQL_DB_PORT/
+
+You can manage your new MySQL database by also embedding phpmyadmin.
+The phpmyadmin username and password will be the same as the MySQL credentials above.
+
+
+Please make note of these MySQL credentials again:
+  Root User: adminzWjjlwQ
+  Root Password: 5G6qqBp2z5Tp
+URL: https://b2card-playbasket.rhcloud.com/phpmyadmin/
