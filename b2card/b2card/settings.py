@@ -91,8 +91,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
         'NAME': 'b2card',
-        'USER': 'adminzWjjlwQ',
-        'PASSWORD': '5G6qqBp2z5Tp',
+        'USER': 'root',
+        'PASSWORD': '',
         'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
         'PORT': '3306',
     }
