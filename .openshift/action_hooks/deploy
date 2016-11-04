@@ -2,4 +2,4 @@
 PYTHONPATH=$OPENSHIFT_REPO_DIR/b2card
 django-admin.py migrate --settings='b2card.production' --pythonpath=$PYTHONPATH
 python $PYTHONPATH/manage.py collectstatic -c --noinput --settings='b2card.production' --pythonpath=$PYTHONPATH
-echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'pass')" | python $PYTHONPATH/ manage.py shell --pythonpath=$PYTHONPATH --settings='b2card.production'
+echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'pass')" | python $PYTHONPATH/manage.py shell --pythonpath=$PYTHONPATH --settings='b2card.production'
