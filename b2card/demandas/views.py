@@ -204,6 +204,15 @@ class DemandaDetail(APIView):
                     tarefa.implantacao_producao = converter_string_para_data(data_string)
                 tarefa.save()
 
+
+    def salvar_observacoes(self, observacoes, demanda):
+        for i in observacoes:
+            if ('observacao' in i and i['observacao'] is not None and 'data_observacao' in i and i['data_observacao'] is not None):
+                observacao = Observacao(**i)
+                observacao.demanda = demanda
+                observacao.data_observacao = converter_string_para_data(i['data_observacao'])
+                observacao.save()
+
     def post(self, request, format=None):
         
         data = request.data
@@ -230,14 +239,7 @@ class DemandaDetail(APIView):
         self.salvar_tarefa(tarefas, demanda)
         self.salvar_proposta(propostas, demanda)
         self.salvar_item_faturamento(itens_faturamento, demanda)
-        
-        for i in observacoes:
-            if ('observacao' in i and i['observacao'] is not None
-                and 'data_observacao' in i and i['data_observacao'] is not None):
-                observacao = Observacao(**i)
-                observacao.demanda = demanda
-                observacao.data_observacao = converter_string_para_data(i['data_observacao'])
-                observacao.save()
+        self.salvar_observacoes(observacoes, demanda)
         
         return Response(self.serializarDemanda(demanda.id))
     
