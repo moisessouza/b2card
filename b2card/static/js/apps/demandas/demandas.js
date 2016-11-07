@@ -32,7 +32,8 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		});
 	} else {
 		$ctrl.demanda = {
-			'itens_faturamento': []
+			'itens_faturamento': [],
+			'propostas':[]
 		}
 		$ctrl.show=true;
 	}
@@ -41,8 +42,8 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		$ctrl.demanda.itens_faturamento.unshift({});
 	}
 	
-	$ctrl.adicionartarefa = function () {
-		alert('ainda não implementado');
+	$ctrl.adicionarproposta = function () {
+		$ctrl.demanda.propostas.unshift({})
 	}
 	
 	$ctrl.listaclientes= DemandaService.buscarclientes();
@@ -65,17 +66,10 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	
 	$ctrl.salvardemanda = function (){
 		messageinfo("salvando...");
-		var itens_faturamento = $ctrl.demanda.itens_faturamento
-		for (index in itens_faturamento){
-			var item = itens_faturamento[index];
-			if (!item.descricao){
-				$ctrl.demanda.itens_faturamento.splice($ctrl.demanda.itens_faturamento.indexOf(item, 1));
-			}
-		}
 		
 		DemandaService.salvardemanda($ctrl.demanda, function(data){
-			$ctrl.demanda.id = data.id;
-			messagesuccess('salvo!');
+			$ctrl.demanda = data;
+			messagesuccess('salvo!')
 		});
 	}
 	
