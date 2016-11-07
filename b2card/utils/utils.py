@@ -10,5 +10,8 @@ def formatar_data(data):
         return None
     
 def converter_string_para_data(data_string):
-    data = datetime.strptime(data_string, '%d/%m/%Y')
-    return data.date()
+    if data_string is not None:
+        data = datetime.strptime(data_string, '%d/%m/%Y')
+        return data.date()
+    else:
+        return None
