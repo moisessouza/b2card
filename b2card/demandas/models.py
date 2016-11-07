@@ -61,4 +61,28 @@ class Proposta(models.Model):
     total_horas_ganhadora = models.IntegerField(null=True)
     demanda = models.ForeignKey(Demanda, null=True)
 
-    
+SIM_NAO = (
+    ('S', 'Sim'),
+    ('N', 'Não')
+)
+
+class Tarefa(models.Model):
+    descricao = models.TextField()
+    analista_tecnico_responsavel = models.ForeignKey(Funcionario, null=True, related_name="%(app_label)s_%(class)s_related", related_query_name="%(app_label)s_%(class)ss")
+    responsavel = models.ForeignKey(Funcionario, null = True)
+    analise_inicio = models.DateField(null = True)
+    analise_fim = models.DateField(null = True)
+    analise_fim_real = models.DateField(null = True)
+    densenvolvimento_inicio = models.DateField(null = True)
+    desenvolvimento_fim = models.DateField(null = True)
+    desenvolvimento_fim_real= models.DateField(null = True)
+    homologacao_possui_sit = models.CharField(null = True, max_length=1, choices=SIM_NAO)
+    homologacao_inicio = models.DateField(null = True)
+    homologacao_fim = models.DateField(null = True)
+    homologacao_fim_real = models.DateField(null = True)
+    forecast = models.CharField(null = True, max_length=30)
+    aceite = models.CharField(null = True, max_length=1, choices=SIM_NAO)
+    evidencias = models.CharField(null = True, max_length=30)
+    implantacao_producao = models.DateField(null = True)
+    implantacao_in_loco = models.CharField(null = True, max_length=1, choices=SIM_NAO)
+    demanda = models.ForeignKey(Demanda, null=True)
