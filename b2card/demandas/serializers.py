@@ -6,12 +6,15 @@ Created on 14 de set de 2016
 from rest_framework import serializers
 from demandas.models import Demanda, FaturamentoDemanda
 from clientes.serializers import ClienteSerializer, TipoValorHoraSerializer
+     
+     
+     
         
 class DemandaSerializer (serializers.ModelSerializer):
     cliente = ClienteSerializer()
     class Meta:
         model = Demanda
-        fields = ('id', 'cliente', 'data_aprovacao', 'identificacao', 'numero_proposta', 'descricao')
+        fields = ('id', 'titulo','cliente','identificacao','descricao','tipo_demanda','status_demanda','codigo_cri')
         
 class FaturamentoDemandaSerializer(serializers.ModelSerializer):
     tipo_hora = TipoValorHoraSerializer()

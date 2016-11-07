@@ -49,6 +49,13 @@
 				<div class="row">
 					<div class="col-md-3">
 						<div class="form-group">
+							<label for="cliente">Título da demanda</label> 
+						    <input type="text" id="titulo" name="titulo" ng-model="$ctrl.demanda.titulo" class="form-control" required maxlength="30"/>
+						    <span class="red" ng-show="demanda.titulo.$invalid">Título da demanda é obrigatório.</span>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
 							<label for="cliente">Cliente</label> 
 						    <select id="cliente" name="cliente" class="form-control" ng-change="$ctrl.changecliente()" ng-model="$ctrl.demanda.cliente.id" ng-options="c.id as c.razao_social for c in $ctrl.listaclientes" required>
 						    	<option value="">Selecione um cliente...</option>
@@ -56,27 +63,52 @@
 							<span class="red" ng-show="demanda.cliente.$invalid">Cliente é obrigatório.</span>
 						</div>
 					</div>
-					<div class="col-md-2">
-						<div class="form-group">
-							<label for="data_aprovacao">Data de aprovação</label> 
-						    <input type="text" id="data_aprovacao" name="data_aprovacao" ng-model="$ctrl.demanda.data_aprovacao" class="form-control" gb-data required/>
-						    <span class="red" ng-show="demanda.data_aprovacao.$invalid">Data é obrigatório.</span>
-						</div>
-					</div>
 					<div class="col-md-3">
 						<div class="form-group">
 							<label for="identificacao">Identificação</label> 
-						    <input type="text" id="identificacao" name="identificacao" ng-model="$ctrl.demanda.identificacao" class="form-control" required/>
+						    <input type="text" id="identificacao" name="identificacao" ng-model="$ctrl.demanda.identificacao" class="form-control" required maxlength="30"/>
 						    <span class="red" ng-show="demanda.identificacao.$invalid">Identificação é obrigatório.</span>
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="form-group form-group-sm">
+							<label for="comissao_comercial">Tipo da demanda</label> 
+						    <select id="tipo_demanda" name="tipo_demanda" ng-model="$ctrl.demanda.tipo_demanda" class="form-control" required>
+					    		<option value="">Selecione um tipo...</option>
+					    		<option value="D">Desenvolvimento</option>
+					    		<option value="H">Homologação</option>
+					    		<option value="C">Consultoria</option>
+					    		<option value="A">Alocação</option>
+					    	</select>
+					    	<span class="red" ng-show="demanda.tipo_demanda.$invalid">Tipo da demanda é obrigatório.</span>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<div class="form-group form-group-sm">
+							<label for="comissao_comercial"> Status da demanda</label> 
+						    <select id="status_demanda" name="status_demanda" ng-model="$ctrl.demanda.status_demanda" class="form-control" required>
+					    		<option value="">Selecione um tipo...</option>
+					    		<option value="O">Em orçamentação</option>
+					    		<option value="A">Aguardando aprovação</option>
+					    		<option value="N">Não aprovada</option>
+					    		<option value="C">Cancelada</option>
+					    		<option value="H">Em homologação</option>
+					    		<option value="I">Implantada</option>
+					    		<option value="D">Em desenvolvimento</option>
+					    	</select>
+					    	<span class="red" ng-show="demanda.tipo_demanda.$invalid">Status da demanda é obrigatório.</span>
 						</div>
 					</div>
 					<div class="col-md-3">
 						<div class="form-group">
-							<label for="numero_proposta">Númerdo da proposta B2Card</label> 
-						    <input type="text" id="numero_proposta" name="numero_proposta" ng-model="$ctrl.demanda.numero_proposta" class="form-control" required/>
-						    <span class="red" ng-show="demanda.numero_proposta.$invalid">Número da proposta é obrigatório.</span>
+							<label for="identificacao">Código de CRI</label> 
+						    <input type="text" id="codigo_cri" name="codigo_cri" ng-model="$ctrl.demanda.codigo_cri" class="form-control" maxlength="12"/>
 						</div>
 					</div>
+				</div>
+				<div class="row">
 					<div class="col-md-12">
 						<div class="form-group">
 							<label for="descricao">Descrição</label> 
@@ -88,7 +120,6 @@
 			</div>
 		</div>
 	</form>
-		
 	<ul class="nav nav-tabs">
 	  <li class="active"><a data-toggle="tab" href="#menu1">Itens de faturamento da demanda</a></li>
 	  <li><a data-toggle="tab" href="#menu2">Tarefas</a></li>
@@ -107,7 +138,7 @@
 							<div class="col-sm-12">
 								<div class="form-group form-group-sm">
 									<label for="descricao">Descrição</label> 
-								    <input type="text" id="descricao" name="descricao" ng-model="item_faturamento.descricao" class="form-control" required/>
+								    <input type="text" id="descricao" name="descricao" ng-model="item_faturamento.descricao" class="form-control" required maxlength="30"/>
 								    <span class="red" ng-show="itensfaturamento.descricao.$invalid">Descrição é obrigatório.</span>
 								</div>
 							</div>
@@ -130,7 +161,7 @@
 							<div class="col-sm-2">
 								<div class="form-group form-group-sm">
 									<label for="comissao_comercial">Valor da hora</label> 
-								    <input type="text" id="comissao_comercial" name="comissao_comercial" ng-model="item_faturamento.valor_hora" ng-change="$ctrl.changehoraproposta(item_faturamento)" gb-money class="form-control"/>
+								    <input type="text" id="comissao_comercial" name="comissao_comercial" ng-model="item_faturamento.valor_hora" ng-change="$ctrl.changehoraproposta(item_faturamento)" maxlength="30" gb-money class="form-control"/>
 								</div>
 							</div>
 							<div class="col-sm-2">
@@ -141,8 +172,8 @@
 							</div>
 							<div class="col-sm-2">
 								<div class="form-group form-group-sm">
-									<label for="comissao_comercial">Valor faturamento</label> 
-								    <input type="text" id="comissao_comercial" name="comissao_comercial" ng-model="item_faturamento.valor_faturamento" gb-money class="form-control"/>
+									<label for="valor_faturamento">Valor faturamento</label> 
+								    <input type="text" id="valor_faturamento" name="valor_faturamento" ng-model="item_faturamento.valor_faturamento" maxlength="30" gb-money class="form-control"/>
 								</div>
 							</div>
 							<div class="col-sm-2">
@@ -158,20 +189,20 @@
 							</div>
 							<div class="col-sm-2">
 								<div class="form-group form-group-sm">
-									<label for="comissao_comercial">Data env. aprv.</label> 
-								    <input type="text" id="comissao_comercial" name="comissao_comercial" ng-model="item_faturamento.data_envio_aprovacao" gb-data class="form-control"/>
+									<label for="data_env_aprov">Data env. aprv.</label> 
+								    <input type="text" id="data_env_aprov" name="data_env_aprov" ng-model="item_faturamento.data_envio_aprovacao" gb-data class="form-control"/>
 								</div>
 							</div>
 							<div class="col-sm-2">
 								<div class="form-group form-group-sm">
-									<label for="comissao_comercial">Data aprv. fat.</label> 
-								    <input type="text" id="comissao_comercial" name="comissao_comercial" ng-model="item_faturamento.data_aprovacao_fatura" gb-data class="form-control"/>
+									<label for="data_aprv_fat">Data aprv. fat.</label> 
+								    <input type="text" id="data_aprv_fat" name="data_aprv_fat" ng-model="item_faturamento.data_aprovacao_fatura" gb-data class="form-control"/>
 								</div>
 							</div>
 							<div class="col-sm-2">
 								<div class="form-group form-group-sm">
-									<label for="comissao_comercial">Data fat.</label> 
-								    <input type="text" id="comissao_comercial" name="comissao_comercial" ng-model="item_faturamento.data_fatura" gb-data class="form-control"/>
+									<label for="data_fat">Data fat.</label> 
+								    <input type="text" id="data_fat" name="data_fat" ng-model="item_faturamento.data_fatura" gb-data class="form-control"/>
 								</div>
 							</div>
 						</div>

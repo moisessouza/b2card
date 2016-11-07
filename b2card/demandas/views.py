@@ -40,7 +40,6 @@ class DemandaDetail(APIView):
         itens_faturamento = FaturamentoDemanda.objects.filter(demanda__id = demanda_id)
         
         data = DemandaSerializer(demanda).data
-        data['data_aprovacao'] = formatar_data(demanda.data_aprovacao)
         
         itens = []
         
@@ -70,10 +69,6 @@ class DemandaDetail(APIView):
        
         demanda = Demanda(**data)
         demanda.cliente = cliente
-               
-        data_string = request.data['data_aprovacao']
-        data = datetime.strptime(data_string, '%d/%m/%Y')
-        demanda.data_aprovacao = data.date()
         
         demanda.save();
         
