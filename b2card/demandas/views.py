@@ -40,6 +40,7 @@ class DemandaDetail(APIView):
         itens_faturamento = FaturamentoDemanda.objects.filter(demanda__id=demanda_id)
         propostas = Proposta.objects.filter(demanda__id=demanda_id)
         data = DemandaSerializer(demanda).data
+
         itens = []
         for i in itens_faturamento:
             faturamento_demanda = FaturamentoDemandaSerializer(i).data
