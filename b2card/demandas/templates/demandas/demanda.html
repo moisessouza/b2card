@@ -33,6 +33,11 @@
 		margin-bottom: 1em;
 		margin-top: 1em;
 	}
+	
+	span.margin {
+		margin: -3px;
+	}
+	
 	table thead tr th{
 		text-align: center;
 	}
@@ -140,9 +145,16 @@
 		  		<span class="glyphicon glyphicon-plus"></span> Adicionar item
 			</button>
 			
-			<form name="itensfaturamento" ng-repeat="item_faturamento in $ctrl.demanda.itens_faturamento">
+			<form name="itensfaturamento" ng-repeat="item_faturamento in $ctrl.demanda.itens_faturamento" ng-show="!item_faturamento.remover">
 				<div class="panel panel-primary">
-					<div class="panel-heading"><strong>{{item_faturamento.descricao ? item_faturamento.descricao : '(Sem descrição)'}}</strong></div>
+					<div class="panel-heading">
+						<strong>{{item_faturamento.descricao ? item_faturamento.descricao : '(Sem descrição)'}}</strong>
+						<div class="btn-group pull-right">
+						<button type="button" class="btn btn-primary" ng-click="$ctrl.removeritem(item_faturamento)">
+		  					<span class="glyphicon glyphicon-trash margin"></span>
+						</button>
+						</div>
+					</div>
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-sm-12">

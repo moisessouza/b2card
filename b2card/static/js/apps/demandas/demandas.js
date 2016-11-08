@@ -33,6 +33,10 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		$ctrl.demanda.itens_faturamento.unshift({});
 	}
 	
+	$ctrl.removeritem = function (item){
+		item.remover = true 
+	}
+	
 	$ctrl.adicionarproposta = function () {
 		$ctrl.demanda.propostas.unshift({});
 	}

@@ -110,142 +110,165 @@ class DemandaDetail(APIView):
 
     def salvar_proposta(self, propostas, demanda):
         for i in propostas:
-            if 'data_recimento_solicitacao' in i and i['data_recimento_solicitacao'] is not None:
-                proposta = Proposta(**i)
-                proposta.demanda = demanda
-                data_string = i['data_recimento_solicitacao']
-                proposta.data_recimento_solicitacao = converter_string_para_data(data_string)
-                if 'data_limite_entrega' in i:
-                    data_string = i['data_limite_entrega']
-                    proposta.data_limite_entrega = converter_string_para_data(data_string)
-                if 'data_real_entrega' in i:
-                    data_string = i['data_real_entrega']
-                    proposta.data_real_entrega = converter_string_para_data(data_string)
-                if 'data_aprovacao' in i:
-                    data_string = i['data_aprovacao']
-                    proposta.data_aprovacao = converter_string_para_data(data_string)
-                proposta.save()
+            if 'remover' not in i or i['remover'] is False:
+                if 'data_recimento_solicitacao' in i and i['data_recimento_solicitacao'] is not None:
+                    proposta = Proposta(**i)
+                    proposta.demanda = demanda
+                    data_string = i['data_recimento_solicitacao']
+                    proposta.data_recimento_solicitacao = converter_string_para_data(data_string)
+                    if 'data_limite_entrega' in i:
+                        data_string = i['data_limite_entrega']
+                        proposta.data_limite_entrega = converter_string_para_data(data_string)
+                    if 'data_real_entrega' in i:
+                        data_string = i['data_real_entrega']
+                        proposta.data_real_entrega = converter_string_para_data(data_string)
+                    if 'data_aprovacao' in i:
+                        data_string = i['data_aprovacao']
+                        proposta.data_aprovacao = converter_string_para_data(data_string)
+                    proposta.save()
+            else:
+                if 'id' in i:
+                    proposta = Proposta.objects.get(pk=i['id'])
+                    proposta.delete()
 
 
     def salvar_item_faturamento(self, itens_faturamento, demanda):
         for i in itens_faturamento:
-            if 'descricao' in i and i['descricao'] is not None:
-                tipo_valor_hora = None
-                if 'tipo_hora' in i:
-                    if 'id' in i['tipo_hora']:
-                        tipo_valor_hora = i['tipo_hora']
-                        tipo_valor_hora = TipoValorHora(pk=tipo_valor_hora['id'])
-                    del i['tipo_hora']
-                faturamento_demanda = FaturamentoDemanda(**i)
-                faturamento_demanda.demanda = demanda
-                if tipo_valor_hora is not None:
-                    faturamento_demanda.tipo_hora = tipo_valor_hora
-                if 'data' in i:
-                    data_string = i['data']
-                    faturamento_demanda.data = converter_string_para_data(data_string)
-                if 'data_envio_aprovacao' in i:
-                    data_string = i['data_envio_aprovacao']
-                    faturamento_demanda.data_envio_aprovacao = converter_string_para_data(data_string)
-                if 'data_aprovacao_fatura' in i:
-                    data_string = i['data_aprovacao_fatura']
-                    faturamento_demanda.data_aprovacao_fatura = converter_string_para_data(data_string)
-                if 'data_fatura' in i:
-                    data_string = i['data_fatura']
-                    faturamento_demanda.data_fatura = converter_string_para_data(data_string)
-                faturamento_demanda.save()
+            if 'remover' not in i or i['remover'] is False:
+                if 'descricao' in i and i['descricao'] is not None:
+                    tipo_valor_hora = None
+                    if 'tipo_hora' in i:
+                        if 'id' in i['tipo_hora']:
+                            tipo_valor_hora = i['tipo_hora']
+                            tipo_valor_hora = TipoValorHora(pk=tipo_valor_hora['id'])
+                        del i['tipo_hora']
+                    faturamento_demanda = FaturamentoDemanda(**i)
+                    faturamento_demanda.demanda = demanda
+                    if tipo_valor_hora is not None:
+                        faturamento_demanda.tipo_hora = tipo_valor_hora
+                    if 'data' in i:
+                        data_string = i['data']
+                        faturamento_demanda.data = converter_string_para_data(data_string)
+                    if 'data_envio_aprovacao' in i:
+                        data_string = i['data_envio_aprovacao']
+                        faturamento_demanda.data_envio_aprovacao = converter_string_para_data(data_string)
+                    if 'data_aprovacao_fatura' in i:
+                        data_string = i['data_aprovacao_fatura']
+                        faturamento_demanda.data_aprovacao_fatura = converter_string_para_data(data_string)
+                    if 'data_fatura' in i:
+                        data_string = i['data_fatura']
+                        faturamento_demanda.data_fatura = converter_string_para_data(data_string)
+                    faturamento_demanda.save()
+            else:
+                if 'id' in i:
+                    faturamento_demanda = FaturamentoDemanda.objects.get(pk=i['id'])
+                    faturamento_demanda.delete()
 
 
     def salvar_tarefa(self, tarefas, demanda):
         for i in tarefas:
-            if ('descricao' in i and i['descricao'] is not None and 'analista_tecnico_responsavel' in i and i['analista_tecnico_responsavel'] is not None and 
-                'responsavel' in i and i['responsavel'] is not None):
-                
-                
-                analista_tecnico_responsavel = None
-                if 'analista_tecnico_responsavel' in i:
-                    if 'id' in i['analista_tecnico_responsavel']:
-                        analista_tecnico_responsavel = i['analista_tecnico_responsavel']
-                        analista_tecnico_responsavel = Funcionario.objects.get(pk=analista_tecnico_responsavel['id'])
-                    del i['analista_tecnico_responsavel']
+            if 'remover' not in i or i['remover'] is False:
+                if ('descricao' in i and i['descricao'] is not None and 'analista_tecnico_responsavel' in i and i['analista_tecnico_responsavel'] is not None and 
+                    'responsavel' in i and i['responsavel'] is not None):
                     
-                responsavel = None
-                if 'responsavel' in i:
-                    if 'id' in i['responsavel']:
-                        responsavel = i['responsavel']
-                        responsavel = Funcionario.objects.get(pk=responsavel['id'])
-                    del i['responsavel']
-                
-                tarefa = Tarefa(**i)
-                tarefa.demanda = demanda
-                
-                if analista_tecnico_responsavel is not None:
-                    tarefa.analista_tecnico_responsavel = analista_tecnico_responsavel
-                
-                if responsavel is not None:
-                    tarefa.responsavel = responsavel
-                
-                if 'analise_inicio' in i:
-                    data_string = i['analise_inicio']
-                    tarefa.analise_inicio = converter_string_para_data(data_string)
-                if 'analise_fim' in i:
-                    data_string = i['analise_fim']
-                    tarefa.analise_fim = converter_string_para_data(data_string)
-                if 'analise_fim_real' in i:
-                    data_string = i['analise_fim_real']
-                    tarefa.analise_fim_real = converter_string_para_data(data_string)
-                if 'densenvolvimento_inicio' in i:
-                    data_string = i['densenvolvimento_inicio']
-                    tarefa.densenvolvimento_inicio = converter_string_para_data(data_string)
-                if 'desenvolvimento_fim' in i:
-                    data_string = i['desenvolvimento_fim']
-                    tarefa.desenvolvimento_fim = converter_string_para_data(data_string)
-                if 'desenvolvimento_fim_real' in i:
-                    data_string = i['desenvolvimento_fim_real']
-                    tarefa.desenvolvimento_fim_real = converter_string_para_data(data_string)
-                if 'homologacao_inicio' in i:
-                    data_string = i['homologacao_inicio']
-                    tarefa.homologacao_inicio = converter_string_para_data(data_string)
-                if 'homologacao_fim' in i:
-                    data_string = i['homologacao_fim']
-                    tarefa.homologacao_fim = converter_string_para_data(data_string)
-                if 'homologacao_fim_real' in i:
-                    data_string = i['homologacao_fim_real']
-                    tarefa.homologacao_fim_real = converter_string_para_data(data_string)
-                if 'implantacao_producao' in i:
-                    data_string = i['implantacao_producao']
-                    tarefa.implantacao_producao = converter_string_para_data(data_string)
-                tarefa.save()
-
+                    
+                    analista_tecnico_responsavel = None
+                    if 'analista_tecnico_responsavel' in i:
+                        if 'id' in i['analista_tecnico_responsavel']:
+                            analista_tecnico_responsavel = i['analista_tecnico_responsavel']
+                            analista_tecnico_responsavel = Funcionario.objects.get(pk=analista_tecnico_responsavel['id'])
+                        del i['analista_tecnico_responsavel']
+                        
+                    responsavel = None
+                    if 'responsavel' in i:
+                        if 'id' in i['responsavel']:
+                            responsavel = i['responsavel']
+                            responsavel = Funcionario.objects.get(pk=responsavel['id'])
+                        del i['responsavel']
+                    
+                    tarefa = Tarefa(**i)
+                    tarefa.demanda = demanda
+                    
+                    if analista_tecnico_responsavel is not None:
+                        tarefa.analista_tecnico_responsavel = analista_tecnico_responsavel
+                    
+                    if responsavel is not None:
+                        tarefa.responsavel = responsavel
+                    
+                    if 'analise_inicio' in i:
+                        data_string = i['analise_inicio']
+                        tarefa.analise_inicio = converter_string_para_data(data_string)
+                    if 'analise_fim' in i:
+                        data_string = i['analise_fim']
+                        tarefa.analise_fim = converter_string_para_data(data_string)
+                    if 'analise_fim_real' in i:
+                        data_string = i['analise_fim_real']
+                        tarefa.analise_fim_real = converter_string_para_data(data_string)
+                    if 'densenvolvimento_inicio' in i:
+                        data_string = i['densenvolvimento_inicio']
+                        tarefa.densenvolvimento_inicio = converter_string_para_data(data_string)
+                    if 'desenvolvimento_fim' in i:
+                        data_string = i['desenvolvimento_fim']
+                        tarefa.desenvolvimento_fim = converter_string_para_data(data_string)
+                    if 'desenvolvimento_fim_real' in i:
+                        data_string = i['desenvolvimento_fim_real']
+                        tarefa.desenvolvimento_fim_real = converter_string_para_data(data_string)
+                    if 'homologacao_inicio' in i:
+                        data_string = i['homologacao_inicio']
+                        tarefa.homologacao_inicio = converter_string_para_data(data_string)
+                    if 'homologacao_fim' in i:
+                        data_string = i['homologacao_fim']
+                        tarefa.homologacao_fim = converter_string_para_data(data_string)
+                    if 'homologacao_fim_real' in i:
+                        data_string = i['homologacao_fim_real']
+                        tarefa.homologacao_fim_real = converter_string_para_data(data_string)
+                    if 'implantacao_producao' in i:
+                        data_string = i['implantacao_producao']
+                        tarefa.implantacao_producao = converter_string_para_data(data_string)
+                    tarefa.save()
+            else:
+                if 'id' in i:
+                    tarefa = Tarefa.objects.get(pk=i['id'])
+                    tarefa.delete()
 
     def salvar_observacoes(self, observacoes, demanda):
         for i in observacoes:
-            if ('observacao' in i and i['observacao'] is not None and 'data_observacao' in i and i['data_observacao'] is not None):
-                observacao = Observacao(**i)
-                observacao.demanda = demanda
-                observacao.data_observacao = converter_string_para_data(i['data_observacao'])
-                observacao.save()
-
+            if 'remover' not in i or i['remover'] is False:
+                if ('observacao' in i and i['observacao'] is not None and 'data_observacao' in i and i['data_observacao'] is not None):
+                    observacao = Observacao(**i)
+                    observacao.demanda = demanda
+                    observacao.data_observacao = converter_string_para_data(i['data_observacao'])
+                    observacao.save()
+            else:
+                if 'id' in i:
+                    observacao = Observacao.objects.get(pk=i['id'])
+                    observacao.delete()
 
     def salvar_ocorrencias(self, ocorrencias, demanda):
         for i in ocorrencias:
-            if 'tipo_ocorrencia' in i and i['tipo_ocorrencia'] is not None:
-                responsavel = None
-                if 'responsavel' in i:
-                    if 'id' in i['responsavel']:
-                        responsavel = i['responsavel']
-                        responsavel = Funcionario.objects.get(pk=responsavel['id'])
-                    del i['responsavel']
-                ocorrencia = Ocorrencia(**i)
-                ocorrencia.demanda = demanda
-                if responsavel is not None:
-                    ocorrencia.responsavel = responsavel
-                if 'data_solicitacao' in i:
-                    data_string = i['data_solicitacao']
-                    ocorrencia.data_solicitacao = converter_string_para_data(data_string)
-                if 'data_prevista_conclusao' in i:
-                    data_string = i['data_prevista_conclusao']
-                    ocorrencia.data_prevista_conclusao = converter_string_para_data(data_string)
-                ocorrencia.save()
+            if 'remover' not in i or i['remover'] is False:
+                if 'tipo_ocorrencia' in i and i['tipo_ocorrencia'] is not None:
+                    responsavel = None
+                    if 'responsavel' in i:
+                        if 'id' in i['responsavel']:
+                            responsavel = i['responsavel']
+                            responsavel = Funcionario.objects.get(pk=responsavel['id'])
+                        del i['responsavel']
+                    ocorrencia = Ocorrencia(**i)
+                    ocorrencia.demanda = demanda
+                    if responsavel is not None:
+                        ocorrencia.responsavel = responsavel
+                    if 'data_solicitacao' in i:
+                        data_string = i['data_solicitacao']
+                        ocorrencia.data_solicitacao = converter_string_para_data(data_string)
+                    if 'data_prevista_conclusao' in i:
+                        data_string = i['data_prevista_conclusao']
+                        ocorrencia.data_prevista_conclusao = converter_string_para_data(data_string)
+                    ocorrencia.save()
+            else:
+                if 'id' in i:
+                    ocorrencia = Ocorrencia.objects.get(pk=i['id'])
+                    ocorrencia.delete()
 
     def post(self, request, format=None):
         
@@ -277,7 +300,6 @@ class DemandaDetail(APIView):
         self.salvar_item_faturamento(itens_faturamento, demanda)
         self.salvar_observacoes(observacoes, demanda)
         self.salvar_ocorrencias(ocorrencias, demanda)
-                
         
         return Response(self.serializarDemanda(demanda.id))
     
