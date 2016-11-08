@@ -23,7 +23,8 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			'itens_faturamento': [{}],
 			'propostas':[{}],
 			'tarefas':[{}],
-			'observacoes':[{}]
+			'observacoes':[{}],
+			'ocorrencias':[{}]
 		}
 		$ctrl.show=true;
 	}
@@ -44,6 +45,10 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		$ctrl.demanda.observacoes.unshift({})
 	}
 	
+	$ctrl.adicionarocorrencia = function () {
+		$ctrl.demanda.ocorrencias.unshift({})
+	}
+		
 	$ctrl.listaclientes= DemandaService.buscarclientes();
 	$ctrl.listafuncionarios = DemandaService.buscarfuncionarios();
 	

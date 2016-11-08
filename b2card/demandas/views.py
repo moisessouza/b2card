@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from demandas.models import Demanda, FaturamentoDemanda, Proposta, Tarefa, Observacao
+from demandas.models import Demanda, FaturamentoDemanda, Proposta, Tarefa, Observacao, Ocorrencia
 from demandas import serializers
 from clientes.models import Cliente, TipoValorHora
 from demandas.serializers import DemandaSerializer, FaturamentoDemandaSerializer, PropostaSerializer, TarefasSerializer,\
-    ObservacaoSerializer
+    ObservacaoSerializer, OcorrenciaSerializer
 from utils.utils import converter_string_para_data, formatar_data
 from recursos.models import Funcionario
 
@@ -43,6 +43,7 @@ class DemandaDetail(APIView):
         propostas = Proposta.objects.filter(demanda__id=demanda_id)
         tarefas = Tarefa.objects.filter(demanda__id=demanda_id)
         observacoes = Observacao.objects.filter(demanda__id=demanda_id)
+        ocorrencias = Ocorrencia.objects.filter(demanda__id=demanda_id)
         
         data = DemandaSerializer(demanda).data
 
@@ -84,11 +85,19 @@ class DemandaDetail(APIView):
             observacao = ObservacaoSerializer(i).data
             observacao['data_observacao'] = formatar_data(i.data_observacao)
             observacoes_list.append(observacao)
+            
+        ocorrencias_list = []
+        for i in ocorrencias:
+            ocorrencia = OcorrenciaSerializer(i).data
+            ocorrencia['data_solicitacao'] = formatar_data(i.data_solicitacao)
+            ocorrencia['data_prevista_conclusao'] = formatar_data(i.data_prevista_conclusao)
+            ocorrencias_list.append(ocorrencia)
         
         data['itens_faturamento'] = itens_list
         data['propostas'] = propostas_list
         data['tarefas'] = tarefas_list
         data['observacoes'] = observacoes_list
+        data['ocorrencias'] = ocorrencias_list
         
         return data
 
@@ -123,8 +132,9 @@ class DemandaDetail(APIView):
             if 'descricao' in i and i['descricao'] is not None:
                 tipo_valor_hora = None
                 if 'tipo_hora' in i:
-                    tipo_valor_hora = i['tipo_hora']
-                    tipo_valor_hora = TipoValorHora(pk=tipo_valor_hora['id'])
+                    if 'id' in i['tipo_hora']:
+                        tipo_valor_hora = i['tipo_hora']
+                        tipo_valor_hora = TipoValorHora(pk=tipo_valor_hora['id'])
                     del i['tipo_hora']
                 faturamento_demanda = FaturamentoDemanda(**i)
                 faturamento_demanda.demanda = demanda
@@ -153,14 +163,16 @@ class DemandaDetail(APIView):
                 
                 analista_tecnico_responsavel = None
                 if 'analista_tecnico_responsavel' in i:
-                    analista_tecnico_responsavel = i['analista_tecnico_responsavel']
-                    analista_tecnico_responsavel = Funcionario.objects.get(pk=analista_tecnico_responsavel['id'])
+                    if 'id' in i['analista_tecnico_responsavel']:
+                        analista_tecnico_responsavel = i['analista_tecnico_responsavel']
+                        analista_tecnico_responsavel = Funcionario.objects.get(pk=analista_tecnico_responsavel['id'])
                     del i['analista_tecnico_responsavel']
                     
                 responsavel = None
                 if 'responsavel' in i:
-                    responsavel = i['responsavel']
-                    responsavel = Funcionario.objects.get(pk=responsavel['id'])
+                    if 'id' in i['responsavel']:
+                        responsavel = i['responsavel']
+                        responsavel = Funcionario.objects.get(pk=responsavel['id'])
                     del i['responsavel']
                 
                 tarefa = Tarefa(**i)
@@ -213,6 +225,28 @@ class DemandaDetail(APIView):
                 observacao.data_observacao = converter_string_para_data(i['data_observacao'])
                 observacao.save()
 
+
+    def salvar_ocorrencias(self, ocorrencias, demanda):
+        for i in ocorrencias:
+            if 'tipo_ocorrencia' in i and i['tipo_ocorrencia'] is not None:
+                responsavel = None
+                if 'responsavel' in i:
+                    if 'id' in i['responsavel']:
+                        responsavel = i['responsavel']
+                        responsavel = Funcionario.objects.get(pk=responsavel['id'])
+                    del i['responsavel']
+                ocorrencia = Ocorrencia(**i)
+                ocorrencia.demanda = demanda
+                if responsavel is not None:
+                    ocorrencia.responsavel = responsavel
+                if 'data_solicitacao' in i:
+                    data_string = i['data_solicitacao']
+                    ocorrencia.data_solicitacao = converter_string_para_data(data_string)
+                if 'data_prevista_conclusao' in i:
+                    data_string = i['data_prevista_conclusao']
+                    ocorrencia.data_prevista_conclusao = converter_string_para_data(data_string)
+                ocorrencia.save()
+
     def post(self, request, format=None):
         
         data = request.data
@@ -224,12 +258,14 @@ class DemandaDetail(APIView):
         propostas = data['propostas']
         tarefas = data['tarefas']
         observacoes = data['observacoes']
+        ocorrencias = data['ocorrencias']
         
         del data['cliente']
         del data['itens_faturamento']
         del data['propostas']
         del data['tarefas']
         del data['observacoes']
+        del data['ocorrencias']
        
         demanda = Demanda(**data)
         demanda.cliente = cliente
@@ -240,6 +276,8 @@ class DemandaDetail(APIView):
         self.salvar_proposta(propostas, demanda)
         self.salvar_item_faturamento(itens_faturamento, demanda)
         self.salvar_observacoes(observacoes, demanda)
+        self.salvar_ocorrencias(ocorrencias, demanda)
+                
         
         return Response(self.serializarDemanda(demanda.id))
     

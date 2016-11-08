@@ -3,6 +3,7 @@ from django.db import models
 from recursos.models import Funcionario
 from clientes.models import Cliente, TipoValorHora
 from datetime import datetime  
+from django.db.models.fields.related import ForeignKey
 
 # Create your models here.
 
@@ -91,3 +92,27 @@ class Observacao(models.Model):
     observacao = models.CharField(max_length=100)
     data_observacao = models.DateField()
     demanda = models.ForeignKey(Demanda, null=True)
+    
+TIPOS_OCORRENCIA = (
+    ('E', 'Erro'),
+    ('S', 'Erro de Especificação'),
+    ('F', 'Fora do escopo inicial do projeto')
+)
+
+ETAPA = (
+    ('C', 'Concluído'),
+    ('A', 'Aguardando análise'),
+    ('E', 'Em avaliação')
+)
+    
+class Ocorrencia(models.Model):
+    tipo_ocorrencia = models.CharField(max_length=1, choices=TIPOS_OCORRENCIA)
+    descricao = models.CharField(max_length=100)
+    nome_solicitante = models.CharField(max_length = 30)
+    data_solicitacao = models.DateField(null=True)
+    data_prevista_conclusao = models.DateField(null=True)
+    etapa = models.CharField(max_length=1, choices = ETAPA)
+    responsavel = models.ForeignKey(Funcionario, null=True)
+    descricao_motivo = models.TextField()
+    observacao = models.TextField()
+    demanda = ForeignKey(Demanda, null=True)

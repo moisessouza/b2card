@@ -50,7 +50,7 @@
 		<button type="submit" class="btn btn-danger margin" name="deletar" ng-click="$ctrl.deletar()" ng-show="$ctrl.demanda.id">Deletar</button>
 		<div class="label {{$ctrl.clazz}}" ng-bind="$ctrl.message" ></div>
 			
-		<div class="panel panel-default form-group-sm">
+		<div class="panel panel-primary form-group-sm">
 			<div class="panel-heading"><strong>Dados da demanda</strong></div>
 			<div class="panel-body">
 				<div class="row">
@@ -132,15 +132,16 @@
 	  <li><a data-toggle="tab" href="#proposta">Proposta</a></li>
 	  <li><a data-toggle="tab" href="#tarefas">Tarefas</a></li>
 	  <li><a data-toggle="tab" href="#observacoes">Observações</a></li>
+	  <li><a data-toggle="tab" href="#ocorrencias">Ocorrências</a></li>
 	</ul>
 	<div class="tab-content">
-  		<div id="itens_faturamento" class="tab-pane fade in active">
+  		<div id="itens_faturamento" class="tab-pane in active">
 			<button type="button" class="btn btn-primary margin" ng-click="$ctrl.adicionaritem()">
 		  		<span class="glyphicon glyphicon-plus"></span> Adicionar item
 			</button>
 			
 			<form name="itensfaturamento" ng-repeat="item_faturamento in $ctrl.demanda.itens_faturamento">
-				<div class="panel panel-default">
+				<div class="panel panel-primary">
 					<div class="panel-heading"><strong>{{item_faturamento.descricao ? item_faturamento.descricao : '(Sem descrição)'}}</strong></div>
 					<div class="panel-body">
 						<div class="row">
@@ -220,7 +221,7 @@
 			</form>
 		</div>
 		
-		<div id="proposta" class="tab-pane fade">
+		<div id="proposta" class="tab-pane">
 		   	
 		   	<button type="button" class="btn btn-primary margin" ng-click="$ctrl.adicionarproposta()">
 		  		<span class="glyphicon glyphicon-plus"></span> Adicionar proposta
@@ -272,7 +273,7 @@
 			</form>
 		</div>
 		
-		<div id="tarefas" class="tab-pane fade">
+		<div id="tarefas" class="tab-pane">
 		
 			<button type="button" class="btn btn-primary margin" ng-click="$ctrl.adicionartarefa()">
 		  		<span class="glyphicon glyphicon-plus"></span> Adicionar tarefa
@@ -458,7 +459,7 @@
 			</form>
 		</div>
 	
-		<div id="observacoes" class="tab-pane fade">
+		<div id="observacoes" class="tab-pane">
 			<button type="button" class="btn btn-primary margin" ng-click="$ctrl.adicionarobservacao()">
 		  		<span class="glyphicon glyphicon-plus"></span> Adicionar observação
 			</button>
@@ -482,7 +483,96 @@
 				</tbody>
 			</table>
 		</div>
+		<div id="ocorrencias" class="tab-pane">
+		
+			<button type="button" class="btn btn-primary margin" ng-click="$ctrl.adicionarocorrencia()">
+		  		<span class="glyphicon glyphicon-plus"></span> Adicionar ocorrência
+			</button>
+			
+			<form name="ocorrenciasform" ng-repeat="ocorrencia in $ctrl.demanda.ocorrencias">
+				<div class="panel panel-primary form-group-sm">
+					<div class="panel-heading"><strong>Dados da ocorrência</strong></div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="tipo_ocorrencia">Tipo de ocorrência</label> 
+								    <select class="form-control" id="tipo_ocorrencia" name="tipo_ocorrencia" ng-model="ocorrencia.tipo_ocorrencia" required>
+								    	<option value="">Selecione...</option>
+								    	<option value="E">Erro</option>
+								    	<option value="S">Erro de Especificação</option>
+								    	<option value="F">Fora do escopo inicial do projeto</option>
+									</select>
+									<span class="red" ng-show="ocorrenciasform.tipo_ocorrencia.$invalid">Tipo de ocorrência é obrigatório.</span>											
+								</div>
+							</div>
+							<div class="col-sm-7">
+								<div class="form-group">
+									<label for="descricao">Descricao</label> 
+								    <input type="text" class="form-control" id="descricao" name="descricao" ng-model="ocorrencia.descricao" maxlength="100"/>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="nome_solicitante">Nome do solicitante</label> 
+								    <input type="text" class="form-control" id="nome_solicitante" name="nome_solicitante" ng-model="ocorrencia.nome_solicitante" maxlength="30"/>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="form-group">
+									<label for="data_solicitacao">Data de solicitação</label> 
+								    <input type="text" class="form-control" id="data_solicitacao" name="data_solicitacao" ng-model="ocorrencia.data_solicitacao" gb-data/>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="form-group">
+									<label for="data_prevista_conclusao">Data prevista conclusão</label> 
+								    <input type="text" class="form-control" id="data_prevista_conclusao" name="data_prevista_conclusao" ng-model="ocorrencia.data_prevista_conclusao" gb-data/>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="form-group">
+									<label for="etapa">Etapa</label> 
+								    <select class="form-control" id="etapa" name="etapa" ng-model="ocorrencia.etapa">
+								    	<option value="">Selecione...</option>
+								    	<option value="C">Concluído</option>
+								    	<option value="A">Aguardando análise</option>
+								    	<option value="E">Em avaliação</option>
+									</select>											
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="form-group">
+									<label for="responsavel">Responsável B2Card</label> 
+								    <select id=responsavel name="responsavel" class="form-control" ng-model="ocorrencia.responsavel.id" ng-options="f.id as f.nome for f in $ctrl.listafuncionarios" required>
+									   	<option value="">Selecione um responsável...</option>
+									</select>
+								</div>
+							</div>
+							</div>
+							<div class="row">
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="descricao_motivo">Descrição do motivo que causaram a ocorrência</label> 
+								    <textarea class="form-control" id="descricao_motivo" name="descricao_motivo" ng-model="ocorrencia.descricao_motivo"></textarea>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="observacao">Observação</label> 
+								    <textarea class="form-control" id="observacao" name="observacao" ng-model="ocorrencia.observacao"></textarea>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
 	</div>
+	
+	
 	
 	<button type="button" class="btn btn-primary margin" ng-click="$ctrl.salvardemanda()" ng-disabled="demanda.$invalid || itensfaturamento.$invalid">Salvar</button>
 	<button type="submit" class="btn btn-danger margin" name="deletar" ng-click="$ctrl.deletar()" ng-show="$ctrl.demanda.id">Deletar</button>

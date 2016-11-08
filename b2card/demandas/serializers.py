@@ -4,12 +4,9 @@ Created on 14 de set de 2016
 @author: moi09
 '''
 from rest_framework import serializers
-from demandas.models import Demanda, FaturamentoDemanda, Proposta, Tarefa, Observacao
+from demandas.models import Demanda, FaturamentoDemanda, Proposta, Tarefa, Observacao, Ocorrencia
 from clientes.serializers import ClienteSerializer, TipoValorHoraSerializer
 from recursos.serializers import FuncionarioSerializer
-     
-     
-     
         
 class DemandaSerializer (serializers.ModelSerializer):
     cliente = ClienteSerializer()
@@ -39,3 +36,9 @@ class ObservacaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Observacao
         fields = ('id','observacao', 'data_observacao')
+        
+class OcorrenciaSerializer(serializers.ModelSerializer):
+    responsavel = FuncionarioSerializer()
+    class Meta:
+        model = Ocorrencia
+        fields = ('id', 'tipo_ocorrencia', 'descricao', 'nome_solicitante', 'data_solicitacao', 'data_prevista_conclusao', 'etapa', 'responsavel', 'descricao_motivo', 'observacao')
