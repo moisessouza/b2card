@@ -150,9 +150,9 @@
 					<div class="panel-heading">
 						<strong>{{item_faturamento.descricao ? item_faturamento.descricao : '(Sem descrição)'}}</strong>
 						<div class="btn-group pull-right">
-						<button type="button" class="btn btn-primary" ng-click="$ctrl.removeritem(item_faturamento)">
-		  					<span class="glyphicon glyphicon-trash margin"></span>
-						</button>
+							<button type="button" class="btn btn-primary" ng-click="$ctrl.remover(item_faturamento)">
+			  					<span class="glyphicon glyphicon-trash margin"></span>
+							</button>
 						</div>
 					</div>
 					<div class="panel-body">
@@ -245,6 +245,7 @@
 					  <tr class="active">
 					    <th colspan="4">Proposta</th>
 					    <th colspan="3">Aprovação</th>
+					    <th></th>
 					  </tr>
 					  <tr class="active">
 					    <th>Data recimento solicitação</th>
@@ -254,10 +255,11 @@
 					    <th>Data de aprovação</th>
 					    <th>Empresa ganhadora</th>
 					    <th>Tot horas ganhadora</th>
+					    <th></th>
 					  </tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="proposta in $ctrl.demanda.propostas">
+						<tr ng-repeat="proposta in $ctrl.demanda.propostas" ng-show="!proposta.remover">
 							<td>
 								<input type="text" ng-model="proposta.data_recimento_solicitacao" class="form-control" gb-data placeholder="Data recimento solicitação"/>
 							</td>
@@ -279,6 +281,11 @@
 							<td>
 								<input type="number" ng-model="proposta.total_horas_ganhadora" class="form-control" placeholder="Tot horas ganhadora"/>
 							</td>
+							<td>
+								<button type="button" class="btn btn-default" ng-click="$ctrl.remover(proposta)">
+									<span class="glyphicon glyphicon-trash"></span>
+								</button>
+							</td>
 						</tr>
 					</tbody>
 				</table>
@@ -290,9 +297,16 @@
 			<button type="button" class="btn btn-primary margin" ng-click="$ctrl.adicionartarefa()">
 		  		<span class="glyphicon glyphicon-plus"></span> Adicionar tarefa
 			</button>	
-			<form name="tarefaform" ng-repeat="tarefa in $ctrl.demanda.tarefas">
+			<form name="tarefaform" ng-repeat="tarefa in $ctrl.demanda.tarefas" ng-show="!tarefa.remover">
 				<div class="panel panel-primary form-group-sm">
-					<div class="panel-heading"><strong>Dados da tarefa</strong></div>
+					<div class="panel-heading">
+						<strong>Dados da tarefa</strong>
+						<div class="btn-group pull-right">					
+							<button type="button" class="btn btn-primary" ng-click="$ctrl.remover(tarefa)">
+			  					<span class="glyphicon glyphicon-trash margin"></span>
+							</button>
+						</div>
+					</div>
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-sm-5">
@@ -481,15 +495,21 @@
 				  <tr class="active">
 				    <th class="col-sm-2">Data da observação</th>
 				    <th class="col-sm-12">Observação</th>
+				    <th></th>
 				  </tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="observacao in $ctrl.demanda.observacoes">
+					<tr ng-repeat="observacao in $ctrl.demanda.observacoes" ng-show="!observacao.remover">
 						<td class="col-sm-2">
 							<input type="text" ng-model="observacao.data_observacao" class="form-control" gb-data placeholder="Data da observação"/>
 						</td>
 						<td class="col-sm-12">
 							<input type="text" ng-model="observacao.observacao" class="form-control" maxlength="100" placeholder="Observação"/>
+						</td>
+						<td>
+							<button type="button" class="btn btn-default" ng-click="$ctrl.remover(observacao)">
+								<span class="glyphicon glyphicon-trash"></span>
+							</button>
 						</td>
 					</tr>
 				</tbody>
@@ -501,9 +521,16 @@
 		  		<span class="glyphicon glyphicon-plus"></span> Adicionar ocorrência
 			</button>
 			
-			<form name="ocorrenciasform" ng-repeat="ocorrencia in $ctrl.demanda.ocorrencias">
+			<form name="ocorrenciasform" ng-repeat="ocorrencia in $ctrl.demanda.ocorrencias" ng-show="!ocorrencia.remover">
 				<div class="panel panel-primary form-group-sm">
-					<div class="panel-heading"><strong>Dados da ocorrência</strong></div>
+					<div class="panel-heading">
+						<strong>Dados da ocorrência</strong>
+						<div class="btn-group pull-right">					
+							<button type="button" class="btn btn-primary" ng-click="$ctrl.remover(ocorrencia)">
+			  					<span class="glyphicon glyphicon-trash margin"></span>
+							</button>
+						</div>
+					</div>
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-sm-3">

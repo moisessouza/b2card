@@ -32,11 +32,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	$ctrl.adicionaritem = function () {
 		$ctrl.demanda.itens_faturamento.unshift({});
 	}
-	
-	$ctrl.removeritem = function (item){
-		item.remover = true 
-	}
-	
+		
 	$ctrl.adicionarproposta = function () {
 		$ctrl.demanda.propostas.unshift({});
 	}
@@ -52,7 +48,11 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	$ctrl.adicionarocorrencia = function () {
 		$ctrl.demanda.ocorrencias.unshift({})
 	}
-		
+	
+	$ctrl.remover = function (i){
+		i.remover = true;
+	}
+	
 	$ctrl.listaclientes= DemandaService.buscarclientes();
 	$ctrl.listafuncionarios = DemandaService.buscarfuncionarios();
 	
