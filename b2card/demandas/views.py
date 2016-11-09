@@ -2,7 +2,6 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from demandas.models import Demanda, FaturamentoDemanda, Proposta, Tarefa, Observacao, Ocorrencia
-from demandas import serializers
 from clientes.models import Cliente, TipoValorHora
 from demandas.serializers import DemandaSerializer, FaturamentoDemandaSerializer, PropostaSerializer, TarefasSerializer,\
     ObservacaoSerializer, OcorrenciaSerializer
@@ -138,7 +137,7 @@ class DemandaDetail(APIView):
                 if 'descricao' in i and i['descricao'] is not None:
                     tipo_valor_hora = None
                     if 'tipo_hora' in i:
-                        if 'id' in i['tipo_hora']:
+                        if i['tipo_hora'] is not None and 'id' in i['tipo_hora']:
                             tipo_valor_hora = i['tipo_hora']
                             tipo_valor_hora = TipoValorHora(pk=tipo_valor_hora['id'])
                         del i['tipo_hora']
@@ -171,17 +170,19 @@ class DemandaDetail(APIView):
                 if ('descricao' in i and i['descricao'] is not None and 'analista_tecnico_responsavel' in i and i['analista_tecnico_responsavel'] is not None and 
                     'responsavel' in i and i['responsavel'] is not None):
                     
+                    if 'show' in i:
+                        del i['show']
                     
                     analista_tecnico_responsavel = None
                     if 'analista_tecnico_responsavel' in i:
-                        if 'id' in i['analista_tecnico_responsavel']:
+                        if i['analista_tecnico_responsavel'] is not None and 'id' in i['analista_tecnico_responsavel']:
                             analista_tecnico_responsavel = i['analista_tecnico_responsavel']
                             analista_tecnico_responsavel = Funcionario.objects.get(pk=analista_tecnico_responsavel['id'])
                         del i['analista_tecnico_responsavel']
                         
                     responsavel = None
                     if 'responsavel' in i:
-                        if 'id' in i['responsavel']:
+                        if i['responsavel'] is not None and 'id' in i['responsavel']:
                             responsavel = i['responsavel']
                             responsavel = Funcionario.objects.get(pk=responsavel['id'])
                         del i['responsavel']
@@ -248,9 +249,13 @@ class DemandaDetail(APIView):
         for i in ocorrencias:
             if 'remover' not in i or i['remover'] is False:
                 if 'tipo_ocorrencia' in i and i['tipo_ocorrencia'] is not None:
+                    
+                    if 'show' in i:
+                        del i['show']
+                    
                     responsavel = None
                     if 'responsavel' in i:
-                        if 'id' in i['responsavel']:
+                        if i['responsavel'] is not None and 'id' in i['responsavel']:
                             responsavel = i['responsavel']
                             responsavel = Funcionario.objects.get(pk=responsavel['id'])
                         del i['responsavel']

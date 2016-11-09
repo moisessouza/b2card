@@ -13,10 +13,31 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		$ctrl.message = msg;
 	}
 	
+	
+	
+	$ctrl.layout = function (i){
+		if (i.show) {
+			i.show = !i.show;
+		} else {
+			i.show = true;
+		}
+	};
+	
 	if (demanda_id) {
 		$ctrl.demanda = DemandaService.buscardemanda(demanda_id, function (data){
 			$ctrl.listatipovalorhora  = DemandaService.buscartipohoracliente(cliente_id);
 			$ctrl.show=true;
+			
+			var ocorrencias = data.ocorrencias;
+			for ( i in ocorrencias ){
+				ocorrencias[i].show = false;
+			}
+			
+			var tarefas = data.tarefas;
+			for ( i in tarefas ){
+				tarefas[i].show = false;
+			}
+			
 		});
 	} else {
 		$ctrl.demanda = {
@@ -32,17 +53,14 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	$ctrl.adicionaritem = function () {
 		$ctrl.demanda.itens_faturamento.unshift({});
 	}
-	
-	$ctrl.removeritem = function (item){
-		item.remover = true 
-	}
-	
+		
 	$ctrl.adicionarproposta = function () {
 		$ctrl.demanda.propostas.unshift({});
 	}
 	
 	$ctrl.adicionartarefa = function () {
-		$ctrl.demanda.tarefas.unshift({});
+		var tarefa = {'show': true};
+		$ctrl.demanda.tarefas.unshift(tarefa);
 	}
 	
 	$ctrl.adicionarobservacao = function (){
@@ -50,9 +68,14 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	}
 	
 	$ctrl.adicionarocorrencia = function () {
-		$ctrl.demanda.ocorrencias.unshift({})
+		var ocorrencia = {'show': true};
+		$ctrl.demanda.ocorrencias.unshift(ocorrencia)
 	}
-		
+	
+	$ctrl.remover = function (i){
+		i.remover = true;
+	}
+	
 	$ctrl.listaclientes= DemandaService.buscarclientes();
 	$ctrl.listafuncionarios = DemandaService.buscarfuncionarios();
 	
