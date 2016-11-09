@@ -89,7 +89,7 @@ class Tarefa(models.Model):
     demanda = models.ForeignKey(Demanda, null=True)
     
 class Observacao(models.Model):
-    observacao = models.CharField(max_length=100)
+    observacao = models.TextField()
     data_observacao = models.DateField()
     demanda = models.ForeignKey(Demanda, null=True)
     

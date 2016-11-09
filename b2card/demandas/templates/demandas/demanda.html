@@ -514,7 +514,7 @@
 							<input type="text" ng-model="observacao.data_observacao" class="form-control" gb-data placeholder="Data da observação"/>
 						</td>
 						<td class="col-sm-12">
-							<input type="text" ng-model="observacao.observacao" class="form-control" maxlength="100" placeholder="Observação"/>
+							<textarea ng-model="observacao.observacao" class="form-control" placeholder="Observação"></textarea>
 						</td>
 						<td>
 							<button type="button" class="btn btn-default" ng-click="$ctrl.remover(observacao)">
