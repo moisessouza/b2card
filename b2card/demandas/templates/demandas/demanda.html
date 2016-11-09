@@ -160,7 +160,7 @@
 							<div class="col-sm-12">
 								<div class="form-group form-group-sm">
 									<label for="descricao">Descrição</label> 
-								    <input type="text" id="descricao" name="descricao" ng-model="item_faturamento.descricao" class="form-control" required maxlength="30"/>
+								    <input type="text" id="descricao" name="descricao" ng-model="item_faturamento.descricao" class="form-control" required maxlength="200"/>
 								    <span class="red" ng-show="itensfaturamento.descricao.$invalid">Descrição é obrigatório.</span>
 								</div>
 							</div>
@@ -172,32 +172,7 @@
 								    <input type="text" id="comissao_comercial" name="comissao_comercial" ng-model="item_faturamento.data" gb-data class="form-control"/>
 								</div>
 							</div>
-							<div class="col-sm-2">
-								<div class="form-group form-group-sm">
-									<label for="comissao_comercial">Tipo horas do cliente</label> 
-								    <select id="cargo" name="cargo" ng-model="item_faturamento.tipo_hora.id" ng-change="$ctrl.changehoraproposta(item_faturamento)" class="form-control" ng-options="t.id as t.tipo_hora for t in $ctrl.listatipovalorhora">
-							    		<option value="">Selecione um tipo...</option>
-							    	</select>
-								</div>
-							</div>
-							<div class="col-sm-2">
-								<div class="form-group form-group-sm">
-									<label for="comissao_comercial">Valor da hora</label> 
-								    <input type="text" id="comissao_comercial" name="comissao_comercial" ng-model="item_faturamento.valor_hora" ng-change="$ctrl.changehoraproposta(item_faturamento)" maxlength="30" gb-money class="form-control"/>
-								</div>
-							</div>
-							<div class="col-sm-2">
-								<div class="form-group form-group-sm">
-									<label for="comissao_comercial">Quantidade horas</label> 
-								    <input type="number" id="comissao_comercial" name="comissao_comercial" ng-model="item_faturamento.quantidade_horas" ng-change="$ctrl.changehoraproposta(item_faturamento)" class="form-control"/>
-								</div>
-							</div>
-							<div class="col-sm-2">
-								<div class="form-group form-group-sm">
-									<label for="valor_faturamento">Valor faturamento</label> 
-								    <input type="text" id="valor_faturamento" name="valor_faturamento" ng-model="item_faturamento.valor_faturamento" maxlength="30" gb-money class="form-control"/>
-								</div>
-							</div>
+							
 							<div class="col-sm-2">
 								<div class="form-group form-group-sm">
 									<label for="comissao_comercial">Status</label> 
@@ -226,6 +201,51 @@
 									<label for="data_fat">Data fat.</label> 
 								    <input type="text" id="data_fat" name="data_fat" ng-model="item_faturamento.data_fatura" gb-data class="form-control"/>
 								</div>
+							</div>
+						</div>
+						
+						<button type="button" class="btn btn-primary margin" ng-click="$ctrl.adicionartipovalorhora(item_faturamento)">
+					  		<span class="glyphicon glyphicon-plus"></span> Adicionar tipo valor hora
+						</button>
+						
+						<table class="table table-sm table-bordered table-striped table-highlight">
+							<thead>
+								<tr class="active">
+									<th>Tipo horas do cliente</th>
+									<th>Valor da hora</th>
+									<th>Quantidade de horas</th>
+									<th>Valor faturamento</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="tipovalorhora in item_faturamento.tipovalorhoras" ng-show="!tipovalorhora.remover">
+									<td>
+										<select id="cargo" name="cargo" ng-model="tipovalorhora.tipo_hora.id" ng-change="$ctrl.changehoraproposta(tipovalorhora, item_faturamento)" class="form-control" ng-options="t.id as t.tipo_hora for t in $ctrl.listatipovalorhora">
+								    		<option value="">Selecione um tipo...</option>
+								    	</select>
+									</td>
+									<td>
+										<input type="text" id="comissao_comercial" name="comissao_comercial" ng-model="tipovalorhora.valor_hora" ng-change="$ctrl.changehoraproposta(tipovalorhora, item_faturamento)" maxlength="30" gb-money class="form-control" disabled/>
+									</td>
+									<td>
+										<input type="number" id="comissao_comercial" name="comissao_comercial" ng-model="tipovalorhora.quantidade_horas" ng-change="$ctrl.changehoraproposta(tipovalorhora, item_faturamento)" class="form-control"/>
+									</td>
+									<td>
+										<input type="text" id="valor_faturamento" name="valor_faturamento" ng-model="tipovalorhora.valor_faturamento" maxlength="30" gb-money class="form-control" disabled/>
+									</td>
+									<td>
+										<button type="button" class="btn btn-default" ng-click="$ctrl.remover(tipovalorhora); $ctrl.recalcularfaturamentototal(item_faturamento);">
+											<span class="glyphicon glyphicon-trash"></span>
+										</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="col-sm-4">
+							<div class="form-group form-group-sm">
+								<label for="valor_total_faturamento">Valor total da fatura</label> 
+							    <input type="text" id="valor_total_faturamento" name="valor_total_faturamento" ng-model="item_faturamento.valor_total_faturamento" gb-money class="form-control" disabled/>
 							</div>
 						</div>
 					</div>

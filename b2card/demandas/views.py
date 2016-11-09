@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from demandas.models import Demanda, FaturamentoDemanda, Proposta, Tarefa, Observacao, Ocorrencia
+from demandas.models import Demanda, FaturamentoDemanda, Proposta, Tarefa, Observacao, Ocorrencia,\
+    TipoValorHoraFaturamento
 from clientes.models import Cliente, TipoValorHora
 from demandas.serializers import DemandaSerializer, FaturamentoDemandaSerializer, PropostaSerializer, TarefasSerializer,\
-    ObservacaoSerializer, OcorrenciaSerializer
+    ObservacaoSerializer, OcorrenciaSerializer, TipoValorHoraFaturamentoSerializer
 from utils.utils import converter_string_para_data, formatar_data
 from recursos.models import Funcionario
 
@@ -53,6 +54,16 @@ class DemandaDetail(APIView):
             faturamento_demanda['data_envio_aprovacao'] = formatar_data(i.data_envio_aprovacao)
             faturamento_demanda['data_aprovacao_fatura'] = formatar_data(i.data_aprovacao_fatura)
             faturamento_demanda['data_fatura'] = formatar_data(i.data_fatura)
+            
+            tipo_valor_hora_faturamento_demanda_list = TipoValorHoraFaturamento.objects.filter(faturamento_demanda=i)
+            
+            tipo_valor_hora_faturamento_demanda_list_data = []            
+            for t in tipo_valor_hora_faturamento_demanda_list:
+                tipo_valor_hora_faturamento_demanda = TipoValorHoraFaturamentoSerializer(t).data
+                tipo_valor_hora_faturamento_demanda_list_data.append(tipo_valor_hora_faturamento_demanda)
+            
+            faturamento_demanda['tipovalorhoras'] = tipo_valor_hora_faturamento_demanda_list_data
+            
             itens_list.append(faturamento_demanda)
         
         propostas_list = []
@@ -131,20 +142,20 @@ class DemandaDetail(APIView):
                     proposta.delete()
 
 
+    
     def salvar_item_faturamento(self, itens_faturamento, demanda):
         for i in itens_faturamento:
             if 'remover' not in i or i['remover'] is False:
                 if 'descricao' in i and i['descricao'] is not None:
-                    tipo_valor_hora = None
-                    if 'tipo_hora' in i:
-                        if i['tipo_hora'] is not None and 'id' in i['tipo_hora']:
-                            tipo_valor_hora = i['tipo_hora']
-                            tipo_valor_hora = TipoValorHora(pk=tipo_valor_hora['id'])
-                        del i['tipo_hora']
+                    
+                    tipovalorhoras_list = [] 
+                    if 'tipovalorhoras' in i and i['tipovalorhoras'] is not None:
+                        tipovalorhoras_list = i['tipovalorhoras']
+                        del i['tipovalorhoras']
+                    
                     faturamento_demanda = FaturamentoDemanda(**i)
                     faturamento_demanda.demanda = demanda
-                    if tipo_valor_hora is not None:
-                        faturamento_demanda.tipo_hora = tipo_valor_hora
+                    
                     if 'data' in i:
                         data_string = i['data']
                         faturamento_demanda.data = converter_string_para_data(data_string)
@@ -158,12 +169,40 @@ class DemandaDetail(APIView):
                         data_string = i['data_fatura']
                         faturamento_demanda.data_fatura = converter_string_para_data(data_string)
                     faturamento_demanda.save()
+                    
+                    self.salvar_tipo_valor_hora_faturamento(faturamento_demanda, tipovalorhoras_list)
+                    
             else:
                 if 'id' in i:
                     faturamento_demanda = FaturamentoDemanda.objects.get(pk=i['id'])
                     faturamento_demanda.delete()
 
+    def salvar_tipo_valor_hora_faturamento(self, faturamento_demanda, tipovalorhoras_list):
+        
+        for t in tipovalorhoras_list:
+            if 'remover' not in t or t['remover'] is False:
+                
+                tipo_valor_hora = None
+                if 'tipo_hora' in t:
+                    if t['tipo_hora'] is not None and 'id' in t['tipo_hora']:
+                        tipo_valor_hora = t['tipo_hora']
+                        tipo_valor_hora = TipoValorHora(pk=tipo_valor_hora['id'])
+                    del t['tipo_hora']
+                    
+                tipo_valor_hora_faturamento = TipoValorHoraFaturamento(**t)
+                tipo_valor_hora_faturamento.faturamento_demanda = faturamento_demanda
+                
+                if tipo_valor_hora is not None:
+                    tipo_valor_hora_faturamento.tipo_hora = tipo_valor_hora
+                                    
+                tipo_valor_hora_faturamento.save()
+                
+            else:
+                if 'id' in t:
+                    tipo_valor_hora_faturamento = TipoValorHoraFaturamento.objects.get(pk=t['id'])
+                    tipo_valor_hora_faturamento.delete()
 
+    
     def salvar_tarefa(self, tarefas, demanda):
         for i in tarefas:
             if 'remover' not in i or i['remover'] is False:

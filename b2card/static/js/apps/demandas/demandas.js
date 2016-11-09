@@ -51,9 +51,18 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	}
 	
 	$ctrl.adicionaritem = function () {
-		$ctrl.demanda.itens_faturamento.unshift({});
+		$ctrl.demanda.itens_faturamento.unshift({
+			'tipovalorhoras':[]
+		});
 	}
 		
+	$ctrl.adicionartipovalorhora = function (itemfaturamento) {
+		if (!itemfaturamento.tipovalorhoras){
+			itemfaturamento.tipovalorhoras = [];
+		}
+		itemfaturamento.tipovalorhoras.push({});
+	}
+	
 	$ctrl.adicionarproposta = function () {
 		$ctrl.demanda.propostas.unshift({});
 	}
@@ -73,7 +82,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	}
 	
 	$ctrl.remover = function (i){
-		i.remover = true;
+		i.remover = true;		
 	}
 	
 	$ctrl.listaclientes= DemandaService.buscarclientes();
@@ -83,22 +92,38 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		$ctrl.listatipovalorhora  = DemandaService.buscartipohoracliente($ctrl.demanda.cliente.id);	
 	}
 	
-	$ctrl.changehoraproposta = function (item_faturamento) {
-		if (item_faturamento.tipo_hora.id){
+	$ctrl.recalcularfaturamentototal = function (item_faturamento) {
+		if (item_faturamento.tipovalorhoras) {			
+			var valortotal = 0;
+			for (var i in item_faturamento.tipovalorhoras) {
+				var tipovalorhora = item_faturamento.tipovalorhoras[i]
+				if (!tipovalorhora.remover){
+					var valor = tipovalorhora.valor_faturamento ? CommonsService.stringparafloat(tipovalorhora.valor_faturamento) : 0;
+					valortotal += valor;
+				}
+			}
+			item_faturamento.valor_total_faturamento =  CommonsService.formatarnumero(valortotal);
+		}
+	}
+	
+	$ctrl.changehoraproposta = function (tipovalorhora, item_faturamento) {
+		if (tipovalorhora.tipo_hora && tipovalorhora.tipo_hora.id){
 			for (var i in $ctrl.listatipovalorhora){
 				
-				var tipovalorhora = $ctrl.listatipovalorhora[i]
+				var tipo = $ctrl.listatipovalorhora[i]
 				
-				if (tipovalorhora.id == item_faturamento.tipo_hora.id){
-					var tipo_hora = tipovalorhora;
-					var valor_hora = parseFloat(tipo_hora.valor_hora.replace('.', '').replace(',','.'));
-					item_faturamento.valor_hora = tipo_hora.valor_hora;
-					var valor_faturamento = valor_hora * (item_faturamento.quantidade_horas ? item_faturamento.quantidade_horas : 0);
-					item_faturamento.valor_faturamento = CommonsService.formatarnumero(valor_faturamento);
+				if (tipo.id == tipovalorhora.tipo_hora.id){
+					var tipo_hora = tipo;
+					var valor_hora = CommonsService.stringparafloat(tipo_hora.valor_hora);
+					tipovalorhora.valor_hora = tipo_hora.valor_hora;
+					var valor_faturamento = valor_hora * (tipovalorhora.quantidade_horas ? tipovalorhora.quantidade_horas : 0);
+					tipovalorhora.valor_faturamento = CommonsService.formatarnumero(valor_faturamento);
 					break;
 				}
 			}
 		}
+		
+		$ctrl.recalcularfaturamentototal(item_faturamento);
 	}
 	
 	

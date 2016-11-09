@@ -63,6 +63,9 @@ commons.directive('gbMoney', function () {
 			return numero.toFixed(2).replace(/./g, function(c, i, a) {
 			    return i && c !== "." && ((a.length - i) % 3 === 0) ? '.' + c : c === "." ? ',' : c;
 			})
+		},
+		stringparafloat: function(string) {
+			return parseFloat(string.replace(/\./g, '').replace(',','.'));
 		}
 	}
 });

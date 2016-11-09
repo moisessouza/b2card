@@ -40,17 +40,21 @@ class Demanda(models.Model):
     codigo_cri = models.CharField(max_length=12, null=True)
     
 class FaturamentoDemanda(models.Model):
-    descricao = models.CharField(max_length = 30)
+    descricao = models.CharField(max_length = 200)
     data = models.DateField(null=True)
-    tipo_hora = models.ForeignKey(TipoValorHora, null=True)
-    valor_hora = models.CharField(max_length=30, null=True)
-    quantidade_horas = models.IntegerField(null=True)
-    valor_faturamento = models.CharField(max_length=30, null=True)
+    valor_total_faturamento = models.CharField(max_length=30, null=True)
     status = models.CharField(max_length=1, choices=STATUS, null=True)
     data_envio_aprovacao = models.DateField(null=True)
     data_aprovacao_fatura = models.DateField(null=True)
     data_fatura = models.DateField(null=True)
     demanda = models.ForeignKey(Demanda, null=True)
+    
+class TipoValorHoraFaturamento(models.Model):
+    tipo_hora = models.ForeignKey(TipoValorHora, null=True)
+    valor_hora = models.CharField(max_length=30, null=True)
+    quantidade_horas = models.IntegerField(null=True)
+    valor_faturamento = models.CharField(max_length=30, null=True)
+    faturamento_demanda = models.ForeignKey(FaturamentoDemanda, null=True) 
     
 class Proposta(models.Model):
     data_recimento_solicitacao = models.DateField()
