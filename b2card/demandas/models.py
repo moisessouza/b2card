@@ -54,7 +54,7 @@ class TipoValorHoraFaturamento(models.Model):
     valor_hora = models.CharField(max_length=30, null=True)
     quantidade_horas = models.IntegerField(null=True)
     valor_faturamento = models.CharField(max_length=30, null=True)
-    faturamento_demanda = models.ForeignKey(FaturamentoDemanda, null=True) 
+    faturamento_demanda = models.ForeignKey(FaturamentoDemanda, null=True, on_delete=models.CASCADE) 
     
 class Proposta(models.Model):
     data_recimento_solicitacao = models.DateField()
