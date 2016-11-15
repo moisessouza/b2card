@@ -5,7 +5,7 @@ from .forms import ClienteForm
 from rest_framework.views import APIView
 from clientes import serializers
 from rest_framework.response import Response
-from clientes.models import TipoValorHora
+from clientes.models import TipoValorHora, CentroResultado
 from datetime import datetime
 from rest_framework.decorators import api_view
 
@@ -47,6 +47,7 @@ class ClienteDetail(APIView):
         cliente = Cliente.objects.get(pk=cliente_id)
         tipos_valor_hora = TipoValorHora.objects.filter(cliente=cliente)
         clienteSerializer = serializers.ClienteSerializer(cliente)
+        centro_resultados = CentroResultado.objects.filter(cliente=cliente)
         
         data = clienteSerializer.data
         
@@ -64,6 +65,9 @@ class ClienteDetail(APIView):
         tipos_valor_hora = serializers.TipoValorHoraSerializer(tipos_valor_hora, many=True)
         data['tipovalorhora'] = tipos_valor_hora.data
         
+        centro_resultados = serializers.CentroResultadoSerializer(centro_resultados, many=True)
+        data['centroresultados'] = centro_resultados.data
+        
         return Response(data)
     
     def post(self, request, format=None):
@@ -73,6 +77,10 @@ class ClienteDetail(APIView):
         if 'tipovalorhora' in request.data:
             tipos_valor_hora = data['tipovalorhora']
             del data['tipovalorhora']
+            
+        if 'centroresultados' in data:
+            centro_resultados = data['centroresultados']
+            del data['centroresultados']
         
         if 'dia_data_contratacao' in data:
             del data['dia_data_contratacao']
@@ -107,6 +115,13 @@ class ClienteDetail(APIView):
                     tipo_valor = TipoValorHora(**tipo_valor_hora)
                     tipo_valor.cliente = cliente
                     tipo_valor.save()
+                    
+        if centro_resultados is not None:
+            for centro_resultado in centro_resultados:
+                if centro_resultado['razao_social'] is not None and centro_resultado['cnpj'] is not None:
+                    centro_result = CentroResultado(**centro_resultado)
+                    centro_result.cliente = cliente
+                    centro_result.save()
                 
         return self.get(request, cliente.id, format);
     
@@ -138,10 +153,25 @@ class TipoValorHoraDetail(APIView):
         
         serializer = serializers.TipoValorHoraSerializer(tipo_valor_hora)
         return Response(serializer.data)
+
+class CentroResultadoDetail(APIView):
+    
+    def delete(self, request, centro_resultado_id, format=None):
+        centro_resultado = CentroResultado.objects.get(pk=centro_resultado_id)
+        centro_resultado.delete()
+        
+        serializer = serializers.CentroResultadoSerializer(centro_resultado)
+        return Response(serializer.data)
     
 @api_view(['GET', 'PUT', 'DELETE'])
 def buscar_valor_hora_cliente(request, cliente_id):
     
     tipo_valor_horas = TipoValorHora.objects.filter(cliente__id=cliente_id)
     serializer = serializers.TipoValorHoraSerializer(tipo_valor_horas, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def buscar_centro_resultados_cliente(request, cliente_id):
+    centro_resultados = CentroResultado.objects.filter(cliente__id = cliente_id)
+    serializer = serializers.CentroResultadoSerializer(centro_resultados, many=True)
     return Response(serializer.data)

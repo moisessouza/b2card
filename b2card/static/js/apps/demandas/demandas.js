@@ -26,6 +26,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	if (demanda_id) {
 		$ctrl.demanda = DemandaService.buscardemanda(demanda_id, function (data){
 			$ctrl.listatipovalorhora  = DemandaService.buscartipohoracliente(cliente_id);
+			$ctrl.listacentroresultado = DemandaService.buscarcentroresultados($ctrl.demanda.cliente.id);
 			$ctrl.show=true;
 			
 			var ocorrencias = data.ocorrencias;
@@ -89,7 +90,8 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	$ctrl.listafuncionarios = DemandaService.buscarfuncionarios();
 	
 	$ctrl.changecliente = function (){
-		$ctrl.listatipovalorhora  = DemandaService.buscartipohoracliente($ctrl.demanda.cliente.id);	
+		$ctrl.listatipovalorhora  = DemandaService.buscartipohoracliente($ctrl.demanda.cliente.id);
+		$ctrl.listacentroresultado = DemandaService.buscarcentroresultados($ctrl.demanda.cliente.id);
 	}
 	
 	$ctrl.recalcularfaturamentototal = function (item_faturamento) {

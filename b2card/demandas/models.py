@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from recursos.models import Funcionario
-from clientes.models import Cliente, TipoValorHora
+from clientes.models import Cliente, TipoValorHora, CentroResultado
 from datetime import datetime  
 from django.db.models.fields.related import ForeignKey
 
@@ -33,8 +33,10 @@ STATUS_DEMANDA = (
 class Demanda(models.Model):
     titulo = models.CharField(max_length=30, default=None)
     cliente = models.ForeignKey(Cliente, blank=False)
+    centro_resultado = models.ForeignKey(CentroResultado, default=None, blank=False)
     identificacao = models.CharField(max_length=30,default=None)
     descricao = models.TextField(default=None)
+    data_aprovacao_demanda = models.DateField(default=None)
     tipo_demanda = models.CharField(max_length=1, choices=TIPO_DEMANDA, null=True)
     status_demanda = models.CharField(max_length=1, choices=STATUS_DEMANDA, null=True)
     codigo_cri = models.CharField(max_length=12, null=True)

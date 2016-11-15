@@ -6,14 +6,15 @@ Created on 14 de set de 2016
 from rest_framework import serializers
 from demandas.models import Demanda, FaturamentoDemanda, Proposta, Tarefa, Observacao, Ocorrencia,\
     TipoValorHoraFaturamento
-from clientes.serializers import ClienteSerializer, TipoValorHoraSerializer
+from clientes.serializers import ClienteSerializer, TipoValorHoraSerializer, CentroResultadoSerializer
 from recursos.serializers import FuncionarioSerializer
         
 class DemandaSerializer (serializers.ModelSerializer):
     cliente = ClienteSerializer()
+    centro_resultado = CentroResultadoSerializer()
     class Meta:
         model = Demanda
-        fields = ('id', 'titulo','cliente','identificacao','descricao','tipo_demanda','status_demanda','codigo_cri')
+        fields = ('id', 'titulo','cliente','identificacao','descricao','tipo_demanda','status_demanda','codigo_cri', 'data_aprovacao_demanda', 'centro_resultado')
         
 class FaturamentoDemandaSerializer(serializers.ModelSerializer):
     class Meta:

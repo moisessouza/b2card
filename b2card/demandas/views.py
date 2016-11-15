@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from demandas.models import Demanda, FaturamentoDemanda, Proposta, Tarefa, Observacao, Ocorrencia,\
     TipoValorHoraFaturamento
-from clientes.models import Cliente, TipoValorHora
+from clientes.models import Cliente, TipoValorHora, CentroResultado
 from demandas.serializers import DemandaSerializer, FaturamentoDemandaSerializer, PropostaSerializer, TarefasSerializer,\
     ObservacaoSerializer, OcorrenciaSerializer, TipoValorHoraFaturamentoSerializer
 from utils.utils import converter_string_para_data, formatar_data
@@ -46,6 +46,8 @@ class DemandaDetail(APIView):
         ocorrencias = Ocorrencia.objects.filter(demanda__id=demanda_id)
         
         data = DemandaSerializer(demanda).data
+        
+        data['data_aprovacao_demanda'] = formatar_data(demanda.data_aprovacao_demanda)
 
         itens_list = []
         for i in itens_faturamento:
@@ -184,18 +186,20 @@ class DemandaDetail(APIView):
                 
                 tipo_valor_hora = None
                 if 'tipo_hora' in t:
-                    if t['tipo_hora'] is not None and 'id' in t['tipo_hora']:
-                        tipo_valor_hora = t['tipo_hora']
-                        tipo_valor_hora = TipoValorHora(pk=tipo_valor_hora['id'])
+                    tipo_hora = t['tipo_hora']
+                    if tipo_hora is not None and 'id' in tipo_hora:
+                        if tipo_hora['id'] is not None:
+                            tipo_valor_hora = TipoValorHora(pk=tipo_hora['id'])
                     del t['tipo_hora']
                     
-                tipo_valor_hora_faturamento = TipoValorHoraFaturamento(**t)
-                tipo_valor_hora_faturamento.faturamento_demanda = faturamento_demanda
-                
                 if tipo_valor_hora is not None:
+                    tipo_valor_hora_faturamento = TipoValorHoraFaturamento(**t)
+                    tipo_valor_hora_faturamento.faturamento_demanda = faturamento_demanda
+                
+                
                     tipo_valor_hora_faturamento.tipo_hora = tipo_valor_hora
                                     
-                tipo_valor_hora_faturamento.save()
+                    tipo_valor_hora_faturamento.save()
                 
             else:
                 if 'id' in t:
@@ -321,6 +325,9 @@ class DemandaDetail(APIView):
         cliente = data['cliente']
         cliente = Cliente.objects.get(pk=cliente['id'])
         
+        centro_resultado = data['centro_resultado']
+        centro_resultado = CentroResultado.objects.get(pk=centro_resultado['id'])
+        
         itens_faturamento = data['itens_faturamento']
         propostas = data['propostas']
         tarefas = data['tarefas']
@@ -328,6 +335,7 @@ class DemandaDetail(APIView):
         ocorrencias = data['ocorrencias']
         
         del data['cliente']
+        del data['centro_resultado']
         del data['itens_faturamento']
         del data['propostas']
         del data['tarefas']
@@ -336,7 +344,12 @@ class DemandaDetail(APIView):
        
         demanda = Demanda(**data)
         demanda.cliente = cliente
-        
+        demanda.centro_resultado = centro_resultado
+       
+        if 'data_aprovacao_demanda' in data:
+            data_string = data['data_aprovacao_demanda']
+            demanda.data_aprovacao_demanda = converter_string_para_data(data_string)
+            
         demanda.save();
         
         self.salvar_tarefa(tarefas, demanda)

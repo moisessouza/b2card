@@ -111,6 +111,36 @@
 					 </div>
 				</div>
     	  </div>
+    	  <div class="table-responsive">
+				<div class="panel panel-default form-group-sm" >
+					 <div class="panel-heading">
+					 	Centro de resultados
+					 </div>
+					 <div class="panel-body">
+					 	<button type="button" class="btn btn-default margin" ng-click="$ctrl.adicionarcentroresultado()">
+					  		<span class="glyphicon glyphicon-plus"></span> Adicionar
+					  	</button>
+					 	<table class="table table-bordered table-striped table-highlight" ng-show="$ctrl.cliente.tipovalorhora">
+						    <thead>
+						        <th>Razão social</th>
+						        <th>CNPJ</th>
+						        <th></th>
+						    </thead>
+						    <tbody>
+						    	<tr ng-repeat="centroresultado in $ctrl.cliente.centroresultados">
+						    		<td><input type="text" ng-model="centroresultado.razao_social" class="form-control" placeholder="Razão social"/></td>
+						    		<td><input type="text" ng-model="centroresultado.cnpj" class="form-control" placeholder="CNPJ" gb-cnpj/></td>
+						    		<td>
+						            	<button type="button" class="btn btn-default" ng-click="$ctrl.deletarcentroresultado(centroresultado)">
+											<span class="glyphicon glyphicon-trash"></span>
+										</button>
+						            </td>
+						    	</tr>
+						    </tbody>
+						</table>
+					 </div>
+				</div>
+		  </div>
 		  <button type="submit" class="btn btn-primary" name="salvar" ng-click="$ctrl.salvar()" ng-disabled="clientes.$invalid">Salvar</button>
 		  <button type="submit" class="btn btn-danger" name="deletar" ng-click="$ctrl.deletar()" ng-show="$ctrl.cliente.id">Deletar</button>
 		  <div class="label {{$ctrl.clazz}}" ng-bind="$ctrl.message" ></div>

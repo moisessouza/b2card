@@ -19,21 +19,35 @@ clientes.controller('ClientesController', function ($scope, $window, ClientesSer
 		});
 	} else {
 		$ctrl.cliente = {
-			'tipovalorhora': []
+			'tipovalorhora': [],
+			'centroresultados': []
 		}
 		$ctrl.show = true;
 	}
 	
 	$ctrl.adicionar = function () {
+		if (!$ctrl.cliente.tipovalorhora){
+			$ctrl.cliente.tipovalorhora = [];
+		}
+		
 		$ctrl.cliente.tipovalorhora.push({
 			'tipo_hora': null,
 			'valor_hora': null
 		});	
 	}
 	
+	$ctrl.adicionarcentroresultado = function () {
+		if (!$ctrl.cliente.centroresultados){
+			$ctrl.cliente.centroresultados = [];
+		}
+		
+		$ctrl.cliente.centroresultados.push({});	
+		
+	}
+	
 	$ctrl.deletarvalorhora = function(tipovalorhora) {
 		if (tipovalorhora.id){
-			var confirm = $window.confirm("Tem certeza que deseja deletar esse funcionário?");
+			var confirm = $window.confirm("Tem certeza que deseja deletar esse valor hora?");
 			if (confirm){
 				ClientesService.deletartipovalorhora(tipovalorhora.id, function (data){
 					$ctrl.cliente.tipovalorhora.splice($ctrl.cliente.tipovalorhora.indexOf(tipovalorhora), 1);
@@ -41,6 +55,19 @@ clientes.controller('ClientesController', function ($scope, $window, ClientesSer
 			}
 		} else {
 			$ctrl.cliente.tipovalorhora.splice($ctrl.cliente.tipovalorhora.indexOf(tipovalorhora), 1);
+		}
+	}
+	
+	$ctrl.deletarcentroresultado = function(centroresultado) {
+		if (centroresultado.id){
+			var confirm = $window.confirm("Tem certeza que deseja deletar esse centro de resultado?");
+			if (confirm){
+				ClientesService.deletarcentroresultado(centroresultado.id, function (data){
+					$ctrl.cliente.centroresultados.splice($ctrl.cliente.centroresultados.indexOf(centroresultado), 1);
+				});
+			}
+		} else {
+			$ctrl.cliente.centroresultados.splice($ctrl.cliente.centroresultados.indexOf(centroresultados), 1);
 		}
 	}
 	
