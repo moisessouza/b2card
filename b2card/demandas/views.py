@@ -52,9 +52,10 @@ class DemandaDetail(APIView):
         itens_list = []
         for i in itens_faturamento:
             faturamento_demanda = FaturamentoDemandaSerializer(i).data
-            faturamento_demanda['data'] = formatar_data(i.data)
             faturamento_demanda['data_envio_aprovacao'] = formatar_data(i.data_envio_aprovacao)
-            faturamento_demanda['data_aprovacao_fatura'] = formatar_data(i.data_aprovacao_fatura)
+            faturamento_demanda['data_previsto_faturamento'] = formatar_data(i.data_previsto_faturamento)
+            faturamento_demanda['data_previsto_pagamento'] = formatar_data(i.data_previsto_pagamento)
+            faturamento_demanda['data_pagamento'] = formatar_data(i.data_pagamento)
             faturamento_demanda['data_fatura'] = formatar_data(i.data_fatura)
             
             tipo_valor_hora_faturamento_demanda_list = TipoValorHoraFaturamento.objects.filter(faturamento_demanda=i)
@@ -158,15 +159,18 @@ class DemandaDetail(APIView):
                     faturamento_demanda = FaturamentoDemanda(**i)
                     faturamento_demanda.demanda = demanda
                     
-                    if 'data' in i:
-                        data_string = i['data']
-                        faturamento_demanda.data = converter_string_para_data(data_string)
                     if 'data_envio_aprovacao' in i:
                         data_string = i['data_envio_aprovacao']
                         faturamento_demanda.data_envio_aprovacao = converter_string_para_data(data_string)
-                    if 'data_aprovacao_fatura' in i:
-                        data_string = i['data_aprovacao_fatura']
-                        faturamento_demanda.data_aprovacao_fatura = converter_string_para_data(data_string)
+                    if 'data_previsto_faturamento' in i:
+                        data_string = i['data_previsto_faturamento']
+                        faturamento_demanda.data_previsto_faturamento = converter_string_para_data(data_string)
+                    if 'data_previsto_pagamento' in i:
+                        data_string = i['data_previsto_pagamento']
+                        faturamento_demanda.data_previsto_pagamento = converter_string_para_data(data_string)
+                    if 'data_pagamento' in i:
+                        data_string = i['data_pagamento']
+                        faturamento_demanda.data_pagamento = converter_string_para_data(data_string)
                     if 'data_fatura' in i:
                         data_string = i['data_fatura']
                         faturamento_demanda.data_fatura = converter_string_para_data(data_string)

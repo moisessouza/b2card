@@ -43,11 +43,13 @@ class Demanda(models.Model):
     
 class FaturamentoDemanda(models.Model):
     descricao = models.CharField(max_length = 200)
-    data = models.DateField(null=True)
+    numero_nota = models.CharField(max_length = 30, default=None)
     valor_total_faturamento = models.CharField(max_length=30, null=True)
     status = models.CharField(max_length=1, choices=STATUS, null=True)
     data_envio_aprovacao = models.DateField(null=True)
-    data_aprovacao_fatura = models.DateField(null=True)
+    data_previsto_faturamento = models.DateField(null=True)
+    data_previsto_pagamento = models.DateField(null=True)
+    data_pagamento = models.DateField(null=True)
     data_fatura = models.DateField(null=True)
     demanda = models.ForeignKey(Demanda, null=True)
     

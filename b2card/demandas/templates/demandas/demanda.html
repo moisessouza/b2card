@@ -183,13 +183,6 @@
 						<div class="row">
 							<div class="col-sm-2">
 								<div class="form-group form-group-sm">
-									<label for="comissao_comercial">Data</label> 
-								    <input type="text" id="comissao_comercial" name="comissao_comercial" ng-model="item_faturamento.data" gb-data class="form-control"/>
-								</div>
-							</div>
-							
-							<div class="col-sm-2">
-								<div class="form-group form-group-sm">
 									<label for="comissao_comercial">Status</label> 
 								     <select id="cargo" name="cargo" ng-model="item_faturamento.status" class="form-control">
 							    		<option value="">Selecione um tipo...</option>
@@ -201,19 +194,31 @@
 							</div>
 							<div class="col-sm-2">
 								<div class="form-group form-group-sm">
-									<label for="data_env_aprov">Data env. aprv.</label> 
+									<label for="data_env_aprov">Data envio aprovação</label> 
 								    <input type="text" id="data_env_aprov" name="data_env_aprov" ng-model="item_faturamento.data_envio_aprovacao" gb-data class="form-control"/>
 								</div>
 							</div>
 							<div class="col-sm-2">
 								<div class="form-group form-group-sm">
-									<label for="data_aprv_fat">Data aprv. fat.</label> 
-								    <input type="text" id="data_aprv_fat" name="data_aprv_fat" ng-model="item_faturamento.data_aprovacao_fatura" gb-data class="form-control"/>
+									<label for="data_previsto_faturamento">Data previsto faturamento</label> 
+								    <input type="text" id="data_previsto_faturamento" name="data_previsto_faturamento" ng-model="item_faturamento.data_previsto_faturamento" gb-data class="form-control"/>
 								</div>
 							</div>
 							<div class="col-sm-2">
 								<div class="form-group form-group-sm">
-									<label for="data_fat">Data fat.</label> 
+									<label for="data_previsto_pagamento">Data previsto pagamento</label> 
+								    <input type="text" id="data_previsto_pagamento" name="data_previsto_pagamento" ng-model="item_faturamento.data_previsto_pagamento" gb-data class="form-control"/>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="form-group form-group-sm">
+									<label for="data_pagamento">Data pagamento</label> 
+								    <input type="text" id="data_pagamento" name="data_pagamento" ng-model="item_faturamento.data_pagamento" gb-data class="form-control"/>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="form-group form-group-sm">
+									<label for="data_fat">Data faturamento</label> 
 								    <input type="text" id="data_fat" name="data_fat" ng-model="item_faturamento.data_fatura" gb-data class="form-control"/>
 								</div>
 							</div>

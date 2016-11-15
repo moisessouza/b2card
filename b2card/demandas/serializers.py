@@ -19,7 +19,7 @@ class DemandaSerializer (serializers.ModelSerializer):
 class FaturamentoDemandaSerializer(serializers.ModelSerializer):
     class Meta:
         model = FaturamentoDemanda
-        fields = ('id', 'descricao', 'data', 'valor_total_faturamento', 'status', 'data_envio_aprovacao', 'data_aprovacao_fatura', 'data_fatura')
+        fields = ('id', 'descricao', 'valor_total_faturamento', 'status', 'data_envio_aprovacao', 'data_previsto_faturamento', 'data_previsto_pagamento', 'data_pagamento', 'data_fatura')
       
 class TipoValorHoraFaturamentoSerializer(serializers.ModelSerializer):
     tipo_hora = TipoValorHoraSerializer()
