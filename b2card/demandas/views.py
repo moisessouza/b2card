@@ -146,6 +146,7 @@ class DemandaDetail(APIView):
 
 
     
+    
     def salvar_item_faturamento(self, itens_faturamento, demanda):
         for i in itens_faturamento:
             if 'remover' not in i or i['remover'] is False:
