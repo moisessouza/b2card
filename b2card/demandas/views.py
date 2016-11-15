@@ -149,7 +149,7 @@ class DemandaDetail(APIView):
     def salvar_item_faturamento(self, itens_faturamento, demanda):
         for i in itens_faturamento:
             if 'remover' not in i or i['remover'] is False:
-                if 'descricao' in i and i['descricao'] is not None:
+                if 'descricao' in i and i['descricao'] is not None and 'numero_nota' in i and i['numero_nota'] is not None:
                     
                     tipovalorhoras_list = [] 
                     if 'tipovalorhoras' in i and i['tipovalorhoras'] is not None:

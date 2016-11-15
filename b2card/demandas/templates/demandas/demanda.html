@@ -172,11 +172,18 @@
 					</div>
 					<div class="panel-body">
 						<div class="row">
-							<div class="col-sm-12">
+							<div class="col-sm-6">
 								<div class="form-group form-group-sm">
 									<label for="descricao">Descrição</label> 
 								    <input type="text" id="descricao" name="descricao" ng-model="item_faturamento.descricao" class="form-control" required maxlength="200"/>
 								    <span class="red" ng-show="itensfaturamento.descricao.$invalid">Descrição é obrigatório.</span>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group form-group-sm">
+									<label for="numero_nota">Numero da nota</label> 
+								    <input type="text" id="numero_nota" name="numero_nota" ng-model="item_faturamento.numero_nota" class="form-control" required maxlength="30"/>
+								    <span class="red" ng-show="itensfaturamento.numero_nota.$invalid">Numero da nota é obrigatório.</span>
 								</div>
 							</div>
 						</div>
