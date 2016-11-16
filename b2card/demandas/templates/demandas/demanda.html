@@ -131,7 +131,7 @@
 					<div class="col-md-3">
 						<div class="form-group">
 							<label for="data_aprovacao_demanda">Data de aprovação da demanda</label> 
-						    <input type="text" id="data_aprovacao_demanda" name="data_aprovacao_demanda" ng-model="$ctrl.demanda.data_aprovacao_demanda"  gb-data class="form-control" maxlength="12"/>
+						    <input type="text" id="data_aprovacao_demanda" name="data_aprovacao_demanda" ng-model="$ctrl.demanda.data_aprovacao_demanda"  ui-mask="99/99/9999" model-view-value="true" class="form-control" maxlength="12"/>
 						</div>
 					</div>
 				</div>
@@ -202,31 +202,31 @@
 							<div class="col-sm-2">
 								<div class="form-group form-group-sm">
 									<label for="data_env_aprov">Data envio aprovação</label> 
-								    <input type="text" id="data_env_aprov" name="data_env_aprov" ng-model="item_faturamento.data_envio_aprovacao" gb-data class="form-control"/>
+								    <input type="text" id="data_env_aprov" name="data_env_aprov" ng-model="item_faturamento.data_envio_aprovacao" ui-mask="99/99/9999" model-view-value="true" ng-change="$ctrl.changedataenvioaprovacao(item_faturamento)"  class="form-control"/>
 								</div>
 							</div>
 							<div class="col-sm-2">
 								<div class="form-group form-group-sm">
 									<label for="data_previsto_faturamento">Data previsto faturamento</label> 
-								    <input type="text" id="data_previsto_faturamento" name="data_previsto_faturamento" ng-model="item_faturamento.data_previsto_faturamento" gb-data class="form-control"/>
+								    <input type="text" id="data_previsto_faturamento" name="data_previsto_faturamento" ng-model="item_faturamento.data_previsto_faturamento" ui-mask="99/99/9999" model-view-value="true" class="form-control"/>
 								</div>
 							</div>
 							<div class="col-sm-2">
 								<div class="form-group form-group-sm">
 									<label for="data_previsto_pagamento">Data previsto pagamento</label> 
-								    <input type="text" id="data_previsto_pagamento" name="data_previsto_pagamento" ng-model="item_faturamento.data_previsto_pagamento" gb-data class="form-control"/>
-								</div>
-							</div>
-							<div class="col-sm-2">
-								<div class="form-group form-group-sm">
-									<label for="data_pagamento">Data pagamento</label> 
-								    <input type="text" id="data_pagamento" name="data_pagamento" ng-model="item_faturamento.data_pagamento" gb-data class="form-control"/>
+								    <input type="text" id="data_previsto_pagamento" name="data_previsto_pagamento" ng-model="item_faturamento.data_previsto_pagamento" ui-mask="99/99/9999" model-view-value="true" class="form-control"/>
 								</div>
 							</div>
 							<div class="col-sm-2">
 								<div class="form-group form-group-sm">
 									<label for="data_fat">Data faturamento</label> 
-								    <input type="text" id="data_fat" name="data_fat" ng-model="item_faturamento.data_fatura" gb-data class="form-control"/>
+								    <input type="text" id="data_fat" name="data_fat" ng-model="item_faturamento.data_fatura" ui-mask="99/99/9999" model-view-value="true" class="form-control"/>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="form-group form-group-sm">
+									<label for="data_pagamento">Data pagamento</label> 
+								    <input type="text" id="data_pagamento" name="data_pagamento" ng-model="item_faturamento.data_pagamento" ui-mask="99/99/9999" model-view-value="true" class="form-control"/>
 								</div>
 							</div>
 						</div>
@@ -308,19 +308,19 @@
 					<tbody>
 						<tr ng-repeat="proposta in $ctrl.demanda.propostas" ng-show="!proposta.remover">
 							<td>
-								<input type="text" ng-model="proposta.data_recimento_solicitacao" class="form-control" gb-data placeholder="Data recimento solicitação"/>
+								<input type="text" ng-model="proposta.data_recimento_solicitacao" class="form-control" ui-mask="99/99/9999" model-view-value="true"/>
 							</td>
 							<td>
-								<input type="text" ng-model="proposta.data_limite_entrega" class="form-control" gb-data placeholder="Data limite entrega"/>
+								<input type="text" ng-model="proposta.data_limite_entrega" class="form-control" ui-mask="99/99/9999" model-view-value="true"/>
 							</td>
 							<td>
-								<input type="text" ng-model="proposta.data_real_entrega" class="form-control" gb-data placeholder="Data real entrega"/>
+								<input type="text" ng-model="proposta.data_real_entrega" class="form-control" ui-mask="99/99/9999" model-view-value="true"/>
 							</td>
 							<td>
 								<input type="text" ng-model="proposta.numerdo_proposta" class="form-control" maxlength="30" placeholder="Númerdo da proposta B2Card"/>
 							</td>
 							<td>
-								<input type="text" ng-model="proposta.data_aprovacao" class="form-control" gb-data placeholder="Data de aprovação"/>
+								<input type="text" ng-model="proposta.data_aprovacao" class="form-control" ui-mask="99/99/9999" model-view-value="true"/>
 							</td>
 							<td>
 								<input type="text" ng-model="proposta.empresa_ganhadora" class="form-control" maxlength="30" placeholder="Empresa ganhadora"/>
@@ -403,19 +403,19 @@
 											<div class="col-sm-4">
 												<div class="form-group">
 													<label for="identificacao">Inicio</label> 
-												    <input type="text" id="analise_inicio" name="analise_inicio" ng-model="tarefa.analise_inicio" class="form-control" gb-data maxlength="12"/>											
+												    <input type="text" id="analise_inicio" name="analise_inicio" ng-model="tarefa.analise_inicio" class="form-control" ui-mask="99/99/9999" model-view-value="true" maxlength="12"/>											
 												</div>
 											</div>
 											<div class="col-sm-4">
 												<div class="form-group">
 													<label for="analise_fim">Fim</label> 
-												    <input type="text" id="analise_fim" name="analise_fim" ng-model="tarefa.analise_fim" class="form-control" gb-data maxlength="12"/>											
+												    <input type="text" id="analise_fim" name="analise_fim" ng-model="tarefa.analise_fim" class="form-control" ui-mask="99/99/9999" model-view-value="true" maxlength="12"/>											
 												</div>
 											</div>
 											<div class="col-sm-4">
 												<div class="form-group">
 													<label for="analise_fim_real">Fim Real</label> 
-												    <input type="text" id="analise_fim_real" name="analise_fim_real" ng-model="tarefa.analise_fim_real" class="form-control" gb-data maxlength="12"/>											
+												    <input type="text" id="analise_fim_real" name="analise_fim_real" ng-model="tarefa.analise_fim_real" class="form-control" ui-mask="99/99/9999" model-view-value="true" maxlength="12"/>											
 												</div>
 											</div>
 										</div>
@@ -430,19 +430,19 @@
 											<div class="col-sm-4">
 												<div class="form-group">
 													<label for="identificacao">Inicio</label> 
-												    <input type="text" id="analise_inicio" name="analise_inicio" ng-model="tarefa.densenvolvimento_inicio" class="form-control" gb-data maxlength="12"/>											
+												    <input type="text" id="analise_inicio" name="analise_inicio" ng-model="tarefa.densenvolvimento_inicio" class="form-control" ui-mask="99/99/9999" model-view-value="true" maxlength="12"/>											
 												</div>
 											</div>
 											<div class="col-sm-4">
 												<div class="form-group">
 													<label for="analise_fim">Fim</label> 
-												    <input type="text" id="analise_fim" name="analise_fim" ng-model="tarefa.desenvolvimento_fim" class="form-control" gb-data maxlength="12"/>											
+												    <input type="text" id="analise_fim" name="analise_fim" ng-model="tarefa.desenvolvimento_fim" class="form-control" ui-mask="99/99/9999" model-view-value="true" maxlength="12"/>											
 												</div>
 											</div>
 											<div class="col-sm-4">
 												<div class="form-group">
 													<label for="analise_fim_real">Fim Real</label> 
-												    <input type="text" id="analise_fim_real" name="analise_fim_real" ng-model="tarefa.desenvolvimento_fim_real" class="form-control" gb-data maxlength="12"/>											
+												    <input type="text" id="analise_fim_real" name="analise_fim_real" ng-model="tarefa.desenvolvimento_fim_real" class="form-control" ui-mask="99/99/9999" model-view-value="true" maxlength="12"/>											
 												</div>
 											</div>
 										</div>
@@ -467,19 +467,19 @@
 											<div class="col-sm-3">
 												<div class="form-group">
 													<label for="homologacao_inicio">Inicio</label> 
-												    <input type="text" id="homologacao_inicio" name="homologacao_inicio" ng-model="tarefa.homologacao_inicio" class="form-control" gb-data maxlength="12"/>											
+												    <input type="text" id="homologacao_inicio" name="homologacao_inicio" ng-model="tarefa.homologacao_inicio" class="form-control" ui-mask="99/99/9999" model-view-value="true" maxlength="12"/>											
 												</div>
 											</div>
 											<div class="col-sm-3">
 												<div class="form-group">
 													<label for="homologacao_fim">Fim</label> 
-												    <input type="text" id="homologacao_fim" name="homologacao_fim" ng-model="tarefa.homologacao_fim" class="form-control" gb-data maxlength="12"/>											
+												    <input type="text" id="homologacao_fim" name="homologacao_fim" ng-model="tarefa.homologacao_fim" class="form-control" ui-mask="99/99/9999" model-view-value="true" maxlength="12"/>											
 												</div>
 											</div>
 											<div class="col-sm-3">
 												<div class="form-group">
 													<label for="homologacao_fim_real">Fim Real</label> 
-												    <input type="text" id="homologacao_fim_real" name="homologacao_fim_real" ng-model="tarefa.homologacao_fim_real" class="form-control" gb-data maxlength="12"/>											
+												    <input type="text" id="homologacao_fim_real" name="homologacao_fim_real" ng-model="tarefa.homologacao_fim_real" class="form-control" ui-mask="99/99/9999" model-view-value="true" maxlength="12"/>											
 												</div>
 											</div>
 										</div>
@@ -516,7 +516,7 @@
 											<div class="col-sm-4">
 												<div class="form-group">
 													<label for="identificacao">Implantação em produção</label> 
-												    <input type="text" id="analise_inicio" name="analise_inicio" ng-model="tarefa.implantacao_producao" class="form-control" gb-data maxlength="12"/>											
+												    <input type="text" id="analise_inicio" name="analise_inicio" ng-model="tarefa.implantacao_producao" class="form-control" ui-mask="99/99/9999" model-view-value="true" maxlength="12"/>											
 												</div>
 											</div>
 											<div class="col-sm-4">
@@ -558,7 +558,7 @@
 				<tbody>
 					<tr ng-repeat="observacao in $ctrl.demanda.observacoes" ng-show="!observacao.remover">
 						<td class="col-sm-2">
-							<input type="text" ng-model="observacao.data_observacao" class="form-control" gb-data placeholder="Data da observação"/>
+							<input type="text" ng-model="observacao.data_observacao" class="form-control" ui-mask="99/99/9999" model-view-value="true"/>
 						</td>
 						<td class="col-sm-12">
 							<textarea ng-model="observacao.observacao" class="form-control" placeholder="Observação"></textarea>
@@ -629,13 +629,13 @@
 							<div class="col-sm-2">
 								<div class="form-group">
 									<label for="data_solicitacao">Data de solicitação</label> 
-								    <input type="text" class="form-control" id="data_solicitacao" name="data_solicitacao" ng-model="ocorrencia.data_solicitacao" gb-data/>
+								    <input type="text" class="form-control" id="data_solicitacao" name="data_solicitacao" ng-model="ocorrencia.data_solicitacao" ui-mask="99/99/9999" model-view-value="true"/>
 								</div>
 							</div>
 							<div class="col-sm-2">
 								<div class="form-group">
 									<label for="data_prevista_conclusao">Data prevista conclusão</label> 
-								    <input type="text" class="form-control" id="data_prevista_conclusao" name="data_prevista_conclusao" ng-model="ocorrencia.data_prevista_conclusao" gb-data/>
+								    <input type="text" class="form-control" id="data_prevista_conclusao" name="data_prevista_conclusao" ng-model="ocorrencia.data_prevista_conclusao" ui-mask="99/99/9999" model-view-value="true"/>
 								</div>
 							</div>
 							<div class="col-sm-2">

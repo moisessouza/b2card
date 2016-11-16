@@ -1,4 +1,4 @@
-var demandas = angular.module('demandas', ['demandas-services', 'commons', 'ui.bootstrap']);
+var demandas = angular.module('demandas', ['demandas-services', 'commons', 'ui.bootstrap', 'ui.mask']);
 
 demandas.controller('DemandaController', function ($scope, $window, $uibModal, $log, DemandaService, CommonsService){
 	var $ctrl = this; 
@@ -13,8 +13,6 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		$ctrl.message = msg;
 	}
 	
-	
-	
 	$ctrl.layout = function (i){
 		if (i.show) {
 			i.show = !i.show;
@@ -26,7 +24,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	if (demanda_id) {
 		$ctrl.demanda = DemandaService.buscardemanda(demanda_id, function (data){
 			$ctrl.listatipovalorhora  = DemandaService.buscartipohoracliente(cliente_id);
-			$ctrl.listacentroresultado = DemandaService.buscarcentroresultados($ctrl.demanda.cliente.id);
+			$ctrl.listacentroresultado = DemandaService.buscarcentroresultados(cliente_id);
 			$ctrl.show=true;
 			
 			var ocorrencias = data.ocorrencias;
@@ -92,6 +90,24 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	$ctrl.changecliente = function (){
 		$ctrl.listatipovalorhora  = DemandaService.buscartipohoracliente($ctrl.demanda.cliente.id);
 		$ctrl.listacentroresultado = DemandaService.buscarcentroresultados($ctrl.demanda.cliente.id);
+	}
+	
+	$ctrl.changedataenvioaprovacao = function (item_faturamento) {
+		if (item_faturamento.data_envio_aprovacao && item_faturamento.data_envio_aprovacao.length == 10 ) {
+			for (i in $ctrl.listaclientes) {
+				var cliente = $ctrl.listaclientes[i];
+				if (cliente.id == $ctrl.demanda.cliente.id) {
+					var dias_faturamento = cliente.dias_faturamento;
+					var dias_pagamento = cliente.dias_pagamento;
+					var data = CommonsService.stringparadata(item_faturamento.data_envio_aprovacao);
+					data.setDate(data.getDate() + dias_faturamento);
+					item_faturamento.data_previsto_faturamento  = CommonsService.dataparastring(data);
+					data.setDate(data.getDate() + dias_pagamento);
+					item_faturamento.data_previsto_pagamento = CommonsService.dataparastring(data);
+					
+				}
+			}
+		}
 	}
 	
 	$ctrl.recalcularfaturamentototal = function (item_faturamento) {

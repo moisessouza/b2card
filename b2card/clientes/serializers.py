@@ -10,12 +10,12 @@ from clientes.models import CentroResultado
 class ClienteMinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cliente
-        fields = ('id', 'razao_social')
+        fields = ('id', 'razao_social','dias_pagamento','dias_faturamento')
         
 class ClienteSerializer(serializers.ModelSerializer):
     class Meta:
         model  = Cliente
-        fields = ('id', 'razao_social','cnpj','endereco','cidade','estado','cep','data_contratacao','data_rescisao')
+        fields = ('id', 'razao_social','cnpj','endereco','cidade','estado','cep','dias_pagamento','dias_faturamento','data_contratacao','data_rescisao')
         
 class TipoValorHoraSerializer(serializers.ModelSerializer):
     class Meta:

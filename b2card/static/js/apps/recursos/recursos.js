@@ -1,4 +1,4 @@
-var recursos = angular.module('recursos', ['recursos-services', 'commons', 'ui.bootstrap']);
+var recursos = angular.module('recursos', ['recursos-services', 'commons', 'ui.bootstrap', 'ui.mask']);
 
 recursos.controller('RecursosController', function ($scope, $uibModal, $window, $location, RecursosService){
 	var $ctrl = this;
