@@ -125,7 +125,7 @@
 		  </div>
 		  <div class="form-group">
 		    <label for="data_admissao">Data de admissão</label>
-		    <input type="text" class="form-control" id="data_admissao" name="data_admissao" ng-model="$ctrl.funcionario.data_admissao" gb-data placeholder="Salário" required>
+		    <input type="text" class="form-control" id="data_admissao" name="data_admissao" ng-model="$ctrl.funcionario.data_admissao" ui-mask="99/99/9999" model-view-value="true" required>
 		    <span class="red" ng-show="recursos.data_admissao.$invalid">Data admissão é obrigatório.</span>
 		  </div>
 		  <button type="submit" class="btn btn-primary" name="gravar" ng-click="$ctrl.salvar()" ng-disabled="recursos.$invalid">Salvar</button>

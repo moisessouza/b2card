@@ -73,13 +73,23 @@
 		    <span class="red" ng-show="clientes.cep.$invalid">CEP é obrigatório.</span>
 		  </div>
 		  <div class="form-group">
+		    <label for="dias_faturamento">Dias para faturamento</label>
+		    <input type="number" class="form-control" id="dias_faturamento" name="dias_faturamento" ng-model="$ctrl.cliente.dias_faturamento" placeholder="Dias para faturamento" required>
+		    <span class="red" ng-show="clientes.dias_faturamento.$invalid">Dias para faturamento é obrigatório.</span>
+		  </div>
+		  <div class="form-group">
+		    <label for="dias_pagamento">Dias para pagamento</label>
+		    <input type="number" class="form-control" id="dias_pagamento" name="dias_pagamento" ng-model="$ctrl.cliente.dias_pagamento" placeholder="Dias para pagamento" required>
+		    <span class="red" ng-show="clientes.dias_pagamento.$invalid">Dias para pagamento é obrigatório.</span>
+		  </div>
+		  <div class="form-group">
 		    <label for="data_contratacao">Data da contratação</label>
-		    <input type="text" class="form-control" id="data_contratacao" name="data_contratacao" ng-model="$ctrl.cliente.data_contratacao" gb-data placeholder="Data da contratação" required>
+		    <input type="text" class="form-control" id="data_contratacao" name="data_contratacao" ng-model="$ctrl.cliente.data_contratacao" ui-mask="99/99/9999" model-view-value="true" required>
 		    <span class="red" ng-show="clientes.data_contratacao.$invalid">Data da contratação é obrigatório.</span>
 		  </div>
 		  <div class="form-group">
 		    <label for="data_rescisao">Data da rescisão</label>
-		    <input type="text" class="form-control" id="data_rescisao" name="data_rescisao" ng-model="$ctrl.cliente.data_rescisao" gb-data placeholder="Data da rescisão">
+		    <input type="text" class="form-control" id="data_rescisao" name="data_rescisao" ng-model="$ctrl.cliente.data_rescisao" ui-mask="99/99/9999" model-view-value="true">
 		  </div>
 		  <div class="table-responsive">
 				<div class="panel panel-default form-group-sm" >

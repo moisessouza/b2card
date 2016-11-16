@@ -9,6 +9,8 @@ class Cliente(models.Model):
     cidade = models.CharField(max_length=20)
     estado = models.CharField(max_length=20)
     cep = models.CharField(max_length=10)
+    dias_faturamento = models.IntegerField(default=None)
+    dias_pagamento = models.IntegerField(default=None)
     data_contratacao = models.DateField(default=None, blank=True)
     data_rescisao = models.DateField(default=None, null=True)
     

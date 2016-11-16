@@ -33,12 +33,17 @@ commons.directive('gbMoney', function () {
             $(elem).mask('99.999-999');
         }
     };
-}).directive('gbData', function () {
+}).directive('gbData', function ($compile) {
     return {
         require: '?ngModel',
         link: function (scope, elem, attrs, ctrl) {
             if (!ctrl) return;
-            $(elem).mask('99/99/9999');
+            //$(elem).mask('99/99/9999');
+            input = elem.find('input').clone();
+            input.setAttribute('ui-mask', '99/99/9999');
+            input.setAttribute('model-view-value', 'true');
+            input = $compile(input)(scope)
+            elem.find('input').replaceWith(input);
         }
     };
 }).directive('gbCpf', function () {
@@ -66,6 +71,18 @@ commons.directive('gbMoney', function () {
 		},
 		stringparafloat: function(string) {
 			return parseFloat(string.replace(/\./g, '').replace(',','.'));
+		},
+		stringparadata: function (string) {
+			var split = string.split('/');
+			return new Date(split[2], split[1]-1, split[0]);
+		},
+		dataparastring: function(data){
+			
+			var dia = data.getDate() < 10 ? '0' + data.getDate() : data.getDate();
+			var mes = (data.getMonth() + 1) < 10 ? '0' + (data.getMonth() + 1) : data.getMonth() + 1;
+			var ano = data.getFullYear();
+			
+			return [dia, mes, ano].join('/');	
 		}
 	}
 });
