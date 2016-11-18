@@ -1,0 +1,128 @@
+<meta charset="utf-8">
+{% extends "base_page.html" %}
+
+{% block script %}
+	<script src="/static/js/apps/cadastros/valorhora/valorhora.js"></script>
+	<script src="/static/js/apps/cadastros/valorhora/valorhora-services.js"></script>
+	<script src="/static/js/apps/cadastros/centrocusto/centrocusto-services.js"></script>
+	<script src="/static/js/apps/cadastros/centroresultado/centroresultado-services.js"></script>
+	<script src="/static/js/apps/cadastros/contagerencial/contagerencial-services.js"></script>
+	<script src="/static/js/apps/cadastros/naturezaoperacao/naturezaoperacao-services.js"></script>
+	<script src="/static/js/apps/cadastros/tipohora/tipohora-services.js"></script>
+	<script src="/static/js/commons/commons.js"></script>
+	<script src="/static/js/angular/ui-bootstrap-tpls-2.2.0.min.js"></script>
+	<script src="/static/js/jquery/priceformat/jquery.priceformat.min.js"></script>
+{% endblock %}
+
+{%block content%}
+
+{% if valor_hora %}
+<script type="text/javascript">
+	var valor_hora_id = {{valor_hora.id}};
+</script>
+{% else %}
+<script type="text/javascript">
+	var valor_hora_id = null;
+</script>
+{% endif %}
+
+{%verbatim%}
+
+<style>
+	button.margin {
+		margin-bottom: 1em;
+	}
+	span.red { 
+   		color:red;
+  	}
+</style>
+
+<h1>Valor hora</h1>
+
+<form  name="valorhora" ng-app="valorhora" ng-controller="ValorHoraController as $ctrl" ng-show="$ctrl.show" class="ng-hide">
+
+	<div class="panel panel-default form-group-sm" >
+	  <div class="panel-body">
+		  <div class="form-group col-sm-3">
+		    <label for="centro_custo">Centro de custo</label>
+		    <select class="form-control" id="centro_custo" name="centro_custo" ng-model="$ctrl.valorhora.centro_custo.id" ng-options="c.id as c.nome for c in $ctrl.centrocustolist" required>
+		    	<option value="">Selecione...</option>
+		    </select>
+		    <span class="red" ng-show="valorhora.centro_custo.$invalid">Centro de custo é obrigatório.</span>
+		  </div>
+		  <div class="form-group col-sm-3">
+		    <label for="centro_resultado">Centro de resultado</label>
+		    <select class="form-control" id="centro_resultado" name="centro_resultado" ng-model="$ctrl.valorhora.centro_resultado.id" ng-options="c.id as c.nome for c in $ctrl.centroresultadolist" required>
+		    	<option value="">Selecione...</option>
+		    </select>
+		    <span class="red" ng-show="valorhora.centro_resultado.$invalid">Centro de resultado é obrigatório.</span>
+		  </div>
+		  <div class="form-group col-sm-3">
+		    <label for="conta_gerencial">Conta gerencial</label>
+		    <select class="form-control" id="conta_gerencial" name="conta_gerencial" ng-model="$ctrl.valorhora.conta_gerencial.id" ng-options="c.id as c.nome for c in $ctrl.contagerenciallist" required>
+		    	<option value="">Selecione...</option>
+		    </select>
+		    <span class="red" ng-show="valorhora.conta_gerencial.$invalid">Conta gerencial é obrigatório.</span>
+		  </div>
+		  <div class="form-group col-sm-3">
+		    <label for="natureza_operacao">Natureza da operação</label>
+		    <select class="form-control" id="natureza_operacao" name="natureza_operacao" ng-model="$ctrl.valorhora.natureza_operacao.id" ng-options="c.id as c.nome for c in $ctrl.naturezaoperacaolist" required>
+		    	<option value="">Selecione...</option>
+		    </select>
+		    <span class="red" ng-show="valorhora.natureza_operacao.$invalid">Natureza da operação é obrigatório.</span>
+		  </div>
+		  <div class="form-group col-sm-3">
+		    <label for="tipo_hora">Tipo hora</label>
+		    <select class="form-control" id="tipo_hora" name="tipo_hora" ng-model="$ctrl.valorhora.tipo_hora.id" ng-options="c.id as c.descricao for c in $ctrl.tipohoralist" required>
+		    	<option value="">Selecione...</option>
+		    </select>
+		    <span class="red" ng-show="valorhora.tipo_hora.$invalid">Tipo hora é obrigatório.</span>
+		  </div>
+		  <div class="form-group col-sm-3">
+		    <label for="descricao">Descrição</label>
+		    <input type="text" class="form-control" id="descricao" name="descricao" ng-model="$ctrl.valorhora.descricao" placeholder="Descrição" required/>
+		    <span class="red" ng-show="valorhora.descricao.$invalid">Descrição é obrigatório.</span>
+		  </div>
+	  </div>
+	 </div>
+	 
+	 <div id="proposta" class="tab-pane">
+	 	  <button type="button" class="btn btn-primary margin" ng-click="$ctrl.adicionarvigencia()">
+		  		<span class="glyphicon glyphicon-plus"></span> Adicionar vigência
+		  </button>	
+	  
+		  <table class="table table-responsive table-bordered table-striped table-highlight">
+				<thead>
+				    <th>Data inicio</th>
+				    <th>Data fim</th>
+				    <th>Valor</th>
+				</thead>
+				<tbody>
+				    <tr ng-repeat="vigencia in $ctrl.valorhora.vigencias">
+				        <td>
+				        	<input type="text" class="form-control" ng-model="vigencia.data_inicio" ui-mask="99/99/9999" model-view-value="true"/>
+				        </td>
+				        <td>
+				        	<input type="text" class="form-control" ng-model="vigencia.data_fim" ui-mask="99/99/9999" model-view-value="true"/>
+				        </td>
+				        <td>
+				        	<input type="text" class="form-control" ng-model="vigencia.valor" gb-money required/>
+				        </td>
+				    </tr>
+				</tbody>
+		  </table>
+	  
+	  </div>
+	  
+	  <button type="button" class="btn btn-primary" ng-click="$ctrl.salvar()" ng-disabled="valorhora.$invalid">
+	  		Salvar
+	  </button>	
+	  <button type="button" class="btn btn-danger" ng-click="$ctrl.deletar()" ng-show="$ctrl.valorhora.id">
+	  		Deletar
+	  </button>	
+	  <div class="label {{$ctrl.clazz}}" ng-bind="$ctrl.message" ></div>
+</form>
+
+{%endverbatim%}
+
+{%endblock%}

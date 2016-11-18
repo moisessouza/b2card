@@ -1,0 +1,36 @@
+<meta charset="utf-8">
+{% extends "base_page.html" %}
+{% block content %}
+
+<style>
+table tr {
+    cursor: pointer;
+}
+</style>
+
+<form class="navbar-form" action="{% url 'cadastros:novo_valor_hora' %}" method="post">
+	{% csrf_token %} 
+	<button class="btn btn-default" value="Novo">Novo</button>
+</form>
+
+<table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Descrição</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for valor_hora in valor_horas %}
+      <tr href="{% url 'cadastros:editar_valor_hora' valor_hora.id %}">
+        <td>{{valor_hora.descricao}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+  <script type="text/javascript">
+  	$('table tr').on('click', function () {
+  		window.location.replace($(this).attr('href'));	
+  	});
+  </script>
+{% endblock %}

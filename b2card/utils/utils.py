@@ -1,4 +1,5 @@
 from datetime import datetime
+import locale
 
 def formatar_data(data):
     if data is not None:
@@ -15,3 +16,8 @@ def converter_string_para_data(data_string):
         return data.date()
     else:
         return None
+    
+def converter_string_para_float(float_string):
+    float_string = float_string.replace('.', '').replace(',', '.')
+    return float(float_string);
+    
