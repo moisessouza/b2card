@@ -1,0 +1,64 @@
+<meta charset="utf-8">
+{% extends "base_page.html" %}
+
+{% block script %}
+	<script src="/static/js/apps/cadastros/centrocusto/centrocusto.js"></script>
+	<script src="/static/js/apps/cadastros/centrocusto/centrocusto-services.js"></script>
+	<script src="/static/js/commons/commons.js"></script>
+	<script src="/static/js/angular/ui-bootstrap-tpls-2.2.0.min.js"></script>
+	<script src="/static/js/jquery/priceformat/jquery.priceformat.min.js"></script>
+{% endblock %}
+
+{%block content%}
+
+{%verbatim%}
+
+<style>
+	table tr {
+    	cursor: pointer;
+	}
+	button.margin {
+		margin-bottom: 1em;
+	}
+	span.red { 
+   		color:red;
+  	}
+</style>
+
+<h1>Centro de custo</h1>
+
+<form  name="centrocusto" ng-app="centrocusto" ng-controller="CentroCustoController as $ctrl" ng-show="$ctrl.show" class="ng-hide">
+  <div class="panel panel-default form-group-sm" >
+	  <div class="panel-body">
+		  <div class="form-group">
+		    <label for="nome">Centro de custo</label>
+		    <input type="text" class="form-control" id="nome" name="nome" ng-model="$ctrl.centrocusto.nome" placeholder="Centro de custo" maxlength="30" required>
+		    <span class="red" ng-show="centrocusto.nome.$invalid">Centro de custo é obrigatório.</span>
+		  </div>
+		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.salvar()" ng-disabled="centrocusto.$invalid">Salvar</button>
+		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.novo()" ng-show="$ctrl.centrocusto.id">Novo</button>
+		  
+		  <table class="table table-responsive table-bordered table-striped table-highlight" ng-show="$ctrl.centrocustolist">
+				<thead>
+				    <th>Centro de custo</th>
+				    <th></th>
+				</thead>
+				<tbody>
+				    <tr ng-repeat="centrocusto in $ctrl.centrocustolist">
+				        <td class="col-sm-12" ng-click="$ctrl.editar(centrocusto);">{{centrocusto.nome}}</td>
+				        <td>
+				       		<button type="button" class="btn btn-default" ng-click="$ctrl.deletar(centrocusto)">
+								<span class="glyphicon glyphicon-trash"></span>
+							</button>
+				        </td>
+				    </tr>
+				</tbody>
+		   </table>
+					 
+	 </div>
+  </div>
+</form>
+
+{%endverbatim%}
+
+{%endblock%}

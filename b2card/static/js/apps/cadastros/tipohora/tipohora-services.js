@@ -10,8 +10,19 @@ clientesservices.config(['$httpProvider', function($httpProvider) {
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 }]);
 
-clientesservices.service('ClientesService', function($resource){
+clientesservices.service('TipoHoraService', function($resource){
 	return {
-		
+		buscartipohoras: function (callback) {
+			var TipoHora = $resource('/cadastros/tipohora/api/list/');
+			return TipoHora.query(callback);
+		},
+		salvar: function(data, callback) {
+			var TipoHora = $resource('/cadastros/tipohora/api/detail/');
+			return TipoHora.save(data, callback);
+		},
+		deletar: function(data, callback){
+			var TipoHora = $resource('/cadastros/tipohora/api/:id/');
+			return TipoHora.remove({id: data.id}, data, callback);
+		}
 	}
 });
