@@ -1,8 +1,7 @@
 from django.conf.urls import url, include
+
 from cadastros import view_contagerencial
 from cadastros.view_contagerencial import ContaGerencialList, ContaGerencialDetail
-
-
 
 urlpatterns = [
    url(r'^$', view_contagerencial.index, name='contagerencial'),

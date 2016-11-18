@@ -3,7 +3,6 @@ from django.conf.urls import url, include
 from cadastros import view_naturezaoperacao
 from cadastros.view_naturezaoperacao import NaturezaOperacaoList, NaturezaOperacaoDetail
 
-
 urlpatterns = [
    url(r'^$', view_naturezaoperacao.index, name='naturezaoperacao'),
    url(r'^api/list/$', NaturezaOperacaoList.as_view()),
