@@ -29,5 +29,4 @@ tipohora.controller('TipoHoraController', function ($scope, $window, TipoHoraSer
 	$ctrl.novo = function () {
 		$ctrl.tipohora = {};
 	}
-	
 });
