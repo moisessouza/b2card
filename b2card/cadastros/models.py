@@ -8,3 +8,6 @@ class TipoHora(models.Model):
     
 class CentroCusto(models.Model):
     nome = models.CharField(max_length=30)
+
+class CentroResultado(models.Model):
+    nome = models.CharField(max_length=30)

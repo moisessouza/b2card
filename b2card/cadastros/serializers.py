@@ -16,3 +16,8 @@ class CentroCustoSerializer(serializers.ModelSerializer):
     class Meta:
         model = CentroCusto
         fields = ('id', 'nome')
+        
+class CentroResultadoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CentroCusto
+        fields = ('id', 'nome')        
