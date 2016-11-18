@@ -4,7 +4,7 @@ Created on 14 de set de 2016
 @author: moi09
 '''
 from rest_framework import serializers
-from cadastros.models import TipoHora, CentroCusto, ContaGerencial
+from cadastros.models import TipoHora, CentroCusto, ContaGerencial, NaturezaOperacao
         
 class TipoHoraSerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,4 +25,9 @@ class CentroResultadoSerializer(serializers.ModelSerializer):
 class ContaGerencialSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContaGerencial
-        fields = ('id', 'nome')       
+        fields = ('id', 'nome')      
+        
+class NaturezaOperacaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NaturezaOperacao
+        fields = ('id', 'nome')   

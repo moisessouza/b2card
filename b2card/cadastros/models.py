@@ -14,3 +14,6 @@ class CentroResultado(models.Model):
     
 class ContaGerencial(models.Model):
     nome = models.CharField(max_length=30)
+    
+class NaturezaOperacao(models.Model):
+    nome = models.CharField(max_length=30)
