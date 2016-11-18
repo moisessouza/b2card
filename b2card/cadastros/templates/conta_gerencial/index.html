@@ -1,0 +1,64 @@
+<meta charset="utf-8">
+{% extends "base_page.html" %}
+
+{% block script %}
+	<script src="/static/js/apps/cadastros/contagerencial/contagerencial.js"></script>
+	<script src="/static/js/apps/cadastros/contagerencial/contagerencial-services.js"></script>
+	<script src="/static/js/commons/commons.js"></script>
+	<script src="/static/js/angular/ui-bootstrap-tpls-2.2.0.min.js"></script>
+	<script src="/static/js/jquery/priceformat/jquery.priceformat.min.js"></script>
+{% endblock %}
+
+{%block content%}
+
+{%verbatim%}
+
+<style>
+	table tr {
+    	cursor: pointer;
+	}
+	button.margin {
+		margin-bottom: 1em;
+	}
+	span.red { 
+   		color:red;
+  	}
+</style>
+
+<h1>Conta gerencial</h1>
+
+<form  name="contagerencial" ng-app="contagerencial" ng-controller="ContaGerencialController as $ctrl" ng-show="$ctrl.show" class="ng-hide">
+  <div class="panel panel-default form-group-sm" >
+	  <div class="panel-body">
+		  <div class="form-group">
+		    <label for="nome">Conta gerencial</label>
+		    <input type="text" class="form-control" id="nome" name="nome" ng-model="$ctrl.contagerencial.nome" placeholder="Conta gerencial" maxlength="30" required>
+		    <span class="red" ng-show="contagerencial.nome.$invalid">Conta gerencial é obrigatório.</span>
+		  </div>
+		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.salvar()" ng-disabled="contagerencial.$invalid">Salvar</button>
+		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.novo()" ng-show="$ctrl.contagerencial.id">Novo</button>
+		  
+		  <table class="table table-responsive table-bordered table-striped table-highlight" ng-show="$ctrl.contagerenciallist">
+				<thead>
+				    <th>Conta gerencial</th>
+				    <th></th>
+				</thead>
+				<tbody>
+				    <tr ng-repeat="contagerencial in $ctrl.contagerenciallist">
+				        <td class="col-sm-12" ng-click="$ctrl.editar(contagerencial);">{{contagerencial.nome}}</td>
+				        <td>
+				       		<button type="button" class="btn btn-default" ng-click="$ctrl.deletar(contagerencial)">
+								<span class="glyphicon glyphicon-trash"></span>
+							</button>
+				        </td>
+				    </tr>
+				</tbody>
+		   </table>
+					 
+	 </div>
+  </div>
+</form>
+
+{%endverbatim%}
+
+{%endblock%}

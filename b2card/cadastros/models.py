@@ -11,3 +11,6 @@ class CentroCusto(models.Model):
 
 class CentroResultado(models.Model):
     nome = models.CharField(max_length=30)
+    
+class ContaGerencial(models.Model):
+    nome = models.CharField(max_length=30)
