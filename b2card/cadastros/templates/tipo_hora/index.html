@@ -14,6 +14,9 @@
 {%verbatim%}
 
 <style>
+	table tr {
+    	cursor: pointer;
+	}
 	button.margin {
 		margin-bottom: 1em;
 	}
@@ -32,30 +35,26 @@
 		    <input type="text" class="form-control" id="descricao" name="descricao" ng-model="$ctrl.tipohora.descricao" placeholder="Tipo hora" required>
 		    <span class="red" ng-show="tipohora.descricao.$invalid">Tipo hora é obrigatório.</span>
 		  </div>
-		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.adicionar()">Salvar</button>
+		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.salvar()" ng-disabled="tipohora.$invalid">Salvar</button>
 		  <div class="label {{$ctrl.clazz}}" ng-bind="$ctrl.message" ></div>
-		  <div class="table-responsive">
-				<div class="panel panel-default form-group-sm" >
-					 <div class="panel-body">
-						<table class="table table-bordered table-striped table-highlight" ng-show="$ctrl.cliente.tipovalorhora">
-						    <thead>
-						        <th>Tipo hora</th>
-						        <th></th>
-						    </thead>
-						    <tbody>
-						        <tr ng-repeat="tipohora in $ctrl.listatipohora" ng-click="$ctrl.editar(tipohora);">
-						            <td>{{tipohora.descricao}}</td>
-						            <td>
-						            	<button type="button" class="btn btn-default" ng-click="$ctrl.deletar(tipohora)">
-											<span class="glyphicon glyphicon-trash"></span>
-										</button>
-						            </td>
-						        </tr>
-						    </tbody>
-						 </table>
-					 </div>
-				</div>
-    	  </div>
+		  
+		  <table class="table table-responsive table-bordered table-striped table-highlight" ng-show="$ctrl.tipohoralist">
+				<thead>
+				    <th>Tipo hora</th>
+				    <th></th>
+				</thead>
+				<tbody>
+				    <tr ng-repeat="tipohora in $ctrl.tipohoralist" ng-click="$ctrl.editar(tipohora);">
+				        <td class="col-sm-12">{{tipohora.descricao}}</td>
+				        <td>
+				       		<button type="button" class="btn btn-default" ng-click="$ctrl.deletar(tipohora)">
+								<span class="glyphicon glyphicon-trash"></span>
+							</button>
+				        </td>
+				    </tr>
+				</tbody>
+		   </table>
+					 
 	 </div>
   </div>
 </form>

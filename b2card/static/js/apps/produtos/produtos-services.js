@@ -15,7 +15,6 @@ produtosservices.service('MateriaisService', function ($resource) {
 		buscarmateriais:function () {
 			var Materiais = $resource('/materiais/api/list/');
 			var result = Materiais.query();
-			console.log(result)
 			return result;
 		}
 	}

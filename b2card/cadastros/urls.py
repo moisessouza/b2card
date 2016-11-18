@@ -17,11 +17,15 @@ from django.conf.urls import url, include
 from rest_framework import routers, serializers, viewsets
 from rest_framework.urlpatterns import format_suffix_patterns
 from . import tipohora
+from cadastros.tipohora import TipoHoraList, TipoHoraDetail
 
 app_name='cadastros'
 
 urlpatterns = [
     url(r'^tipohora/$', tipohora.index, name='tipohora'),
+    url(r'^tipohora/api/list/$', TipoHoraList.as_view()),
+    url(r'^tipohora/api/detail/$', TipoHoraDetail.as_view()),
+     url(r'^tipohora/api/(?P<tipohora_id>[0-9]+)/$', TipoHoraDetail.as_view())
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
