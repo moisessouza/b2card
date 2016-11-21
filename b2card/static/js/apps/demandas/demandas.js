@@ -101,6 +101,23 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		fase.itensfase.push({});
 	}
 	
+	$ctrl.adicionarfase = function () {
+		if (!$ctrl.demanda.orcamento){
+			$ctrl.demanda.orcamento = {}
+		}
+		if (!$ctrl.demanda.orcamento.fases){
+			$ctrl.demanda.orcamento.fases = [];
+		}
+		$ctrl.demanda.orcamento.fases.unshift({})
+	}
+	
+	$ctrl.adicionaritemfase = function (fase){
+		if (!fase.itensfase){
+			fase.itensfase = [];
+		}
+		fase.itensfase.push({});
+	}
+	
 	$ctrl.remover = function (i){
 		i.remover = true;		
 	}
