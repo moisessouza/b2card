@@ -45,6 +45,11 @@
 	.heading-text-align {
 		text-align: center;
 	}
+	
+	.margin-top {
+		margin-top: 2em;
+	}
+	
 </style>
 
 <h1>Demanda</h1>
@@ -148,14 +153,110 @@
 		</div>
 	</form>
 	<ul class="nav nav-tabs">
-	  <li class="active"><a data-toggle="tab" href="#itens_faturamento">Itens de faturamento da demanda</a></li>
+	  <li class="active"><a data-toggle="tab" href="#orcamento">Orçamento</a></li>
+	  <li><a data-toggle="tab" href="#itens_faturamento">Itens de faturamento da demanda</a></li>
 	  <li><a data-toggle="tab" href="#proposta">Proposta</a></li>
 	  <li><a data-toggle="tab" href="#tarefas">Tarefas</a></li>
 	  <li><a data-toggle="tab" href="#observacoes">Observações</a></li>
 	  <li><a data-toggle="tab" href="#ocorrencias">Ocorrências</a></li>
 	</ul>
 	<div class="tab-content">
-  		<div id="itens_faturamento" class="tab-pane in active">
+		<div id="orcamento" class="tab-pane in active">
+			<form>
+				<div class="panel panel-primary margin-top">
+					<div class="panel-heading">
+						Dados do orçamento
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-sm-6">	
+								<div class="form-group form-group-sm">
+									<label for="centro_custo">Centro de custo</label> 
+						    		<select id="centro_custo" name="centro_custo"  class="form-control" required>
+						    			<option value="">Selecione...</option>
+						    			<option>Bradescard</option>
+						    		</select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-group form-group-sm">
+									<label for="centro_custo" >Descrição</label> 
+						    		<textarea class="form-control"></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-6">	
+								<div class="form-group form-group-sm">
+									<label for="total_orcamento">Total orçamento</label> 
+						    		<input type="text" id="total_orcamento" name="total_orcamento"  class="form-control" required disabled="disabled"/>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+										
+				<button type="button" class="btn btn-primary margin">
+			  		<span class="glyphicon glyphicon-plus"></span> Adicionar fase
+				</button>	
+				
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						(Sem descrição)
+					</div>
+					<div class="panel-body">	
+						<div class="row">						
+							<div class="col-sm-6 form-group form-group-sm">
+								<label for="centro_custo">Descrição</label> 
+					   			<input type="text" id="centro_custo" name="centro_custo"  class="form-control" required/>
+							</div>
+						</div>
+						
+						<button type="button" class="btn btn-primary margin">
+				  			<span class="glyphicon glyphicon-plus"></span> Adicionar valor hora
+						</button>
+						
+						<table class="table table-sm table-bordered table-striped table-highlight">
+							<thead>
+								<tr class="active">
+									<th>Valor hora</th>
+									<th>Valor</th>
+									<th>Quantidade de horas</th>
+									<th>Valor final</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<select id="cargo" name="cargo" ng-model="tipovalorhora.tipo_hora.id" ng-change="$ctrl.changehoraproposta(tipovalorhora, item_faturamento)" class="form-control" ng-options="t.id as t.tipo_hora for t in $ctrl.listatipovalorhora">
+								    		<option value="">Selecione um tipo...</option>
+								    	</select>
+									</td>
+									<td>
+										<input type="text" id="comissao_comercial" name="comissao_comercial" ng-model="tipovalorhora.valor_hora" ng-change="$ctrl.changehoraproposta(tipovalorhora, item_faturamento)" maxlength="30" gb-money class="form-control" disabled/>
+									</td>
+									<td>
+										<input type="number" id="comissao_comercial" name="comissao_comercial" ng-model="tipovalorhora.quantidade_horas" ng-change="$ctrl.changehoraproposta(tipovalorhora, item_faturamento)" class="form-control"/>
+									</td>
+									<td>
+										<input type="text" id="valor_faturamento" name="valor_faturamento" ng-model="tipovalorhora.valor_faturamento" maxlength="30" gb-money class="form-control" disabled/>
+									</td>
+									<td>
+										<button type="button" class="btn btn-default" ng-click="$ctrl.remover(tipovalorhora); $ctrl.recalcularfaturamentototal(item_faturamento);">
+											<span class="glyphicon glyphicon-trash"></span>
+										</button>
+									</td>
+								 </tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</form>
+		</div>
+  		<div id="itens_faturamento" class="tab-pane">
 			<button type="button" class="btn btn-primary margin" ng-click="$ctrl.adicionaritem()">
 		  		<span class="glyphicon glyphicon-plus"></span> Adicionar item
 			</button>
