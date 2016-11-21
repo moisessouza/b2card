@@ -133,12 +133,13 @@ class Orcamento(models.Model):
     
 class Fase(models.Model):
     descricao = models.CharField(max_length=100)
+    valor_total = models.FloatField()
     orcamento = models.ForeignKey(Orcamento, default=None)
     
 class ItemFase(models.Model):
     fase = models.ForeignKey(Fase, default = None)
     valor_hora = models.ForeignKey(ValorHora, default=None)
     valor_selecionado = models.FloatField()
-    quantidade = models.IntegerField()
+    quantidade_horas = models.IntegerField()
     valor_total = models.FloatField()
     

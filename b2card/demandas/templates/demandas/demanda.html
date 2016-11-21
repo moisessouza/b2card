@@ -4,6 +4,8 @@
 {% block script %}
 	<script src="/static/js/apps/demandas/demandas.js"></script>
 	<script src="/static/js/apps/demandas/demandas-services.js"></script>
+	<script src="/static/js/apps/cadastros/centrocusto/centrocusto-services.js"></script>
+	<script src="/static/js/apps/cadastros/valorhora/valorhora-services.js"></script>
 	<script src="/static/js/commons/commons.js"></script>
 	<script src="/static/js/angular/ui-bootstrap-tpls-2.2.0.min.js"></script>
 	<script src="/static/js/jquery/priceformat/jquery.priceformat.min.js"></script>
@@ -162,7 +164,7 @@
 	</ul>
 	<div class="tab-content">
 		<div id="orcamento" class="tab-pane in active">
-			<form>
+			<form name="orcamento">
 				<div class="panel panel-primary margin-top">
 					<div class="panel-heading">
 						Dados do orçamento
@@ -172,18 +174,18 @@
 							<div class="col-sm-6">	
 								<div class="form-group form-group-sm">
 									<label for="centro_custo">Centro de custo</label> 
-						    		<select id="centro_custo" name="centro_custo"  class="form-control" required>
+						    		<select id="centro_custo" name="centro_custo"  ng-model="$ctrl.demanda.orcamento.centro_custo.id" class="form-control" ng-change="$ctrl.changecentrocusto()" ng-options="c.id as c.nome for c in $ctrl.listacentrocustos" required>
 						    			<option value="">Selecione...</option>
-						    			<option>Bradescard</option>
 						    		</select>
+						    		<span class="red" ng-show="orcamento.centro_custo.$invalid">Centro de custo é obrigatório.</span>
 								</div>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-sm-12">
 								<div class="form-group form-group-sm">
-									<label for="centro_custo" >Descrição</label> 
-						    		<textarea class="form-control"></textarea>
+									<label for="descricao" >Descrição</label> 
+						    		<textarea ng-model="$ctrl.demanda.orcamento.descricao" class="form-control"></textarea>
 								</div>
 							</div>
 						</div>
@@ -191,30 +193,35 @@
 							<div class="col-sm-6">	
 								<div class="form-group form-group-sm">
 									<label for="total_orcamento">Total orçamento</label> 
-						    		<input type="text" id="total_orcamento" name="total_orcamento"  class="form-control" required disabled="disabled"/>
+						    		<input type="text" id="total_orcamento" name="total_orcamento"  ng-model="$ctrl.demanda.orcamento.total_orcamento" class="form-control" required disabled="disabled"/>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 										
-				<button type="button" class="btn btn-primary margin">
+				<button type="button" class="btn btn-primary margin" ng-click="$ctrl.adicionarfase()">
 			  		<span class="glyphicon glyphicon-plus"></span> Adicionar fase
 				</button>	
 				
-				<div class="panel panel-primary">
+				<div class="panel panel-primary" ng-repeat="fase in $ctrl.demanda.orcamento.fases" ng-show="!fase.remover">
 					<div class="panel-heading">
-						(Sem descrição)
+						<strong>{{fase.descricao ? fase.descricao : '(Sem descrição)'}}</strong>
+						<div class="btn-group pull-right">
+							<button type="button" class="btn btn-primary" ng-click="$ctrl.remover(fase)">
+			  					<span class="glyphicon glyphicon-trash margin"></span>
+							</button>
+						</div>
 					</div>
 					<div class="panel-body">	
 						<div class="row">						
 							<div class="col-sm-6 form-group form-group-sm">
-								<label for="centro_custo">Descrição</label> 
-					   			<input type="text" id="centro_custo" name="centro_custo"  class="form-control" required/>
+								<label for="fase_descricao">Descrição</label> 
+					   			<input type="text" id="fase_descricao" name="fase_descricao"  ng-model="fase.descricao" class="form-control" required/>
 							</div>
 						</div>
 						
-						<button type="button" class="btn btn-primary margin">
+						<button type="button" class="btn btn-primary margin" ng-click="$ctrl.adicionaritemfase(fase)">
 				  			<span class="glyphicon glyphicon-plus"></span> Adicionar valor hora
 						</button>
 						
@@ -229,29 +236,35 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
+								<tr ng-repeat="itemfase in fase.itensfase" ng-show="!itemfase.remover">
 									<td>
-										<select id="cargo" name="cargo" ng-model="tipovalorhora.tipo_hora.id" ng-change="$ctrl.changehoraproposta(tipovalorhora, item_faturamento)" class="form-control" ng-options="t.id as t.tipo_hora for t in $ctrl.listatipovalorhora">
+										<select id="valorhora" name="valorhora" ng-model="itemfase.valor_hora.id" ng-change="$ctrl.changevalorhora(itemfase)" class="form-control" ng-options="v.id as v.descricao for v in $ctrl.listavalorhora">
 								    		<option value="">Selecione um tipo...</option>
 								    	</select>
 									</td>
 									<td>
-										<input type="text" id="comissao_comercial" name="comissao_comercial" ng-model="tipovalorhora.valor_hora" ng-change="$ctrl.changehoraproposta(tipovalorhora, item_faturamento)" maxlength="30" gb-money class="form-control" disabled/>
+										<input type="text" id="comissao_comercial" name="comissao_comercial" ng-model="itemfase.valor_selecionado" maxlength="30" gb-money class="form-control" disabled/>
 									</td>
 									<td>
-										<input type="number" id="comissao_comercial" name="comissao_comercial" ng-model="tipovalorhora.quantidade_horas" ng-change="$ctrl.changehoraproposta(tipovalorhora, item_faturamento)" class="form-control"/>
+										<input type="number" id="comissao_comercial" name="comissao_comercial" ng-model="itemfase.quantidade_horas" ng-change="$ctrl.changefasequantidadehoras(itemfase)" class="form-control"/>
 									</td>
 									<td>
-										<input type="text" id="valor_faturamento" name="valor_faturamento" ng-model="tipovalorhora.valor_faturamento" maxlength="30" gb-money class="form-control" disabled/>
+										<input type="text" id="valor_faturamento" name="valor_faturamento" ng-model="itemfase.valor_total" maxlength="30" gb-money class="form-control" disabled/>
 									</td>
 									<td>
-										<button type="button" class="btn btn-default" ng-click="$ctrl.remover(tipovalorhora); $ctrl.recalcularfaturamentototal(item_faturamento);">
+										<button type="button" class="btn btn-default" ng-click="$ctrl.remover(itemfase)">
 											<span class="glyphicon glyphicon-trash"></span>
 										</button>
 									</td>
-								 </tr>
+								</tr>
 							</tbody>
 						</table>
+						
+						<div class="form-group form-group-sm">
+							<label for="descricao">Valor total</label> 
+						    <input type="text" id="descricao" name="descricao" ng-model="fase.valor_total" class="form-control" disabled/>
+						</div>
+						
 					</div>
 				</div>
 			</form>

@@ -6,6 +6,8 @@ from cadastros.models import ValorHora, Vigencia, CentroCusto, CentroResultado, 
     TipoHora
 from cadastros.serializers import ValorHoraSerializer, VigenciaSerializer
 from utils.utils import formatar_data, converter_string_para_float, converter_string_para_data
+from rest_framework.decorators import api_view
+import datetime
 
 def index(request):
     
@@ -111,3 +113,17 @@ class ValorHoraDetail(APIView):
         valor_hora.delete()
                
         return Response('ok')
+    
+@api_view(['GET'])
+def buscar_valor_hora_por_centro_custo(request, centro_custo_id):
+    valor_horas = ValorHora.objects.filter(centro_custo__id = centro_custo_id);
+    
+    valor_hora_list = []
+    for i in valor_horas:
+        vigencia = Vigencia.objects.filter(valor_hora=i, data_inicio__lte = datetime.date.today(), data_fim__gte = datetime.date.today())
+        valor_hora_data = ValorHoraSerializer(i).data    
+        valor_hora_data['vigencia'] = VigenciaSerializer(vigencia[0]).data
+        valor_hora_list.append(valor_hora_data)
+    return Response(valor_hora_list)
+    
+    

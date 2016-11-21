@@ -1,6 +1,7 @@
-var demandas = angular.module('demandas', ['demandas-services', 'commons', 'ui.bootstrap', 'ui.mask']);
+var demandas = angular.module('demandas', ['demandas-services', 'centrocusto-services', 'valorhora-services', 'commons', 'ui.bootstrap', 'ui.mask']);
 
-demandas.controller('DemandaController', function ($scope, $window, $uibModal, $log, DemandaService, CommonsService){
+demandas.controller('DemandaController', function ($scope, $window, $uibModal, $log, DemandaService, 
+		CentroCustoService, ValorHoraService, CommonsService){
 	var $ctrl = this; 
 	
 	var messageinfo = function (msg){
@@ -44,7 +45,8 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			'propostas':[{}],
 			'tarefas':[{}],
 			'observacoes':[{}],
-			'ocorrencias':[{}]
+			'ocorrencias':[{}],
+			'orcamento': {}
 		}
 		$ctrl.show=true;
 	}
@@ -80,12 +82,88 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		$ctrl.demanda.ocorrencias.unshift(ocorrencia)
 	}
 	
+	$ctrl.adicionarfase = function () {
+		if (!$ctrl.demanda.orcamento){
+			$ctrl.demanda.orcamento = {}
+		}
+		if (!$ctrl.demanda.orcamento.fases){
+			$ctrl.demanda.orcamento.fases = [];
+		}
+		$ctrl.demanda.orcamento.fases.unshift({})
+	}
+	
+	$ctrl.adicionaritemfase = function (fase){
+		if (!fase.itensfase){
+			fase.itensfase = [];
+		}
+		fase.itensfase.push({});
+	}
+	
 	$ctrl.remover = function (i){
 		i.remover = true;		
 	}
 	
+	
+	
 	$ctrl.listaclientes= DemandaService.buscarclientes();
 	$ctrl.listafuncionarios = DemandaService.buscarfuncionarios();
+	$ctrl.listacentrocustos = CentroCustoService.buscarcentrocustos();
+	
+	$ctrl.changecentrocusto = function () {
+		var idcentrocusto = $ctrl.demanda.orcamento.centro_custo.id;
+		$ctrl.listavalorhora = ValorHoraService.buscarvalorhoraporcentrodecusto(idcentrocusto);
+	}
+	
+	$ctrl.changevalorhora = function (itemfase) {
+		itemfase.valor_selecionado = CommonsService.formatarnumero(0);
+		for (i in $ctrl.listavalorhora){
+			var valorhora = $ctrl.listavalorhora[i]
+			if (valorhora && valorhora.vigencia){
+				if (valorhora.id == itemfase.valor_hora.id){
+					itemfase.valor_selecionado = CommonsService.formatarnumero(valorhora.vigencia && valorhora.vigencia.valor ? valorhora.vigencia.valor : 0);
+					break;
+				}
+			}
+		}
+		$ctrl.changefasequantidadehoras(itemfase);
+	}
+	
+	var calcularvalortotalorcamento = function (){
+		
+		var fases = $ctrl.demanda.orcamento.fases
+		var totalorcamento = 0;
+		
+		for (i in fases) {
+			var fase = fases[i];
+			var itensfase = fase.itensfase;
+			
+			var valorfase = 0
+			for (i in itensfase){
+				var itemfase = itensfase[i];
+				if (itemfase.valor_total) {
+					var valoritem = CommonsService.stringparafloat(itemfase.valor_total);
+					valorfase+=valoritem;
+				}
+			}
+			
+			fase.valor_total = CommonsService.formatarnumero(valorfase);
+			totalorcamento+= valorfase;
+		}
+		
+		$ctrl.demanda.orcamento.total_orcamento =  CommonsService.formatarnumero(totalorcamento);
+	}
+	
+	$ctrl.changefasequantidadehoras = function (itemfase) {
+		for (i in $ctrl.listavalorhora){
+			var valorhora = $ctrl.listavalorhora[i]
+			if (valorhora.id == itemfase.valor_hora.id){
+				itemfase.valor_total  = CommonsService.formatarnumero((valorhora.vigencia ? valorhora.vigencia.valor : 0) * ( itemfase.quantidade_horas ? itemfase.quantidade_horas : 0));
+			}
+		}
+		
+		calcularvalortotalorcamento();
+		
+	}
 	
 	$ctrl.changecliente = function (){
 		$ctrl.listatipovalorhora  = DemandaService.buscartipohoracliente($ctrl.demanda.cliente.id);
