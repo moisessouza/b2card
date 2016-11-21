@@ -2,8 +2,8 @@
 from django.db import models
 from recursos.models import Funcionario
 from clientes.models import Cliente, TipoValorHora, CentroResultado
-from datetime import datetime  
-from django.db.models.fields.related import ForeignKey
+from datetime import datetime
+from cadastros.models import CentroCusto, ValorHora
 
 # Create your models here.
 
@@ -123,4 +123,20 @@ class Ocorrencia(models.Model):
     responsavel = models.ForeignKey(Funcionario, null=True)
     descricao_motivo = models.TextField()
     observacao = models.TextField()
-    demanda = ForeignKey(Demanda, null=True)
+    demanda = models.ForeignKey(Demanda, null=True)
+    
+class Orcamento(models.Model):
+    centro_custo = models.ForeignKey(CentroCusto, default=None)
+    descricao = models.TextField(default = None)
+    
+class Fase(models.Model):
+    descricao = models.CharField(max_length=100)
+    orcamento = models.ForeignKey(Orcamento, default=None)
+    
+class ItemFase(models.Model):
+    fase = models.ForeignKey(Fase, default = None)
+    valor_hora = models.ForeignKey(ValorHora, default=None)
+    valor_selecionado = models.FloatField()
+    quantidade = models.IntegerField()
+    valor_total = models.FloatField()
+    
