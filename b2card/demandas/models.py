@@ -33,7 +33,6 @@ STATUS_DEMANDA = (
 class Demanda(models.Model):
     titulo = models.CharField(max_length=30, default=None)
     cliente = models.ForeignKey(Cliente, blank=False)
-    centro_resultado = models.ForeignKey(CentroResultado, default=None, blank=False)
     identificacao = models.CharField(max_length=30,default=None)
     descricao = models.TextField(default=None)
     data_aprovacao_demanda = models.DateField(default=None)
@@ -128,12 +127,12 @@ class Ocorrencia(models.Model):
 class Orcamento(models.Model):
     demanda = models.ForeignKey(Demanda)
     centro_custo = models.ForeignKey(CentroCusto, default=None)
-    descricao = models.TextField(default = None)
+    descricao = models.TextField(null=True, default = None)
     total_orcamento = models.FloatField(default = None)
     
 class Fase(models.Model):
     descricao = models.CharField(max_length=100)
-    valor_total = models.FloatField()
+    valor_total = models.FloatField(default = None)
     orcamento = models.ForeignKey(Orcamento, default=None)
     
 class ItemFase(models.Model):

@@ -2,12 +2,14 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from demandas.models import Demanda, FaturamentoDemanda, Proposta, Tarefa, Observacao, Ocorrencia,\
-    TipoValorHoraFaturamento
+    TipoValorHoraFaturamento, Orcamento, ItemFase, Fase
 from clientes.models import Cliente, TipoValorHora, CentroResultado
 from demandas.serializers import DemandaSerializer, FaturamentoDemandaSerializer, PropostaSerializer, TarefasSerializer,\
-    ObservacaoSerializer, OcorrenciaSerializer, TipoValorHoraFaturamentoSerializer
-from utils.utils import converter_string_para_data, formatar_data
+    ObservacaoSerializer, OcorrenciaSerializer, TipoValorHoraFaturamentoSerializer, OrcamentoSerializer,\
+    ItemFaseSerializer, FaseSerializer
+from utils.utils import converter_string_para_data, formatar_data, converter_string_para_float
 from recursos.models import Funcionario
+from cadastros.models import CentroCusto, ValorHora
 
 # Create your views here.
 
@@ -44,6 +46,7 @@ class DemandaDetail(APIView):
         tarefas = Tarefa.objects.filter(demanda__id=demanda_id)
         observacoes = Observacao.objects.filter(demanda__id=demanda_id)
         ocorrencias = Ocorrencia.objects.filter(demanda__id=demanda_id)
+        orcamentos = Orcamento.objects.filter(demanda__id=demanda_id)
         
         data = DemandaSerializer(demanda).data
         
@@ -105,12 +108,31 @@ class DemandaDetail(APIView):
             ocorrencia['data_solicitacao'] = formatar_data(i.data_solicitacao)
             ocorrencia['data_prevista_conclusao'] = formatar_data(i.data_prevista_conclusao)
             ocorrencias_list.append(ocorrencia)
+            
+        orcamento_dict = {}
+        if  orcamentos:
+            orcamento = orcamentos[0]
+            orcamento_dict = OrcamentoSerializer(orcamento).data
+            fases = Fase.objects.filter(orcamento = orcamento)
+            
+            fases_list = []
+            for i in fases:
+                itens_fase = ItemFase.objects.filter(fase = i)
+                intes_fase_list = ItemFaseSerializer(itens_fase, many=True).data
+                fase_dict = FaseSerializer(i).data
+                fase_dict['itensfase'] = intes_fase_list
+                fases_list.append(fase_dict)
+                
+            orcamento_dict['fases'] = fases_list
+            
+            
         
         data['itens_faturamento'] = itens_list
         data['propostas'] = propostas_list
         data['tarefas'] = tarefas_list
         data['observacoes'] = observacoes_list
         data['ocorrencias'] = ocorrencias_list
+        data['orcamento'] = orcamento_dict
         
         return data
 
@@ -320,33 +342,88 @@ class DemandaDetail(APIView):
                     ocorrencia = Ocorrencia.objects.get(pk=i['id'])
                     ocorrencia.delete()
 
+    def salvar_orcamento(self, orcamento_dict, demanda):
+        
+        centro_custo = None
+        if 'centro_custo' in orcamento_dict:
+            centro_custo = orcamento_dict['centro_custo']
+            centro_custo = CentroCusto.objects.get(pk=centro_custo['id'])
+            del orcamento_dict['centro_custo']
+        
+        fases_list= None
+        if 'fases' in orcamento_dict:
+            fases_list = orcamento_dict['fases']
+            del orcamento_dict['fases']
+        
+        orcamento = Orcamento(**orcamento_dict)
+        orcamento.total_orcamento = converter_string_para_float(orcamento.total_orcamento)
+        orcamento.demanda = demanda
+        orcamento.centro_custo = centro_custo
+        orcamento.save();
+        
+        if fases_list is not None:    
+            for f in fases_list:
+                if 'remover' not in f or f['remover'] is False:
+                    itens_fase = None
+                    if 'itensfase' in f:
+                        itens_fase = f['itensfase']
+                        del f['itensfase']
+                        
+                    fase = Fase(**f)
+                    fase.valor_total = converter_string_para_float(fase.valor_total)
+                    fase.orcamento = orcamento
+                    fase.save()
+                     
+                    if itens_fase is not None:
+                        for i in itens_fase:
+                            
+                            if 'remover' not in i or f['remover'] is False:
+                                
+                                valor_hora = None
+                                if 'valor_hora' in i:
+                                    valor_hora = ValorHora.objects.get(pk=i['valor_hora']['id'])
+                                    del i['valor_hora']
+                                    
+                                item_fase = ItemFase(**i)
+                                item_fase.valor_selecionado = converter_string_para_float(item_fase.valor_selecionado)
+                                item_fase.valor_total = converter_string_para_float(item_fase.valor_total)
+                                item_fase.valor_hora = valor_hora
+                                item_fase.fase = fase
+                                item_fase.save()
+                                
+                            elif 'id' in i:
+                                item_fase = ItemFase.objects.get(pk=i['id'])
+                                item_fase.delete()
+                                
+                elif 'id' in f:
+                    fase = Fase.objects.get(pk=f[id])
+                    fase.delete()
+                
+                
     def post(self, request, format=None):
         
         data = request.data
         
         cliente = data['cliente']
         cliente = Cliente.objects.get(pk=cliente['id'])
-        
-        centro_resultado = data['centro_resultado']
-        centro_resultado = CentroResultado.objects.get(pk=centro_resultado['id'])
-        
+    
         itens_faturamento = data['itens_faturamento']
         propostas = data['propostas']
         tarefas = data['tarefas']
         observacoes = data['observacoes']
         ocorrencias = data['ocorrencias']
+        orcamento = data['orcamento']
         
         del data['cliente']
-        del data['centro_resultado']
         del data['itens_faturamento']
         del data['propostas']
         del data['tarefas']
         del data['observacoes']
         del data['ocorrencias']
+        del data['orcamento']
        
         demanda = Demanda(**data)
         demanda.cliente = cliente
-        demanda.centro_resultado = centro_resultado
        
         if 'data_aprovacao_demanda' in data:
             data_string = data['data_aprovacao_demanda']
@@ -359,6 +436,7 @@ class DemandaDetail(APIView):
         self.salvar_item_faturamento(itens_faturamento, demanda)
         self.salvar_observacoes(observacoes, demanda)
         self.salvar_ocorrencias(ocorrencias, demanda)
+        self.salvar_orcamento(orcamento, demanda)
         
         return Response(self.serializarDemanda(demanda.id))
     

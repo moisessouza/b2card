@@ -5,16 +5,16 @@ Created on 14 de set de 2016
 '''
 from rest_framework import serializers
 from demandas.models import Demanda, FaturamentoDemanda, Proposta, Tarefa, Observacao, Ocorrencia,\
-    TipoValorHoraFaturamento
+    TipoValorHoraFaturamento, Orcamento, Fase, ItemFase
 from clientes.serializers import ClienteSerializer, TipoValorHoraSerializer, CentroResultadoSerializer
 from recursos.serializers import FuncionarioSerializer
+from cadastros.serializers import CentroCustoSerializer, ValorHoraSerializer
         
 class DemandaSerializer (serializers.ModelSerializer):
     cliente = ClienteSerializer()
-    centro_resultado = CentroResultadoSerializer()
     class Meta:
         model = Demanda
-        fields = ('id', 'titulo','cliente','identificacao','descricao','tipo_demanda','status_demanda','codigo_cri', 'data_aprovacao_demanda', 'centro_resultado')
+        fields = ('id', 'titulo','cliente','identificacao','descricao','tipo_demanda','status_demanda','codigo_cri', 'data_aprovacao_demanda')
         
 class FaturamentoDemandaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -50,3 +50,21 @@ class OcorrenciaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ocorrencia
         fields = ('id', 'tipo_ocorrencia', 'descricao', 'nome_solicitante', 'data_solicitacao', 'data_prevista_conclusao', 'etapa', 'responsavel', 'descricao_motivo', 'observacao')
+        
+class OrcamentoSerializer(serializers.ModelSerializer):
+    centro_custo = CentroCustoSerializer()
+    class Meta:
+        model = Orcamento
+        fields = ('id', 'centro_custo', 'descricao', 'total_orcamento')
+        
+class FaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Fase
+        fields = ('id', 'descricao', 'valor_total')
+        
+class ItemFaseSerializer(serializers.ModelSerializer):
+    valor_hora = ValorHoraSerializer()
+    class Meta:
+        model = ItemFase
+        fields = ('id', 'valor_hora', 'valor_selecionado', 'quantidade_horas', 'valor_total')
+        

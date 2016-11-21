@@ -24,6 +24,33 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		}
 	};
 	
+	var configurarorcamento = function (data) {
+		if (data.orcamento){
+			
+			var idcentrocusto = data.orcamento.centro_custo.id;
+			$ctrl.listavalorhora = ValorHoraService.buscarvalorhoraporcentrodecusto(idcentrocusto);
+			
+			data.orcamento.total_orcamento = CommonsService.formatarnumero(data.orcamento.total_orcamento);
+			
+			if (data.orcamento.fases) {
+				
+				for (var i in data.orcamento.fases){
+					
+					var fase =  data.orcamento.fases[i]
+					fase.valor_total = CommonsService.formatarnumero(fase.valor_total);
+					
+					if (fase.itensfase) {
+						for (var j in fase.itensfase) {
+							var itemfase = fase.itensfase[j]
+							itemfase.valor_selecionado = CommonsService.formatarnumero(itemfase.valor_selecionado);
+							itemfase.valor_total = CommonsService.formatarnumero(itemfase.valor_total);
+						}
+					}
+				}
+			}				
+		}
+	}
+	
 	if (demanda_id) {
 		$ctrl.demanda = DemandaService.buscardemanda(demanda_id, function (data){
 			$ctrl.listatipovalorhora  = DemandaService.buscartipohoracliente(cliente_id);
@@ -39,6 +66,8 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			for ( var i in tarefas ){
 				tarefas[i].show = false;
 			}
+			
+			configurarorcamento(data);
 			
 		});
 	} else {
@@ -91,9 +120,16 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		if (!$ctrl.demanda.orcamento.fases){
 			$ctrl.demanda.orcamento.fases = [];
 		}
-		$ctrl.demanda.orcamento.fases.unshift({})
+		$ctrl.demanda.orcamento.fases.push({})
 	}
 	
+	$ctrl.adicionaritemfase = function (fase){
+		if (!fase.itensfase){
+			fase.itensfase = [];
+		}
+		fase.itensfase.push({});
+	}
+		
 	$ctrl.adicionaritemfase = function (fase){
 		if (!fase.itensfase){
 			fase.itensfase = [];
@@ -243,6 +279,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		
 		DemandaService.salvardemanda($ctrl.demanda, function(data){
 			$ctrl.demanda = data;
+			configurarorcamento(data);
 			messagesuccess('salvo!')
 		});
 	}

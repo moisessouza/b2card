@@ -84,15 +84,6 @@
 					</div>
 					<div class="col-md-3">
 						<div class="form-group">
-							<label for="centro_resultado">Centro de resultado</label> 
-						    <select id="centro_resultado" name="centro_resultado" class="form-control" ng-model="$ctrl.demanda.centro_resultado.id" ng-options="r.id as r.razao_social for r in $ctrl.listacentroresultado" required>
-						    	<option value="">Centro de resultado...</option>
-						    </select>
-							<span class="red" ng-show="demanda.cliente.$invalid">Cliente é obrigatório.</span>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="form-group">
 							<label for="identificacao">Identificação</label> 
 						    <input type="text" id="identificacao" name="identificacao" ng-model="$ctrl.demanda.identificacao" class="form-control" required maxlength="30"/>
 						    <span class="red" ng-show="demanda.identificacao.$invalid">Identificação é obrigatório.</span>
