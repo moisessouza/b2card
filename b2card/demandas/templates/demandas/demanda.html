@@ -199,7 +199,7 @@
 					<div class="panel-heading">
 						<strong>{{fase.descricao ? fase.descricao : '(Sem descrição)'}}</strong>
 						<div class="btn-group pull-right">
-							<button type="button" class="btn btn-primary" ng-click="$ctrl.remover(fase)">
+							<button type="button" class="btn btn-primary" ng-click="$ctrl.remover(fase, $ctrl.calcularvalortotalorcamento)">
 			  					<span class="glyphicon glyphicon-trash margin"></span>
 							</button>
 						</div>
@@ -243,7 +243,7 @@
 										<input type="text" id="valor_faturamento" name="valor_faturamento" ng-model="itemfase.valor_total" maxlength="30" gb-money class="form-control" disabled/>
 									</td>
 									<td>
-										<button type="button" class="btn btn-default" ng-click="$ctrl.remover(itemfase)">
+										<button type="button" class="btn btn-default" ng-click="$ctrl.remover(itemfase, $ctrl.calcularvalortotalorcamento)">
 											<span class="glyphicon glyphicon-trash"></span>
 										</button>
 									</td>

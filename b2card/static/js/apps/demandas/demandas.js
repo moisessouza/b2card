@@ -137,8 +137,11 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		fase.itensfase.push({});
 	}
 	
-	$ctrl.remover = function (i){
+	$ctrl.remover = function (i, callback){
 		i.remover = true;		
+		if (callback){
+			callback();
+		}
 	}
 	
 	
@@ -166,26 +169,28 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		$ctrl.changefasequantidadehoras(itemfase);
 	}
 	
-	var calcularvalortotalorcamento = function (){
+	$ctrl.calcularvalortotalorcamento = function (){
 		
 		var fases = $ctrl.demanda.orcamento.fases;
 		var totalorcamento = 0;
 		
 		for (var i in fases) {
 			var fase = fases[i];
-			var itensfase = fase.itensfase;
-			
-			var valorfase = 0
-			for (i in itensfase){
-				var itemfase = itensfase[i];
-				if (itemfase.valor_total) {
-					var valoritem = CommonsService.stringparafloat(itemfase.valor_total);
-					valorfase+=valoritem;
+			if (!fase.remover) {
+				var itensfase = fase.itensfase;
+				
+				var valorfase = 0
+				for (i in itensfase){
+					var itemfase = itensfase[i];
+					if (!itemfase.remover && itemfase.valor_total) {
+						var valoritem = CommonsService.stringparafloat(itemfase.valor_total);
+						valorfase+=valoritem;
+					}
 				}
+				
+				fase.valor_total = CommonsService.formatarnumero(valorfase);
+				totalorcamento+= valorfase;
 			}
-			
-			fase.valor_total = CommonsService.formatarnumero(valorfase);
-			totalorcamento+= valorfase;
 		}
 		
 		$ctrl.demanda.orcamento.total_orcamento =  CommonsService.formatarnumero(totalorcamento);
@@ -199,7 +204,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			}
 		}
 		
-		calcularvalortotalorcamento();
+		$ctrl.calcularvalortotalorcamento();
 		
 	}
 	
