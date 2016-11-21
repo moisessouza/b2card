@@ -1,3 +1,5 @@
+"use strict";
+
 var contagerencialservices = angular.module('contagerencial-services', ['ngResource']);
 
 contagerencialservices.config(['$resourceProvider', function($resourceProvider) {

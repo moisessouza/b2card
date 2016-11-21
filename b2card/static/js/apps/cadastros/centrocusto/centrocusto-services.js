@@ -1,3 +1,5 @@
+"use strict";
+
 var centrocustoservices = angular.module('centrocusto-services', ['ngResource']);
 
 centrocustoservices.config(['$resourceProvider', function($resourceProvider) {

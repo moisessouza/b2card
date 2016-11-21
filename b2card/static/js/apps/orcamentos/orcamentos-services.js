@@ -1,3 +1,5 @@
+"use strict";
+
 var orcamentosservices = angular.module('orcamentos-services', ['ngResource']);
 
 orcamentosservices.config(['$resourceProvider', function($resourceProvider) {

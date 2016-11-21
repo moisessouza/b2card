@@ -1,3 +1,5 @@
+"use strict";
+
 var valorhora = angular.module('valorhora', ['valorhora-services', 'centrocusto-services', 'centroresultado-services', 
                                              'contagerencial-services',	'naturezaoperacao-services', 'tipohora-services',
                                              'commons', 'ui.bootstrap', 'ui.mask']);

@@ -1,3 +1,5 @@
+"use strict";
+
 var produtos = angular.module('orcamentos', ['ngResource', 'orcamentos-services', 'produtos-services']);
 
 produtos.controller('OrcamentoController', function ($scope, ProdutoService, OrcamentosService){

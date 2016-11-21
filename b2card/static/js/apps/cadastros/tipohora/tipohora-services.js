@@ -1,3 +1,5 @@
+"use strict";
+
 var clientesservices = angular.module('tipohora-services', ['ngResource']);
 
 clientesservices.config(['$resourceProvider', function($resourceProvider) {

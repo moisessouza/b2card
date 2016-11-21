@@ -1,3 +1,5 @@
+"use strict";
+
 var commons = angular.module('commons', ['ui.bootstrap']);
 
 commons.directive('gbMoney', function () {

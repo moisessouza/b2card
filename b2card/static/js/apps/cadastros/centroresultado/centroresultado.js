@@ -1,3 +1,5 @@
+"use strict";
+
 var centroresultado = angular.module('centroresultado', ['centroresultado-services', 'commons', 'ui.bootstrap', 'ui.mask']);
 
 centroresultado.controller('CentroResultadoController', function ($scope, $window, CentroResultadoService){

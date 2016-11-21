@@ -1,3 +1,5 @@
+"use strict";
+
 var demandasservices = angular.module('demandas-services', ['ngResource']);
 
 demandasservices.config(['$resourceProvider', function($resourceProvider) {

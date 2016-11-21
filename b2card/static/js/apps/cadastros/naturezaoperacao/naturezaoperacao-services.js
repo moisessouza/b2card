@@ -1,3 +1,5 @@
+"use strict";
+
 var naturezaoperacaoservices = angular.module('naturezaoperacao-services', ['ngResource']);
 
 naturezaoperacaoservices.config(['$resourceProvider', function($resourceProvider) {

@@ -1,3 +1,5 @@
+"use strict";
+
 var valorhoraservice = angular.module('valorhora-services', ['ngResource']);
 
 valorhoraservice.config(['$resourceProvider', function($resourceProvider) {
@@ -23,6 +25,10 @@ valorhoraservice.service('ValorHoraService', function($resource){
 		deletar: function (valor_hora_id, callback) {
 			var ValorHora = $resource('/cadastros/valorhora/api/:id/');
 			return ValorHora.remove({id: valor_hora_id}, callback)
+		},
+		buscarvalorhoraporcentrodecusto: function (centro_custo_id, callback) {
+			var ValorHora = $resource('/cadastros/valorhora/api/centrocusto/:id/');
+			return ValorHora.query({id: centro_custo_id}, callback)
 		}
 	}
 });

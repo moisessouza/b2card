@@ -1,3 +1,5 @@
+"use strict";
+
 var contagerencial = angular.module('contagerencial', ['contagerencial-services', 'commons', 'ui.bootstrap', 'ui.mask']);
 
 contagerencial.controller('ContaGerencialController', function ($scope, $window, ContaGerencialService){

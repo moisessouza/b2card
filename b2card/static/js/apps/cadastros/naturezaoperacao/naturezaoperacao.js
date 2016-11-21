@@ -1,3 +1,5 @@
+"use strict";
+
 var naturezaoperacao = angular.module('naturezaoperacao', ['naturezaoperacao-services', 'commons', 'ui.bootstrap', 'ui.mask']);
 
 naturezaoperacao.controller('NaturezaOperacaoController', function ($scope, $window, NaturezaOperacaoService){

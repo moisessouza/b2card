@@ -1,3 +1,5 @@
+"use strict";
+
 var produtosservices = angular.module('produtos-services', ['ngResource']);
 
 produtosservices.config(['$resourceProvider', function($resourceProvider) {

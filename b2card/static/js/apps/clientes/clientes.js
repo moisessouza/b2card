@@ -1,3 +1,5 @@
+"use strict";
+
 var clientes = angular.module('clientes', ['clientes-services', 'commons', 'ui.bootstrap', 'ui.mask']);
 
 clientes.controller('ClientesController', function ($scope, $window, ClientesService){

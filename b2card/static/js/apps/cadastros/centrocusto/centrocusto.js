@@ -1,3 +1,5 @@
+"use strict";
+
 var centrocusto = angular.module('centrocusto', ['centrocusto-services', 'commons', 'ui.bootstrap', 'ui.mask']);
 
 centrocusto.controller('CentroCustoController', function ($scope, $window, CentroCustoService){

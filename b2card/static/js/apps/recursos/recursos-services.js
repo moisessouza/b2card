@@ -1,3 +1,5 @@
+"use strict";
+
 var recursosservices = angular.module('recursos-services', ['ngResource']);
 
 recursosservices.config(['$resourceProvider', function($resourceProvider) {

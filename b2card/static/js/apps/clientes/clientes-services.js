@@ -1,3 +1,5 @@
+"use strict";
+
 var clientesservices = angular.module('clientes-services', ['ngResource']);
 
 clientesservices.config(['$resourceProvider', function($resourceProvider) {
