@@ -377,7 +377,7 @@ class DemandaDetail(APIView):
                     if itens_fase is not None:
                         for i in itens_fase:
                             
-                            if 'remover' not in i or f['remover'] is False:
+                            if 'remover' not in i or i['remover'] is False:
                                 
                                 valor_hora = None
                                 if 'valor_hora' in i:
