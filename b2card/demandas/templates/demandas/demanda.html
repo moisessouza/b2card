@@ -5,6 +5,7 @@
 	<script src="/static/js/apps/demandas/demandas.js"></script>
 	<script src="/static/js/apps/demandas/demandas-services.js"></script>
 	<script src="/static/js/apps/cadastros/centrocusto/centrocusto-services.js"></script>
+	<script src="/static/js/apps/cadastros/centroresultado/centroresultado-services.js"></script>
 	<script src="/static/js/apps/cadastros/valorhora/valorhora-services.js"></script>
 	<script src="/static/js/commons/commons.js"></script>
 	<script src="/static/js/angular/ui-bootstrap-tpls-2.2.0.min.js"></script>
@@ -52,13 +53,18 @@
 		margin-top: 2em;
 	}
 	
+	div.scroll {
+		overflow-y: scroll;  
+		height:400px;
+	}
+	
 </style>
 
 <h1>Demanda</h1>
 <div ng-app="demandas" ng-controller="DemandaController as $ctrl" class="ng-hide" ng-show="$ctrl.show">
 	<form name="demanda">
 		
-		<button type="button" class="btn btn-primary margin" ng-click="$ctrl.salvardemanda()" ng-disabled="demanda.$invalid || itensfaturamento.$invalid">Salvar</button>
+		<button type="button" class="btn btn-primary margin" ng-click="$ctrl.salvardemanda()" ng-disabled="demanda.$invalid">Salvar</button>
 		<button type="submit" class="btn btn-danger margin" name="deletar" ng-click="$ctrl.deletar()" ng-show="$ctrl.demanda.id">Deletar</button>
 		<div class="label {{$ctrl.clazz}}" ng-bind="$ctrl.message" ></div>
 			
@@ -147,6 +153,7 @@
 	</form>
 	<ul class="nav nav-tabs">
 	  <li class="active"><a data-toggle="tab" href="#orcamento">Orçamento</a></li>
+	  <li><a data-toggle="tab" href="#atividades">Atividades</a></li>
 	  <li><a data-toggle="tab" href="#itens_faturamento">Itens de faturamento da demanda</a></li>
 	  <li><a data-toggle="tab" href="#proposta">Proposta</a></li>
 	  <li><a data-toggle="tab" href="#tarefas">Tarefas</a></li>
@@ -259,6 +266,84 @@
 					</div>
 				</div>
 			</form>
+		</div>
+		<div id="atividades" class="tab-pane">
+			<button type="button" class="btn btn-primary margin" ng-click="$ctrl.adicionaratividade()">
+		  		<span class="glyphicon glyphicon-plus"></span> Adicionar atividade
+			</button>
+			<div class="row">
+				<div class="col-sm-8 scroll">
+					<form name="atividade">
+						<div class="panel panel-primary margin-top" ng-repeat="atividade in $ctrl.demanda.atividades">
+							<div class="panel-heading">
+								<strong>{{atividade.titulo ? atividade.titulo : '(Sem título)'}}</strong>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-sm-8">
+										<div class="form-group form-group-sm">
+											<label for="titulo" >Título</label> 
+								    		<input id="titulo" type="text" ng-model="atividade.titulo" maxlength="100" class="form-control" required/>
+								    		<span class="red" ng-show="atividade.titulo.$invalid">Título é obrigatório.</span>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-3">
+										<div class="form-group form-group-sm">
+											<label for="responsavel">Responsável</label> 
+								    		<select id="responsavel" name="responsavel" ng-model="atividade.responsavel.id" class="form-control" ng-options="f.id as f.nome for f in $ctrl.listafuncionarios" required>
+								    			<option value="">Selecione...</option>
+									    	</select>
+									    	<span class="red" ng-show="atividade.responsavel.$invalid">Responsável é obrigatório.</span>
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="form-group form-group-sm">
+											<label for="centro_resultado">Centro de resultado</label> 
+								    		<select id="centro_resultado" name="centro_resultado" ng-model="atividade.centro_resultado.id" ng-options="c.id as c.nome for c in $ctrl.listacentroresultados" class="form-control" required>
+								    			<option value="">Selecione...</option>
+								    		</select>
+								    		<span class="red" ng-show="atividade.centro_custo.$invalid">Centro de resultado é obrigatório.</span>
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<div class="form-group form-group-sm">
+											<label for="horas_previstas">Horas previstas</label> 
+								    		<input type="number" id="horas_previstas" class="form-control" ng-model="atividade.horas_previstas" name="horas_previstas" required/>
+								    		<span class="red" ng-show="atividade.horas_previstas.$invalid">Horas previstas é obrigatório.</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="col-sm-3">
+					
+					<div class="panel panel-primary margin-top">
+						<div class="panel-heading">
+							<strong>Horas para cada centro de resultado</strong>
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-sm-12">
+									<label>Desenvolvimento</label>
+									<div class="form-group form-group-sm">
+										Total horas
+										<input type="number" id="horas_previstas" class="form-control" ng-model="atividade.horas_previstas" name="horas_previstas" disabled/>
+									</div>
+									<div class="form-group form-group-sm">
+										Horas restantes
+										<input type="number" id="horas_previstas" class="form-control" ng-model="atividade.horas_previstas" name="horas_previstas" disabled/>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
 		</div>
   		<div id="itens_faturamento" class="tab-pane">
 			<button type="button" class="btn btn-primary margin" ng-click="$ctrl.adicionaritem()">

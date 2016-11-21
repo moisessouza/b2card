@@ -1,9 +1,10 @@
 "use strict";
 
-var demandas = angular.module('demandas', ['demandas-services', 'centrocusto-services', 'valorhora-services', 'commons', 'ui.bootstrap', 'ui.mask']);
+var demandas = angular.module('demandas', ['demandas-services', 'centrocusto-services', 'valorhora-services', 
+                                           'centroresultado-services', 'commons', 'ui.bootstrap', 'ui.mask']);
 
 demandas.controller('DemandaController', function ($scope, $window, $uibModal, $log, DemandaService, 
-		CentroCustoService, ValorHoraService, CommonsService){
+		CentroCustoService, ValorHoraService, CommonsService, CentroResultadoService){
 	var $ctrl = this; 
 	
 	var messageinfo = function (msg){
@@ -77,7 +78,8 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			'tarefas':[{}],
 			'observacoes':[{}],
 			'ocorrencias':[{}],
-			'orcamento': {}
+			'orcamento': {},
+			'atividades': [{}]
 		}
 		$ctrl.show=true;
 	}
@@ -137,6 +139,15 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		fase.itensfase.push({});
 	}
 	
+	$ctrl.adicionaratividade = function () {
+		if(!$ctrl.demanda.atividades){
+			$ctrl.demanda.atividades = [];
+		}
+		
+		$ctrl.demanda.atividades.unshift({});
+		
+	}
+	
 	$ctrl.remover = function (i, callback){
 		i.remover = true;		
 		if (callback){
@@ -149,6 +160,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	$ctrl.listaclientes= DemandaService.buscarclientes();
 	$ctrl.listafuncionarios = DemandaService.buscarfuncionarios();
 	$ctrl.listacentrocustos = CentroCustoService.buscarcentrocustos();
+	$ctrl.listacentroresultados = CentroResultadoService.buscarcentroresultados()
 	
 	$ctrl.changecentrocusto = function () {
 		var idcentrocusto = $ctrl.demanda.orcamento.centro_custo.id;
