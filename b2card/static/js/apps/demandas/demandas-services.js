@@ -43,6 +43,10 @@ demandasservices.service('DemandaService', function($resource){
 		deletardemanda: function(id, callback){
 			var Demandas = $resource('/demandas/api/:id');
 			return Demandas.remove({id:id}, callback);
+		},
+		buscarcentroresultadoshora: function(demanda_id, callback){
+			var Demandas = $resource('/demandas/api/:id/centroresultadoshora/');
+			return Demandas.query({id:demanda_id}, callback);
 		}
 	}
 });

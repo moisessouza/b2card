@@ -52,8 +52,49 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		}
 	}
 	
+	$ctrl.changeatividade = function () {
+		
+		var tipos_centro_resultado = {}
+		
+		for (var int = 0; int < $ctrl.demanda.atividades.length; int++) {
+			var atividade = $ctrl.demanda.atividades[int];
+			
+			if (!atividade.remover){
+			
+				var id_centro_resultado = atividade.centro_resultado.id;
+				var horas_previstas = atividade.horas_previstas;
+				
+				if (tipos_centro_resultado[id_centro_resultado]){
+					tipos_centro_resultado[id_centro_resultado]+=horas_previstas;
+				} else {
+					tipos_centro_resultado[id_centro_resultado]=horas_previstas;
+				}
+			
+			}
+		}	
+		
+		for(var int = 0; int < $ctrl.listacentroresultadoshoras.length; int++){
+		
+			var tipo_resultado_horas = $ctrl.listacentroresultadoshoras[int];
+			tipo_resultado_horas.horas_restantes = tipo_resultado_horas.total_horas;
+			
+			for (var id_tipo in tipos_centro_resultado){
+				
+				var horas_gastas = tipos_centro_resultado[id_tipo];
+
+				if (horas_gastas && tipo_resultado_horas.fase__itemfase__valor_hora__centro_resultado__id == id_tipo){
+					tipo_resultado_horas.horas_restantes = tipo_resultado_horas.total_horas - horas_gastas;
+				}
+			}
+		}
+		
+	}
+	
 	if (demanda_id) {
 		$ctrl.demanda = DemandaService.buscardemanda(demanda_id, function (data){
+			
+			console.log(data);
+			
 			$ctrl.listatipovalorhora  = DemandaService.buscartipohoracliente(cliente_id);
 			$ctrl.listacentroresultado = DemandaService.buscarcentroresultados(cliente_id);
 			$ctrl.show=true;
@@ -70,7 +111,10 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			
 			configurarorcamento(data);
 			
+			$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(demanda_id, $ctrl.changeatividade);
+			
 		});
+		
 	} else {
 		$ctrl.demanda = {
 			'itens_faturamento': [{}],
@@ -82,6 +126,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			'atividades': [{}]
 		}
 		$ctrl.show=true;
+		$ctrl.listacentroresultadoshoras = []
 	}
 	
 	$ctrl.adicionaritem = function () {
@@ -154,13 +199,11 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			callback();
 		}
 	}
-	
-	
-	
+		
 	$ctrl.listaclientes= DemandaService.buscarclientes();
 	$ctrl.listafuncionarios = DemandaService.buscarfuncionarios();
 	$ctrl.listacentrocustos = CentroCustoService.buscarcentrocustos();
-	$ctrl.listacentroresultados = CentroResultadoService.buscarcentroresultados()
+	$ctrl.listacentroresultados = CentroResultadoService.buscarcentroresultados();
 	
 	$ctrl.changecentrocusto = function () {
 		var idcentrocusto = $ctrl.demanda.orcamento.centro_custo.id;
@@ -297,6 +340,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		DemandaService.salvardemanda($ctrl.demanda, function(data){
 			$ctrl.demanda = data;
 			configurarorcamento(data);
+			$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(demanda_id, $ctrl.changeatividade);
 			messagesuccess('salvo!')
 		});
 	}
