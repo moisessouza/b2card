@@ -189,7 +189,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			$ctrl.demanda.atividades = [];
 		}
 		
-		$ctrl.demanda.atividades.unshift({});
+		$ctrl.demanda.atividades.push({});
 		
 	}
 	
