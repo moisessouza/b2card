@@ -59,100 +59,13 @@
 	}
 	
 </style>
-
-<h1>Demanda</h1>
 <div ng-app="demandas" ng-controller="DemandaController as $ctrl" class="ng-hide" ng-show="$ctrl.show">
-	<form name="demanda">
-		
-		<button type="button" class="btn btn-primary margin" ng-click="$ctrl.salvardemanda()" ng-disabled="demanda.$invalid">Salvar</button>
-		<button type="submit" class="btn btn-danger margin" name="deletar" ng-click="$ctrl.deletar()" ng-show="$ctrl.demanda.id">Deletar</button>
-		<div class="label {{$ctrl.clazz}}" ng-bind="$ctrl.message" ></div>
-			
-		<div class="panel panel-primary form-group-sm">
-			<div class="panel-heading"><strong>Dados da demanda</strong></div>
-			<div class="panel-body">
-				<div class="row">
-					<div class="col-md-3">
-						<div class="form-group">
-							<label for="titulo">Título da demanda</label> 
-						    <input type="text" id="titulo" name="titulo" ng-model="$ctrl.demanda.titulo" class="form-control" required maxlength="30"/>
-						    <span class="red" ng-show="demanda.titulo.$invalid">Título da demanda é obrigatório.</span>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="form-group">
-							<label for="cliente">Cliente</label> 
-						    <select id="cliente" name="cliente" class="form-control" ng-change="$ctrl.changecliente()" ng-model="$ctrl.demanda.cliente.id" ng-options="c.id as c.razao_social for c in $ctrl.listaclientes" required>
-						    	<option value="">Selecione um cliente...</option>
-						    </select>
-							<span class="red" ng-show="demanda.cliente.$invalid">Cliente é obrigatório.</span>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="form-group">
-							<label for="identificacao">Identificação</label> 
-						    <input type="text" id="identificacao" name="identificacao" ng-model="$ctrl.demanda.identificacao" class="form-control" required maxlength="30"/>
-						    <span class="red" ng-show="demanda.identificacao.$invalid">Identificação é obrigatório.</span>
-						</div>
-					</div>
-					<div class="col-md-2">
-						<div class="form-group form-group-sm">
-							<label for="tipo_demanda">Tipo da demanda</label> 
-						    <select id="tipo_demanda" name="tipo_demanda" ng-model="$ctrl.demanda.tipo_demanda" class="form-control" required>
-					    		<option value="">Selecione um tipo...</option>
-					    		<option value="D">Desenvolvimento</option>
-					    		<option value="H">Homologação</option>
-					    		<option value="C">Consultoria</option>
-					    		<option value="A">Alocação</option>
-					    	</select>
-					    	<span class="red" ng-show="demanda.tipo_demanda.$invalid">Tipo da demanda é obrigatório.</span>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-2">
-						<div class="form-group form-group-sm">
-							<label for="status_demanda"> Status da demanda</label> 
-						    <select id="status_demanda" name="status_demanda" ng-model="$ctrl.demanda.status_demanda" class="form-control" required>
-					    		<option value="">Selecione um tipo...</option>
-					    		<option value="O">Em orçamentação</option>
-					    		<option value="A">Aguardando aprovação</option>
-					    		<option value="N">Não aprovada</option>
-					    		<option value="C">Cancelada</option>
-					    		<option value="H">Em homologação</option>
-					    		<option value="I">Implantada</option>
-					    		<option value="D">Em desenvolvimento</option>
-					    	</select>
-					    	<span class="red" ng-show="demanda.tipo_demanda.$invalid">Status da demanda é obrigatório.</span>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="form-group">
-							<label for="codigo_cri">Código de CRI</label> 
-						    <input type="text" id="codigo_cri" name="codigo_cri" ng-model="$ctrl.demanda.codigo_cri" class="form-control" maxlength="12"/>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="form-group">
-							<label for="data_aprovacao_demanda">Data de aprovação da demanda</label> 
-						    <input type="text" id="data_aprovacao_demanda" name="data_aprovacao_demanda" ng-model="$ctrl.demanda.data_aprovacao_demanda"  ui-mask="99/99/9999" model-view-value="true" class="form-control" maxlength="12"/>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						<div class="form-group">
-							<label for="descricao">Descrição</label> 
-						    <textarea id="descricao" name="descricao" ng-model="$ctrl.demanda.descricao" class="form-control" required></textarea>
-						    <span class="red" ng-show="demanda.descricao.$invalid">Descrição é obrigatório.</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</form>
+	<button type="button" class="btn btn-primary margin" ng-click="$ctrl.salvardemanda()" ng-disabled="demanda.$invalid">Salvar</button>
+	<button type="submit" class="btn btn-danger margin" name="deletar" ng-click="$ctrl.deletar()" ng-show="$ctrl.demanda.id">Deletar</button>
+	<div class="label {{$ctrl.clazz}}" ng-bind="$ctrl.message" ></div>
 	<ul class="nav nav-tabs">
-	  <li class="active"><a data-toggle="tab" href="#orcamento">Orçamento</a></li>
+	  <li class="active"><a data-toggle="tab" href="#dadosdemanda">Dados da demanda</a></li>
+	  <li><a data-toggle="tab" href="#orcamento">Orçamento</a></li>
 	  <li><a data-toggle="tab" href="#atividades">Atividades</a></li>
 	  <li><a data-toggle="tab" href="#itens_faturamento">Itens de faturamento da demanda</a></li>
 	  <li><a data-toggle="tab" href="#proposta">Proposta</a></li>
@@ -161,7 +74,94 @@
 	  <li><a data-toggle="tab" href="#ocorrencias">Ocorrências</a></li>
 	</ul>
 	<div class="tab-content">
-		<div id="orcamento" class="tab-pane in active">
+		<div id="dadosdemanda" class="tab-pane in active">
+			<form name="demanda">
+					
+				<div class="panel panel-primary form-group-sm">
+					<div class="panel-heading"><strong>Dados da demanda</strong></div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="titulo">Título da demanda</label> 
+								    <input type="text" id="titulo" name="titulo" ng-model="$ctrl.demanda.titulo" class="form-control" required maxlength="30"/>
+								    <span class="red" ng-show="demanda.titulo.$invalid">Título da demanda é obrigatório.</span>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="cliente">Cliente</label> 
+								    <select id="cliente" name="cliente" class="form-control" ng-change="$ctrl.changecliente()" ng-model="$ctrl.demanda.cliente.id" ng-options="c.id as c.razao_social for c in $ctrl.listaclientes" required>
+								    	<option value="">Selecione um cliente...</option>
+								    </select>
+									<span class="red" ng-show="demanda.cliente.$invalid">Cliente é obrigatório.</span>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="identificacao">Identificação</label> 
+								    <input type="text" id="identificacao" name="identificacao" ng-model="$ctrl.demanda.identificacao" class="form-control" required maxlength="30"/>
+								    <span class="red" ng-show="demanda.identificacao.$invalid">Identificação é obrigatório.</span>
+								</div>
+							</div>
+							<div class="col-md-2">
+								<div class="form-group form-group-sm">
+									<label for="tipo_demanda">Tipo da demanda</label> 
+								    <select id="tipo_demanda" name="tipo_demanda" ng-model="$ctrl.demanda.tipo_demanda" class="form-control" required>
+							    		<option value="">Selecione um tipo...</option>
+							    		<option value="D">Desenvolvimento</option>
+							    		<option value="H">Homologação</option>
+							    		<option value="C">Consultoria</option>
+							    		<option value="A">Alocação</option>
+							    	</select>
+							    	<span class="red" ng-show="demanda.tipo_demanda.$invalid">Tipo da demanda é obrigatório.</span>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-2">
+								<div class="form-group form-group-sm">
+									<label for="status_demanda"> Status da demanda</label> 
+								    <select id="status_demanda" name="status_demanda" ng-model="$ctrl.demanda.status_demanda" class="form-control" required>
+							    		<option value="">Selecione um tipo...</option>
+							    		<option value="O">Em orçamentação</option>
+							    		<option value="A">Aguardando aprovação</option>
+							    		<option value="N">Não aprovada</option>
+							    		<option value="C">Cancelada</option>
+							    		<option value="H">Em homologação</option>
+							    		<option value="I">Implantada</option>
+							    		<option value="D">Em desenvolvimento</option>
+							    	</select>
+							    	<span class="red" ng-show="demanda.tipo_demanda.$invalid">Status da demanda é obrigatório.</span>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="codigo_cri">Código de CRI</label> 
+								    <input type="text" id="codigo_cri" name="codigo_cri" ng-model="$ctrl.demanda.codigo_cri" class="form-control" maxlength="12"/>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="data_aprovacao_demanda">Data de aprovação da demanda</label> 
+								    <input type="text" id="data_aprovacao_demanda" name="data_aprovacao_demanda" ng-model="$ctrl.demanda.data_aprovacao_demanda"  ui-mask="99/99/9999" model-view-value="true" class="form-control" maxlength="12"/>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label for="descricao">Descrição</label> 
+								    <textarea id="descricao" name="descricao" ng-model="$ctrl.demanda.descricao" class="form-control" required></textarea>
+								    <span class="red" ng-show="demanda.descricao.$invalid">Descrição é obrigatório.</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div id="orcamento" class="tab-pane">
 			<form name="orcamento">
 				<div class="panel panel-primary margin-top">
 					<div class="panel-heading">
