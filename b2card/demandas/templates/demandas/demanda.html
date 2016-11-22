@@ -274,9 +274,14 @@
 			<div class="row">
 				<div class="col-sm-8 scroll">
 					<form name="atividade">
-						<div class="panel panel-primary margin-top" ng-repeat="atividade in $ctrl.demanda.atividades">
+						<div class="panel panel-primary margin-top" ng-repeat="atividade in $ctrl.demanda.atividades" ng-show="!atividade.remover">
 							<div class="panel-heading">
 								<strong>{{atividade.titulo ? atividade.titulo : '(Sem título)'}}</strong>
+								<div class="btn-group pull-right">
+									<button type="button" class="btn btn-primary" ng-click="$ctrl.remover(atividade)">
+					  					<span class="glyphicon glyphicon-trash margin"></span>
+									</button>
+								</div>
 							</div>
 							<div class="panel-body">
 								<div class="row">
@@ -301,7 +306,7 @@
 									<div class="col-sm-3">
 										<div class="form-group form-group-sm">
 											<label for="centro_resultado">Centro de resultado</label> 
-								    		<select id="centro_resultado" name="centro_resultado" ng-model="atividade.centro_resultado.id" ng-options="c.id as c.nome for c in $ctrl.listacentroresultados" class="form-control" required>
+								    		<select id="centro_resultado" name="centro_resultado" ng-model="atividade.centro_resultado.id" ng-change="$ctrl.changeatividade()" ng-options="c.id as c.nome for c in $ctrl.listacentroresultados" class="form-control" required>
 								    			<option value="">Selecione...</option>
 								    		</select>
 								    		<span class="red" ng-show="atividade.centro_custo.$invalid">Centro de resultado é obrigatório.</span>
@@ -310,7 +315,7 @@
 									<div class="col-sm-2">
 										<div class="form-group form-group-sm">
 											<label for="horas_previstas">Horas previstas</label> 
-								    		<input type="number" id="horas_previstas" class="form-control" ng-model="atividade.horas_previstas" name="horas_previstas" required/>
+								    		<input type="number" id="horas_previstas" class="form-control" ng-model="atividade.horas_previstas" ng-change="$ctrl.changeatividade()" name="horas_previstas" required/>
 								    		<span class="red" ng-show="atividade.horas_previstas.$invalid">Horas previstas é obrigatório.</span>
 										</div>
 									</div>
@@ -326,16 +331,16 @@
 							<strong>Horas para cada centro de resultado</strong>
 						</div>
 						<div class="panel-body">
-							<div class="row">
+							<div class="row" ng-repeat="centroresultadohora in $ctrl.listacentroresultadoshoras">
 								<div class="col-sm-12">
-									<label>Desenvolvimento</label>
+									<label>{{centroresultadohora.fase__itemfase__valor_hora__centro_resultado__nome}}</label>
 									<div class="form-group form-group-sm">
 										Total horas
-										<input type="number" id="horas_previstas" class="form-control" ng-model="atividade.horas_previstas" name="horas_previstas" disabled/>
+										<input type="number" id="total_horas" class="form-control" ng-model="centroresultadohora.total_horas" name="total_horas" disabled/>
 									</div>
 									<div class="form-group form-group-sm">
 										Horas restantes
-										<input type="number" id="horas_previstas" class="form-control" ng-model="atividade.horas_previstas" name="horas_previstas" disabled/>
+										<input type="number" id="horas_restantes" ng-model="centroresultadohora.horas_restantes" class="form-control" name="horas_restantes" disabled/>
 									</div>
 								</div>
 							</div>

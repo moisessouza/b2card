@@ -5,10 +5,10 @@ Created on 14 de set de 2016
 '''
 from rest_framework import serializers
 from demandas.models import Demanda, FaturamentoDemanda, Proposta, Tarefa, Observacao, Ocorrencia,\
-    TipoValorHoraFaturamento, Orcamento, Fase, ItemFase
-from clientes.serializers import ClienteSerializer, TipoValorHoraSerializer, CentroResultadoSerializer
+    TipoValorHoraFaturamento, Orcamento, Fase, ItemFase, Atividade
+from clientes.serializers import ClienteSerializer, TipoValorHoraSerializer
 from recursos.serializers import FuncionarioSerializer
-from cadastros.serializers import CentroCustoSerializer, ValorHoraSerializer
+from cadastros.serializers import CentroCustoSerializer, ValorHoraSerializer, CentroResultadoSerializer
         
 class DemandaSerializer (serializers.ModelSerializer):
     cliente = ClienteSerializer()
@@ -67,4 +67,11 @@ class ItemFaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = ItemFase
         fields = ('id', 'valor_hora', 'valor_selecionado', 'quantidade_horas', 'valor_total')
+        
+class AtividadeSerializer(serializers.ModelSerializer):
+    responsavel = FuncionarioSerializer()
+    centro_resultado = CentroResultadoSerializer()
+    class Meta:
+        model = Atividade
+        fields = ('id', 'titulo', 'responsavel', 'centro_resultado', 'horas_previstas')
         

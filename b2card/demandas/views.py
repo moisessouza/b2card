@@ -2,14 +2,16 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from demandas.models import Demanda, FaturamentoDemanda, Proposta, Tarefa, Observacao, Ocorrencia,\
-    TipoValorHoraFaturamento, Orcamento, ItemFase, Fase
-from clientes.models import Cliente, TipoValorHora, CentroResultado
+    TipoValorHoraFaturamento, Orcamento, ItemFase, Fase, Atividade
+from clientes.models import Cliente, TipoValorHora
 from demandas.serializers import DemandaSerializer, FaturamentoDemandaSerializer, PropostaSerializer, TarefasSerializer,\
     ObservacaoSerializer, OcorrenciaSerializer, TipoValorHoraFaturamentoSerializer, OrcamentoSerializer,\
-    ItemFaseSerializer, FaseSerializer
+    ItemFaseSerializer, FaseSerializer, AtividadeSerializer
 from utils.utils import converter_string_para_data, formatar_data, converter_string_para_float
 from recursos.models import Funcionario
-from cadastros.models import CentroCusto, ValorHora
+from cadastros.models import CentroCusto, ValorHora, CentroResultado
+from rest_framework.decorators import api_view
+from django.db.models.aggregates import Sum
 
 # Create your views here.
 
@@ -47,6 +49,7 @@ class DemandaDetail(APIView):
         observacoes = Observacao.objects.filter(demanda__id=demanda_id)
         ocorrencias = Ocorrencia.objects.filter(demanda__id=demanda_id)
         orcamentos = Orcamento.objects.filter(demanda__id=demanda_id)
+        atividades = Atividade.objects.filter(demanda__id=demanda_id)
         
         data = DemandaSerializer(demanda).data
         
@@ -124,8 +127,10 @@ class DemandaDetail(APIView):
                 fases_list.append(fase_dict)
                 
             orcamento_dict['fases'] = fases_list
-            
-            
+        
+        atividade_list = []
+        if atividades:
+            atividade_list = AtividadeSerializer(atividades, many=True).data    
         
         data['itens_faturamento'] = itens_list
         data['propostas'] = propostas_list
@@ -133,15 +138,13 @@ class DemandaDetail(APIView):
         data['observacoes'] = observacoes_list
         data['ocorrencias'] = ocorrencias_list
         data['orcamento'] = orcamento_dict
+        data['atividades'] = atividade_list
         
         return data
 
     def get(self, request, demanda_id, format=None):
-        
         data = self.serializarDemanda(demanda_id)
-        
         return Response(data)
-    
 
     def salvar_proposta(self, propostas, demanda):
         for i in propostas:
@@ -398,7 +401,32 @@ class DemandaDetail(APIView):
                 elif 'id' in f:
                     fase = Fase.objects.get(pk=f[id])
                     fase.delete()
+    
+    def salvar_atividade(self, atividade_list, demanda):
+        
+        for i in atividade_list:
+            if 'remover' not in i or i['remover'] is False:
                 
+                responsavel = None
+                if 'responsavel' in i:
+                    responsavel = Funcionario.objects.get(pk=i['responsavel']['id'])
+                    del i['responsavel']
+                
+                centro_resultado = None
+                if 'centro_resultado' in i:
+                    centro_resultado = CentroResultado.objects.get(pk=i['centro_resultado']['id'])
+                    del i['centro_resultado']
+                
+                atividade = Atividade(**i)
+                atividade.responsavel = responsavel
+                atividade.centro_resultado = centro_resultado
+                atividade.demanda = demanda
+                
+                atividade.save()
+                
+            elif 'id' in i:
+                atividade = Atividade.objects.get(pk=i['id'])
+                atividade.delete();
                 
     def post(self, request, format=None):
         
@@ -413,6 +441,7 @@ class DemandaDetail(APIView):
         observacoes = data['observacoes']
         ocorrencias = data['ocorrencias']
         orcamento = data['orcamento']
+        atividades = data['atividades']
         
         del data['cliente']
         del data['itens_faturamento']
@@ -421,6 +450,7 @@ class DemandaDetail(APIView):
         del data['observacoes']
         del data['ocorrencias']
         del data['orcamento']
+        del data['atividades']
        
         demanda = Demanda(**data)
         demanda.cliente = cliente
@@ -437,6 +467,7 @@ class DemandaDetail(APIView):
         self.salvar_observacoes(observacoes, demanda)
         self.salvar_ocorrencias(ocorrencias, demanda)
         self.salvar_orcamento(orcamento, demanda)
+        self.salvar_atividade(atividades, demanda)
         
         return Response(self.serializarDemanda(demanda.id))
     
@@ -467,3 +498,11 @@ class DemandaDetail(APIView):
         return Response(data)
         
         return self.get(request, demanda_id, format=None)
+    
+
+@api_view(['GET'])
+def buscar_total_horas_custo_resultado_por_demanda(request, demanda_id, format=None):
+    
+    resultado = Orcamento.objects.filter(demanda__id=demanda_id).values('fase__itemfase__valor_hora__centro_resultado__id', 'fase__itemfase__valor_hora__centro_resultado__nome').annotate(total_horas = Sum('fase__itemfase__quantidade_horas'))
+    return Response(resultado)
+    

@@ -23,7 +23,7 @@ valorhora.controller('ValorHoraController', function (ValorHoraService, CentroCu
 			$ctrl.valorhora = data;
 			
 			if (data.vigencias){
-				for( i in data.vigencias){
+				for(var i in data.vigencias){
 					var vigencia = data.vigencias[i];
 					vigencia.valor = CommonsService.formatarnumero(vigencia.valor);
 				}
@@ -52,7 +52,7 @@ valorhora.controller('ValorHoraController', function (ValorHoraService, CentroCu
 			$ctrl.valorhora = data;
 			
 			if (data.vigencias){
-				for( i in data.vigencias){
+				for(var i in data.vigencias){
 					var vigencia = data.vigencias[i];
 					vigencia.valor = CommonsService.formatarnumero(vigencia.valor);
 				}

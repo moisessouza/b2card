@@ -25,7 +25,8 @@ urlpatterns = [
     url(r'^novo/$', views.novo, name='novo'),
     url(r'^editar/(?P<demanda_id>[0-9]+)/$', views.editar, name='editar'),
     url(r'^api/new/$', views.DemandaDetail.as_view()),
-    url(r'^api/(?P<demanda_id>[0-9]+)/$', views.DemandaDetail.as_view())
+    url(r'^api/(?P<demanda_id>[0-9]+)/$', views.DemandaDetail.as_view()),
+    url(r'^api/(?P<demanda_id>[0-9]+)/centroresultadoshora/$', views.buscar_total_horas_custo_resultado_por_demanda)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

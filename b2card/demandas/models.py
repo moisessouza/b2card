@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from recursos.models import Funcionario
-from clientes.models import Cliente, TipoValorHora, CentroResultado
+from clientes.models import Cliente, TipoValorHora
 from datetime import datetime
-from cadastros.models import CentroCusto, ValorHora
+from cadastros.models import CentroCusto, ValorHora, CentroResultado
 
 # Create your models here.
 
@@ -39,6 +39,13 @@ class Demanda(models.Model):
     tipo_demanda = models.CharField(max_length=1, choices=TIPO_DEMANDA, null=True)
     status_demanda = models.CharField(max_length=1, choices=STATUS_DEMANDA, null=True)
     codigo_cri = models.CharField(max_length=12, null=True)
+    
+class Atividade(models.Model):
+    titulo = models.CharField(max_length=10)
+    responsavel = models.ForeignKey(Funcionario, default=None)
+    centro_resultado = models.ForeignKey(CentroResultado, default=None)
+    horas_previstas = models.IntegerField()
+    demanda = models.ForeignKey(Demanda)
     
 class FaturamentoDemanda(models.Model):
     descricao = models.CharField(max_length = 200)
