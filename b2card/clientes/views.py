@@ -5,7 +5,7 @@ from .forms import ClienteForm
 from rest_framework.views import APIView
 from clientes import serializers
 from rest_framework.response import Response
-from clientes.models import TipoValorHora, CentroResultado
+
 from datetime import datetime
 from rest_framework.decorators import api_view
 
@@ -45,9 +45,7 @@ class ClienteDetail(APIView):
     def get(self, request, cliente_id, format=None):
         
         cliente = Cliente.objects.get(pk=cliente_id)
-        tipos_valor_hora = TipoValorHora.objects.filter(cliente=cliente)
         clienteSerializer = serializers.ClienteSerializer(cliente)
-        centro_resultados = CentroResultado.objects.filter(cliente=cliente)
         
         data = clienteSerializer.data
         
@@ -62,12 +60,6 @@ class ClienteDetail(APIView):
             tokens = iso.split('-')
             data['data_rescisao'] = "%s/%s/%s" % (tokens[2],tokens[1],tokens[0])
             
-        tipos_valor_hora = serializers.TipoValorHoraSerializer(tipos_valor_hora, many=True)
-        data['tipovalorhora'] = tipos_valor_hora.data
-        
-        centro_resultados = serializers.CentroResultadoSerializer(centro_resultados, many=True)
-        data['centroresultados'] = centro_resultados.data
-        
         return Response(data)
     
     def post(self, request, format=None):
@@ -108,70 +100,12 @@ class ClienteDetail(APIView):
         
         cliente.save();
         
-        if tipos_valor_hora is not None:
-            for tipo_valor_hora in tipos_valor_hora:
-                if (tipo_valor_hora['tipo_hora'] is not None 
-                    and tipo_valor_hora['valor_hora'] is not None):
-                    tipo_valor = TipoValorHora(**tipo_valor_hora)
-                    tipo_valor.cliente = cliente
-                    tipo_valor.save()
-                    
-        if centro_resultados is not None:
-            for centro_resultado in centro_resultados:
-                if centro_resultado['razao_social'] is not None and centro_resultado['cnpj'] is not None:
-                    centro_result = CentroResultado(**centro_resultado)
-                    centro_result.cliente = cliente
-                    centro_result.save()
-                
         return self.get(request, cliente.id, format);
     
     def delete(self, request, cliente_id, format=None):
         
         cliente = Cliente.objects.get(pk=cliente_id)
-        
-        tipos_valor_hora = TipoValorHora.objects.filter(cliente=cliente)
-        
-        for tipo_valor_hora in tipos_valor_hora:
-            tipo_valor_hora.delete()
-            
         cliente.delete()
         
         serializer = serializers.ClienteSerializer(cliente)
         return Response(serializer.data)
-    
-class TipoValorHoraDetail(APIView):
-    
-    def get(self, request, tipo_valor_hora_id, format=None):
-        tipo_valor_hora  = TipoValorHora.objects.get(pk=tipo_valor_hora_id)
-        serializer = serializers.TipoValorHoraSerializer(tipo_valor_hora)
-        return Response(serializer.data)
-    
-    def delete(self, request, tipo_valor_hora_id, format=None):
-        
-        tipo_valor_hora = TipoValorHora.objects.get(pk=tipo_valor_hora_id)
-        tipo_valor_hora.delete()
-        
-        serializer = serializers.TipoValorHoraSerializer(tipo_valor_hora)
-        return Response(serializer.data)
-
-class CentroResultadoDetail(APIView):
-    
-    def delete(self, request, centro_resultado_id, format=None):
-        centro_resultado = CentroResultado.objects.get(pk=centro_resultado_id)
-        centro_resultado.delete()
-        
-        serializer = serializers.CentroResultadoSerializer(centro_resultado)
-        return Response(serializer.data)
-    
-@api_view(['GET', 'PUT', 'DELETE'])
-def buscar_valor_hora_cliente(request, cliente_id):
-    
-    tipo_valor_horas = TipoValorHora.objects.filter(cliente__id=cliente_id)
-    serializer = serializers.TipoValorHoraSerializer(tipo_valor_horas, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def buscar_centro_resultados_cliente(request, cliente_id):
-    centro_resultados = CentroResultado.objects.filter(cliente__id = cliente_id)
-    serializer = serializers.CentroResultadoSerializer(centro_resultados, many=True)
-    return Response(serializer.data)

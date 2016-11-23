@@ -5,8 +5,8 @@ Created on 14 de set de 2016
 '''
 from rest_framework import serializers
 from demandas.models import Demanda, FaturamentoDemanda, Proposta, Tarefa, Observacao, Ocorrencia,\
-    TipoValorHoraFaturamento, Orcamento, Fase, ItemFase, Atividade
-from clientes.serializers import ClienteSerializer, TipoValorHoraSerializer
+    Orcamento, Fase, ItemFase, Atividade, ValorHoraFaturamento
+from clientes.serializers import ClienteSerializer
 from recursos.serializers import FuncionarioSerializer
 from cadastros.serializers import CentroCustoSerializer, ValorHoraSerializer, CentroResultadoSerializer
         
@@ -20,14 +20,13 @@ class FaturamentoDemandaSerializer(serializers.ModelSerializer):
     class Meta:
         model = FaturamentoDemanda
         fields = ('id', 'descricao', 'numero_nota', 'valor_total_faturamento', 'status', 'data_envio_aprovacao', 'data_previsto_faturamento', 'data_previsto_pagamento', 'data_pagamento', 'data_fatura')
-      
-class TipoValorHoraFaturamentoSerializer(serializers.ModelSerializer):
-    tipo_hora = TipoValorHoraSerializer()
+
+class ValorHoraFaturamentoSerializer(serializers.ModelSerializer):
+    valor_hora = ValorHoraSerializer()
     class Meta:
-        model = TipoValorHoraFaturamento
-        fields = ('id', 'tipo_hora','valor_hora','quantidade_horas','valor_faturamento')
-    
-  
+        model = ValorHoraFaturamento
+        fields = ('id','valor_hora', 'valor', 'quantidade_horas', 'valor_faturamento')
+        
 class PropostaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Proposta

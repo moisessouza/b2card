@@ -24,14 +24,6 @@ demandasservices.service('DemandaService', function($resource){
 			var result = Recursos.query(callback);
 			return result;
 		},
-		buscartipohoracliente: function(idcliente, callback){
-			var Clientes = $resource('/clientes/api/cliente/:id/valorhora/')
-			return Clientes.query({id:idcliente}, callback);
-		},
-		buscarcentroresultados: function(idcliente, callback){
-			var Clientes = $resource('/clientes/api/cliente/:id/centroresultado/')
-			return Clientes.query({id:idcliente}, callback);
-		},
 		salvardemanda: function(data, callback){
 			var Demandas = $resource('/demandas/api/new/');
 			return Demandas.save(data, callback);

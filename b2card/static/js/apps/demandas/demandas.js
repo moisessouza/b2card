@@ -25,6 +25,20 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		}
 	};
 	
+	var configuraritensfaturamento = function (data) {
+		if (data.itens_faturamento) {
+			for (var i in data.itens_faturamento) {
+				var valorhoras = data.itens_faturamento[i].valorhoras
+				if (valorhoras){
+					for (var v in valorhoras) {
+						var valorhora = valorhoras[v]
+						valorhora.valor = CommonsService.formatarnumero(valorhora.valor);
+					}
+				}
+			}
+		}
+	}
+	
 	var configurarorcamento = function (data) {
 		if (data.orcamento){
 			
@@ -94,9 +108,6 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		$ctrl.demanda = DemandaService.buscardemanda(demanda_id, function (data){
 			
 			console.log(data);
-			
-			$ctrl.listatipovalorhora  = DemandaService.buscartipohoracliente(cliente_id);
-			$ctrl.listacentroresultado = DemandaService.buscarcentroresultados(cliente_id);
 			$ctrl.show=true;
 			
 			var ocorrencias = data.ocorrencias;
@@ -110,6 +121,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			}
 			
 			configurarorcamento(data);
+			configuraritensfaturamento(data);
 			
 			$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(demanda_id, $ctrl.changeatividade);
 			
@@ -135,11 +147,11 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		});
 	}
 		
-	$ctrl.adicionartipovalorhora = function (itemfaturamento) {
-		if (!itemfaturamento.tipovalorhoras){
-			itemfaturamento.tipovalorhoras = [];
+	$ctrl.adicionarvalorhora = function (itemfaturamento) {
+		if (!itemfaturamento.valorhoras){
+			itemfaturamento.valorhoras = [];
 		}
-		itemfaturamento.tipovalorhoras.push({});
+		itemfaturamento.valorhoras.push({});
 	}
 	
 	$ctrl.adicionarproposta = function () {
@@ -263,11 +275,6 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		
 	}
 	
-	$ctrl.changecliente = function (){
-		$ctrl.listatipovalorhora  = DemandaService.buscartipohoracliente($ctrl.demanda.cliente.id);
-		$ctrl.listacentroresultado = DemandaService.buscarcentroresultados($ctrl.demanda.cliente.id);
-	}
-	
 	$ctrl.changedataenvioaprovacao = function (item_faturamento) {
 		if (item_faturamento.data_envio_aprovacao && item_faturamento.data_envio_aprovacao.length == 10 ) {
 			for (var i in $ctrl.listaclientes) {
@@ -300,12 +307,12 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	}
 	
 	$ctrl.recalcularfaturamentototal = function (item_faturamento) {
-		if (item_faturamento.tipovalorhoras) {			
+		if (item_faturamento.valorhoras) {			
 			var valortotal = 0;
-			for (var i in item_faturamento.tipovalorhoras) {
-				var tipovalorhora = item_faturamento.tipovalorhoras[i]
-				if (!tipovalorhora.remover){
-					var valor = tipovalorhora.valor_faturamento ? CommonsService.stringparafloat(tipovalorhora.valor_faturamento) : 0;
+			for (var i in item_faturamento.valorhoras) {
+				var valorhora = item_faturamento.valorhoras[i]
+				if (!valorhora.remover){
+					var valor = valorhora.valor_faturamento ? CommonsService.stringparafloat(valorhora.valor_faturamento) : 0;
 					valortotal += valor;
 				}
 			}
@@ -313,18 +320,17 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		}
 	}
 	
-	$ctrl.changehoraproposta = function (tipovalorhora, item_faturamento) {
-		if (tipovalorhora.tipo_hora && tipovalorhora.tipo_hora.id){
-			for (var i in $ctrl.listatipovalorhora){
+	$ctrl.changevalorhoraitem = function (valorhora, item_faturamento) {
+		if (valorhora.valor_hora && valorhora.valor_hora.id){
+			for (var i in $ctrl.listavalorhora){
 				
-				var tipo = $ctrl.listatipovalorhora[i]
+				var valor = $ctrl.listavalorhora[i]
 				
-				if (tipo.id == tipovalorhora.tipo_hora.id){
-					var tipo_hora = tipo;
-					var valor_hora = CommonsService.stringparafloat(tipo_hora.valor_hora);
-					tipovalorhora.valor_hora = tipo_hora.valor_hora;
-					var valor_faturamento = valor_hora * (tipovalorhora.quantidade_horas ? tipovalorhora.quantidade_horas : 0);
-					tipovalorhora.valor_faturamento = CommonsService.formatarnumero(valor_faturamento);
+				if (valor.id == valorhora.valor_hora.id){
+					var valor_hora = valor.vigencia.valor;
+					valorhora.valor = CommonsService.formatarnumero(valor_hora);
+					var valor_faturamento = valor_hora * (valorhora.quantidade_horas ? valorhora.quantidade_horas : 0);
+					valorhora.valor_faturamento = CommonsService.formatarnumero(valor_faturamento);
 					break;
 				}
 			}
@@ -339,6 +345,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		
 		DemandaService.salvardemanda($ctrl.demanda, function(data){
 			$ctrl.demanda = data;
+			configuraritensfaturamento(data);
 			configurarorcamento(data);
 			$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(demanda_id, $ctrl.changeatividade);
 			messagesuccess('salvo!')
