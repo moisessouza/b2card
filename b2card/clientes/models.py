@@ -13,13 +13,3 @@ class Cliente(models.Model):
     dias_pagamento = models.IntegerField(default=None)
     data_contratacao = models.DateField(default=None, blank=True)
     data_rescisao = models.DateField(default=None, null=True)
-    
-class TipoValorHora(models.Model):
-    cliente = models.ForeignKey(Cliente, default=None, blank=True)
-    tipo_hora = models.CharField(max_length=30);
-    valor_hora = models.CharField(max_length=10);
-    
-class CentroResultado(models.Model):
-    razao_social = models.CharField(max_length=30)
-    cnpj = models.CharField(max_length=19)
-    cliente = models.ForeignKey(Cliente, default=None, blank=True)

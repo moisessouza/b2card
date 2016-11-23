@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from recursos.models import Funcionario
-from clientes.models import Cliente, TipoValorHora
+from clientes.models import Cliente
 from datetime import datetime
 from cadastros.models import CentroCusto, ValorHora, CentroResultado
 
@@ -59,9 +59,9 @@ class FaturamentoDemanda(models.Model):
     data_fatura = models.DateField(null=True)
     demanda = models.ForeignKey(Demanda, null=True)
     
-class TipoValorHoraFaturamento(models.Model):
-    tipo_hora = models.ForeignKey(TipoValorHora, null=True)
-    valor_hora = models.CharField(max_length=30, null=True)
+class ValorHoraFaturamento(models.Model):
+    valor_hora = models.ForeignKey(ValorHora, null=True)
+    valor = models.FloatField(null=True)
     quantidade_horas = models.IntegerField(null=True)
     valor_faturamento = models.CharField(max_length=30, null=True)
     faturamento_demanda = models.ForeignKey(FaturamentoDemanda, null=True, on_delete=models.CASCADE) 
