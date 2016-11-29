@@ -43,6 +43,21 @@
 
 	<div class="panel panel-default form-group-sm" >
 	  <div class="panel-body">
+	  	<div class="row">
+	  	  <div class="form-group col-sm-3">
+		    <label for="tipo_hora">Tipo hora</label>
+		    <select class="form-control" id="tipo_hora" name="tipo_hora" ng-model="$ctrl.valorhora.tipo_hora.id" ng-options="c.id as c.descricao for c in $ctrl.tipohoralist" required>
+		    	<option value="">Selecione...</option>
+		    </select>
+		    <span class="red" ng-show="valorhora.tipo_hora.$invalid">Tipo hora é obrigatório.</span>
+		  </div>
+		  <div class="form-group col-sm-3">
+		    <label for="descricao">Descrição</label>
+		    <input type="text" class="form-control" id="descricao" name="descricao" ng-model="$ctrl.valorhora.descricao" placeholder="Descrição" required/>
+		    <span class="red" ng-show="valorhora.descricao.$invalid">Descrição é obrigatório.</span>
+		  </div>
+		</div>
+		<div class="row">
 		  <div class="form-group col-sm-3">
 		    <label for="centro_custo">Centro de custo</label>
 		    <select class="form-control" id="centro_custo" name="centro_custo" ng-model="$ctrl.valorhora.centro_custo.id" ng-options="c.id as c.nome for c in $ctrl.centrocustolist" required>
@@ -71,18 +86,7 @@
 		    </select>
 		    <span class="red" ng-show="valorhora.natureza_operacao.$invalid">Natureza da operação é obrigatório.</span>
 		  </div>
-		  <div class="form-group col-sm-3">
-		    <label for="tipo_hora">Tipo hora</label>
-		    <select class="form-control" id="tipo_hora" name="tipo_hora" ng-model="$ctrl.valorhora.tipo_hora.id" ng-options="c.id as c.descricao for c in $ctrl.tipohoralist" required>
-		    	<option value="">Selecione...</option>
-		    </select>
-		    <span class="red" ng-show="valorhora.tipo_hora.$invalid">Tipo hora é obrigatório.</span>
-		  </div>
-		  <div class="form-group col-sm-3">
-		    <label for="descricao">Descrição</label>
-		    <input type="text" class="form-control" id="descricao" name="descricao" ng-model="$ctrl.valorhora.descricao" placeholder="Descrição" required/>
-		    <span class="red" ng-show="valorhora.descricao.$invalid">Descrição é obrigatório.</span>
-		  </div>
+		 </div>
 	  </div>
 	 </div>
 	 
