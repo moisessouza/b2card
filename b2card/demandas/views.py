@@ -355,39 +355,40 @@ class DemandaDetail(APIView):
         if fases_list is not None:    
             for f in fases_list:
                 if 'remover' not in f or f['remover'] is False:
-                    itens_fase = None
-                    if 'itensfase' in f:
-                        itens_fase = f['itensfase']
-                        del f['itensfase']
-                        
-                    fase = Fase(**f)
-                    fase.valor_total = converter_string_para_float(fase.valor_total)
-                    fase.orcamento = orcamento
-                    fase.save()
-                     
-                    if itens_fase is not None:
-                        for i in itens_fase:
+                    if 'descricao' in f and f['descricao'] and 'valor_total' in f and f['valor_total']:
+                        itens_fase = None
+                        if 'itensfase' in f:
+                            itens_fase = f['itensfase']
+                            del f['itensfase']
                             
-                            if 'remover' not in i or i['remover'] is False:
+                        fase = Fase(**f)
+                        fase.valor_total = converter_string_para_float(fase.valor_total)
+                        fase.orcamento = orcamento
+                        fase.save()
+                         
+                        if itens_fase is not None:
+                            for i in itens_fase:
                                 
-                                valor_hora = None
-                                if 'valor_hora' in i:
-                                    valor_hora = ValorHora.objects.get(pk=i['valor_hora']['id'])
-                                    del i['valor_hora']
+                                if 'remover' not in i or i['remover'] is False:
                                     
-                                item_fase = ItemFase(**i)
-                                item_fase.valor_selecionado = converter_string_para_float(item_fase.valor_selecionado)
-                                item_fase.valor_total = converter_string_para_float(item_fase.valor_total)
-                                item_fase.valor_hora = valor_hora
-                                item_fase.fase = fase
-                                item_fase.save()
-                                
-                            elif 'id' in i:
-                                item_fase = ItemFase.objects.get(pk=i['id'])
-                                item_fase.delete()
+                                    valor_hora = None
+                                    if 'valor_hora' in i:
+                                        valor_hora = ValorHora.objects.get(pk=i['valor_hora']['id'])
+                                        del i['valor_hora']
+                                        
+                                    item_fase = ItemFase(**i)
+                                    item_fase.valor_selecionado = converter_string_para_float(item_fase.valor_selecionado)
+                                    item_fase.valor_total = converter_string_para_float(item_fase.valor_total)
+                                    item_fase.valor_hora = valor_hora
+                                    item_fase.fase = fase
+                                    item_fase.save()
+                                    
+                                elif 'id' in i:
+                                    item_fase = ItemFase.objects.get(pk=i['id'])
+                                    item_fase.delete()
                                 
                 elif 'id' in f:
-                    fase = Fase.objects.get(pk=f[id])
+                    fase = Fase.objects.get(pk=f['id'])
                     fase.delete()
     
     def salvar_atividade(self, atividade_list, demanda):

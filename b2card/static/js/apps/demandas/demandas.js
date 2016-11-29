@@ -25,6 +25,8 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		}
 	};
 	
+	$ctrl.fase = {};
+	
 	var configuraritensfaturamento = function (data) {
 		if (data.itens_faturamento) {
 			for (var i in data.itens_faturamento) {
@@ -180,28 +182,37 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		$ctrl.demanda.ocorrencias.unshift(ocorrencia);
 	}
 	
-	$ctrl.adicionarfase = function () {
+	$ctrl.novafase = function () {
+		$ctrl.fase = {};
+	}
+	
+	$ctrl.editarfase = function (fase) {
+		$ctrl.fase = fase;
+	}
+	
+	$ctrl.salvarfase = function () {
 		if (!$ctrl.demanda.orcamento){
-			$ctrl.demanda.orcamento = {}
+			$ctrl.demanda.orcamento = {};
 		}
 		if (!$ctrl.demanda.orcamento.fases){
 			$ctrl.demanda.orcamento.fases = [];
 		}
-		$ctrl.demanda.orcamento.fases.push({})
+		
+		if ($ctrl.demanda.orcamento.fases.indexOf($ctrl.fase) < 0
+				&& $ctrl.fase.descricao){
+			$ctrl.demanda.orcamento.fases.push($ctrl.fase);	
+		}
+		
+		$ctrl.fase = {};
+		
+		$ctrl.calcularvalortotalorcamento();
 	}
 	
-	$ctrl.adicionaritemfase = function (fase){
-		if (!fase.itensfase){
-			fase.itensfase = [];
+	$ctrl.adicionaritemfase = function (){
+		if (!$ctrl.fase.itensfase){
+			$ctrl.fase.itensfase = [];
 		}
-		fase.itensfase.push({});
-	}
-		
-	$ctrl.adicionaritemfase = function (fase){
-		if (!fase.itensfase){
-			fase.itensfase = [];
-		}
-		fase.itensfase.push({});
+		$ctrl.fase.itensfase.push({});
 	}
 	
 	$ctrl.adicionaratividade = function () {
@@ -272,6 +283,19 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 				itemfase.valor_total  = CommonsService.formatarnumero((valorhora.vigencia ? valorhora.vigencia.valor : 0) * ( itemfase.quantidade_horas ? itemfase.quantidade_horas : 0));
 			}
 		}
+		
+		var itensfase = $ctrl.fase.itensfase;
+		
+		var valorfase = 0
+		for (i in itensfase){
+			var itemfase = itensfase[i];
+			if (!itemfase.remover && itemfase.valor_total) {
+				var valoritem = CommonsService.stringparafloat(itemfase.valor_total);
+				valorfase+=valoritem;
+			}
+		}
+		
+		$ctrl.fase.valor_total = CommonsService.formatarnumero(valorfase);
 		
 		$ctrl.calcularvalortotalorcamento();
 		
