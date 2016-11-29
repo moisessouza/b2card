@@ -26,6 +26,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	};
 	
 	$ctrl.fase = {};
+	$ctrl.atividade = {};
 	
 	var configuraritensfaturamento = function (data) {
 		if (data.itens_faturamento) {
@@ -215,13 +216,34 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		$ctrl.fase.itensfase.push({});
 	}
 	
-	$ctrl.adicionaratividade = function () {
+	$ctrl.novaatividade = function () {
+		$ctrl.atividade = {};
+	}
+	
+	$ctrl.salvaratividade = function () {
 		if(!$ctrl.demanda.atividades){
 			$ctrl.demanda.atividades = [];
 		}
 		
-		$ctrl.demanda.atividades.push({});
+		if ($ctrl.demanda.atividades.indexOf($ctrl.atividade) < 0){
+			$ctrl.demanda.atividades.push($ctrl.atividade);	
+		}
 		
+		for (var i in $ctrl.listafuncionarios){
+			var funcionario = $ctrl.listafuncionarios[i];
+			if (funcionario.id == $ctrl.atividade.responsavel.id){
+				$ctrl.atividade.responsavel.nome = funcionario.nome;
+			}
+		}
+		
+		$ctrl.changeatividade();
+		
+		$ctrl.atividade = {};
+		
+	}
+	
+	$ctrl.editaratividade = function (atividade) {
+		$ctrl.atividade = atividade;
 	}
 	
 	$ctrl.remover = function (i, callback){
