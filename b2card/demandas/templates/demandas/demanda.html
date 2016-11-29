@@ -228,40 +228,39 @@
 				</button>
 				
 				<table class="table table-sm table-bordered table-striped table-highlight">
-							<thead>
-								<tr class="active">
-									<th>ID</th>
-									<th>Fase</th>
-									<th>Valor final</th>
-									<th></th>
-									<th></th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr ng-repeat="fase in $ctrl.demanda.orcamento.fases" ng-show="!fase.remover">
-									<td class="col-sm-1">
-										<input type="text" id="id" name="id" ng-model="fase.id" maxlength="30" class="form-control" disabled/>
-									</td>
-									<td class="col-sm-6">
-										<input type="text" id="descricao" name="descricao" ng-model="fase.descricao" maxlength="30" gb-money class="form-control" disabled/>
-									</td>
-									<td class="col-sm-6">
-										<input type="text" id="valor_total" name="valor_total" ng-model="fase.valor_total" maxlength="30" gb-money class="form-control" disabled/>
-									</td>
-									<td>
-										<button type="button" class="btn btn-default" ng-click="$ctrl.editarfase(fase)">
-											<span class="glyphicon glyphicon-edit"></span>
-										</button>
-									</td>
-									<td>
-										<button type="button" class="btn btn-default" ng-click="$ctrl.remover(fase, $ctrl.calcularvalortotalorcamento)">
-											<span class="glyphicon glyphicon-trash"></span>
-										</button>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-				
+					<thead>
+						<tr class="active">
+							<th>ID</th>
+							<th>Fase</th>
+							<th>Valor final</th>
+							<th></th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="fase in $ctrl.demanda.orcamento.fases" ng-show="!fase.remover">
+							<td class="col-sm-1">
+								<input type="text" id="id" name="id" ng-model="fase.id" maxlength="30" class="form-control" disabled/>
+							</td>
+							<td class="col-sm-6">
+								<input type="text" id="descricao" name="descricao" ng-model="fase.descricao" maxlength="30" gb-money class="form-control" disabled/>
+							</td>
+							<td class="col-sm-6">
+								<input type="text" id="valor_total" name="valor_total" ng-model="fase.valor_total" maxlength="30" gb-money class="form-control" disabled/>
+							</td>
+							<td>
+								<button type="button" class="btn btn-default" ng-click="$ctrl.editarfase(fase)">
+									<span class="glyphicon glyphicon-edit"></span>
+								</button>
+							</td>
+							<td>
+								<button type="button" class="btn btn-default" ng-click="$ctrl.remover(fase, $ctrl.calcularvalortotalorcamento)">
+									<span class="glyphicon glyphicon-trash"></span>
+								</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 				
 			</form>
 		</div>
