@@ -31,14 +31,11 @@ STATUS_DEMANDA = (
 )
 
 class Demanda(models.Model):
-    titulo = models.CharField(max_length=30, default=None)
     cliente = models.ForeignKey(Cliente, blank=False)
-    identificacao = models.CharField(max_length=30,default=None)
-    descricao = models.TextField(default=None)
-    data_aprovacao_demanda = models.DateField(default=None)
-    tipo_demanda = models.CharField(max_length=1, choices=TIPO_DEMANDA, null=True)
+    nome_demanda = models.CharField(max_length=30,default=None)
+    descricao = models.TextField(default=None, null=True)
     status_demanda = models.CharField(max_length=1, choices=STATUS_DEMANDA, null=True)
-    codigo_cri = models.CharField(max_length=12, null=True)
+    codigo_demanda = models.CharField(max_length=12, null=True)
     
 class Atividade(models.Model):
     titulo = models.CharField(max_length=100)
@@ -133,9 +130,8 @@ class Ocorrencia(models.Model):
     
 class Orcamento(models.Model):
     demanda = models.ForeignKey(Demanda)
-    centro_custo = models.ForeignKey(CentroCusto, default=None)
     descricao = models.TextField(null=True, default = None)
-    total_orcamento = models.FloatField(default = None)
+    total_orcamento = models.FloatField(default = None, null=True)
     
 class Fase(models.Model):
     descricao = models.CharField(max_length=100)

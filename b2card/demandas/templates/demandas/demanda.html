@@ -81,11 +81,10 @@
 					<div class="panel-heading"><strong>Dados da demanda</strong></div>
 					<div class="panel-body">
 						<div class="row">
-							<div class="col-md-3">
+							<div class="col-md-1">
 								<div class="form-group">
-									<label for="titulo">Título da demanda</label> 
-								    <input type="text" id="titulo" name="titulo" ng-model="$ctrl.demanda.titulo" class="form-control" required maxlength="30"/>
-								    <span class="red" ng-show="demanda.titulo.$invalid">Título da demanda é obrigatório.</span>
+									<label for="cliente">ID</label> 
+								    <input type="text" id="id" name="id" ng-model="$ctrl.demanda.id" class="form-control" disabled/>
 								</div>
 							</div>
 							<div class="col-md-3">
@@ -99,26 +98,11 @@
 							</div>
 							<div class="col-md-3">
 								<div class="form-group">
-									<label for="identificacao">Identificação</label> 
-								    <input type="text" id="identificacao" name="identificacao" ng-model="$ctrl.demanda.identificacao" class="form-control" required maxlength="30"/>
-								    <span class="red" ng-show="demanda.identificacao.$invalid">Identificação é obrigatório.</span>
+									<label for="nome_demanda">Nome da demanda</label> 
+								    <input type="text" id="nome_demanda" name="nome_demanda" ng-model="$ctrl.demanda.nome_demanda" class="form-control" required maxlength="30"/>
+								    <span class="red" ng-show="demanda.nome_demanda.$invalid">Nome da demanda é obrigatório.</span>
 								</div>
 							</div>
-							<div class="col-md-2">
-								<div class="form-group form-group-sm">
-									<label for="tipo_demanda">Tipo da demanda</label> 
-								    <select id="tipo_demanda" name="tipo_demanda" ng-model="$ctrl.demanda.tipo_demanda" class="form-control" required>
-							    		<option value="">Selecione um tipo...</option>
-							    		<option value="D">Desenvolvimento</option>
-							    		<option value="H">Homologação</option>
-							    		<option value="C">Consultoria</option>
-							    		<option value="A">Alocação</option>
-							    	</select>
-							    	<span class="red" ng-show="demanda.tipo_demanda.$invalid">Tipo da demanda é obrigatório.</span>
-								</div>
-							</div>
-						</div>
-						<div class="row">
 							<div class="col-md-2">
 								<div class="form-group form-group-sm">
 									<label for="status_demanda"> Status da demanda</label> 
@@ -132,19 +116,14 @@
 							    		<option value="I">Implantada</option>
 							    		<option value="D">Em desenvolvimento</option>
 							    	</select>
-							    	<span class="red" ng-show="demanda.tipo_demanda.$invalid">Status da demanda é obrigatório.</span>
+							    	<span class="red" ng-show="demanda.status_demanda.$invalid">Status da demanda é obrigatório.</span>
 								</div>
 							</div>
 							<div class="col-md-3">
 								<div class="form-group">
-									<label for="codigo_cri">Código de CRI</label> 
-								    <input type="text" id="codigo_cri" name="codigo_cri" ng-model="$ctrl.demanda.codigo_cri" class="form-control" maxlength="12"/>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group">
-									<label for="data_aprovacao_demanda">Data de aprovação da demanda</label> 
-								    <input type="text" id="data_aprovacao_demanda" name="data_aprovacao_demanda" ng-model="$ctrl.demanda.data_aprovacao_demanda"  ui-mask="99/99/9999" model-view-value="true" class="form-control" maxlength="12"/>
+									<label for="codigo_demanda">Código da demanda</label> 
+								    <input type="text" id="codigo_demanda" name="codigo_demanda" ng-model="$ctrl.demanda.codigo_demanda" class="form-control" maxlength="12" required/>
+								    <span class="red" ng-show="demanda.codigo_demanda.$invalid">Código da demanda é obrigatório.</span>
 								</div>
 							</div>
 						</div>
@@ -152,8 +131,7 @@
 							<div class="col-md-12">
 								<div class="form-group">
 									<label for="descricao">Descrição</label> 
-								    <textarea id="descricao" name="descricao" ng-model="$ctrl.demanda.descricao" class="form-control" required></textarea>
-								    <span class="red" ng-show="demanda.descricao.$invalid">Descrição é obrigatório.</span>
+								    <textarea id="descricao" name="descricao" ng-model="$ctrl.demanda.descricao" class="form-control"></textarea>
 								</div>
 							</div>
 						</div>
@@ -165,32 +143,12 @@
 			<form name="orcamento">
 				<div class="panel panel-primary margin-top">
 					<div class="panel-heading">
-						Dados do orçamento
+						Total orçamento
 					</div>
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-sm-6">	
 								<div class="form-group form-group-sm">
-									<label for="centro_custo">Centro de custo</label> 
-						    		<select id="centro_custo" name="centro_custo"  ng-model="$ctrl.demanda.orcamento.centro_custo.id" class="form-control" ng-change="$ctrl.changecentrocusto()" ng-options="c.id as c.nome for c in $ctrl.listacentrocustos" required>
-						    			<option value="">Selecione...</option>
-						    		</select>
-						    		<span class="red" ng-show="orcamento.centro_custo.$invalid">Centro de custo é obrigatório.</span>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-sm-12">
-								<div class="form-group form-group-sm">
-									<label for="descricao" >Descrição</label> 
-						    		<textarea ng-model="$ctrl.demanda.orcamento.descricao" class="form-control"></textarea>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-sm-6">	
-								<div class="form-group form-group-sm">
-									<label for="total_orcamento">Total orçamento</label> 
 						    		<input type="text" id="total_orcamento" name="total_orcamento"  ng-model="$ctrl.demanda.orcamento.total_orcamento" class="form-control" required disabled="disabled"/>
 								</div>
 							</div>

@@ -1,8 +1,8 @@
 "use strict";
 
-var clientes = angular.module('clientes', ['clientes-services', 'commons', 'ui.bootstrap', 'ui.mask']);
+var clientes = angular.module('clientes', ['clientes-services', 'centrocusto-services', 'commons', 'ui.bootstrap', 'ui.mask']);
 
-clientes.controller('ClientesController', function ($scope, $window, ClientesService){
+clientes.controller('ClientesController', function ($scope, $window, ClientesService, CentroCustoService){
 	var $ctrl = this;
 	
 	var messageinfo = function (msg){
@@ -14,6 +14,8 @@ clientes.controller('ClientesController', function ($scope, $window, ClientesSer
 		$ctrl.clazz = 'label-success';
 		$ctrl.message = msg;
 	}
+	
+	$ctrl.listacentrocusto = CentroCustoService.buscarcentrocustos();
 	
 	if (cliente_id) {
 		$ctrl.cliente = ClientesService.buscarcliente(cliente_id, function(){

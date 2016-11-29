@@ -1,4 +1,5 @@
 from django.db import models
+from cadastros.models import CentroCusto
 
 # Create your models here.
 
@@ -13,3 +14,4 @@ class Cliente(models.Model):
     dias_pagamento = models.IntegerField(default=None)
     data_contratacao = models.DateField(default=None, blank=True)
     data_rescisao = models.DateField(default=None, null=True)
+    centro_custo = models.ForeignKey(CentroCusto, null=True)

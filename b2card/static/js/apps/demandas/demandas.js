@@ -40,10 +40,12 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	}
 	
 	var configurarorcamento = function (data) {
+		
+		if (data.cliente){
+			$ctrl.listavalorhora = ValorHoraService.buscarvalorhoraporcliente(data.cliente.id);
+		}
+		
 		if (data.orcamento){
-			
-			var idcentrocusto = data.orcamento.centro_custo.id;
-			$ctrl.listavalorhora = ValorHoraService.buscarvalorhoraporcentrodecusto(idcentrocusto);
 			
 			data.orcamento.total_orcamento = CommonsService.formatarnumero(data.orcamento.total_orcamento);
 			
@@ -63,6 +65,12 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 					}
 				}
 			}				
+		}
+	}
+	
+	$ctrl.changecliente = function () {
+		if ($ctrl.demanda.cliente){
+			$ctrl.listavalorhora = ValorHoraService.buscarvalorhoraporcliente($ctrl.demanda.cliente.id);
 		}
 	}
 	
@@ -214,13 +222,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		
 	$ctrl.listaclientes= DemandaService.buscarclientes();
 	$ctrl.listafuncionarios = DemandaService.buscarfuncionarios();
-	$ctrl.listacentrocustos = CentroCustoService.buscarcentrocustos();
 	$ctrl.listacentroresultados = CentroResultadoService.buscarcentroresultados();
-	
-	$ctrl.changecentrocusto = function () {
-		var idcentrocusto = $ctrl.demanda.orcamento.centro_custo.id;
-		$ctrl.listavalorhora = ValorHoraService.buscarvalorhoraporcentrodecusto(idcentrocusto);
-	}
 	
 	$ctrl.changevalorhora = function (itemfase) {
 		itemfase.valor_selecionado = CommonsService.formatarnumero(0);
@@ -347,7 +349,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			$ctrl.demanda = data;
 			configuraritensfaturamento(data);
 			configurarorcamento(data);
-			$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(demanda_id, $ctrl.changeatividade);
+			$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(data.id, $ctrl.changeatividade);
 			messagesuccess('salvo!')
 		});
 	}

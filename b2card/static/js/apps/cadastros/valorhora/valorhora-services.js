@@ -26,9 +26,9 @@ valorhoraservice.service('ValorHoraService', function($resource){
 			var ValorHora = $resource('/cadastros/valorhora/api/:id/');
 			return ValorHora.remove({id: valor_hora_id}, callback)
 		},
-		buscarvalorhoraporcentrodecusto: function (centro_custo_id, callback) {
-			var ValorHora = $resource('/cadastros/valorhora/api/centrocusto/:id/');
-			return ValorHora.query({id: centro_custo_id}, callback)
+		buscarvalorhoraporcliente: function (cliente_id, callback) {
+			var ValorHora = $resource('/cadastros/valorhora/api/cliente/:id/');
+			return ValorHora.query({id: cliente_id}, callback)
 		}
 	}
 });

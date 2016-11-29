@@ -53,8 +53,6 @@ class DemandaDetail(APIView):
         
         data = DemandaSerializer(demanda).data
         
-        data['data_aprovacao_demanda'] = formatar_data(demanda.data_aprovacao_demanda)
-
         itens_list = []
         for i in itens_faturamento:
             faturamento_demanda = FaturamentoDemandaSerializer(i).data
@@ -337,13 +335,15 @@ class DemandaDetail(APIView):
         
         centro_custo = None
         if 'centro_custo' in orcamento_dict:
-            centro_custo = orcamento_dict['centro_custo']
-            centro_custo = CentroCusto.objects.get(pk=centro_custo['id'])
+            if orcamento_dict['centro_custo']:
+                centro_custo = orcamento_dict['centro_custo']
+                centro_custo = CentroCusto.objects.get(pk=centro_custo['id'])
             del orcamento_dict['centro_custo']
         
         fases_list= None
         if 'fases' in orcamento_dict:
-            fases_list = orcamento_dict['fases']
+            if orcamento_dict['fases']:
+                fases_list = orcamento_dict['fases']
             del orcamento_dict['fases']
         
         orcamento = Orcamento(**orcamento_dict)
@@ -394,23 +394,23 @@ class DemandaDetail(APIView):
         
         for i in atividade_list:
             if 'remover' not in i or i['remover'] is False:
-                
-                responsavel = None
-                if 'responsavel' in i:
-                    responsavel = Funcionario.objects.get(pk=i['responsavel']['id'])
-                    del i['responsavel']
-                
-                centro_resultado = None
-                if 'centro_resultado' in i:
-                    centro_resultado = CentroResultado.objects.get(pk=i['centro_resultado']['id'])
-                    del i['centro_resultado']
-                
-                atividade = Atividade(**i)
-                atividade.responsavel = responsavel
-                atividade.centro_resultado = centro_resultado
-                atividade.demanda = demanda
-                
-                atividade.save()
+                if 'titulo' in i:
+                    responsavel = None
+                    if 'responsavel' in i:
+                        responsavel = Funcionario.objects.get(pk=i['responsavel']['id'])
+                        del i['responsavel']
+                    
+                    centro_resultado = None
+                    if 'centro_resultado' in i:
+                        centro_resultado = CentroResultado.objects.get(pk=i['centro_resultado']['id'])
+                        del i['centro_resultado']
+                    
+                    atividade = Atividade(**i)
+                    atividade.responsavel = responsavel
+                    atividade.centro_resultado = centro_resultado
+                    atividade.demanda = demanda
+                    
+                    atividade.save()
                 
             elif 'id' in i:
                 atividade = Atividade.objects.get(pk=i['id'])

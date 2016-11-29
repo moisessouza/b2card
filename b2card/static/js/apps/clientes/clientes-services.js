@@ -25,14 +25,6 @@ clientesservices.service('ClientesService', function($resource){
 		deletarcliente: function(cliente, callback){
 			var Cliente = $resource('/clientes/api/:id/');
 			return Cliente.remove({id: cliente.id}, callback);
-		},
-		deletartipovalorhora: function(id, callback) {
-			var Cliente = $resource('/clientes/api/valorhora/:id/');
-			return Cliente.remove({id:id}, callback);
-		},
-		deletarcentroresultado: function(id, callback){
-			var Cliente = $resource('/clientes/api/centroresultado/:id/');
-			return Cliente.remove({id:id}, callback);
 		}
 	}
 });

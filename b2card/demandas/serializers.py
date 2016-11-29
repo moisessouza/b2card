@@ -9,12 +9,12 @@ from demandas.models import Demanda, FaturamentoDemanda, Proposta, Tarefa, Obser
 from clientes.serializers import ClienteSerializer
 from recursos.serializers import FuncionarioSerializer
 from cadastros.serializers import CentroCustoSerializer, ValorHoraSerializer, CentroResultadoSerializer
-        
+    
 class DemandaSerializer (serializers.ModelSerializer):
     cliente = ClienteSerializer()
     class Meta:
         model = Demanda
-        fields = ('id', 'titulo','cliente','identificacao','descricao','tipo_demanda','status_demanda','codigo_cri', 'data_aprovacao_demanda')
+        fields = ('id', 'cliente','nome_demanda','descricao','status_demanda','codigo_demanda')
         
 class FaturamentoDemandaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -51,10 +51,9 @@ class OcorrenciaSerializer(serializers.ModelSerializer):
         fields = ('id', 'tipo_ocorrencia', 'descricao', 'nome_solicitante', 'data_solicitacao', 'data_prevista_conclusao', 'etapa', 'responsavel', 'descricao_motivo', 'observacao')
         
 class OrcamentoSerializer(serializers.ModelSerializer):
-    centro_custo = CentroCustoSerializer()
     class Meta:
         model = Orcamento
-        fields = ('id', 'centro_custo', 'descricao', 'total_orcamento')
+        fields = ('id', 'total_orcamento')
         
 class FaseSerializer(serializers.ModelSerializer):
     class Meta:

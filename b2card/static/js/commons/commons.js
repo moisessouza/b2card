@@ -67,9 +67,13 @@ commons.directive('gbMoney', function () {
 }).service('CommonsService', function(){
 	return {
 		formatarnumero: function (numero) {
-			return numero.toFixed(2).replace(/./g, function(c, i, a) {
-			    return i && c !== "." && ((a.length - i) % 3 === 0) ? '.' + c : c === "." ? ',' : c;
-			})
+			if (numero) {
+				return numero.toFixed(2).replace(/./g, function(c, i, a) {
+					return i && c !== "." && ((a.length - i) % 3 === 0) ? '.' + c : c === "." ? ',' : c;
+				})
+			} else {
+				return null;
+			}
 		},
 		stringparafloat: function(string) {
 			return parseFloat(string.replace(/\./g, '').replace(',','.'));

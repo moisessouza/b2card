@@ -8,6 +8,7 @@ from rest_framework.response import Response
 
 from datetime import datetime
 from rest_framework.decorators import api_view
+from cadastros.models import CentroCusto
 
 # Create your views here.
 
@@ -66,14 +67,6 @@ class ClienteDetail(APIView):
                       
         data = request.data
         
-        if 'tipovalorhora' in request.data:
-            tipos_valor_hora = data['tipovalorhora']
-            del data['tipovalorhora']
-            
-        if 'centroresultados' in data:
-            centro_resultados = data['centroresultados']
-            del data['centroresultados']
-        
         if 'dia_data_contratacao' in data:
             del data['dia_data_contratacao']
             del data['mes_data_contratacao']
@@ -84,17 +77,23 @@ class ClienteDetail(APIView):
             del data['mes_data_rescisao']
             del data['ano_data_rescisao']
         
+        centro_custo = None
+        if 'centro_custo' in data:
+            if data['centro_custo']['id']:
+                centro_custo = CentroCusto.objects.get(pk=data['centro_custo']['id'])
+            del data['centro_custo']
+            
         cliente = Cliente(**data)
         
+        cliente.centro_custo = centro_custo
+        
         data_string = request.data['data_contratacao']
-        #data_string = data_string[:data_string.index('T')]
         data = datetime.strptime(data_string, '%d/%m/%Y')
         cliente.data_contratacao = data.date()
         
         if 'data_rescisao' in request.data:
             data_string = request.data['data_rescisao']
             if data_string is not None:
-                #data_string = data_string[:data_string.index('T')]
                 data = datetime.strptime(data_string, '%d/%m/%Y')
                 cliente.data_rescisao = data.date()
         
