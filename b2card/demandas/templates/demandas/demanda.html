@@ -133,7 +133,7 @@
 								    <select id="unidade_administrativa" name="unidade_administrativa" class="form-control" ng-model="$ctrl.demanda.unidade_administrativa.id" ng-options="u.id as (u.codigo + ' - ' + u.nome) for u in $ctrl.listaunidadeadministrativas" required>
 								    	<option value="">Selecione uma unidade...</option>
 								    </select>
-								    <span class="red" ng-show="demanda.codigo_demanda.$invalid">Unidade administrativa é obrigatório.</span>
+								    <span class="red" ng-show="demanda.unidade_administrativa.$invalid">Unidade administrativa é obrigatório.</span>
 								</div>
 							</div>
 						</div>
