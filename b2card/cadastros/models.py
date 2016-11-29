@@ -32,3 +32,7 @@ class Vigencia(models.Model):
     data_fim = models.DateField()
     valor = models.FloatField()
     valor_hora = models.ForeignKey(ValorHora, default=None, on_delete=CASCADE)
+    
+class UnidadeAdministrativa(models.Model):
+    codigo = models.CharField(max_length=10, default=None)
+    nome = models.CharField(max_length=30, default=None)

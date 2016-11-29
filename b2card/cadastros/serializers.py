@@ -4,7 +4,8 @@ Created on 14 de set de 2016
 @author: moi09
 '''
 from rest_framework import serializers
-from cadastros.models import TipoHora, CentroCusto, ContaGerencial, NaturezaOperacao, ValorHora, Vigencia
+from cadastros.models import TipoHora, CentroCusto, ContaGerencial, NaturezaOperacao, ValorHora, Vigencia,\
+    UnidadeAdministrativa
         
 class TipoHoraSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,3 +47,8 @@ class VigenciaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vigencia
         fields = ('id', 'data_inicio', 'data_fim', 'valor')
+        
+class UnidadeAdministrativaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UnidadeAdministrativa
+        fields = ('id', 'codigo', 'nome')
