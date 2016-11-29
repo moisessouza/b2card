@@ -3,7 +3,7 @@ from django.db import models
 from recursos.models import Funcionario
 from clientes.models import Cliente
 from datetime import datetime
-from cadastros.models import CentroCusto, ValorHora, CentroResultado
+from cadastros.models import CentroCusto, ValorHora, CentroResultado, UnidadeAdministrativa
 
 # Create your models here.
 
@@ -36,6 +36,7 @@ class Demanda(models.Model):
     descricao = models.TextField(default=None, null=True)
     status_demanda = models.CharField(max_length=1, choices=STATUS_DEMANDA, null=True)
     codigo_demanda = models.CharField(max_length=12, null=True)
+    unidade_administrativa = models.ForeignKey(UnidadeAdministrativa, default=None, null=True)
     
 class Atividade(models.Model):
     titulo = models.CharField(max_length=100)

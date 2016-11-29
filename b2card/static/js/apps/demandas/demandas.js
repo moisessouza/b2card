@@ -1,10 +1,10 @@
 "use strict";
 
 var demandas = angular.module('demandas', ['demandas-services', 'centrocusto-services', 'valorhora-services', 
-                                           'centroresultado-services', 'commons', 'ui.bootstrap', 'ui.mask']);
+                                           'centroresultado-services', 'unidadeadministrativa-services', 'commons', 'ui.bootstrap', 'ui.mask']);
 
 demandas.controller('DemandaController', function ($scope, $window, $uibModal, $log, DemandaService, 
-		CentroCustoService, ValorHoraService, CommonsService, CentroResultadoService){
+		CentroCustoService, ValorHoraService, CommonsService, CentroResultadoService, UnidadeAdministrativaService){
 	var $ctrl = this; 
 	
 	var messageinfo = function (msg){
@@ -256,6 +256,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	$ctrl.listaclientes= DemandaService.buscarclientes();
 	$ctrl.listafuncionarios = DemandaService.buscarfuncionarios();
 	$ctrl.listacentroresultados = CentroResultadoService.buscarcentroresultados();
+	$ctrl.listaunidadeadministrativas = UnidadeAdministrativaService.buscarunidadeadministrativas();
 	
 	$ctrl.changevalorhora = function (itemfase) {
 		itemfase.valor_selecionado = CommonsService.formatarnumero(0);

@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+encoding//cadastros/migrations/0007_unidadeadministrativa.py=utf-8
 encoding//demandas/migrations/0001_initial.py=utf-8
 encoding//demandas/migrations/0013_auto_20161108_1053.py=utf-8
 encoding//demandas/migrations/0014_auto_20161109_1155.py=utf-8
@@ -7,4 +8,5 @@ encoding//demandas/migrations/0016_auto_20161110_1221.py=utf-8
 encoding//demandas/migrations/0018_demanda_centro_resultado.py=utf-8
 encoding//demandas/migrations/0019_auto_20161115_1204.py=utf-8
 encoding//demandas/migrations/0020_auto_20161115_1602.py=utf-8
+encoding//demandas/migrations/0035_demanda_unidade_administrativa.py=utf-8
 encoding//demandas/models.py=utf-8

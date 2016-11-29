@@ -9,7 +9,7 @@ from demandas.serializers import DemandaSerializer, FaturamentoDemandaSerializer
     ItemFaseSerializer, FaseSerializer, AtividadeSerializer, ValorHoraFaturamentoSerializer
 from utils.utils import converter_string_para_data, formatar_data, converter_string_para_float
 from recursos.models import Funcionario
-from cadastros.models import CentroCusto, ValorHora, CentroResultado
+from cadastros.models import CentroCusto, ValorHora, CentroResultado, UnidadeAdministrativa
 from rest_framework.decorators import api_view
 from django.db.models.aggregates import Sum
 
@@ -423,7 +423,10 @@ class DemandaDetail(APIView):
         
         cliente = data['cliente']
         cliente = Cliente.objects.get(pk=cliente['id'])
-    
+        
+        unidade_administrativa = data['unidade_administrativa']
+        unidade_administrativa = UnidadeAdministrativa.objects.get(pk=unidade_administrativa['id'])
+        
         itens_faturamento = data['itens_faturamento']
         propostas = data['propostas']
         tarefas = data['tarefas']
@@ -440,9 +443,11 @@ class DemandaDetail(APIView):
         del data['ocorrencias']
         del data['orcamento']
         del data['atividades']
+        del data['unidade_administrativa']
        
         demanda = Demanda(**data)
         demanda.cliente = cliente
+        demanda.unidade_administrativa = unidade_administrativa
        
         if 'data_aprovacao_demanda' in data:
             data_string = data['data_aprovacao_demanda']

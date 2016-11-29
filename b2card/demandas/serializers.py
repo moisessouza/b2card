@@ -8,13 +8,15 @@ from demandas.models import Demanda, FaturamentoDemanda, Proposta, Tarefa, Obser
     Orcamento, Fase, ItemFase, Atividade, ValorHoraFaturamento
 from clientes.serializers import ClienteSerializer
 from recursos.serializers import FuncionarioSerializer
-from cadastros.serializers import CentroCustoSerializer, ValorHoraSerializer, CentroResultadoSerializer
+from cadastros.serializers import CentroCustoSerializer, ValorHoraSerializer, CentroResultadoSerializer,\
+    UnidadeAdministrativaSerializer
     
 class DemandaSerializer (serializers.ModelSerializer):
     cliente = ClienteSerializer()
+    unidade_administrativa = UnidadeAdministrativaSerializer()
     class Meta:
         model = Demanda
-        fields = ('id', 'cliente','nome_demanda','descricao','status_demanda','codigo_demanda')
+        fields = ('id', 'cliente','nome_demanda','descricao','status_demanda','codigo_demanda', 'unidade_administrativa')
         
 class FaturamentoDemandaSerializer(serializers.ModelSerializer):
     class Meta:
