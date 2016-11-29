@@ -40,7 +40,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	}
 	
 	var configurarorcamento = function (data) {
-		if (data.orcamento){
+		if (data.orcamento && data.orcamento.centro_custo){
 			
 			var idcentrocusto = data.orcamento.centro_custo.id;
 			$ctrl.listavalorhora = ValorHoraService.buscarvalorhoraporcentrodecusto(idcentrocusto);
