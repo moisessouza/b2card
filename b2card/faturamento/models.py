@@ -26,10 +26,9 @@ class ContasReceber(models.Model):
     
 class Parcela(models.Model):
     descricao = models.CharField(max_length = 200)
-    numero_nota = models.CharField(max_length = 30, default=None)
     valor_parcela = models.CharField(max_length=30, null=True)
     status = models.CharField(max_length=2, choices=STATUS, null=True)
-    data_previsto_faturamento = models.DateField(null=True)
+    data_previsto_parcela = models.DateField(null=True)
     contas_receber = models.ForeignKey(ContasReceber, default=None, null=True)
 
 class ParcelaValorHora(models.Model):

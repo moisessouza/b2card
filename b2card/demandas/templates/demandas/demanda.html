@@ -4,6 +4,7 @@
 {% block script %}
 	<script src="/static/js/apps/demandas/demandas.js"></script>
 	<script src="/static/js/apps/demandas/demandas-services.js"></script>
+	<script src="/static/js/apps/faturamento/parcelas.js"></script>
 	<script src="/static/js/apps/cadastros/centrocusto/centrocusto-services.js"></script>
 	<script src="/static/js/apps/cadastros/centroresultado/centroresultado-services.js"></script>
 	<script src="/static/js/apps/cadastros/unidadeadministrativa/unidadeadministrativa-services.js"></script>
@@ -73,6 +74,7 @@
 	  <li><a data-toggle="tab" href="#tarefas">Tarefas</a></li>
 	  <li><a data-toggle="tab" href="#observacoes">Observações</a></li>
 	  <li><a data-toggle="tab" href="#ocorrencias">Ocorrências</a></li>
+	  <li><a data-toggle="tab" href="#contasreceber">Contas a receber</a></li>
 	</ul>
 	<div class="tab-content">
 		<div id="dadosdemanda" class="tab-pane in active">
@@ -924,6 +926,214 @@
 					</div>
 				</div>
 			</form>
+		</div>
+		<div id="contasreceber" ng-controller="FaturamentoController as $ctrl" class="tab-pane">
+		
+			<div class="panel panel-primary form-group-sm">
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-sm-3">
+							<div class="input-group">
+								<span class="input-group-addon" for="tipo">Tipo</span> 
+							    <select class="form-control" id="tipo" name="tipo" ng-model="$ctrl.demanda.contasreceber.tipo" aria-describedby="basic-addon1">
+							    	<option value="">Selecione tipo...</option>
+							    	<option value="P">Parcela</option>
+							    	<option value="M">Medição</option>
+							   	</select>
+							</div>
+						</div>
+						<div class="col-sm-3">
+							<div class="input-group" ng-show="$ctrl.demanda.contasreceber.tipo=='P'">
+								<span class="input-group-addon" for="tipo">Numero de vezes</span> 
+							    <input type="number" class="form-control"/>
+							</div>
+						</div>
+						<div class="col-sm-3">
+						<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.alertteste()" ng-show="$ctrl.demanda.contasreceber.tipo=='P'">
+					  		<span class="glyphicon"></span> Gerar parcelas
+						</button>
+						</div>
+					</div>
+					
+					<button type="button" class="btn btn-default margin" ng-click="$ctrl.novo()" ng-show="$ctrl.demanda.contasreceber.tipo">Nova parcela</button>
+					
+					<div class="panel panel-default form-group-sm margin-top" ng-show="$ctrl.demanda.contasreceber.tipo == 'P' && $ctrl.parcela">
+						<div class="panel-heading">
+							Dados da parcela
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label for="descricao_motivo">Descrição</label>
+										<input type="text" class="form-control"/>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label for="data_previsto_parcela">Data previsto parcela</label>
+										<input type="text" ui-mask="99/99/9999" class="form-control" ng-model="$ctrl.parcela.data_previsto_parcela" model-view-value="true"/>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label for="descricao_motivo">Valor da parcela</label>
+										<input type="text" class="form-control"/>
+									</div>
+								</div>
+							</div>
+							<table class="table table-sm table-bordered table-striped table-highlight" ng-show="$ctrl.demanda.contasreceber.tipo">
+								<thead>
+									<tr class="active">
+										<th>Centro de resultado</th>
+										<th>Horas</th>
+										<th>Valor total</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>
+											Desenvolvimento
+										</td>
+										<td>
+											5
+										</td>
+										<td>
+											2.000,00
+										</td>
+									</tr>
+									<tr>
+										<td>
+											Homologação
+										</td>
+										<td>
+											5
+										</td>
+										<td>
+											2.000,00
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<button type="button" class="btn btn-default margin">Incluir</button>
+						</div>
+					</div>
+					
+					<div class="panel panel-default form-group-sm margin-top" ng-show="$ctrl.demanda.contasreceber.tipo == 'M' && $ctrl.parcela">
+						<div class="panel-heading">
+							Dados da Medição
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label for="descricao_motivo">Descrição</label>
+										<input type="text" class="form-control"/>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label for="data_previsto_parcela">Data previsto parcela</label>
+										<input type="text" ui-mask="99/99/9999" class="form-control" ng-model="$ctrl.parcela.data_previsto_parcela" model-view-value="true"/>
+									</div>
+								</div>
+							</div>
+							
+							<button type="button" class="btn btn-primary margin">
+						  		<span class="glyphicon glyphicon-plus"></span> Adicionar valor hora
+							</button>
+							
+							<table class="table table-sm table-bordered table-striped table-highlight">
+								<thead>
+									<tr class="active">
+										<th>Valor hora</th>
+										<th>Valor</th>
+										<th>Quantidade de horas</th>
+										<th>Valor faturamento</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>
+											<select id="cargo" name="cargo" ng-model="valorhora.valor_hora.id" ng-change="$ctrl.changevalorhoraitem(valorhora, item_faturamento)" class="form-control" ng-options="l.id as l.descricao for l in $ctrl.listavalorhora">
+									    		<option value="">Selecione um tipo...</option>
+									    	</select>
+										</td>
+										<td>
+											<input type="text" id="comissao_comercial" name="comissao_comercial" ng-model="valorhora.valor" ng-change="$ctrl.changevalorhoraitem(valorhora, item_faturamento)" maxlength="30" gb-money class="form-control" disabled/>
+										</td>
+										<td>
+											<input type="number" id="comissao_comercial" name="comissao_comercial" ng-model="valorhora.quantidade_horas" ng-change="$ctrl.changevalorhoraitem(valorhora, item_faturamento)" class="form-control"/>
+										</td>
+										<td>
+											<input type="text" id="valor_faturamento" name="valor_faturamento" ng-model="valorhora.valor_faturamento" maxlength="30" gb-money class="form-control" disabled/>
+										</td>
+										<td>
+											<button type="button" class="btn btn-default" ng-click="$ctrl.remover(valorhora); $ctrl.recalcularfaturamentototal(item_faturamento);">
+												<span class="glyphicon glyphicon-trash"></span>
+											</button>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="row">
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label for="descricao_motivo">Valor total</label>
+										<input type="text" class="form-control" disabled/>
+									</div>
+								</div>
+							</div>
+							<button type="button" class="btn btn-default">Incluir</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+				
+			
+			<table class="table table-sm table-bordered table-striped table-highlight" ng-show="$ctrl.demanda.contasreceber.tipo">
+				<thead>
+					<tr class="active">
+						<th>ID</th>
+						<th>Descrição</th>
+						<th>Data previsto parcela</th>
+						<th>Valor da parcela</th>
+						<th></th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="col-sm-1">
+							<input type="text" id="id" name="id" maxlength="30" class="form-control" disabled/>
+						</td>
+						<td class="col-sm-4">
+							<input type="text" id="descricao" name="descricao" maxlength="30" class="form-control" disabled/>
+						</td>
+						<td class="col-sm-4">
+							<input type="text" id="descricao" name="descricao" maxlength="30" gb-money class="form-control" disabled/>
+						</td>
+						<td class="col-sm-4">
+							<input type="text" id="valor_total" name="valor_total" maxlength="30" gb-money class="form-control" disabled/>
+						</td>
+						<td>
+							<button type="button" class="btn btn-default">
+								<span class="glyphicon glyphicon-edit"></span>
+							</button>
+						</td>
+						<td>
+							<button type="button" class="btn btn-default">
+								<span class="glyphicon glyphicon-trash"></span>
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		
 		</div>
 	</div>
 	

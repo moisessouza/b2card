@@ -1,6 +1,6 @@
 "use strict";
 
-var demandas = angular.module('demandas', ['demandas-services', 'centrocusto-services', 'valorhora-services', 
+var demandas = angular.module('demandas', ['demandas-services', 'centrocusto-services', 'faturamento', 'valorhora-services', 
                                            'centroresultado-services', 'unidadeadministrativa-services', 'commons', 'ui.bootstrap', 'ui.mask']);
 
 demandas.controller('DemandaController', function ($scope, $window, $uibModal, $log, DemandaService, 
