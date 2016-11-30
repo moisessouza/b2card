@@ -67,7 +67,7 @@ commons.directive('gbMoney', function () {
 }).service('CommonsService', function(){
 	return {
 		formatarnumero: function (numero) {
-			if (numero) {
+			if (numero || numero == 0) {
 				return numero.toFixed(2).replace(/./g, function(c, i, a) {
 					return i && c !== "." && ((a.length - i) % 3 === 0) ? '.' + c : c === "." ? ',' : c;
 				})
@@ -89,6 +89,13 @@ commons.directive('gbMoney', function () {
 			var ano = data.getFullYear();
 			
 			return [dia, mes, ano].join('/');	
+		},
+		arrendodar: function (numero){
+			if (numero){
+				return numero.toFixed(2);
+			} else {
+				return null;
+			}
 		}
 	}
 });

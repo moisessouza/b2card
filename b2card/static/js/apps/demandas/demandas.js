@@ -25,7 +25,6 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		}
 	};
 	
-	$ctrl.fase = {};
 	$ctrl.atividade = {};
 	
 	var configuraritensfaturamento = function (data) {
@@ -75,6 +74,29 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		if ($ctrl.demanda.cliente){
 			$ctrl.listavalorhora = ValorHoraService.buscarvalorhoraporcliente($ctrl.demanda.cliente.id);
 		}
+	}
+	
+	$ctrl.modalcontasreceber = function (){
+			var modalInstance = $uibModal.open({
+			animation : $ctrl.animationsEnabled,
+			ariaLabelledBy : 'modal-title',
+			ariaDescribedBy : 'modal-body',
+			templateUrl : '/static/modal/modalContasReceber.html',
+			controller : 'ModalParcelasController',
+			controllerAs : '$ctrl',
+			size : 'lg',
+			resolve : {
+				demanda : function() {
+					return $ctrl.demanda;
+				}
+			}
+		});
+
+		modalInstance.result.then(function(proposta) {
+			//$ctrl.listacargos = RecursosService.buscarcargos();
+		}, function() {
+			// $log.info('Modal dismissed at: ' + new Date());
+		});
 	}
 	
 	$ctrl.changeatividade = function () {
@@ -187,6 +209,10 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		$ctrl.fase = {};
 	}
 	
+	$ctrl.cancelarfase = function () {
+		$ctrl.fase = null;
+	}
+	
 	$ctrl.editarfase = function (fase) {
 		$ctrl.fase = fase;
 	}
@@ -201,10 +227,26 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		
 		if ($ctrl.demanda.orcamento.fases.indexOf($ctrl.fase) < 0
 				&& $ctrl.fase.descricao){
+			
+			if ( $ctrl.fase.itensfase){
+				for (var i in $ctrl.fase.itensfase){
+					var itemfase = $ctrl.fase.itensfase[i];
+					for (var j in $ctrl.listavalorhora){
+				
+						var valorhora = $ctrl.listavalorhora[j];
+						if (valorhora.id == itemfase.valor_hora.id){
+							itemfase.valor_hora.descricao = valorhora.descricao;
+							break;
+						}
+					}
+					
+				}
+			}
+			
 			$ctrl.demanda.orcamento.fases.push($ctrl.fase);	
 		}
 		
-		$ctrl.fase = {};
+		$ctrl.fase = null;
 		
 		$ctrl.calcularvalortotalorcamento();
 	}

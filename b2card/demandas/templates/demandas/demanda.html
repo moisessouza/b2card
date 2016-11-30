@@ -168,11 +168,18 @@
 						    		<input type="text" id="total_orcamento" name="total_orcamento"  ng-model="$ctrl.demanda.orcamento.total_orcamento" class="form-control" disabled="disabled"/>
 								</div>
 							</div>
+							<div class="col-sm-6">	
+								<button class="btn btn-sm btn-primary" ng-click="$ctrl.modalcontasreceber()" ng-show="$ctrl.demanda.orcamento.id && $ctrl.demanda.orcamento.total_orcamento">Gerar contas a receber</button>
+							</div>
 						</div>
 					</div>
 				</div>
-										
-				<div class="panel panel-primary">
+				
+				<button type="button" class="btn btn-default margin" ng-click="$ctrl.novafase()">
+			  		Nova fase
+				</button>			
+							
+				<div class="panel panel-primary" ng-show="$ctrl.fase">
 					<div class="panel-heading">
 						<strong>{{$ctrl.fase.descricao ? $ctrl.fase.descricao : '(Sem descrição)'}}</strong>
 					</div>
@@ -232,16 +239,15 @@
 						    <input type="text" id="descricao" name="descricao" ng-model="$ctrl.fase.valor_total" class="form-control" disabled required/>
 						</div>
 						
+						<button type="button" class="btn btn-default margin" ng-click="$ctrl.salvarfase()" ng-disabled="orcamento.$invalid">
+					  		Incluir
+						</button>
+						<button type="button" class="btn btn-default margin" ng-click="$ctrl.cancelarfase()">
+					  		Cancelar
+						</button>
+						
 					</div>
 				</div>
-				
-				<button type="button" class="btn btn-default margin" ng-click="$ctrl.salvarfase()" ng-disabled="orcamento.$invalid">
-			  		Incluir
-				</button>
-				
-				<button type="button" class="btn btn-default margin" ng-click="$ctrl.novafase()">
-			  		Novo
-				</button>
 				
 				<table class="table table-sm table-bordered table-striped table-highlight" style="text-align: center;">
 					<thead>

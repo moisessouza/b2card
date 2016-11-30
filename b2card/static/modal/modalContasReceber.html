@@ -1,0 +1,88 @@
+<meta charset="utf-8">
+<div class="modal-header">
+	<h3 class="modal-title" id="modal-title">Geração de contas a receber</h3>
+</div>
+<div class="modal-body" id="modal-body">
+	
+	<div class="panel panel-primary form-group-sm">
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="input-group">
+						<span class="input-group-addon" for="tipo">Tipo</span> 
+					    <select class="form-control" id="tipo" name="tipo" ng-model="$ctrl.demanda.contasreceber.tipo" aria-describedby="basic-addon1" required>
+					    	<option value="">Selecione tipo...</option>
+					    	<option value="P">Parcela</option>
+					    	<option value="M">Medição</option>
+					   	</select>
+					</div>
+				</div>
+				<div class="col-sm-4">
+					<div class="input-group" ng-show="$ctrl.demanda.contasreceber.tipo=='P'">
+						<span class="input-group-addon" for="tipo">Numero de vezes</span> 
+					    <input type="number" ng-model="$ctrl.numero_vezes" class="form-control" required/>
+					</div>
+				</div>
+				<div class="col-sm-4">
+					<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.gerarparcelas()" ng-disabled="!$ctrl.numero_vezes" ng-show="$ctrl.demanda.contasreceber.tipo=='P'">
+				  		<span class="glyphicon"></span> Gerar parcelas
+					</button>
+				</div>
+			</div>
+			<div class="row" ng-show="$ctrl.demanda.contasreceber.tipo && $ctrl.parcelas">
+				<div class="col-sm-4">
+					<div class="form-group">
+						<label for="total_orcamento">Total orcamento</label>
+						<input type="text" id="total_orcamento" name="total_orcamento" ng-model="$ctrl.total_orcamento" class="form-control" disabled/>
+					</div>
+				</div>
+				<div class="col-sm-4">
+					<div class="form-group">
+						<label for="total_orcamento">Valor restante</label>
+						<input type="text" id="total_orcamento" name="total_orcamento" ng-model="$ctrl.valor_restante" class="form-control" disabled/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<button type="button" class="btn btn-default" ng-click="$ctrl.adicionarparcela()" ng-show="$ctrl.demanda.contasreceber.tipo && $ctrl.parcelas">
+		<span class="glyphicon glyphicon-plus"></span> Adicionar parcela
+	</button>
+		
+	<form name="parcelas">
+		<table class="table table-sm table-bordered table-striped table-highlight margin-top" ng-show="$ctrl.demanda.contasreceber.tipo && $ctrl.parcelas">
+			<thead>
+				<tr class="active">
+					<th>Descrição</th>
+					<th>Data prevista parcela</th>
+					<th>Valor da parcela</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="parcela in $ctrl.parcelas" ng-show="!parcela.remover">
+					<td class="col-sm-4">
+						<input type="text" id="descricao" ng-model="parcela.descricao" name="descricao" maxlength="30" class="form-control" required/>
+					</td>
+					<td class="col-sm-4">
+						<input type="text" id="data_prevista" ng-model="parcela.data_previsto_parcela" name="data_prevista" maxlength="30" ng-model="parcela" ui-mask="99/99/9999" model-view-value="true"  class="form-control" required/>
+					</td>
+					<td class="col-sm-4">
+						<input type="text" id="valor_parcela" ng-model="parcela.valor_parcela" name="valor_parcela" maxlength="30" ng-change="$ctrl.calcularvalorrestante()" gb-money class="form-control" required/>
+					</td>
+					<td>
+						<button type="button" class="btn btn-default" ng-click="$ctrl.remover(parcela, $ctrl.calcularvalorrestante)">
+							<span class="glyphicon glyphicon-trash"></span>
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<button type="button" class="btn btn-primary margin-top" ng-disabled="parcelas.$invalid" ng-show="$ctrl.demanda.contasreceber.tipo && $ctrl.parcelas">Gravar</button>
+	</form>
+	
+</div>
+<div class="modal-footer">
+  	<button class="btn btn-primary" type="button" ng-click="$ctrl.fechar()">Sair</button>
+</div> 
