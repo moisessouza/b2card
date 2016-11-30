@@ -248,7 +248,7 @@
 						<tr class="active">
 							<th>ID</th>
 							<th>Fase</th>
-							<th>Valor final</th>
+							<th></th>
 							<th></th>
 							<th></th>
 						</tr>
@@ -258,11 +258,34 @@
 							<td class="col-sm-1">
 								<input type="text" id="id" name="id" ng-model="fase.id" maxlength="30" class="form-control" disabled/>
 							</td>
-							<td class="col-sm-6">
+							<td class="col-sm-2">
 								<input type="text" id="descricao" name="descricao" ng-model="fase.descricao" maxlength="30" gb-money class="form-control" disabled/>
 							</td>
-							<td class="col-sm-6">
-								<input type="text" id="valor_total" name="valor_total" ng-model="fase.valor_total" maxlength="30" gb-money class="form-control" disabled/>
+							<td class="col-sm-8">
+								<table class="table table-sm table-bordered table-striped table-highlight">
+									<thead>
+										<tr>
+											<th>Valor hora</th>
+											<th>Valor</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="itemfase in fase.itensfase" ng-show="!itemfase.remover">
+											<td>
+												<select id="valorhora" name="valorhora" ng-model="itemfase.valor_hora.id" disabled class="form-control" ng-options="v.id as v.descricao for v in $ctrl.listavalorhora">
+										    		<option value="">Selecione um tipo...</option>
+										    	</select>
+											</td>
+											<td>
+												<input type="text" id="valor_faturamento" name="valor_faturamento" ng-model="itemfase.valor_total" maxlength="30" gb-money class="form-control" disabled/>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								<div class="input-group">
+									<span  class="input-group-addon" for="valor_total">Valor final</span> 
+									<input type="text" id="valor_total" name="valor_total" ng-model="fase.valor_total" maxlength="30" gb-money class="form-control" disabled/>
+								</div>
 							</td>
 							<td>
 								<button type="button" class="btn btn-default" ng-click="$ctrl.editarfase(fase)">
@@ -955,7 +978,7 @@
 						</div>
 					</div>
 					
-					<button type="button" class="btn btn-default margin" ng-click="$ctrl.novo()" ng-show="$ctrl.demanda.contasreceber.tipo">Nova parcela</button>
+					<button type="button" class="btn btn-default margin-top" ng-click="$ctrl.novo()" ng-show="$ctrl.demanda.contasreceber.tipo">Nova parcela</button>
 					
 					<div class="panel panel-default form-group-sm margin-top" ng-show="$ctrl.demanda.contasreceber.tipo == 'P' && $ctrl.parcela">
 						<div class="panel-heading">
