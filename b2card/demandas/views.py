@@ -12,6 +12,8 @@ from recursos.models import Funcionario
 from cadastros.models import CentroCusto, ValorHora, CentroResultado, UnidadeAdministrativa
 from rest_framework.decorators import api_view
 from django.db.models.aggregates import Sum
+from faturamento.models import Parcela
+from faturamento.serializers import ParcelaSerializer
 
 # Create your views here.
 
@@ -50,6 +52,7 @@ class DemandaDetail(APIView):
         ocorrencias = Ocorrencia.objects.filter(demanda__id=demanda_id)
         orcamentos = Orcamento.objects.filter(demanda__id=demanda_id)
         atividades = Atividade.objects.filter(demanda__id=demanda_id)
+        parcelas = Parcela.objects.filter(demanda__id=demanda_id)
         
         data = DemandaSerializer(demanda).data
         
@@ -124,6 +127,12 @@ class DemandaDetail(APIView):
         atividade_list = []
         if atividades:
             atividade_list = AtividadeSerializer(atividades, many=True).data    
+            
+        parcelas_list = []
+        for i in parcelas:
+            parcela = ParcelaSerializer(i).data
+            parcela['data_previsto_parcela'] = formatar_data(i.data_previsto_parcela)
+            parcelas_list.append(parcela)
         
         data['itens_faturamento'] = itens_list
         data['propostas'] = propostas_list
@@ -132,6 +141,7 @@ class DemandaDetail(APIView):
         data['ocorrencias'] = ocorrencias_list
         data['orcamento'] = orcamento_dict
         data['atividades'] = atividade_list
+        data['parcelas'] = parcelas_list
         
         return data
 

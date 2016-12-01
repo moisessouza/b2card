@@ -1,9 +1,12 @@
 "use strict";
 
-var faturamento = angular.module('faturamento', ['commons', 'ui.bootstrap', 'ui.mask', 'parcela-services']);
+//var faturamento = angular.module('faturamento', ['commons', 'ui.bootstrap', 'ui.mask', 'demandas', 'parcela-services']);
 
-faturamento.controller('FaturamentoController', function ($scope, $window){
+demandas.controller('ParcelaController', function ($scope, $window, $controller, share, CommonsService){
+	
 	var $ctrl = this;
+	
+	$ctrl.demanda = share.demanda;
 	
 	$ctrl.novo = function () {
 		$ctrl.parcela = {};
@@ -81,8 +84,9 @@ faturamento.controller('FaturamentoController', function ($scope, $window){
 	
 	$ctrl.gravarparcelas = function () {
 		ParcelaService.gravarparcelas($ctrl.parcelas, function (data){
+			$ctrl.parcelas = data;
 			$window.alert('Parcelas geradas com sucesso!');
-			$uibModalInstance.close();	
+			$uibModalInstance.close($ctrl.parcelas);	
 		});
 	}
 	
