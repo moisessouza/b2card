@@ -301,6 +301,10 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			callback();
 		}
 	}
+	
+	$ctrl.adicionarparcela = function (){
+		$ctrl.demanda.parcelas.push({});
+	}
 		
 	$ctrl.listaclientes= DemandaService.buscarclientes();
 	$ctrl.listafuncionarios = DemandaService.buscarfuncionarios();

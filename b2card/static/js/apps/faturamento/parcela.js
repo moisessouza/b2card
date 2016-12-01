@@ -2,21 +2,7 @@
 
 //var faturamento = angular.module('faturamento', ['commons', 'ui.bootstrap', 'ui.mask', 'demandas', 'parcela-services']);
 
-demandas.controller('ParcelaController', function ($scope, $window, $controller, share, CommonsService){
-	
-	var $ctrl = this;
-	
-	$ctrl.demanda = share.demanda;
-	
-	$ctrl.novo = function () {
-		$ctrl.parcela = {};
-	}
-	
-	$ctrl.alertteste= function () {
-		alert('Parcelas geradas');
-	}
-		
-}).controller('ModalParcelasController', function ($scope, $window, $uibModalInstance, demanda, CommonsService, ParcelaService){
+demandas.controller('ModalParcelasController', function ($scope, $window, $uibModalInstance, demanda, CommonsService, ParcelaService){
 	var $ctrl = this;
 	
 	$ctrl.total_orcamento = demanda.orcamento.total_orcamento;
