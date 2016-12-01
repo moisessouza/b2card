@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from faturamento.models import Parcela
 from faturamento.serializers import ParcelaSerializer
 from rest_framework.response import Response
-from utils.utils import converter_string_para_float, converter_string_para_data
+from utils.utils import converter_string_para_float, converter_string_para_data, formatar_data
 from demandas.models import Demanda
 
 # Create your views here.
@@ -12,7 +12,7 @@ class ParcelaList(APIView):
     
     def post(self, request, format=None):
         
-        parcelas = []
+        parcela_list = []
         
         for i in request.data:
             if 'remover' not in i or i['remover'] == False:
@@ -38,12 +38,12 @@ class ParcelaList(APIView):
                 parcela.demanda = demanda
                 parcela.save()
                 
-                parcelas.append(parcela)
+                serializer = ParcelaSerializer(parcela).data
+                serializer['data_previsto_parcela'] = formatar_data(parcela.data_previsto_parcela)
+                parcela_list.append(serializer)
                 
             elif 'id' in i:
                 parcela = Parcela.objects.get(pk=i['id'])
                 parcela.delete()
-                
-        serializer = ParcelaSerializer(parcelas, many=True)
         
-        return Response(serializer.data)
+        return Response(parcela_list)

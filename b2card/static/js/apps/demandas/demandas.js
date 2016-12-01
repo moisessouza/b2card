@@ -1,10 +1,14 @@
 "use strict";
 
-var demandas = angular.module('demandas', ['demandas-services', 'centrocusto-services', 'faturamento', 'valorhora-services', 
+var demandas = angular.module('demandas', ['demandas-services', 'centrocusto-services', 'valorhora-services', 'parcela-services',
                                            'centroresultado-services', 'unidadeadministrativa-services', 'commons', 'ui.bootstrap', 'ui.mask']);
 
+demandas.factory('share', function(){
+	  return {};
+});
+
 demandas.controller('DemandaController', function ($scope, $window, $uibModal, $log, DemandaService, 
-		CentroCustoService, ValorHoraService, CommonsService, CentroResultadoService, UnidadeAdministrativaService){
+		CentroCustoService, ValorHoraService, CommonsService, CentroResultadoService, UnidadeAdministrativaService, share){
 	var $ctrl = this; 
 	
 	var messageinfo = function (msg){
@@ -92,8 +96,9 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			}
 		});
 
-		modalInstance.result.then(function(proposta) {
-			//$ctrl.listacargos = RecursosService.buscarcargos();
+		modalInstance.result.then(function(parcelas) {
+			$ctrl.demanda.parcelas = parcelas;
+			configurarparcelas($ctrl.demanda);
 		}, function() {
 			// $log.info('Modal dismissed at: ' + new Date());
 		});
@@ -140,7 +145,6 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	if (demanda_id) {
 		$ctrl.demanda = DemandaService.buscardemanda(demanda_id, function (data){
 			
-			console.log(data);
 			$ctrl.show=true;
 			
 			var ocorrencias = data.ocorrencias;
@@ -155,10 +159,13 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			
 			configurarorcamento(data);
 			configuraritensfaturamento(data);
+			configurarparcelas(data);
 			
 			$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(demanda_id, $ctrl.changeatividade);
 			
 		});
+		
+		share.demanda = $ctrl.demanda;
 		
 	} else {
 		$ctrl.demanda = {
@@ -435,12 +442,23 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		messageinfo("salvando...");
 		
 		DemandaService.salvardemanda($ctrl.demanda, function(data){
+			share.demanda = data;
 			$ctrl.demanda = data;
 			configuraritensfaturamento(data);
 			configurarorcamento(data);
+			configurarparcelas(data)
 			$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(data.id, $ctrl.changeatividade);
 			messagesuccess('salvo!')
 		});
+	}
+	
+	var configurarparcelas = function (data) {
+		if (data.parcelas) {
+			for ( var i in data.parcelas) {
+				var parcela = $ctrl.demanda.parcelas[i];
+				parcela.valor_parcela =  CommonsService.formatarnumero(parcela.valor_parcela);
+			}
+		}
 	}
 	
 	$ctrl.deletar = function () {
