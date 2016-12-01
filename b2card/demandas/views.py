@@ -499,4 +499,10 @@ def buscar_total_horas_custo_resultado_por_demanda(request, demanda_id, format=N
     
     resultado = Orcamento.objects.filter(demanda__id=demanda_id).values('fase__itemfase__valor_hora__centro_resultado__id', 'fase__itemfase__valor_hora__centro_resultado__nome').annotate(total_horas = Sum('fase__itemfase__quantidade_horas'))
     return Response(resultado)
+
+@api_view(['GET'])
+def buscar_total_horas_orcamento(request, demanda_id, format=None):
+    resultado = Orcamento.objects.filter(demanda__id=demanda_id).values('id').annotate(total_horas = Sum('fase__itemfase__quantidade_horas'))
+    return Response(resultado[0])
+    
     
