@@ -10,7 +10,7 @@
 				<div class="col-sm-4">
 					<div class="input-group">
 						<span class="input-group-addon" for="tipo">Tipo</span> 
-					    <select class="form-control" id="tipo" name="tipo" ng-model="$ctrl.demanda.contasreceber.tipo" aria-describedby="basic-addon1" required>
+					    <select class="form-control" id="tipo" name="tipo" ng-model="$ctrl.tipo" aria-describedby="basic-addon1" required>
 					    	<option value="">Selecione tipo...</option>
 					    	<option value="P">Parcela</option>
 					    	<option value="M">Medição</option>
@@ -18,18 +18,18 @@
 					</div>
 				</div>
 				<div class="col-sm-4">
-					<div class="input-group" ng-show="$ctrl.demanda.contasreceber.tipo=='P'">
+					<div class="input-group" ng-show="$ctrl.tipo=='P'">
 						<span class="input-group-addon" for="tipo">Numero de vezes</span> 
 					    <input type="number" ng-model="$ctrl.numero_vezes" class="form-control" required/>
 					</div>
 				</div>
 				<div class="col-sm-4">
-					<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.gerarparcelas()" ng-disabled="!$ctrl.numero_vezes" ng-show="$ctrl.demanda.contasreceber.tipo=='P'">
+					<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.gerarparcelas()" ng-disabled="!$ctrl.numero_vezes" ng-show="$ctrl.tipo=='P'">
 				  		<span class="glyphicon"></span> Gerar parcelas
 					</button>
 				</div>
 			</div>
-			<div class="row" ng-show="$ctrl.demanda.contasreceber.tipo && $ctrl.parcelas">
+			<div class="row" ng-show="$ctrl.tipo && $ctrl.parcelas">
 				<div class="col-sm-4">
 					<div class="form-group">
 						<label for="total_orcamento">Total orcamento</label>
@@ -46,12 +46,12 @@
 		</div>
 	</div>
 	
-	<button type="button" class="btn btn-default" ng-click="$ctrl.adicionarparcela()" ng-show="$ctrl.demanda.contasreceber.tipo && $ctrl.parcelas">
+	<button type="button" class="btn btn-default" ng-click="$ctrl.adicionarparcela()" ng-show="$ctrl.tipo && $ctrl.parcelas">
 		<span class="glyphicon glyphicon-plus"></span> Adicionar parcela
 	</button>
 		
 	<form name="parcelas">
-		<table class="table table-sm table-bordered table-striped table-highlight margin-top" ng-show="$ctrl.demanda.contasreceber.tipo && $ctrl.parcelas">
+		<table class="table table-sm table-bordered table-striped table-highlight margin-top" ng-show="$ctrl.tipo && $ctrl.parcelas">
 			<thead>
 				<tr class="active">
 					<th>Descrição</th>
@@ -79,9 +79,8 @@
 				</tr>
 			</tbody>
 		</table>
-		<button type="button" class="btn btn-primary margin-top" ng-disabled="parcelas.$invalid" ng-show="$ctrl.demanda.contasreceber.tipo && $ctrl.parcelas">Gravar</button>
+		<button class="btn btn-primary margin-top" ng-click="$ctrl.gravarparcelas()" ng-disabled="parcelas.$invalid" ng-show="$ctrl.tipo && $ctrl.parcelas">Gravar</button>
 	</form>
-	
 </div>
 <div class="modal-footer">
   	<button class="btn btn-primary" type="button" ng-click="$ctrl.fechar()">Sair</button>

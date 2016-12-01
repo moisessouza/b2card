@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'recursos.apps.RecursosConfig',
     'clientes.apps.ClientesConfig',
     'demandas.apps.DemandasConfig',
-    'cadastros.apps.CadastrosConfig'
+    'cadastros.apps.CadastrosConfig',
+    'faturamento.apps.FaturamentoConfig'
 ]
 
 MIDDLEWARE = [

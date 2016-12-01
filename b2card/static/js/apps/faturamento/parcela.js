@@ -1,6 +1,6 @@
 "use strict";
 
-var faturamento = angular.module('faturamento', ['commons', 'ui.bootstrap', 'ui.mask']);
+var faturamento = angular.module('faturamento', ['commons', 'ui.bootstrap', 'ui.mask', 'parcela-services']);
 
 faturamento.controller('FaturamentoController', function ($scope, $window){
 	var $ctrl = this;
@@ -13,10 +13,13 @@ faturamento.controller('FaturamentoController', function ($scope, $window){
 		alert('Parcelas geradas');
 	}
 		
-}).controller('ModalParcelasController', function ($scope, $window, $uibModalInstance, demanda, CommonsService){
+}).controller('ModalParcelasController', function ($scope, $window, $uibModalInstance, demanda, CommonsService, ParcelaService){
 	var $ctrl = this;
 	
 	$ctrl.total_orcamento = demanda.orcamento.total_orcamento;
+	ParcelaService.buscartotalhoras(demanda.id, function (data){
+		$ctrl.total_horas = data.total_horas
+	});
 	
 	$ctrl.calcularvalorrestante = function () {
 		
@@ -49,10 +52,15 @@ faturamento.controller('FaturamentoController', function ($scope, $window){
 			var valortotal = 0;
 			
 			for (var int = 0; int < $ctrl.numero_vezes; int++) {
+				
+				var numero_horas = (valorparcela * $ctrl.total_horas) / CommonsService.stringparafloat($ctrl.total_orcamento);
+				
 				var parcela = {
 					descricao: (int + 1) + '/' + $ctrl.numero_vezes,
 					valor_parcela: CommonsService.formatarnumero(valorparcela),
-					status: 'PE'
+					numero_horas : numero_horas,
+					status: 'PE',
+					demanda: demanda
 				}
 				valortotal+=valorparcela;
 				$ctrl.parcelas.push(parcela);
@@ -60,15 +68,26 @@ faturamento.controller('FaturamentoController', function ($scope, $window){
 			
 			var diferenca = CommonsService.stringparafloat(demanda.orcamento.total_orcamento) - valortotal;
 			diferenca = CommonsService.stringparafloat($ctrl.parcelas[$ctrl.parcelas.length-1].valor_parcela) + diferenca;
+			
+			var numero_horas = (diferenca * $ctrl.total_horas) / CommonsService.stringparafloat($ctrl.total_orcamento);
+			
 			$ctrl.parcelas[$ctrl.parcelas.length-1].valor_parcela = CommonsService.formatarnumero(diferenca);
+			$ctrl.parcelas[$ctrl.parcelas.length-1].numero_horas = numero_horas;
 			
 			$ctrl.calcularvalorrestante();
 			
 		}
 	}
 	
+	$ctrl.gravarparcelas = function () {
+		ParcelaService.gravarparcelas($ctrl.parcelas)
+	}
+	
 	$ctrl.adicionarparcela = function () {
-		$ctrl.parcelas.push({});
+		$ctrl.parcelas.push({
+			status: 'PE',
+			demanda: demanda
+		});
 	}
 	
 	$ctrl.fechar = function (){

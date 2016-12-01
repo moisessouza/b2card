@@ -81,7 +81,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			animation : $ctrl.animationsEnabled,
 			ariaLabelledBy : 'modal-title',
 			ariaDescribedBy : 'modal-body',
-			templateUrl : '/static/modal/modalContasReceber.html',
+			templateUrl : '/static/modal/modalContasReceber.html?bust=' + Math.random().toString(36).slice(2),
 			controller : 'ModalParcelasController',
 			controllerAs : '$ctrl',
 			size : 'lg',
