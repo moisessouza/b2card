@@ -480,17 +480,20 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	$ctrl.parcela = {};
 	
 	$ctrl.calcularvalorrestante = function () {
-		
-		var valortotal = 0;
-		for (var i in $ctrl.demanda.parcelas){
-			var parcela = $ctrl.demanda.parcelas[i];
-			if (!parcela.remover && parcela.valor_parcela){
-				valortotal += CommonsService.stringparafloat(parcela.valor_parcela);
+		if($ctrl.demanda.orcamento.total_orcamento){
+			
+			var valortotal = 0;
+			for (var i in $ctrl.demanda.parcelas){
+				var parcela = $ctrl.demanda.parcelas[i];
+				if (!parcela.remover && parcela.valor_parcela){
+					valortotal += CommonsService.stringparafloat(parcela.valor_parcela);
+				}
 			}
-		}
 		
-		var valor_restante = CommonsService.stringparafloat($ctrl.demanda.orcamento.total_orcamento) - valortotal;
-		$ctrl.parcela.valor_restante = CommonsService.formatarnumero(valor_restante);
+		
+			var valor_restante = CommonsService.stringparafloat($ctrl.demanda.orcamento.total_orcamento) - valortotal;
+			$ctrl.parcela.valor_restante = CommonsService.formatarnumero(valor_restante);
+		}
 	}
 	
 	$ctrl.calcularparcela = function (parcela){
