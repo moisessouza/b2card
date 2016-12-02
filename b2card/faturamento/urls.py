@@ -21,6 +21,7 @@ from . import views
 app_name='faturamento'
 
 urlpatterns = [
+    url(r'^contasreceber', views.contas_receber_prevista, name="contasreceber"),
     url(r'^api/parcela/new/$', views.ParcelaList.as_view()),
 ]
 

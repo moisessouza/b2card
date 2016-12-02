@@ -8,6 +8,20 @@ from demandas.models import Demanda
 
 # Create your views here.
 
+def contas_receber_prevista(request):
+    
+    demandas = Demanda.objects.filter(parcela__status = 'PE').distinct()
+    
+    for demanda in demandas:
+        parcelas = Parcela.objects.filter(demanda=demanda)
+        demanda.parcelas=parcelas
+    
+    context = {
+        'demandas': demandas
+    }
+    
+    return render(request, 'contas_previstas/index.html', context);
+
 class ParcelaList(APIView):
     
     def post(self, request, format=None):
