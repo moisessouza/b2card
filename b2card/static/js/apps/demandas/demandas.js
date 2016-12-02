@@ -483,7 +483,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		var valortotal = 0;
 		for (var i in $ctrl.demanda.parcelas){
 			var parcela = $ctrl.demanda.parcelas[i];
-			if (!parcela.remover){
+			if (!parcela.remover && parcela.valor_parcela){
 				valortotal += CommonsService.stringparafloat(parcela.valor_parcela);
 			}
 		}
@@ -498,16 +498,15 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		
 		if ($ctrl.demanda.orcamento.total_orcamento && numero_vezes){
 			var valorparcela = parseFloat(CommonsService.arrendodar(CommonsService.stringparafloat($ctrl.demanda.orcamento.total_orcamento) / numero_vezes));
-			var numero_horas = (valorparcela * $ctrl.parcela.total_horas) / CommonsService.stringparafloat($ctrl.total_orcamento);
+			var numero_horas = (valorparcela * $ctrl.parcela.total_horas) / CommonsService.stringparafloat($ctrl.demanda.orcamento.total_orcamento);
 			parcela.numero_horas = numero_horas;
 			$ctrl.calcularvalorrestante();
 		}
 	}
 	
 	$ctrl.adicionarparcela = function () {
-		$ctrl.parcelas.push({
+		$ctrl.demanda.parcelas.push({
 			status: 'PE',
-			demanda: demanda
 		});
 	}
 	
