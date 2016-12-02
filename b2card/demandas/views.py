@@ -429,27 +429,28 @@ class DemandaDetail(APIView):
                 
     def salvar_parcelas(self, parcela_list, demanda):
         
-        for i in parcela_list:
-            if 'remover' not in i or i['remover'] == False:
-                
-                valor_parcela = None
-                if 'valor_parcela' in i:
-                    valor_parcela = converter_string_para_float(i['valor_parcela'])
-                    del i['valor_parcela']
-                
-                data_previsto_parcela = None
-                if 'data_previsto_parcela' in i:
-                    data_previsto_parcela = converter_string_para_data(i['data_previsto_parcela'])
-                    del i['data_previsto_parcela']
+        if parcela_list:
+            for i in parcela_list:
+                if 'remover' not in i or i['remover'] == False:
                     
-                parcela = Parcela(**i)
-                parcela.valor_parcela = valor_parcela
-                parcela.data_previsto_parcela = data_previsto_parcela
-                parcela.demanda = demanda
-                parcela.save()
-                
-            elif 'id' in i:
-                parcela = Parcela.objects.get(pk=i['id'])
+                    valor_parcela = None
+                    if 'valor_parcela' in i:
+                        valor_parcela = converter_string_para_float(i['valor_parcela'])
+                        del i['valor_parcela']
+                    
+                    data_previsto_parcela = None
+                    if 'data_previsto_parcela' in i:
+                        data_previsto_parcela = converter_string_para_data(i['data_previsto_parcela'])
+                        del i['data_previsto_parcela']
+                        
+                    parcela = Parcela(**i)
+                    parcela.valor_parcela = valor_parcela
+                    parcela.data_previsto_parcela = data_previsto_parcela
+                    parcela.demanda = demanda
+                    parcela.save()
+                    
+                elif 'id' in i:
+                    parcela = Parcela.objects.get(pk=i['id'])
                 parcela.delete()
         
     def post(self, request, format=None):
@@ -469,7 +470,11 @@ class DemandaDetail(APIView):
         ocorrencias = data['ocorrencias']
         orcamento = data['orcamento']
         atividades = data['atividades']
-        parcelas = data['parcelas']
+        
+        parcelas = None
+        if 'parcelas' in data:
+            parcelas = data['parcelas']
+            del data['parcelas']
         
         del data['cliente']
         del data['itens_faturamento']
@@ -480,8 +485,7 @@ class DemandaDetail(APIView):
         del data['orcamento']
         del data['atividades']
         del data['unidade_administrativa']
-        del data['parcelas']
-        
+
         demanda = Demanda(**data)
         demanda.cliente = cliente
         demanda.unidade_administrativa = unidade_administrativa
