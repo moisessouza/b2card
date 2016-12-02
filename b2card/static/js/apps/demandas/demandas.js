@@ -7,7 +7,7 @@ demandas.factory('share', function(){
 	  return {};
 });
 
-demandas.controller('DemandaController', function ($scope, $window, $uibModal, $log, DemandaService, 
+demandas.controller('DemandaController', function ($scope, $window, $uibModal, $log, DemandaService, ParcelaService,
 		CentroCustoService, ValorHoraService, CommonsService, CentroResultadoService, UnidadeAdministrativaService, share){
 	var $ctrl = this; 
 	
@@ -161,6 +161,11 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			configuraritensfaturamento(data);
 			configurarparcelas(data);
 			
+			ParcelaService.buscartotalhoras(data.id, function (data){
+				$ctrl.parcela.total_horas = data.total_horas
+				$ctrl.calcularvalorrestante();
+			});
+			
 			$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(demanda_id, $ctrl.changeatividade);
 			
 		});
@@ -300,10 +305,6 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		if (callback){
 			callback();
 		}
-	}
-	
-	$ctrl.adicionarparcela = function (){
-		$ctrl.demanda.parcelas.push({});
 	}
 		
 	$ctrl.listaclientes= DemandaService.buscarclientes();
@@ -460,7 +461,9 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		if (data.parcelas) {
 			for ( var i in data.parcelas) {
 				var parcela = $ctrl.demanda.parcelas[i];
-				parcela.valor_parcela =  CommonsService.formatarnumero(parcela.valor_parcela);
+				if (parcela.valor_parcela){
+					parcela.valor_parcela =  CommonsService.formatarnumero(parcela.valor_parcela);
+				}
 			}
 		}
 	}
@@ -468,6 +471,43 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	$ctrl.deletar = function () {
 		DemandaService.deletardemanda($ctrl.demanda.id, function(data){
 			$window.location.href = '/demandas/';
+		});
+	}
+	
+	// PARCELAS
+	
+	$ctrl.parcela = {};
+	
+	$ctrl.calcularvalorrestante = function () {
+		
+		var valortotal = 0;
+		for (var i in $ctrl.demanda.parcelas){
+			var parcela = $ctrl.demanda.parcelas[i];
+			if (!parcela.remover){
+				valortotal += CommonsService.stringparafloat(parcela.valor_parcela);
+			}
+		}
+		
+		var valor_restante = CommonsService.stringparafloat($ctrl.demanda.orcamento.total_orcamento) - valortotal;
+		$ctrl.parcela.valor_restante = CommonsService.formatarnumero(valor_restante);
+	}
+	
+	$ctrl.calcularparcela = function (parcela){
+		
+		var numero_vezes = $ctrl.demanda.parcelas.length;
+		
+		if ($ctrl.demanda.orcamento.total_orcamento && numero_vezes){
+			var valorparcela = parseFloat(CommonsService.arrendodar(CommonsService.stringparafloat($ctrl.demanda.orcamento.total_orcamento) / numero_vezes));
+			var numero_horas = (valorparcela * $ctrl.parcela.total_horas) / CommonsService.stringparafloat($ctrl.total_orcamento);
+			parcela.numero_horas = numero_horas;
+			$ctrl.calcularvalorrestante();
+		}
+	}
+	
+	$ctrl.adicionarparcela = function () {
+		$ctrl.parcelas.push({
+			status: 'PE',
+			demanda: demanda
 		});
 	}
 	

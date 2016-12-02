@@ -75,7 +75,7 @@
 	  <li><a data-toggle="tab" href="#tarefas">Tarefas</a></li>
 	  <li><a data-toggle="tab" href="#observacoes">Observações</a></li>
 	  <li><a data-toggle="tab" href="#ocorrencias">Ocorrências</a></li>
-	  <li><a data-toggle="tab" href="#contasreceber">Contas a receber</a></li>
+	  <li><a data-toggle="tab" href="#contasreceber" ng-show="$ctrl.demanda.parcelas && $ctrl.demanda.parcelas.length > 0">Contas a receber</a></li>
 	</ul>
 	<div class="tab-content">
 		<div id="dadosdemanda" class="tab-pane in active">
@@ -170,7 +170,7 @@
 								</div>
 							</div>
 							<div class="col-sm-6">	
-								<button class="btn btn-sm btn-primary" ng-click="$ctrl.modalcontasreceber()" ng-show="$ctrl.demanda.orcamento.id && $ctrl.demanda.orcamento.total_orcamento && (!$ctrl.demanda.parcelas || $ctrl.demanda.parcelas.length == 0)">Gerar contas a receber</button>
+								<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.modalcontasreceber()" ng-show="$ctrl.demanda.orcamento.id && $ctrl.demanda.orcamento.total_orcamento && (!$ctrl.demanda.parcelas || $ctrl.demanda.parcelas.length == 0)">Gerar contas a receber</button>
 							</div>
 						</div>
 					</div>
@@ -187,8 +187,8 @@
 					<div class="panel-body">	
 						<div class="row">	
 							<div class="col-sm-1 form-group form-group-sm">
-								<label for="fase_descricao">ID</label> 
-					   			<input type="text" id="fase_descricao" name="fase_descricao"  ng-model="$ctrl.fase.id" class="form-control" disabled/>
+								<label for="fase_id">ID</label> 
+					   			<input type="text" id="fase_id" name="fase_id"  ng-model="$ctrl.fase.id" class="form-control" disabled/>
 							</div>					
 							<div class="col-sm-6 form-group form-group-sm">
 								<label for="fase_descricao">Descrição</label> 
@@ -954,7 +954,22 @@
 				</div>
 			</form>
 		</div>
-		<div id="contasreceber" class="tab-pane">
+		<div id="contasreceber" class="tab-pane" ng-show="$ctrl.demanda.parcelas && $ctrl.demanda.parcelas.length > 0">
+
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="form-group">
+						<label for="total_orcamento">Total orcamento</label>
+						<input type="text" id="total_orcamento" name="total_orcamento" ng-model="$ctrl.demanda.orcamento.total_orcamento" class="form-control" disabled/>
+					</div>
+				</div>
+				<div class="col-sm-4">
+					<div class="form-group">
+						<label for="total_orcamento">Valor restante</label>
+						<input type="text" id="total_orcamento" name="total_orcamento" ng-model="$ctrl.parcela.valor_restante" class="form-control" disabled/>
+					</div>
+				</div>
+			</div>
 
 			<button type="button" class="btn btn-default margin" ng-click="$ctrl.adicionarparcela()">Adicionar parcela</button>
 			
@@ -980,10 +995,10 @@
 							<input type="text" id="data_previsto_parcela" ng-model="parcela.data_previsto_parcela" name="data_previsto_parcela" maxlength="30" ui-mask="99/99/9999" model-view-value="true" class="form-control"/>
 						</td>
 						<td class="col-sm-4">
-							<input type="text" id="valor_parcela" ng-model="parcela.valor_parcela" name="valor_parcela" maxlength="30" gb-money class="form-control"/>
+							<input type="text" id="valor_parcela" ng-model="parcela.valor_parcela" name="valor_parcela" ng-change="$ctrl.calcularparcela(parcela)" maxlength="30" gb-money class="form-control"/>
 						</td>
 						<td>
-							<button type="button" class="btn btn-default" ng-click="$ctrl.remover(parcela)">
+							<button type="button" class="btn btn-default" ng-click="$ctrl.remover(parcela, $ctrl.calcularvalorrestante)">
 								<span class="glyphicon glyphicon-trash"></span>
 							</button>
 						</td>
