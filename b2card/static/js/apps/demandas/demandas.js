@@ -99,6 +99,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		modalInstance.result.then(function(parcelas) {
 			$ctrl.demanda.parcelas = parcelas;
 			configurarparcelas($ctrl.demanda);
+			$ctrl.calcularvalorrestante();
 		}, function() {
 			// $log.info('Modal dismissed at: ' + new Date());
 		});

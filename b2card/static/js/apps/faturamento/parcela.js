@@ -15,7 +15,7 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 		var valortotal = 0;
 		for (var i in $ctrl.parcelas){
 			var parcela = $ctrl.parcelas[i];
-			if (!parcela.remover){
+			if (!parcela.remover && parcela.valor_parcela){
 				valortotal += CommonsService.stringparafloat(parcela.valor_parcela);
 			}
 		}
@@ -76,7 +76,21 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 		});
 	}
 	
+	$ctrl.changehoras = function () {
+		
+		for (var int = 0; int < $ctrl.parcelas.length; int++) {
+			var parcela = $ctrl.parcelas[int];
+			parcela.valor_parcela = CommonsService.formatarnumero(parcela.numero_horas * CommonsService.stringparafloat($ctrl.total_orcamento) / $ctrl.total_horas);
+		}
+		
+		$ctrl.calcularvalorrestante();
+		
+	}
+	
 	$ctrl.adicionarparcela = function () {
+		if (!$ctrl.parcelas){
+			$ctrl.parcelas = [];
+		}
 		$ctrl.parcelas.push({
 			status: 'PE',
 			demanda: demanda

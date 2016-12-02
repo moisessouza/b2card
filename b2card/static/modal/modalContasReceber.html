@@ -8,6 +8,20 @@
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-sm-4">
+					<div class="form-group">
+						<label for="total_orcamento">Total orcamento</label>
+						<input type="text" id="total_orcamento" name="total_orcamento" ng-model="$ctrl.total_orcamento" class="form-control" disabled/>
+					</div>
+				</div>
+				<div class="col-sm-4">
+					<div class="form-group">
+						<label for="total_orcamento">Valor restante</label>
+						<input type="text" id="total_orcamento" name="total_orcamento" ng-model="$ctrl.valor_restante" class="form-control" disabled/>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-4">
 					<div class="input-group">
 						<span class="input-group-addon" for="tipo">Tipo</span> 
 					    <select class="form-control" id="tipo" name="tipo" ng-model="$ctrl.tipo" aria-describedby="basic-addon1" required>
@@ -29,33 +43,21 @@
 					</button>
 				</div>
 			</div>
-			<div class="row" ng-show="$ctrl.tipo && $ctrl.parcelas">
-				<div class="col-sm-4">
-					<div class="form-group">
-						<label for="total_orcamento">Total orcamento</label>
-						<input type="text" id="total_orcamento" name="total_orcamento" ng-model="$ctrl.total_orcamento" class="form-control" disabled/>
-					</div>
-				</div>
-				<div class="col-sm-4">
-					<div class="form-group">
-						<label for="total_orcamento">Valor restante</label>
-						<input type="text" id="total_orcamento" name="total_orcamento" ng-model="$ctrl.valor_restante" class="form-control" disabled/>
-					</div>
-				</div>
-			</div>
+			
 		</div>
 	</div>
 	
-	<button type="button" class="btn btn-default" ng-click="$ctrl.adicionarparcela()" ng-show="$ctrl.tipo && $ctrl.parcelas">
+	<button type="button" class="btn btn-default" ng-click="$ctrl.adicionarparcela()" ng-show="($ctrl.tipo && $ctrl.parcelas) || ($ctrl.tipo == 'M')">
 		<span class="glyphicon glyphicon-plus"></span> Adicionar parcela
 	</button>
 		
 	<form name="parcelas">
-		<table class="table table-sm table-bordered table-striped table-highlight margin-top" ng-show="$ctrl.tipo && $ctrl.parcelas">
+		<table class="table table-sm table-bordered table-striped table-highlight margin-top" ng-show="($ctrl.tipo && $ctrl.parcelas) || ($ctrl.tipo == 'M')">
 			<thead>
 				<tr class="active">
 					<th>Descrição</th>
 					<th>Data prevista parcela</th>
+					<th ng-show="$ctrl.tipo == 'M'">Horas</th>
 					<th>Valor da parcela</th>
 					<th></th>
 				</tr>
@@ -65,11 +67,14 @@
 					<td class="col-sm-4">
 						<input type="text" id="descricao" ng-model="parcela.descricao" name="descricao" maxlength="30" class="form-control" required/>
 					</td>
-					<td class="col-sm-4">
-						<input type="text" id="data_prevista" ng-model="parcela.data_previsto_parcela" name="data_prevista" maxlength="30" ng-model="parcela" ui-mask="99/99/9999" model-view-value="true"  class="form-control" required/>
+					<td class="col-sm-3">
+						<input type="text" id="data_prevista" ng-model="parcela.data_previsto_parcela" name="data_prevista" maxlength="30" ui-mask="99/99/9999" model-view-value="true"  class="form-control" required/>
+					</td>
+					<td class="col-sm-2" ng-show="$ctrl.tipo == 'M'">
+						<input type="number" id="numero_horas" ng-model="parcela.numero_horas" name="numero_horas" maxlength="30" class="form-control" ng-change="$ctrl.changehoras()" required/>
 					</td>
 					<td class="col-sm-4">
-						<input type="text" id="valor_parcela" ng-model="parcela.valor_parcela" name="valor_parcela" maxlength="30" ng-change="$ctrl.calcularvalorrestante()" gb-money class="form-control" required/>
+						<input type="text" id="valor_parcela" ng-model="parcela.valor_parcela" name="valor_parcela" maxlength="30" ng-change="$ctrl.calcularvalorrestante()" gb-money class="form-control" ng-disabled="$ctrl.tipo == 'M'" required/>
 					</td>
 					<td>
 						<button type="button" class="btn btn-default" ng-click="$ctrl.remover(parcela, $ctrl.calcularvalorrestante)">
