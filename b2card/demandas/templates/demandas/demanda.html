@@ -956,17 +956,21 @@
 		</div>
 		<div id="contasreceber" class="tab-pane" ng-show="$ctrl.demanda.parcelas && $ctrl.demanda.parcelas.length > 0">
 
-			<div class="row">
-				<div class="col-sm-4">
-					<div class="form-group">
-						<label for="total_orcamento">Total orcamento</label>
-						<input type="text" id="total_orcamento" name="total_orcamento" ng-model="$ctrl.demanda.orcamento.total_orcamento" class="form-control" disabled/>
-					</div>
-				</div>
-				<div class="col-sm-4">
-					<div class="form-group">
-						<label for="total_orcamento">Valor restante</label>
-						<input type="text" id="total_orcamento" name="total_orcamento" ng-model="$ctrl.parcela.valor_restante" class="form-control" disabled/>
+			<div class="panel panel-primary form-group-sm">
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label for="total_orcamento">Total orcamento</label>
+								<input type="text" id="total_orcamento" name="total_orcamento" ng-model="$ctrl.demanda.orcamento.total_orcamento" class="form-control" disabled/>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label for="total_orcamento">Valor restante</label>
+								<input type="text" id="total_orcamento" name="total_orcamento" ng-model="$ctrl.parcela.valor_restante" class="form-control" disabled/>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
