@@ -88,14 +88,19 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			templateUrl : '/static/modal/modalContasReceber.html?bust=' + Math.random().toString(36).slice(2),
 			controller : 'ModalParcelasController',
 			controllerAs : '$ctrl',
-			size : 'lg',
+			//size : 'lg'
+			windowClass: 'app-modal-window',
 			resolve : {
 				demanda : function() {
 					return $ctrl.demanda;
+				},
+				listavalorhora: function () {
+					return $ctrl.listavalorhora;
 				}
+				
 			}
 		});
-
+			
 		modalInstance.result.then(function(parcelas) {
 			$ctrl.demanda.parcelas = parcelas;
 			configurarparcelas($ctrl.demanda);
