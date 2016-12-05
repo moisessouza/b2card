@@ -4,6 +4,7 @@ from recursos.models import Funcionario
 from clientes.models import Cliente
 from datetime import datetime
 from cadastros.models import CentroCusto, ValorHora, CentroResultado, UnidadeAdministrativa
+import faturamento
 
 # Create your models here.
 
@@ -30,6 +31,11 @@ STATUS_DEMANDA = (
     ('D','Em desenvolvimento')
 )
 
+TIPO_PARCELA = (
+    ('P', 'Parcela'),
+    ('M', 'Medição')
+)
+
 class Demanda(models.Model):
     cliente = models.ForeignKey(Cliente, blank=False)
     nome_demanda = models.CharField(max_length=30,default=None)
@@ -37,6 +43,7 @@ class Demanda(models.Model):
     status_demanda = models.CharField(max_length=1, choices=STATUS_DEMANDA, null=True)
     codigo_demanda = models.CharField(max_length=12, null=True)
     unidade_administrativa = models.ForeignKey(UnidadeAdministrativa, default=None, null=True)
+    tipo_parcela = models.CharField(max_length=1, choices=TIPO_PARCELA, null=True)
     
 class Atividade(models.Model):
     titulo = models.CharField(max_length=100)

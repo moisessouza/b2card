@@ -14,9 +14,13 @@ parcelaservices.config(['$httpProvider', function($httpProvider) {
 
 parcelaservices.service('ParcelaService', function($resource){
 	return {
-		gravarparcelas: function (parcelas, callback){
-			var Parcela = $resource('/faturamento/api/parcela/new/', {}, {'save':  {method:'POST', isArray:true}});
-			return Parcela.save(parcelas, callback);
+		gravarparcelas: function (objeto, callback){
+			var Parcela = $resource('/faturamento/api/parcela/new/', {}, {'save':  {
+																						method:'POST', 
+																						//isArray:true
+																					}
+																		 });
+			return Parcela.save(objeto, callback);
 		},
 		buscartotalhoras: function (demanda_id, callback){
 			var Orcamento = $resource('/demandas/api/:id/orcamento/totalhoras/');

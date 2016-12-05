@@ -69,7 +69,14 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 	}
 	
 	$ctrl.gravarparcelas = function () {
-		ParcelaService.gravarparcelas($ctrl.parcelas, function (data){
+		
+		var objeto = {
+			tipo_parcela: $ctrl.tipo,
+			parcelas: $ctrl.parcelas,
+			demanda_id: demanda.id
+		}
+		
+		ParcelaService.gravarparcelas(objeto, function (data){
 			$ctrl.parcelas = data;
 			$window.alert('Parcelas geradas com sucesso!');
 			$uibModalInstance.close($ctrl.parcelas);	
