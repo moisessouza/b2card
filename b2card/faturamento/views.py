@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from faturamento.models import Parcela
+from faturamento.models import Parcela, Medicao
 from faturamento.serializers import ParcelaSerializer
 from rest_framework.response import Response
 from utils.utils import converter_string_para_float, converter_string_para_data, formatar_data
 from demandas.models import Demanda
+from exceptions import Exception
+from cadastros.models import ValorHora
 
 # Create your views here.
 
@@ -26,9 +28,24 @@ class ParcelaList(APIView):
     
     def post(self, request, format=None):
         
-        parcela_list = []
+        demanda = None
+        if 'demanda_id' in request.data:
+            demanda = Demanda.objects.get(pk=request.data['demanda_id'])
+        else:
+            raise Exception('Demanda nao informada');
         
-        for i in request.data:
+        parcela_list = []
+        if 'parcelas' in request.data:
+            parcela_list = request.data['parcelas']
+            
+        tipo_parcela = None
+        if 'tipo_parcela' in request.data:
+            tipo_parcela = request.data['tipo_parcela']
+            demanda.tipo_parcela = tipo_parcela
+            demanda.save()
+        
+        parcela_resp = []
+        for i in parcela_list:
             if 'remover' not in i or i['remover'] == False:
                 
                 valor_parcela = None
@@ -45,19 +62,62 @@ class ParcelaList(APIView):
                 if 'demanda' in i:
                     demanda = Demanda.objects.get(pk=i['demanda']['id'])
                     del i['demanda']
-                    
+                
+                medicao_list = []
+                if 'medicoes' in i:
+                    medicao_list = i['medicoes']
+                    del i['medicoes']
+                
                 parcela = Parcela(**i)
                 parcela.valor_parcela = valor_parcela
                 parcela.data_previsto_parcela = data_previsto_parcela
+                parcela.tipo_parcela = tipo_parcela
                 parcela.demanda = demanda
                 parcela.save()
                 
+                if tipo_parcela == 'M':
+                    self.gravar_medicoes(parcela, medicao_list)
+                
                 serializer = ParcelaSerializer(parcela).data
                 serializer['data_previsto_parcela'] = formatar_data(parcela.data_previsto_parcela)
-                parcela_list.append(serializer)
+                parcela_resp.append(serializer)
                 
             elif 'id' in i:
                 parcela = Parcela.objects.get(pk=i['id'])
                 parcela.delete()
         
-        return Response(parcela_list)
+        context = {
+            'parcelas': parcela_resp
+        }
+        
+        return Response(context)
+    
+    def gravar_medicoes(self, parcela, medicoes):
+        
+        medicao_list = []
+        if medicoes:
+            for i in medicoes:
+                if 'remover' not in i or i['remover'] == False:
+                    
+                    valor_hora = None
+                    if 'valor_hora' in i:
+                        valor_hora = ValorHora.objects.get(pk=i['valor_hora']['id'])
+                        del i['valor_hora']
+                    
+                    medicao = Medicao(**i)
+                    medicao.valor_hora = valor_hora
+                    medicao.valor = converter_string_para_float(medicao.valor)   
+                    medicao.valor_total = converter_string_para_float(medicao.valor_total)
+                    medicao.parcela = parcela
+                    medicao.save()
+                    
+                    
+                    
+                    
+                elif 'id' in i:
+                    medicao = Medicao.objects.get(pk=i['id'])
+                    medicao.delete()
+            
+            
+         
+        return medicao_list   

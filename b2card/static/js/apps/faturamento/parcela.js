@@ -68,9 +68,26 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 		}
 	}
 	
+	$ctrl.calcularnumerohorasparcelas = function () {
+		if ($ctrl.parcelas){
+			for (var i = 0; i < $ctrl.parcelas.length; i++) {
+				var parcela = $ctrl.parcelas[i];
+				var numero_horas = (CommonsService.stringparafloat(parcela.valor_parcela) * $ctrl.total_horas) / CommonsService.stringparafloat($ctrl.total_orcamento);
+				parcela.numero_horas = numero_horas;
+			}
+		}
+	}
+	
 	$ctrl.gravarparcelas = function () {
-		ParcelaService.gravarparcelas($ctrl.parcelas, function (data){
-			$ctrl.parcelas = data;
+		
+		var objeto = {
+			tipo_parcela: $ctrl.tipo,
+			parcelas: $ctrl.parcelas,
+			demanda_id: demanda.id
+		}
+		
+		ParcelaService.gravarparcelas(objeto, function (data){
+			$ctrl.parcelas = data.parcelas;
 			$window.alert('Parcelas geradas com sucesso!');
 			$uibModalInstance.close($ctrl.parcelas);	
 		});

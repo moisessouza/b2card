@@ -70,7 +70,7 @@
 						<input type="text" id="data_prevista" ng-model="parcela.data_previsto_parcela" name="data_prevista" maxlength="30" ui-mask="99/99/9999" model-view-value="true"  class="form-control" ng-required="$ctrl.tipo == 'P'"/>
 					</td>
 					<td class="col-sm-4">
-						<input type="text" id="valor_parcela" ng-model="parcela.valor_parcela" name="valor_parcela" maxlength="30" ng-change="$ctrl.calcularvalorrestante()" gb-money class="form-control" ng-disabled="$ctrl.tipo == 'M'" ng-required="$ctrl.tipo == 'P'"/>
+						<input type="text" id="valor_parcela" ng-model="parcela.valor_parcela" name="valor_parcela" maxlength="30" ng-change="$ctrl.calcularvalorrestante(); $ctrl.calcularnumerohorasparcelas();" gb-money class="form-control" ng-disabled="$ctrl.tipo == 'M'" ng-required="$ctrl.tipo == 'P'"/>
 					</td>
 					<td>
 						<button type="button" class="btn btn-default" ng-click="$ctrl.remover(parcela, $ctrl.calcularvalorrestante)">
