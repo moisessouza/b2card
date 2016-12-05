@@ -12,8 +12,8 @@ from recursos.models import Funcionario
 from cadastros.models import CentroCusto, ValorHora, CentroResultado, UnidadeAdministrativa
 from rest_framework.decorators import api_view
 from django.db.models.aggregates import Sum
-from faturamento.models import Parcela
-from faturamento.serializers import ParcelaSerializer
+from faturamento.models import Parcela, Medicao
+from faturamento.serializers import ParcelaSerializer, MedicaoSerializer
 
 # Create your views here.
 
@@ -132,6 +132,12 @@ class DemandaDetail(APIView):
         for i in parcelas:
             parcela = ParcelaSerializer(i).data
             parcela['data_previsto_parcela'] = formatar_data(i.data_previsto_parcela)
+            
+            if i.tipo_parcela == 'M':
+                medicoes = Medicao.objects.filter(parcela = i)
+                medicao_list = MedicaoSerializer(medicoes, many=True).data
+                parcela['medicoes'] = medicao_list
+            
             parcelas_list.append(parcela)
         
         data['itens_faturamento'] = itens_list
@@ -442,16 +448,53 @@ class DemandaDetail(APIView):
                     if 'data_previsto_parcela' in i:
                         data_previsto_parcela = converter_string_para_data(i['data_previsto_parcela'])
                         del i['data_previsto_parcela']
-                        
+                    
+                    medicao_list = None
+                    if 'medicoes' in i:
+                        medicao_list = i['medicoes']
+                        del i['medicoes']  
+                    
+                    if 'demanda' in i:
+                        del i['demanda']  
+                    
                     parcela = Parcela(**i)
                     parcela.valor_parcela = valor_parcela
                     parcela.data_previsto_parcela = data_previsto_parcela
                     parcela.demanda = demanda
+                    parcela.tipo_parcela = demanda.tipo_parcela
                     parcela.save()
+                    
+                    self.gravar_medicoes(parcela, medicao_list)
                     
                 elif 'id' in i:
                     parcela = Parcela.objects.get(pk=i['id'])
-                parcela.delete()
+                    parcela.delete()
+                    
+                    
+    def gravar_medicoes(self, parcela, medicoes):
+        
+        medicao_list = []
+        if medicoes:
+            for i in medicoes:
+                if 'remover' not in i or i['remover'] == False:
+                    
+                    valor_hora = None
+                    if 'valor_hora' in i:
+                        valor_hora = ValorHora.objects.get(pk=i['valor_hora']['id'])
+                        del i['valor_hora']
+                    
+                    medicao = Medicao(**i)
+                    medicao.valor_hora = valor_hora
+                    medicao.valor = converter_string_para_float(medicao.valor)   
+                    medicao.valor_total = converter_string_para_float(medicao.valor_total)
+                    medicao.parcela = parcela
+                    medicao.save()
+                    
+                elif 'id' in i:
+                    medicao = Medicao.objects.get(pk=i['id'])
+                    medicao.delete()
+         
+        return medicao_list   
         
     def post(self, request, format=None):
         

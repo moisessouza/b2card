@@ -101,8 +101,9 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			}
 		});
 			
-		modalInstance.result.then(function(parcelas) {
-			$ctrl.demanda.parcelas = parcelas;
+		modalInstance.result.then(function(data) {
+			$ctrl.demanda.parcelas = data.parcelas;
+			$ctrl.demanda.tipo_parcela = data.tipo_parcela;
 			configurarparcelas($ctrl.demanda);
 			$ctrl.calcularvalorrestante();
 		}, function() {
@@ -463,17 +464,6 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		});
 	}
 	
-	var configurarparcelas = function (data) {
-		if (data.parcelas) {
-			for ( var i in data.parcelas) {
-				var parcela = $ctrl.demanda.parcelas[i];
-				if (parcela.valor_parcela){
-					parcela.valor_parcela =  CommonsService.formatarnumero(parcela.valor_parcela);
-				}
-			}
-		}
-	}
-	
 	$ctrl.deletar = function () {
 		DemandaService.deletardemanda($ctrl.demanda.id, function(data){
 			$window.location.href = '/demandas/';
@@ -482,7 +472,58 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	
 	// PARCELAS
 	
+	var configurarparcelas = function (data) {
+		if (data.parcelas) {
+			for ( var i in data.parcelas) {
+				var parcela = $ctrl.demanda.parcelas[i];
+				if (parcela.valor_parcela){
+					parcela.valor_parcela =  CommonsService.formatarnumero(parcela.valor_parcela);
+				}
+				
+				if (parcela.medicoes){
+					
+					for (var m in parcela.medicoes ){
+						var medicao = parcela.medicoes[m];
+						
+						if (medicao.valor){
+							medicao.valor = CommonsService.formatarnumero(medicao.valor);
+						}
+						
+						if (medicao.valor_total){
+							medicao.valor_total = CommonsService.formatarnumero(medicao.valor_total);
+						}
+						
+					}
+					
+				}
+				
+			}
+		}
+	}
+	
 	$ctrl.parcela = {};
+	
+	$ctrl.adicionarparcela = function () {
+		
+		if (!$ctrl.demanda.parcelas){
+			$ctrl.demanda.parcelas = [];
+		}
+		
+		$ctrl.demanda.parcelas.push({
+			status: 'PE',
+			demanda: {
+				id: demanda.id
+			}
+		});
+	}
+	
+	$ctrl.adicionarmedicao = function (parcela) {
+		if (!parcela.medicoes) {
+			parcela.medicoes = [];
+		}
+		
+		parcela.medicoes.push({});
+	}
 	
 	$ctrl.calcularvalorrestante = function () {
 		if($ctrl.demanda.orcamento.total_orcamento){
@@ -501,22 +542,61 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		}
 	}
 	
-	$ctrl.calcularparcela = function (parcela){
+	$ctrl.calcularvalortotalparcelas = function () {
 		
-		var numero_vezes = $ctrl.demanda.parcelas.length;
+		for (var p = 0; p < $ctrl.demanda.parcelas.length; p++) {
+			var parcela = $ctrl.demanda.parcelas[p];
+			
+			var valortotalparcela = 0;
+			for (var m = 0; m < parcela.medicoes.length; m++) {
+				var medicao = parcela.medicoes[m];
+				if (medicao.valor_total && !medicao.remover){
+					valortotalparcela+=CommonsService.stringparafloat(medicao.valor_total);
+				}
+			}
+			
+			parcela.valor_parcela = CommonsService.formatarnumero(valortotalparcela);
+			
+		}
 		
-		if ($ctrl.demanda.orcamento.total_orcamento && numero_vezes){
-			var valorparcela = parseFloat(CommonsService.arrendodar(CommonsService.stringparafloat($ctrl.demanda.orcamento.total_orcamento) / numero_vezes));
-			var numero_horas = (valorparcela * $ctrl.parcela.total_horas) / CommonsService.stringparafloat($ctrl.demanda.orcamento.total_orcamento);
-			parcela.numero_horas = numero_horas;
-			$ctrl.calcularvalorrestante();
+		$ctrl.calcularvalorrestante();
+		
+	}
+	
+	$ctrl.calcularnumerohorasparcelas = function () {
+		if ($ctrl.demanda.parcelas){
+			for (var i = 0; i < $ctrl.demanda.parcelas.length; i++) {
+				var parcela = $ctrl.demanda.parcelas[i];
+				var numero_horas = (CommonsService.stringparafloat(parcela.valor_parcela) * $ctrl.parcela.total_horas) / CommonsService.stringparafloat($ctrl.demanda.orcamento.total_orcamento);
+				parcela.numero_horas = numero_horas;
+			}
 		}
 	}
 	
-	$ctrl.adicionarparcela = function () {
-		$ctrl.demanda.parcelas.push({
-			status: 'PE',
-		});
+	$ctrl.changevalorhoraparcela = function (medicao) {
+		
+		var valor_hora_id = medicao.valor_hora.id;
+		
+		for (var int = 0; int < $ctrl.listavalorhora.length; int++) {
+			var valorhora = $ctrl.listavalorhora[int];
+			if (valorhora.id == valor_hora_id) {
+				medicao.valor =  CommonsService.formatarnumero(valorhora.vigencia.valor);
+				break;
+			}
+		}
+		
+		$ctrl.calcularvalortotalparcelas();
+
+	}
+	
+	$ctrl.changequantidadehorasparcela = function(medicao){
+		if (medicao.valor){
+			medicao.valor_total = CommonsService.formatarnumero(CommonsService.stringparafloat(medicao.valor) * medicao.quantidade_horas);
+		}
+		
+		$ctrl.calcularvalortotalparcelas();
+		$ctrl.calcularvalorrestante();
+		
 	}
 	
 });

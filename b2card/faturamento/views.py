@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from faturamento.models import Parcela, Medicao
-from faturamento.serializers import ParcelaSerializer
+from faturamento.serializers import ParcelaSerializer, MedicaoSerializer
 from rest_framework.response import Response
 from utils.utils import converter_string_para_float, converter_string_para_data, formatar_data
 from demandas.models import Demanda
@@ -75,11 +75,13 @@ class ParcelaList(APIView):
                 parcela.demanda = demanda
                 parcela.save()
                 
+                medicao_resp = None
                 if tipo_parcela == 'M':
-                    self.gravar_medicoes(parcela, medicao_list)
+                    medicao_resp = self.gravar_medicoes(parcela, medicao_list)
                 
                 serializer = ParcelaSerializer(parcela).data
                 serializer['data_previsto_parcela'] = formatar_data(parcela.data_previsto_parcela)
+                serializer['medicoes'] = medicao_resp
                 parcela_resp.append(serializer)
                 
             elif 'id' in i:
@@ -87,6 +89,7 @@ class ParcelaList(APIView):
                 parcela.delete()
         
         context = {
+            'tipo_parcela': tipo_parcela,
             'parcelas': parcela_resp
         }
         
@@ -110,9 +113,7 @@ class ParcelaList(APIView):
                     medicao.valor_total = converter_string_para_float(medicao.valor_total)
                     medicao.parcela = parcela
                     medicao.save()
-                    
-                    
-                    
+                    medicao_list.append(MedicaoSerializer(medicao).data)
                     
                 elif 'id' in i:
                     medicao = Medicao.objects.get(pk=i['id'])

@@ -10,7 +10,7 @@ from cadastros.serializers import ValorHoraSerializer
 class ParcelaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Parcela
-        fields = ('id', 'descricao', 'valor_parcela', 'numero_horas', 'status', 'data_previsto_parcela')
+        fields = ('id', 'descricao', 'valor_parcela', 'numero_horas', 'status', 'data_previsto_parcela', 'tipo_parcela')
         
 class MedicaoSerializer(serializers.ModelSerializer):
     valor_hora = ValorHoraSerializer()

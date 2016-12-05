@@ -87,9 +87,8 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 		}
 		
 		ParcelaService.gravarparcelas(objeto, function (data){
-			$ctrl.parcelas = data.parcelas;
 			$window.alert('Parcelas geradas com sucesso!');
-			$uibModalInstance.close($ctrl.parcelas);	
+			$uibModalInstance.close(data);	
 		});
 	}
 	
