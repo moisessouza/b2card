@@ -1007,6 +1007,17 @@
 					</div>
 				</div>
 			</div>
+			
+			<div class="panel panel-primary form-group-sm" ng-show="$ctrl.demanda.tipo_parcela=='M'">
+				<div class="panel-body">
+					<div class="col-sm-2" ng-repeat="valorhora_hora in $ctrl.valorhoras_horas">
+						<div class="input-group" >
+							<span class="input-group-addon" for="tipo">{{valorhora_hora.fase__itemfase__valor_hora__descricao}}</span> 
+						    <input type="number" value="20" ng-model="valorhora_hora.horas_restantes" class="form-control" disabled/>
+						</div>
+					</div>
+				</div>
+			</div>
 
 			<button type="button" class="btn btn-default margin" ng-click="$ctrl.adicionarparcela()">Adicionar parcela</button>
 			
@@ -1091,7 +1102,7 @@
 											<input type="text" id="valor_total" name="valor_total" ng-model="medicao.valor_total" class="form-control" value="30,00" disabled/>
 										</td>
 										<td>
-											<button type="button" class="btn btn-default" ng-click="$ctrl.remover(medicao, $ctrl.calcularvalortotalparcelas)">
+											<button type="button" class="btn btn-default" ng-click="$ctrl.remover(medicao, $ctrl.calcularvalortotalparcelas); $ctrl.calcularhorasrestantesparcela();">
 												<span class="glyphicon glyphicon-trash"></span>
 											</button>
 										</td>
@@ -1106,7 +1117,7 @@
 							
 						</td>
 						<td>
-							<button type="button" class="btn btn-default" ng-click="$ctrl.remover(parcela, $ctrl.calcularvalorrestante)">
+							<button type="button" class="btn btn-default" ng-click="$ctrl.remover(parcela, $ctrl.calcularvalorrestante); $ctrl.calcularhorasrestantesparcela();">
 								<span class="glyphicon glyphicon-trash"></span>
 							</button>
 						</td>

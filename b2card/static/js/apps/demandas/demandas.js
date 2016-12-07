@@ -173,6 +173,17 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 				$ctrl.calcularvalorrestante();
 			});
 			
+			ParcelaService.buscartotalhorasporvalorhora(data.id, function(data){
+				$ctrl.valorhoras_horas_raw = data;
+				
+				for (var i = 0; i < $ctrl.valorhoras_horas_raw.length; i++){
+					$ctrl.valorhoras_horas_raw[i].horas_restantes = $ctrl.valorhoras_horas_raw[i].total_horas;
+				}
+				
+				$ctrl.calcularhorasrestantesparcela();
+			});
+			
+			
 			$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(demanda_id, $ctrl.changeatividade);
 			
 		});
@@ -586,6 +597,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		}
 		
 		$ctrl.calcularvalortotalparcelas();
+		$ctrl.calcularhorasrestantesparcela();
 
 	}
 	
@@ -596,7 +608,31 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		
 		$ctrl.calcularvalortotalparcelas();
 		$ctrl.calcularvalorrestante();
+		$ctrl.calcularhorasrestantesparcela();
 		
+	}
+	
+	$ctrl.calcularhorasrestantesparcela = function () {
+		$ctrl.valorhoras_horas = [];
+		angular.copy($ctrl.valorhoras_horas_raw, $ctrl.valorhoras_horas);
+		if ($ctrl.demanda.parcelas){
+			for (var i = 0; i < $ctrl.demanda.parcelas.length; i++) {
+				var parcela = $ctrl.demanda.parcelas[i];
+				if (!parcela.remover && parcela.medicoes){
+					for (var m = 0; m < parcela.medicoes.length; m++){
+						var medicao = parcela.medicoes[m];
+						if (!medicao.remover){
+							for (var j = 0; j < $ctrl.valorhoras_horas.length; j++){
+								var valorhora_hora = $ctrl.valorhoras_horas[j];
+								if (medicao.quantidade_horas && medicao.valor_hora.id == valorhora_hora.fase__itemfase__valor_hora__id){
+									valorhora_hora.horas_restantes -= medicao.quantidade_horas;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	
 });

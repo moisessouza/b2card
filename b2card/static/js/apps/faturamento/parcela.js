@@ -7,8 +7,39 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 	$ctrl.listavalorhora = listavalorhora;
 	
 	ParcelaService.buscartotalhoras(demanda.id, function (data){
-		$ctrl.total_horas = data.total_horas
+		$ctrl.total_horas = data.total_horas;
 	});
+	
+	ParcelaService.buscartotalhorasporvalorhora(demanda.id, function(data){
+		$ctrl.valorhoras_horas_raw = data;
+		
+		for (var i = 0; i < $ctrl.valorhoras_horas_raw.length; i++){
+			$ctrl.valorhoras_horas_raw[i].horas_restantes = $ctrl.valorhoras_horas_raw[i].total_horas;
+		}
+		
+		$ctrl.calcularhorasrestantesparcela();
+	});
+	
+	$ctrl.calcularhorasrestantesparcela = function () {
+		$ctrl.valorhoras_horas = [];
+		angular.copy($ctrl.valorhoras_horas_raw, $ctrl.valorhoras_horas);
+		if ($ctrl.parcelas){
+			for (var i = 0; i < $ctrl.parcelas.length; i++) {
+				var parcela = $ctrl.parcelas[i];
+				if (parcela.medicoes){
+					for (var m = 0; m < parcela.medicoes.length; m++){
+						var medicao = parcela.medicoes[m];
+						for (var j = 0; j < $ctrl.valorhoras_horas.length; j++){
+							var valorhora_hora = $ctrl.valorhoras_horas[j];
+							if (medicao.quantidade_horas && medicao.valor_hora.id == valorhora_hora.fase__itemfase__valor_hora__id){
+								valorhora_hora.horas_restantes -= medicao.quantidade_horas;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 	
 	$ctrl.calcularvalorrestante = function () {
 		
@@ -112,6 +143,7 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 	
 	$ctrl.removermedicao = function (medicao, parcela) {
 		parcela.medicoes.splice(parcela.medicoes.indexOf(medicao), 1);
+		$ctrl.calcularhorasrestantesparcela();
 	}
 	
 	$ctrl.calcularvalortotalparcelas = function () {
@@ -132,6 +164,7 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 		}
 		
 		$ctrl.calcularvalorrestante();
+		$ctrl.calcularhorasrestantesparcela();
 		
 	}
 	
@@ -148,6 +181,7 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 		}
 		
 		$ctrl.calcularvalortotalparcelas();
+		$ctrl.calcularhorasrestantesparcela();
 
 	}
 	
@@ -158,6 +192,7 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 		
 		$ctrl.calcularvalortotalparcelas();
 		$ctrl.calcularvalorrestante();
+		$ctrl.calcularhorasrestantesparcela();
 		
 	}
 	

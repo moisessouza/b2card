@@ -47,6 +47,17 @@
 		</div>
 	</div>
 	
+	<div class="panel panel-primary form-group-sm" ng-show="$ctrl.tipo=='M'">
+		<div class="panel-body">
+			<div class="col-sm-2" ng-repeat="valorhora_hora in $ctrl.valorhoras_horas">
+				<div class="input-group" >
+					<span class="input-group-addon" for="tipo">{{valorhora_hora.fase__itemfase__valor_hora__descricao}}</span> 
+				    <input type="number" value="20" ng-model="valorhora_hora.horas_restantes" class="form-control" disabled/>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 	<button type="button" class="btn btn-default" ng-click="$ctrl.adicionarparcela()" ng-show="($ctrl.tipo && $ctrl.parcelas) || ($ctrl.tipo == 'M')">
 		<span class="glyphicon glyphicon-plus"></span> Adicionar parcela
 	</button>
