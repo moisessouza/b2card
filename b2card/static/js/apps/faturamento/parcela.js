@@ -152,10 +152,12 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 			var parcela = $ctrl.parcelas[p];
 			
 			var valortotalparcela = 0;
-			for (var m = 0; m < parcela.medicoes.length; m++) {
-				var medicao = parcela.medicoes[m];
-				if (medicao.valor_total && !medicao.remover){
-					valortotalparcela+=CommonsService.stringparafloat(medicao.valor_total);
+			if(parcela.medicoes){
+				for (var m = 0; m < parcela.medicoes.length; m++) {
+					var medicao = parcela.medicoes[m];
+					if (medicao.valor_total && !medicao.remover){
+						valortotalparcela+=CommonsService.stringparafloat(medicao.valor_total);
+					}
 				}
 			}
 			
