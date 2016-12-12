@@ -20,7 +20,7 @@
     "@font-family-serif": "Georgia, \"Times New Roman\", Times, serif",
     "@font-family-monospace": "Menlo, Monaco, Consolas, \"Courier New\", monospace",
     "@font-family-base": "@font-family-sans-serif",
-    "@font-size-base": "11px",
+    "@font-size-base": "12px",
     "@font-size-large": "ceil((@font-size-base * 1.25))",
     "@font-size-small": "ceil((@font-size-base * 0.85))",
     "@font-size-h1": "floor((@font-size-base * 2.6))",
@@ -94,9 +94,9 @@
     "@input-border-radius-small": "@border-radius-small",
     "@input-border-focus": "#66afe9",
     "@input-color-placeholder": "#999",
-    "@input-height-base": "(@line-height-computed + (@padding-base-vertical * 2) + 2)",
-    "@input-height-large": "(ceil(@font-size-large * @line-height-large) + (@padding-large-vertical * 2) + 2)",
-    "@input-height-small": "(floor(@font-size-small * @line-height-small) + (@padding-small-vertical * 2) + 2)",
+    "@input-height-base": "(@line-height-computed + (@padding-base-vertical * 2) + 0)",
+    "@input-height-large": "(ceil(@font-size-large * @line-height-large) + (@padding-large-vertical * 2) + 0)",
+    "@input-height-small": "(floor(@font-size-small * @line-height-small) + (@padding-small-vertical * 2) + 0)",
     "@form-group-margin-bottom": "15px",
     "@legend-color": "@gray-dark",
     "@legend-border-color": "#e5e5e5",
@@ -431,5 +431,5 @@
     "scrollspy.js",
     "transition.js"
   ],
-  "customizerUrl": "http://getbootstrap.com/customize/?id=ec35ac3c8b41d1fa0f05178d5b726026"
+  "customizerUrl": "http://getbootstrap.com/customize/?id=df5808a87a1cadf7aa36a97ba82ef43c"
 }
