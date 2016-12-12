@@ -80,7 +80,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		}
 	}
 	
-	$ctrl.modalcontasreceber = function (){
+	$ctrl.modalprevisaofaturamento = function (){
 			var modalInstance = $uibModal.open({
 			animation : $ctrl.animationsEnabled,
 			ariaLabelledBy : 'modal-title',
@@ -106,6 +106,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			$ctrl.demanda.tipo_parcela = data.tipo_parcela;
 			configurarparcelas($ctrl.demanda);
 			$ctrl.calcularvalorrestante();
+			$ctrl.calcularhorasrestantesparcela();
 		}, function() {
 			// $log.info('Modal dismissed at: ' + new Date());
 		});

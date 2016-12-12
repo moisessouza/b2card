@@ -111,7 +111,7 @@
 	  <li><a data-toggle="tab" href="#tarefas">Tarefas</a></li>
 	  <li><a data-toggle="tab" href="#observacoes">Observações</a></li>
 	  <li><a data-toggle="tab" href="#ocorrencias">Ocorrências</a></li>
-	  <li><a data-toggle="tab" href="#contasreceber" ng-show="$ctrl.demanda.parcelas && $ctrl.demanda.parcelas.length > 0">Contas a receber</a></li>
+	  <li><a data-toggle="tab" href="#previsaofaturamento" ng-show="$ctrl.demanda.parcelas && $ctrl.demanda.parcelas.length > 0">Previsão de faturamento</a></li>
 	</ul>
 	<div class="tab-content">
 		<div id="dadosdemanda" class="tab-pane in active">
@@ -203,7 +203,7 @@
 								</div>
 							</div>
 							<div class="col-sm-6">	
-								<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.modalcontasreceber()" ng-show="$ctrl.demanda.orcamento.id && $ctrl.demanda.orcamento.total_orcamento && (!$ctrl.demanda.parcelas || $ctrl.demanda.parcelas.length == 0)">Gerar contas a receber</button>
+								<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.modalprevisaofaturamento()" ng-show="$ctrl.demanda.orcamento.id && $ctrl.demanda.orcamento.total_orcamento && (!$ctrl.demanda.parcelas || $ctrl.demanda.parcelas.length == 0)">Gerar previsão de faturamento</button>
 							</div>
 						</div>
 					</div>
@@ -299,12 +299,20 @@
 										<tr>
 											<th>Valor hora</th>
 											<th>Valor</th>
+											<th>Quantidade</th>
+											<th>Valor total</th>
 										</tr>
 									</thead>
 									<tbody>
 										<tr ng-repeat="itemfase in fase.itensfase" ng-show="!itemfase.remover">
 											<td>
-												{{itemfase.valor_hora.descricao}}</label>
+												{{itemfase.valor_hora.descricao}}
+											</td>
+											<td>
+												{{itemfase.valor_selecionado}}
+											</td>
+											<td>
+												{{itemfase.quantidade_horas}}
 											</td>
 											<td>
 												{{itemfase.valor_total}}
@@ -979,7 +987,7 @@
 				</div>
 			</form>
 		</div>
-		<div id="contasreceber" class="tab-pane" ng-show="$ctrl.demanda.parcelas && $ctrl.demanda.parcelas.length > 0">
+		<div id="previsaofaturamento" class="tab-pane" ng-show="$ctrl.demanda.parcelas && $ctrl.demanda.parcelas.length > 0">
 
 			<div class="panel panel-primary form-group-sm">
 				<div class="panel-body">
