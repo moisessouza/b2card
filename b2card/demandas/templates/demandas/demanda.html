@@ -282,18 +282,18 @@
 				<table class="table table-sm table-bordered table-striped table-highlight" style="text-align: center;">
 					<thead>
 						<tr class="active">
-							<th>Fase</th>
-							<th></th>
-							<th></th>
-							<th></th>
+							<th class="col-sm-2">Fase</th>
+							<th class="col-sm-12"></th>
+							<th class="col-sm-1"></th>
+							<th class="col-sm-1"></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr ng-repeat="fase in $ctrl.demanda.orcamento.fases" ng-show="!fase.remover">
-							<td class="col-sm-2">
+							<td>
 								<label>{{fase.descricao}}</label>
 							</td>
-							<td class="col-sm-8">
+							<td>
 								<table class="table table-sm table-bordered table-striped table-highlight">
 									<thead>
 										<tr>
@@ -1024,7 +1024,6 @@
 			<table class="table table-sm table-bordered table-striped table-highlight" ng-show="$ctrl.demanda.tipo_parcela == 'P'">
 				<thead>
 					<tr class="active">
-						<th>ID</th>
 						<th>Descrição</th>
 						<th>Data previsto parcela</th>
 						<th>Valor da parcela</th>
@@ -1033,9 +1032,6 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="parcela in $ctrl.demanda.parcelas" ng-show="!parcela.remover">
-						<td class="col-sm-1">
-							<input type="text" id="id" ng-model="parcela.id" name="id" maxlength="30" class="form-control" disabled/>
-						</td>
 						<td class="col-sm-4">
 							<input type="text" id="descricao" ng-model="parcela.descricao" name="descricao" maxlength="30" class="form-control"/>
 						</td>
@@ -1057,8 +1053,8 @@
 			<table class="table table-sm table-bordered table-striped table-highlight margin-top"  ng-show="$ctrl.demanda.tipo_parcela == 'M'">
 				<thead>
 					<tr class="active">
-						<th>Descrição</th>
-						<th>Data prevista parcela</th>
+						<th class="col-sm-1">Descrição</th>
+						<th class="col-sm-1" title="Data de Previsão da parcela">Previsão</th>
 						<th>Medições</th>
 						<th></th>
 					</tr>
@@ -1069,7 +1065,7 @@
 							<input type="text" id="descricao" ng-model="parcela.descricao" name="descricao" maxlength="30" class="form-control" ng-required="$ctrl.demanda.tipo_parcela == 'M'"/>
 						</td>
 						<td>
-							<input type="text" id="data_prevista" ng-model="parcela.data_previsto_parcela" name="data_prevista" maxlength="30" ui-mask="99/99/9999" model-view-value="true"  class="form-control" ng-required="$ctrl.demanda.tipo_parcela == 'M'"/>
+							<input type="text" id="data_prevista" ng-model="parcela.data_previsto_parcela" name="data_prevista" maxlength="30" ui-mask="99/99/9999" model-view-value="true"  title="Data de Previsão da parcela" class="form-control" ng-required="$ctrl.demanda.tipo_parcela == 'M'"/>
 						</td>
 						<td>
 							<button type="button" class="btn btn-default" ng-click="$ctrl.adicionarmedicao(parcela)">

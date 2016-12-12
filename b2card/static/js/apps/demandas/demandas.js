@@ -524,12 +524,18 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			$ctrl.demanda.parcelas = [];
 		}
 		
-		$ctrl.demanda.parcelas.push({
+		var parcela = {
 			status: 'PE',
 			demanda: {
 				id: demanda.id
 			}
-		});
+		}
+		
+		if ($ctrl.demanda.tipo_parcela == 'M'){
+			parcela.medicoes = [{}];
+		}
+		
+		$ctrl.demanda.parcelas.push(parcela);
 	}
 	
 	$ctrl.adicionarmedicao = function (parcela) {
