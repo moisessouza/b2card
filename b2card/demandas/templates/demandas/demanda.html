@@ -219,12 +219,8 @@
 					</div>
 					<div class="panel-body">	
 						<div class="row">	
-							<div class="col-sm-1 form-group form-group-sm">
-								<label for="fase_id">ID</label> 
-					   			<input type="text" id="fase_id" name="fase_id"  ng-model="$ctrl.fase.id" class="form-control" disabled/>
-							</div>					
 							<div class="col-sm-6 form-group form-group-sm">
-								<label for="fase_descricao">Descrição</label> 
+								<label for="fase_descricao">Fase</label> 
 					   			<input type="text" id="fase_descricao" name="fase_descricao"  ng-model="$ctrl.fase.descricao" class="form-control" required/>
 							</div>
 						</div>
@@ -286,7 +282,6 @@
 				<table class="table table-sm table-bordered table-striped table-highlight" style="text-align: center;">
 					<thead>
 						<tr class="active">
-							<th>ID</th>
 							<th>Fase</th>
 							<th></th>
 							<th></th>
@@ -295,9 +290,6 @@
 					</thead>
 					<tbody>
 						<tr ng-repeat="fase in $ctrl.demanda.orcamento.fases" ng-show="!fase.remover">
-							<td class="col-sm-1">
-								<label>{{fase.id}}</label>
-							</td>
 							<td class="col-sm-2">
 								<label>{{fase.descricao}}</label>
 							</td>

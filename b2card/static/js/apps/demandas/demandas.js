@@ -236,7 +236,9 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	}
 	
 	$ctrl.novafase = function () {
-		$ctrl.fase = {};
+		$ctrl.fase = {
+			itensfase: [{}]
+		};
 	}
 	
 	$ctrl.cancelarfase = function () {
@@ -255,8 +257,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			$ctrl.demanda.orcamento.fases = [];
 		}
 		
-		if ($ctrl.demanda.orcamento.fases.indexOf($ctrl.fase) < 0
-				&& $ctrl.fase.descricao){
+		if ($ctrl.fase.descricao){
 			
 			if ( $ctrl.fase.itensfase){
 				for (var i in $ctrl.fase.itensfase){
@@ -264,7 +265,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 					for (var j in $ctrl.listavalorhora){
 				
 						var valorhora = $ctrl.listavalorhora[j];
-						if (valorhora.id == itemfase.valor_hora.id){
+						if (itemfase.valor_hora && valorhora.id == itemfase.valor_hora.id){
 							itemfase.valor_hora.descricao = valorhora.descricao;
 							break;
 						}
@@ -273,7 +274,9 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 				}
 			}
 			
-			$ctrl.demanda.orcamento.fases.push($ctrl.fase);	
+			if ($ctrl.demanda.orcamento.fases.indexOf($ctrl.fase) < 0){
+				$ctrl.demanda.orcamento.fases.push($ctrl.fase);	
+			}
 		}
 		
 		$ctrl.fase = null;
