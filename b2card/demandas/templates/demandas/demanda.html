@@ -299,12 +299,20 @@
 										<tr>
 											<th>Valor hora</th>
 											<th>Valor</th>
+											<th>Quantidade</th>
+											<th>Valor total</th>
 										</tr>
 									</thead>
 									<tbody>
 										<tr ng-repeat="itemfase in fase.itensfase" ng-show="!itemfase.remover">
 											<td>
-												{{itemfase.valor_hora.descricao}}</label>
+												{{itemfase.valor_hora.descricao}}
+											</td>
+											<td>
+												{{itemfase.valor_selecionado}}
+											</td>
+											<td>
+												{{itemfase.quantidade_horas}}
 											</td>
 											<td>
 												{{itemfase.valor_total}}
