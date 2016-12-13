@@ -184,7 +184,10 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 			$ctrl.parcelas = [];
 		}
 		$ctrl.parcelas.push({
-			status: 'PE'
+			status: 'PE',
+			parcelafases: [{
+				medicoes: [{}]
+			}]
 		});
 	}
 	
@@ -201,7 +204,9 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 			parcela.parcelafases = []
 		}
 		
-		parcela.parcelafases.push({});
+		parcela.parcelafases.push({
+			medicoes: [{}]
+		});
 		
 	}
 	

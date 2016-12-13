@@ -63,7 +63,7 @@
 	<button type="button" class="btn btn-default margin" ng-click="$ctrl.adicionarparcela()" ng-show="($ctrl.tipo && $ctrl.parcelas) || ($ctrl.tipo == 'M')">
 		<span class="glyphicon glyphicon-plus"></span> Adicionar parcela
 	</button>
-	<form name="parcelas" style="height: 400px; overflow-y: scroll;">
+	<form name="parcelas" style="height: 75%; overflow-y: scroll;">
 		<table class="table table-sm table-bordered table-striped table-highlight margin-top" ng-show="($ctrl.tipo == 'P' && $ctrl.parcelas)">
 			<thead>
 				<tr class="active">
@@ -117,7 +117,7 @@
 			</div>
 			<div class="panel-body">
 				<div class="row">
-					<div class="col-sm-10" ng-repeat="parcelafase in parcela.parcelafases" ng-show="!parcelafase.remover">
+					<div class="col-sm-12" ng-repeat="parcelafase in parcela.parcelafases" ng-show="!parcelafase.remover">
 						<div class="panel panel-default form-group-sm" ng-show="$ctrl.tipo=='M'">
 							<div class="panel-heading">
 								<div class="col-sm-6">
