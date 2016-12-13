@@ -37,6 +37,16 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 		}
 	}
 	
+	ParcelaService.buscarlistavalorhoraporfase(demanda.id, function (data) {
+		if (data){
+			$ctrl.valorhoraobject = {}
+			for (var int = 0; int < data.length; int++) {
+				var o = data[int];
+				$ctrl.valorhoraobject[o.id] = o.valorhora;
+			}		
+		}
+	});
+	
 	ParcelaService.buscarparcelageradas(demanda.id, function (data){
 		if (data) {
 			$ctrl.parcelas = data;

@@ -6,8 +6,10 @@ from rest_framework.response import Response
 from utils.utils import converter_string_para_float, converter_string_para_data, formatar_data
 from demandas.models import Demanda, Fase
 from exceptions import Exception
-from cadastros.models import ValorHora
+from cadastros.models import ValorHora, TipoHora
 from rest_framework.decorators import api_view
+from demandas.serializers import FaseSerializer
+from cadastros.serializers import TipoHoraSerializer, ValorHoraSerializer
 
 # Create your views here.
 
@@ -178,4 +180,21 @@ def buscar_parcela_por_demanda_id(request, demanda_id, format=None):
         
     
     return Response(parcelas_list);
+
+@api_view(['GET'])
+def buscar_tipo_hora_por_fases(request, demanda_id, format=None):
+    
+    fase_list = Fase.objects.filter(orcamento__demanda__id=demanda_id)
+    
+    faseserializer_list = []
+    
+    for i in fase_list:
+        serializer = FaseSerializer(i).data
+        faseserializer_list.append(serializer)
+        valorhora_list = ValorHora.objects.filter(itemfase__fase = i).distinct()
+        serializer['valorhora'] = ValorHoraSerializer(valorhora_list, many=True).data
+        
+    
+    return Response(faseserializer_list)
+    
     

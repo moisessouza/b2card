@@ -151,7 +151,7 @@
 								<tbody>
 									<tr ng-repeat="medicao in parcelafase.medicoes" ng-show="!medicao.remover">
 										<td>
-											<select id="valorhora" name="valorhora" ng-model="medicao.valor_hora.id" class="form-control" ng-change="$ctrl.changevalorhora(medicao); $ctrl.changequantidadehoras(medicao);" ng-options="v.id as v.descricao for v in $ctrl.listavalorhora" ng-required="$ctrl.tipo == 'M' && !parcela.remover">
+											<select id="valorhora" name="valorhora" ng-model="medicao.valor_hora.id" class="form-control" ng-change="$ctrl.changevalorhora(medicao); $ctrl.changequantidadehoras(medicao);" ng-options="v.id as v.descricao for v in $ctrl.valorhoraobject[parcelafase.fase.id]" ng-required="$ctrl.tipo == 'M' && !parcela.remover">
 									    		<option value="">Selecione um tipo...</option>
 									    	</select>
 										</td>
