@@ -4,8 +4,9 @@ Created on 14 de set de 2016
 @author: moi09
 '''
 from rest_framework import serializers
-from faturamento.models import Parcela, Medicao
+from faturamento.models import Parcela, Medicao, ParcelaFase
 from cadastros.serializers import ValorHoraSerializer
+from demandas.serializers import FaseSerializer
 
 class ParcelaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,3 +18,10 @@ class MedicaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Medicao
         fields = ('id', 'valor_hora', 'valor', 'quantidade_horas', 'valor_total')
+        
+class ParcelaFaseSerializer(serializers.ModelSerializer):
+    parcela = ParcelaSerializer()
+    fase = FaseSerializer()
+    class Meta:
+        model = ParcelaFase
+        fields = ('id', 'parcela', 'fase')

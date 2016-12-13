@@ -29,6 +29,10 @@ parcelaservices.service('ParcelaService', function($resource){
 		buscartotalhorasporvalorhora: function(demanda_id, callback){
 			var Orcamento = $resource('/demandas/api/:id/orcamento/totalhoras/valorhora/');
 			return Orcamento.query({id: demanda_id}, callback);
+		},
+		buscarparcelageradas: function(demanda_id, callback){
+			var Parcela = $resource('/faturamento/api/parcela/demanda/:demanda_id/');
+			return Parcela.query({demanda_id: demanda_id}, callback);
 		}
 	}
 });

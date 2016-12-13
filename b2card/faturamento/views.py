@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from faturamento.models import Parcela, Medicao
-from faturamento.serializers import ParcelaSerializer, MedicaoSerializer
+from faturamento.models import Parcela, Medicao, ParcelaFase
+from faturamento.serializers import ParcelaSerializer, MedicaoSerializer, ParcelaFaseSerializer
 from rest_framework.response import Response
 from utils.utils import converter_string_para_float, converter_string_para_data, formatar_data
-from demandas.models import Demanda
+from demandas.models import Demanda, Fase
 from exceptions import Exception
 from cadastros.models import ValorHora
+from rest_framework.decorators import api_view
 
 # Create your views here.
 
@@ -58,15 +59,10 @@ class ParcelaList(APIView):
                     data_previsto_parcela = converter_string_para_data(i['data_previsto_parcela'])
                     del i['data_previsto_parcela']
                 
-                demanda = None
-                if 'demanda' in i:
-                    demanda = Demanda.objects.get(pk=i['demanda']['id'])
-                    del i['demanda']
-                
-                medicao_list = []
-                if 'medicoes' in i:
-                    medicao_list = i['medicoes']
-                    del i['medicoes']
+                parcelafase_list = []
+                if 'parcelafases' in i:
+                    parcelafase_list = i['parcelafases']
+                    del i['parcelafases']
                 
                 parcela = Parcela(**i)
                 parcela.valor_parcela = valor_parcela
@@ -75,13 +71,13 @@ class ParcelaList(APIView):
                 parcela.demanda = demanda
                 parcela.save()
                 
-                medicao_resp = None
+                parcelafase_resp = None
                 if tipo_parcela == 'M':
-                    medicao_resp = self.gravar_medicoes(parcela, medicao_list)
-                
+                    parcelafase_resp = self.gravar_parcelafases(parcela, parcelafase_list)
+
                 serializer = ParcelaSerializer(parcela).data
                 serializer['data_previsto_parcela'] = formatar_data(parcela.data_previsto_parcela)
-                serializer['medicoes'] = medicao_resp
+                serializer['parcelafases'] = parcelafase_resp
                 parcela_resp.append(serializer)
                 
             elif 'id' in i:
@@ -95,7 +91,44 @@ class ParcelaList(APIView):
         
         return Response(context)
     
-    def gravar_medicoes(self, parcela, medicoes):
+    def gravar_parcelafases(self, parcela, parcelafases):
+    
+        parcelafase_list = []
+        if parcelafases:
+            for i in parcelafases:
+                if 'remover' not in i or i['remover'] == False:
+                    
+                    fase = None
+                    if 'fase' in i:
+                        fase = Fase.objects.get(pk=i['fase']['id'])
+                        del i['fase']
+                    
+                    if 'parcela' in i:
+                        del i['parcela']
+                        
+                    medicoes = []
+                    if 'medicoes' in i:
+                        medicoes = i['medicoes']
+                        del i['medicoes']
+                    
+                    parcela_fase = ParcelaFase(**i)
+                    parcela_fase.parcela = parcela
+                    parcela_fase.fase = fase
+                    parcela_fase.save();
+                    
+                    data = ParcelaFaseSerializer(parcela_fase).data
+                    
+                    medicao_list = self.gravar_medicoes(parcela_fase, medicoes)
+                    data['medicoes'] = medicao_list
+                    parcelafase_list.append(data)
+                
+                elif 'id' in i:
+                    parcela_fase = ParcelaFase.objects.get(pk=i['id'])
+                    parcela_fase.delete()
+                    
+        return parcelafase_list        
+    
+    def gravar_medicoes(self, parcela_fase, medicoes):
         
         medicao_list = []
         if medicoes:
@@ -111,14 +144,38 @@ class ParcelaList(APIView):
                     medicao.valor_hora = valor_hora
                     medicao.valor = converter_string_para_float(medicao.valor)   
                     medicao.valor_total = converter_string_para_float(medicao.valor_total)
-                    medicao.parcela = parcela
+                    medicao.parcela_fase = parcela_fase
                     medicao.save()
                     medicao_list.append(MedicaoSerializer(medicao).data)
                     
                 elif 'id' in i:
                     medicao = Medicao.objects.get(pk=i['id'])
                     medicao.delete()
-            
-            
          
-        return medicao_list   
+        return medicao_list
+    
+    
+@api_view(['GET'])
+def buscar_parcela_por_demanda_id(request, demanda_id, format=None):
+
+    parcelas = Parcela.objects.filter(demanda__id=demanda_id)
+    parcelas_list = []
+
+    for i in parcelas:
+        
+        parcela_data = ParcelaSerializer(i).data
+        parcela_data['parcelafases'] = []
+        parcela_data['data_previsto_parcela'] = formatar_data(i.data_previsto_parcela)
+        parcelas_list.append(parcela_data)
+        
+        parcelafases_list = ParcelaFase.objects.filter(parcela = i)
+        for pf in parcelafases_list:
+            pf_data = ParcelaFaseSerializer(pf).data
+            medicoes_list = Medicao.objects.filter(parcela_fase = pf)
+            pf_data['medicoes'] = MedicaoSerializer(medicoes_list, many=True).data
+            
+            parcela_data['parcelafases'].append(pf_data);
+        
+    
+    return Response(parcelas_list);
+    

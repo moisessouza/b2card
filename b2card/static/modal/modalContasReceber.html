@@ -84,7 +84,7 @@
 						<input type="text" id="valor_parcela" ng-model="parcela.valor_parcela" name="valor_parcela" maxlength="30" ng-change="$ctrl.calcularvalorrestante(); $ctrl.calcularnumerohorasparcelas();" gb-money class="form-control" ng-disabled="$ctrl.tipo == 'M'" ng-required="$ctrl.tipo == 'P'"/>
 					</td>
 					<td>
-						<button type="button" class="btn btn-default" ng-click="$ctrl.remover(parcela, $ctrl.calcularvalorrestante)">
+						<button type="button" class="btn btn-default" ng-click="$ctrl.remover(parcela, $ctrl.calcularvalorrestante); $ctrl.calcularvalortotalparcelas(); $ctrl.calcularhorasrestantesparcela();">
 							<span class="glyphicon glyphicon-trash"></span>
 						</button>
 					</td>
@@ -112,12 +112,12 @@
 					<td>
 						<div class="row">
 							<div class="col-sm-4">
-								<button type="button" class="btn btn-default" ng-click="$ctrl.adicionarfase(parcela)">
+								<button type="button" class="btn btn-default" ng-click="$ctrl.adicionarfase(parcela, $ctrl.calcularvalortotalparcelas); $ctrl.calcularhorasrestantesparcela();">
 									Adicionar fase
 								</button>
 							</div>
 						</div>
-						<div ng-repeat="parcelafase in parcela.parcelafases">
+						<div ng-repeat="parcelafase in parcela.parcelafases" ng-show="!parcelafase.remover">
 							<div class="panel panel-primary form-group-sm" ng-show="$ctrl.tipo=='M'">
 								<div class="panel-body">
 									<div class="col-sm-4">
@@ -131,6 +131,9 @@
 									<div class="col-sm-4">
 									<button type="button" class="btn btn-sm btn-default" ng-click="$ctrl.adicionarmedicao(parcelafase)">
 										Adicionar
+									</button>
+									<button type="button" class="btn btn-sm btn-default" ng-click="$ctrl.remover(parcelafase, $ctrl.calcularvalortotalparcelas); $ctrl.calcularhorasrestantesparcela();">
+										Remover fase
 									</button>
 									</div>
 								</div>
@@ -162,7 +165,7 @@
 											<input type="text" id="valor_total" name="valor_total" ng-model="medicao.valor_total" class="form-control" value="30,00" disabled/>
 										</td>
 										<td>
-											<button type="button" class="btn btn-default" ng-click="$ctrl.remover(medicao, $ctrl.calcularvalortotalparcelas)">
+											<button type="button" class="btn btn-default" ng-click="$ctrl.remover(medicao, $ctrl.calcularvalortotalparcelas); $ctrl.calcularhorasrestantesparcela();">
 												<span class="glyphicon glyphicon-trash"></span>
 											</button>
 										</td>
@@ -177,7 +180,7 @@
 						
 					</td>
 					<td>
-						<button type="button" class="btn btn-default" ng-click="$ctrl.remover(parcela, $ctrl.calcularvalorrestante)">
+						<button type="button" class="btn btn-default" ng-click="$ctrl.remover(parcela, $ctrl.calcularvalorrestante); $ctrl.calcularvalortotalparcelas(); $ctrl.calcularhorasrestantesparcela();">
 							<span class="glyphicon glyphicon-trash"></span>
 						</button>
 					</td>

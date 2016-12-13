@@ -7,6 +7,48 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 	$ctrl.listavalorhora = listavalorhora;
 	$ctrl.listafases = demanda.orcamento.fases;
 	
+	var configurarparcelas = function (parcelas) {
+		for ( var i in parcelas) {
+			
+			var parcela = parcelas[i];
+			if (parcela.valor_parcela){
+				parcela.valor_parcela =  CommonsService.formatarnumero(parcela.valor_parcela);
+			}
+			
+			if (parcela.parcelafases){
+				
+				for (var pf = 0; pf < parcela.parcelafases.length; pf++) {
+					var parcelafase = parcela.parcelafases[pf]
+					
+					if (parcelafase.medicoes){
+						for (var m = 0; m < parcelafase.medicoes.length; m++) {
+							var medicao = parcelafase.medicoes[m];
+							if (medicao.valor){
+								medicao.valor = CommonsService.formatarnumero(medicao.valor);
+							}
+							if (medicao.valor_total){
+								medicao.valor_total = CommonsService.formatarnumero(medicao.valor_total);
+							}
+						}
+					}
+				
+				}
+			}
+		}
+	}
+	
+	ParcelaService.buscarparcelageradas(demanda.id, function (data){
+		if (data) {
+			$ctrl.parcelas = data;
+			$ctrl.tipo = demanda.tipo_parcela;
+			
+			configurarparcelas($ctrl.parcelas);
+			$ctrl.calcularvalortotalparcelas();
+			$ctrl.calcularvalorrestante();
+			$ctrl.calcularhorasrestantesparcela();
+		}
+	});
+	
 	ParcelaService.buscartotalhoras(demanda.id, function (data){
 		$ctrl.total_horas = data.total_horas;
 	});
@@ -27,15 +69,15 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 		if ($ctrl.parcelas){
 			for (var i = 0; i < $ctrl.parcelas.length; i++) {
 				var parcela = $ctrl.parcelas[i];
-				if (parcela.parcelafases) {
+				if (!parcela.remover && parcela.parcelafases) {
 					for (var pf = 0; pf < parcela.parcelafases.length; pf++) {
 						var parcelafase = parcela.parcelafases[pf];
-						if (parcelafase.medicoes){
+						if (!parcelafase.remover && parcelafase.medicoes){
 							for (var m = 0; m < parcelafase.medicoes.length; m++){
 								var medicao = parcelafase.medicoes[m];
 								for (var j = 0; j < $ctrl.valorhoras_horas.length; j++){
 									var valorhora_hora = $ctrl.valorhoras_horas[j];
-									if (medicao.quantidade_horas && medicao.valor_hora.id == valorhora_hora.fase__itemfase__valor_hora__id){
+									if (!medicao.remover && medicao.quantidade_horas && medicao.valor_hora.id == valorhora_hora.fase__itemfase__valor_hora__id){
 										valorhora_hora.horas_restantes -= medicao.quantidade_horas;
 									}
 								}
@@ -85,8 +127,7 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 					descricao: (int + 1) + '/' + $ctrl.numero_vezes,
 					valor_parcela: CommonsService.formatarnumero(valorparcela),
 					numero_horas : numero_horas,
-					status: 'PE',
-					demanda: demanda
+					status: 'PE'
 				}
 				valortotal+=valorparcela;
 				$ctrl.parcelas.push(parcela);
@@ -134,8 +175,7 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 			$ctrl.parcelas = [];
 		}
 		$ctrl.parcelas.push({
-			status: 'PE',
-			demanda: demanda
+			status: 'PE'
 		});
 	}
 	

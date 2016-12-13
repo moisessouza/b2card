@@ -12,8 +12,8 @@ from recursos.models import Funcionario
 from cadastros.models import CentroCusto, ValorHora, CentroResultado, UnidadeAdministrativa
 from rest_framework.decorators import api_view
 from django.db.models.aggregates import Sum
-from faturamento.models import Parcela, Medicao
-from faturamento.serializers import ParcelaSerializer, MedicaoSerializer
+from faturamento.models import Parcela, Medicao, ParcelaFase
+from faturamento.serializers import ParcelaSerializer, MedicaoSerializer, ParcelaFaseSerializer
 
 # Create your views here.
 
@@ -130,14 +130,22 @@ class DemandaDetail(APIView):
             
         parcelas_list = []
         for i in parcelas:
+            
             parcela = ParcelaSerializer(i).data
             parcela['data_previsto_parcela'] = formatar_data(i.data_previsto_parcela)
             
             if i.tipo_parcela == 'M':
-                medicoes = Medicao.objects.filter(parcela = i)
-                medicao_list = MedicaoSerializer(medicoes, many=True).data
-                parcela['medicoes'] = medicao_list
-            
+                parcelafase_list = ParcelaFase.objects.filter(parcela = i)
+                parcelafaseserializer_list = []
+                for pf in parcelafase_list:
+                    parcelafaseserializer = ParcelaFaseSerializer(pf).data
+                    medicoes = Medicao.objects.filter(parcela_fase = pf)
+                    medicao_list = MedicaoSerializer(medicoes, many=True).data
+                    parcelafaseserializer['medicoes'] = medicao_list
+                    
+                    parcelafaseserializer_list.append(parcelafaseserializer)
+                parcela['parcelafases'] = parcelafaseserializer_list
+                
             parcelas_list.append(parcela)
         
         data['itens_faturamento'] = itens_list
@@ -471,7 +479,7 @@ class DemandaDetail(APIView):
                     parcela.delete()
                     
                     
-    def gravar_medicoes(self, parcela, medicoes):
+    def gravar_medicoes(self, parcelafase, medicoes):
         
         medicao_list = []
         if medicoes:
@@ -487,7 +495,7 @@ class DemandaDetail(APIView):
                     medicao.valor_hora = valor_hora
                     medicao.valor = converter_string_para_float(medicao.valor)   
                     medicao.valor_total = converter_string_para_float(medicao.valor_total)
-                    medicao.parcela = parcela
+                    medicao.parcela = parcelafase
                     medicao.save()
                     
                 elif 'id' in i:
