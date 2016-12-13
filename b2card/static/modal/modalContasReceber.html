@@ -60,12 +60,9 @@
 			</div>
 		</div>
 	</div>
-	
-	
 	<button type="button" class="btn btn-default margin" ng-click="$ctrl.adicionarparcela()" ng-show="($ctrl.tipo && $ctrl.parcelas) || ($ctrl.tipo == 'M')">
 		<span class="glyphicon glyphicon-plus"></span> Adicionar parcela
 	</button>
-		
 	<form name="parcelas" style="height: 400px; overflow-y: scroll;">
 		<table class="table table-sm table-bordered table-striped table-highlight margin-top" ng-show="($ctrl.tipo == 'P' && $ctrl.parcelas)">
 			<thead>
@@ -183,7 +180,6 @@
 				</div>
 			</div>
 		</div>
-		
 	</form>
 </div>
 <div class="modal-footer">
