@@ -37,6 +37,16 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 		}
 	}
 	
+	ParcelaService.buscarlistavalorhoraporfase(demanda.id, function (data) {
+		if (data){
+			$ctrl.valorhoraobject = {}
+			for (var int = 0; int < data.length; int++) {
+				var o = data[int];
+				$ctrl.valorhoraobject[o.id] = o.valorhora;
+			}		
+		}
+	});
+	
 	ParcelaService.buscarparcelageradas(demanda.id, function (data){
 		if (data) {
 			$ctrl.parcelas = data;
@@ -165,8 +175,7 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 		}
 		
 		ParcelaService.gravarparcelas(objeto, function (data){
-			$window.alert('Parcelas geradas com sucesso!');
-			$uibModalInstance.close(data);	
+			$window.alert('Parcelas geradas com sucesso!');	
 		});
 	}
 	
@@ -209,7 +218,7 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 			if (parcela.parcelafases){
 				for (var pf = 0; pf < parcela.parcelafases.length; pf++) {
 					var parcelafase = parcela.parcelafases[pf];
-					if(parcelafase.medicoes){
+					if(!parcelafase.remover && parcelafase.medicoes){
 						for (var m = 0; m < parcelafase.medicoes.length; m++) {
 							var medicao = parcelafase.medicoes[m];
 							if (medicao.valor_total && !medicao.remover){

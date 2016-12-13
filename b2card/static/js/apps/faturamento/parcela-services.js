@@ -33,6 +33,10 @@ parcelaservices.service('ParcelaService', function($resource){
 		buscarparcelageradas: function(demanda_id, callback){
 			var Parcela = $resource('/faturamento/api/parcela/demanda/:demanda_id/');
 			return Parcela.query({demanda_id: demanda_id}, callback);
+		},
+		buscarlistavalorhoraporfase: function (demanda_id, callback){
+			var Parcela = $resource('/faturamento/api/parcela/fase/tipohora/:demanda_id/');
+			return Parcela.query({demanda_id: demanda_id}, callback);
 		}
 	}
 });

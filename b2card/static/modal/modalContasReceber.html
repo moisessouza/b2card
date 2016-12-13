@@ -1,68 +1,72 @@
 <meta charset="utf-8">
-<div class="modal-header">
-	<h3 class="modal-title" id="modal-title">Previsão de faturamento</h3>
-</div>
 <div class="modal-body" id="modal-body">
-	
-	<div class="panel panel-primary form-group-sm">
-		<div class="panel-body">
-			<div class="row">
-				<div class="col-sm-4">
-					<div class="form-group">
-						<label for="total_orcamento">Total orcamento</label>
-						<input type="text" id="total_orcamento" name="total_orcamento" ng-model="$ctrl.total_orcamento" class="form-control" disabled/>
+	<div class="col-sm-4">
+		<div class="panel panel-primary form-group-sm">
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-sm-4">
+						<div class="form-group">
+							<label for="total_orcamento">Total</label>
+							<input type="text" id="total_orcamento" name="total_orcamento" ng-model="$ctrl.total_orcamento" class="form-control" disabled/>
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="form-group">
+							<label for="total_orcamento">Valor restante</label>
+							<input type="text" id="total_orcamento" name="total_orcamento" ng-model="$ctrl.valor_restante" class="form-control" disabled/>
+						</div>
 					</div>
 				</div>
-				<div class="col-sm-4">
-					<div class="form-group">
-						<label for="total_orcamento">Valor restante</label>
-						<input type="text" id="total_orcamento" name="total_orcamento" ng-model="$ctrl.valor_restante" class="form-control" disabled/>
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="input-group">
+							<span class="input-group-addon" for="tipo">Tipo</span> 
+						    <select class="form-control" id="tipo" name="tipo" ng-model="$ctrl.tipo" aria-describedby="basic-addon1" required>
+						    	<option value="">Selecione tipo...</option>
+						    	<option value="P">Parcela</option>
+						    	<option value="M">Medição</option>
+						   	</select>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="input-group" ng-show="$ctrl.tipo=='P'">
+							<span class="input-group-addon" for="tipo">Numero de vezes</span> 
+						    <input type="number" ng-model="$ctrl.numero_vezes" class="form-control" required/>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.gerarparcelas()" ng-disabled="!$ctrl.numero_vezes" ng-show="$ctrl.tipo=='P'">
+					  		<span class="glyphicon"></span> Gerar parcelas
+						</button>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+		<div class="panel panel-primary form-group-sm" ng-show="$ctrl.tipo=='M'">
+			<div class="panel-body">
+				<div class="row" ng-repeat="valorhora_hora in $ctrl.valorhoras_horas">
+					<div class="col-sm-12" >
+						<div class="input-group" >
+							<span class="input-group-addon" for="tipo">{{valorhora_hora.fase__itemfase__valor_hora__descricao}}</span> 
+						    <input type="number" ng-model="valorhora_hora.horas_restantes" class="form-control" disabled/>
+						</div>
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-sm-4">
-					<div class="input-group">
-						<span class="input-group-addon" for="tipo">Tipo</span> 
-					    <select class="form-control" id="tipo" name="tipo" ng-model="$ctrl.tipo" aria-describedby="basic-addon1" required>
-					    	<option value="">Selecione tipo...</option>
-					    	<option value="P">Parcela</option>
-					    	<option value="M">Medição</option>
-					   	</select>
-					</div>
-				</div>
-				<div class="col-sm-4">
-					<div class="input-group" ng-show="$ctrl.tipo=='P'">
-						<span class="input-group-addon" for="tipo">Numero de vezes</span> 
-					    <input type="number" ng-model="$ctrl.numero_vezes" class="form-control" required/>
-					</div>
-				</div>
-				<div class="col-sm-4">
-					<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.gerarparcelas()" ng-disabled="!$ctrl.numero_vezes" ng-show="$ctrl.tipo=='P'">
-				  		<span class="glyphicon"></span> Gerar parcelas
-					</button>
-				</div>
-			</div>
-			
 		</div>
 	</div>
 	
-	<div class="panel panel-primary form-group-sm" ng-show="$ctrl.tipo=='M'">
-		<div class="panel-body">
-			<div class="col-sm-3" ng-repeat="valorhora_hora in $ctrl.valorhoras_horas">
-				<div class="input-group" >
-					<span class="input-group-addon" for="tipo">{{valorhora_hora.fase__itemfase__valor_hora__descricao}}</span> 
-				    <input type="number" value="20" ng-model="valorhora_hora.horas_restantes" class="form-control" disabled/>
-				</div>
-			</div>
-		</div>
-	</div>
 	
-	<button type="button" class="btn btn-default" ng-click="$ctrl.adicionarparcela()" ng-show="($ctrl.tipo && $ctrl.parcelas) || ($ctrl.tipo == 'M')">
+	<button type="button" class="btn btn-default margin" ng-click="$ctrl.adicionarparcela()" ng-show="($ctrl.tipo && $ctrl.parcelas) || ($ctrl.tipo == 'M')">
 		<span class="glyphicon glyphicon-plus"></span> Adicionar parcela
 	</button>
 		
-	<form name="parcelas">
+	<form name="parcelas" style="height: 400px; overflow-y: scroll;">
 		<table class="table table-sm table-bordered table-striped table-highlight margin-top" ng-show="($ctrl.tipo == 'P' && $ctrl.parcelas)">
 			<thead>
 				<tr class="active">
@@ -92,105 +96,97 @@
 			</tbody>
 		</table>
 		
-		<table class="table table-sm table-bordered table-striped table-highlight margin-top"  ng-show="($ctrl.tipo == 'M')">
-			<thead>
-				<tr class="active">
-					<th class="col-sm-2">Descrição</th>
-					<th class="col-sm-2">Data parcela</th>
-					<th class="col-sm-12">Medições</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="parcela in $ctrl.parcelas" ng-show="!parcela.remover">
-					<td>
-						<input type="text" id="descricao" ng-model="parcela.descricao" name="descricao" maxlength="30" class="form-control" ng-required="$ctrl.tipo == 'M' && !parcela.remover"/>
-					</td>
-					<td>
-						<input type="text" id="data_prevista" ng-model="parcela.data_previsto_parcela" name="data_prevista" maxlength="30" ui-mask="99/99/9999" model-view-value="true"  class="form-control" ng-required="$ctrl.tipo == 'M' && !parcela.remover"/>
-					</td>
-					<td>
-						<div class="row">
-							<div class="col-sm-4">
-								<button type="button" class="btn btn-default" ng-click="$ctrl.adicionarfase(parcela, $ctrl.calcularvalortotalparcelas); $ctrl.calcularhorasrestantesparcela();">
-									Adicionar fase
-								</button>
-							</div>
-						</div>
-						<div ng-repeat="parcelafase in parcela.parcelafases" ng-show="!parcelafase.remover">
-							<div class="panel panel-primary form-group-sm" ng-show="$ctrl.tipo=='M'">
-								<div class="panel-body">
-									<div class="col-sm-4">
-										<div class="input-group" >
-											<span class="input-group-addon" for="tipo">Fase:</span> 
-										    <select type="number" value="20" ng-model="parcelafase.fase.id" ng-options="f.id as f.descricao for f in $ctrl.listafases" class="form-control">
-										    	<option value="">Selecione...</option>
-										    </select>
-										</div>
+		<div class="panel panel-default form-group-sm"  ng-repeat="parcela in $ctrl.parcelas" ng-show="$ctrl.tipo=='M' && !parcela.remover">
+			<div class="panel-heading">
+				<div class="col-sm-4">
+					<div class="input-group" >
+						<span class="input-group-addon">Descrição</span> 
+					    <input type="text" ng-model="parcela.descricao" class="form-control"/>
+					</div>
+				</div>
+				<div class="col-sm-4">
+					<div class="input-group" >
+						<span class="input-group-addon">Data prevista</span> 
+					    <input type="text" class="form-control" ng-model="parcela.data_previsto_parcela" ui-mask="99/99/9999" model-view-value="true" />
+					</div>
+				</div>
+				<button type="button" class="btn btn-sm btn-default" ng-click="$ctrl.adicionarfase(parcela, $ctrl.calcularvalortotalparcelas); $ctrl.calcularhorasrestantesparcela();">
+					Adicionar fase
+				</button>
+				<button type="button" class="btn btn-sm btn-default pull-right" ng-click="$ctrl.remover(parcela, $ctrl.calcularvalorrestante); $ctrl.calcularvalortotalparcelas(); $ctrl.calcularhorasrestantesparcela();">
+					<span class="glyphicon glyphicon-remove"></span>
+				</button>
+				
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-sm-10" ng-repeat="parcelafase in parcela.parcelafases" ng-show="!parcelafase.remover">
+						<div class="panel panel-default form-group-sm" ng-show="$ctrl.tipo=='M'">
+							<div class="panel-heading">
+								<div class="col-sm-6">
+									<div class="input-group" >
+										<span class="input-group-addon" for="tipo">Fase:</span> 
+									    <select type="number" value="20" ng-model="parcelafase.fase.id" ng-options="f.id as f.descricao for f in $ctrl.listafases" class="form-control">
+									    	<option value="">Selecione...</option>
+									    </select>
 									</div>
-									<div class="col-sm-4">
+								</div>
 									<button type="button" class="btn btn-sm btn-default" ng-click="$ctrl.adicionarmedicao(parcelafase)">
 										Adicionar
 									</button>
-									<button type="button" class="btn btn-sm btn-default" ng-click="$ctrl.remover(parcelafase, $ctrl.calcularvalortotalparcelas); $ctrl.calcularhorasrestantesparcela();">
-										Remover fase
+									<button type="button" class="btn btn-sm btn-default pull-right" ng-click="$ctrl.remover(parcelafase, $ctrl.calcularvalortotalparcelas); $ctrl.calcularhorasrestantesparcela();">
+										<span class="glyphicon glyphicon-remove"></span>
 									</button>
-									</div>
-								</div>
-							</div>	
-							<table class="table table-sm table-bordered">
-								<thead>
-									<tr>
-										<th class="col-sm-3">Tipo hora</th>
-										<th class="col-sm-2">Valor hora</th>
-										<th class="col-sm-2">Quantidade</th>
-										<th>Valor</th>
-										<th class="col-sm-1"></th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr ng-repeat="medicao in parcelafase.medicoes" ng-show="!medicao.remover">
-										<td>
-											<select id="valorhora" name="valorhora" ng-model="medicao.valor_hora.id" class="form-control" ng-change="$ctrl.changevalorhora(medicao); $ctrl.changequantidadehoras(medicao);" ng-options="v.id as v.descricao for v in $ctrl.listavalorhora" ng-required="$ctrl.tipo == 'M' && !parcela.remover">
-									    		<option value="">Selecione um tipo...</option>
-									    	</select>
-										</td>
-										<td>
-											<input type="text" id="valor" ng-model="medicao.valor" name="valor" class="form-control" value="2,00" disabled/>
-										</td>
-										<td>
-											<input type="number" id="quantidade_horas" ng-model="medicao.quantidade_horas" ng-change="$ctrl.changequantidadehoras(medicao)" name="quantidade_horas" class="form-control" ng-required="$ctrl.tipo == 'M' && !parcela.remover"/>
-										</td>
-										<td>
-											<input type="text" id="valor_total" name="valor_total" ng-model="medicao.valor_total" class="form-control" value="30,00" disabled/>
-										</td>
-										<td>
-											<button type="button" class="btn btn-default" ng-click="$ctrl.remover(medicao, $ctrl.calcularvalortotalparcelas); $ctrl.calcularhorasrestantesparcela();">
-												<span class="glyphicon glyphicon-trash"></span>
-											</button>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<div class="form-group form-group-sm col-sm-5">
-							<label for="descricao">Valor total</label> 
-						    <input type="text" id="descricao" name="descricao" ng-model="parcela.valor_parcela" class="form-control" disabled ng-required="$ctrl.tipo == 'M'"/>
-						</div>
-						
-					</td>
-					<td>
-						<button type="button" class="btn btn-default" ng-click="$ctrl.remover(parcela, $ctrl.calcularvalorrestante); $ctrl.calcularvalortotalparcelas(); $ctrl.calcularhorasrestantesparcela();">
-							<span class="glyphicon glyphicon-trash"></span>
-						</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+							</div>
+							<div class="panel-body">
+								<table class="table table-sm table-bordered">
+									<thead>
+										<tr>
+											<th class="col-sm-4">Perfil</th>
+											<th class="col-sm-2">Valor</th>
+											<th class="col-sm-2">Quantidade</th>
+											<th>Valor</th>
+											<th class="col-sm-1"></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="medicao in parcelafase.medicoes" ng-show="!medicao.remover">
+											<td>
+												<select id="valorhora" name="valorhora" ng-model="medicao.valor_hora.id" class="form-control" ng-change="$ctrl.changevalorhora(medicao); $ctrl.changequantidadehoras(medicao);" ng-options="v.id as v.descricao for v in $ctrl.valorhoraobject[parcelafase.fase.id]" ng-required="$ctrl.tipo == 'M' && !parcela.remover">
+										    		<option value="">Selecione um tipo...</option>
+										    	</select>
+											</td>
+											<td>
+												<input type="text" id="valor" ng-model="medicao.valor" name="valor" class="form-control" value="2,00" disabled/>
+											</td>
+											<td>
+												<input type="number" id="quantidade_horas" ng-model="medicao.quantidade_horas" ng-change="$ctrl.changequantidadehoras(medicao)" name="quantidade_horas" class="form-control" ng-required="$ctrl.tipo == 'M' && !parcela.remover"/>
+											</td>
+											<td>
+												<input type="text" id="valor_total" name="valor_total" ng-model="medicao.valor_total" class="form-control" value="30,00" disabled/>
+											</td>
+											<td>
+												<button type="button" class="btn btn-default" ng-click="$ctrl.remover(medicao, $ctrl.calcularvalortotalparcelas); $ctrl.calcularhorasrestantesparcela();">
+													<span class="glyphicon glyphicon-trash"></span>
+												</button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>	
+					</div>
+				</div>
+				<div class="form-group form-group-sm col-sm-5">
+					<label for="descricao">Valor total</label> 
+				    <input type="text" id="descricao" name="descricao" ng-model="parcela.valor_parcela" class="form-control" disabled ng-required="$ctrl.tipo == 'M'"/>
+				</div>
+			</div>
+		</div>
 		
-		<button type="button" class="btn btn-primary margin-top" ng-click="$ctrl.gravarparcelas()" ng-disabled="parcelas.$invalid" ng-show="$ctrl.tipo && $ctrl.parcelas">Gravar</button>
 	</form>
 </div>
 <div class="modal-footer">
-  	<button class="btn btn-primary" type="button" ng-click="$ctrl.fechar()">Sair</button>
+	<button type="button" class="btn btn-primary" ng-click="$ctrl.gravarparcelas()" ng-disabled="parcelas.$invalid" ng-show="$ctrl.tipo && $ctrl.parcelas">Gravar</button>
+  	<button type="button" class="btn btn-primary"  ng-click="$ctrl.fechar()">Sair</button>
 </div> 

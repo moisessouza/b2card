@@ -104,7 +104,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		modalInstance.result.then(function(data) {
 			$ctrl.demanda.parcelas = data.parcelas;
 			$ctrl.demanda.tipo_parcela = data.tipo_parcela;
-			configurarparcelas($ctrl.demanda);
+			//configurarparcelas($ctrl.demanda);
 			$ctrl.calcularvalorrestante();
 			$ctrl.calcularhorasrestantesparcela();
 		}, function() {
@@ -167,9 +167,9 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			
 			configurarorcamento(data);
 			configuraritensfaturamento(data);
-			configurarparcelas(data);
+			//configurarparcelas(data);
 			
-			ParcelaService.buscartotalhoras(data.id, function (data){
+			/*ParcelaService.buscartotalhoras(data.id, function (data){
 				$ctrl.parcela.total_horas = data.total_horas
 				$ctrl.calcularvalorrestante();
 			});
@@ -182,7 +182,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 				}
 				
 				$ctrl.calcularhorasrestantesparcela();
-			});
+			});*/
 			
 			
 			$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(demanda_id, $ctrl.changeatividade);
@@ -473,7 +473,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			$ctrl.demanda = data;
 			configuraritensfaturamento(data);
 			configurarorcamento(data);
-			configurarparcelas(data)
+			//configurarparcelas(data)
 			$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(data.id, $ctrl.changeatividade);
 			messagesuccess('salvo!')
 		});
@@ -487,7 +487,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	
 	// PARCELAS
 	
-	var configurarparcelas = function (data) {
+	/*var configurarparcelas = function (data) {
 		if (data.parcelas) {
 			for ( var i in data.parcelas) {
 				var parcela = $ctrl.demanda.parcelas[i];
@@ -643,6 +643,6 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 				}
 			}
 		}
-	}
+	}*/
 	
 });
