@@ -46,21 +46,16 @@
 		</div>
 		<div class="panel panel-primary form-group-sm" ng-show="$ctrl.tipo=='P' && $ctrl.parcelas.length == 0">
 			<div class="panel-body">
-				<div class="row">
-					<div class="col-sm-12">
-						<div class="input-group">
-							<span class="input-group-addon" for="tipo">Numero de vezes</span> 
-						    <input type="number" ng-model="$ctrl.numero_vezes" class="form-control" required/>
-						</div>
+				<div class="col-sm-7">
+					<div class="input-group">
+						 
+					    <input type="number" ng-model="$ctrl.numero_vezes" class="form-control" required/>
+					    <span class="input-group-addon" for="tipo">Vezes</span>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-sm-6">
-						<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.gerarparcelas()" ng-disabled="!$ctrl.numero_vezes">
-					  		<span class="glyphicon"></span> Gerar parcelas
-						</button>
-					</div>
-				</div>
+				<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.gerarparcelas()" ng-disabled="!$ctrl.numero_vezes">
+			  		<span class="glyphicon"></span> Gerar parcelas
+				</button>
 			</div>
 		</div>
 		<!-- <div class="panel panel-primary form-group-sm" ng-repeat="fase in $ctrl.listafases" ng-show="$ctrl.tipo=='P'">
