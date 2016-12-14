@@ -11,7 +11,7 @@ from demandas.serializers import FaseSerializer
 class ParcelaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Parcela
-        fields = ('id', 'descricao', 'valor_parcela', 'numero_horas', 'status', 'data_previsto_parcela', 'tipo_parcela')
+        fields = ('id', 'descricao', 'valor_parcela', 'status', 'data_previsto_parcela', 'tipo_parcela')
         
 class MedicaoSerializer(serializers.ModelSerializer):
     valor_hora = ValorHoraSerializer()
@@ -24,4 +24,4 @@ class ParcelaFaseSerializer(serializers.ModelSerializer):
     fase = FaseSerializer()
     class Meta:
         model = ParcelaFase
-        fields = ('id', 'parcela', 'fase')
+        fields = ('id', 'parcela', 'fase', 'valor')

@@ -90,7 +90,7 @@ commons.directive('gbMoney', function () {
 			
 			return [dia, mes, ano].join('/');	
 		},
-		arrendodar: function (numero){
+		arredondar: function (numero){
 			if (numero){
 				return numero.toFixed(2);
 			} else {

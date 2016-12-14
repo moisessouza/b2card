@@ -34,7 +34,7 @@
 					<div class="col-sm-6">
 						<div class="input-group">
 							<span class="input-group-addon" for="tipo">Tipo</span> 
-						    <select class="form-control" id="tipo" name="tipo" ng-model="$ctrl.tipo" aria-describedby="basic-addon1" required>
+						    <select class="form-control" id="tipo" name="tipo" ng-model="$ctrl.tipo" ng-change="$ctrl.changetipoparcela()" aria-describedby="basic-addon1" ng-disabled="$ctrl.parcelas.length > 0" required>
 						    	<option value="">Selecione tipo...</option>
 						    	<option value="P">Parcela</option>
 						    	<option value="M">Medição</option>
@@ -44,7 +44,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="panel panel-primary form-group-sm" ng-show="$ctrl.tipo=='P'">
+		<div class="panel panel-primary form-group-sm" ng-show="$ctrl.tipo=='P' && $ctrl.parcelas.length == 0">
 			<div class="panel-body">
 				<div class="row">
 					<div class="col-sm-12">
@@ -80,36 +80,7 @@
 		<span class="glyphicon glyphicon-plus"></span> Adicionar parcela
 	</button>
 	<form name="parcelas" style="height: 75%; overflow-y: scroll;">
-		<table class="table table-sm table-bordered table-striped table-highlight margin-top ng-hide" ng-show="($ctrl.tipo == 'P' && $ctrl.parcelas)">
-			<thead>
-				<tr class="active">
-					<th>Descrição</th>
-					<th>Data prevista parcela</th>
-					<th>Valor da parcela</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="parcela in $ctrl.parcelas" ng-show="!parcela.remover">
-					<td class="col-sm-4">
-						<input type="text" id="descricao" ng-model="parcela.descricao" name="descricao" maxlength="30" class="form-control" ng-required="$ctrl.tipo == 'P'"/>
-					</td>
-					<td class="col-sm-3">
-						<input type="text" id="data_prevista" ng-model="parcela.data_previsto_parcela" name="data_prevista" maxlength="30" ui-mask="99/99/9999" model-view-value="true"  class="form-control" ng-required="$ctrl.tipo == 'P'"/>
-					</td>
-					<td class="col-sm-4">
-						<input type="text" id="valor_parcela" ng-model="parcela.valor_parcela" name="valor_parcela" maxlength="30" ng-change="$ctrl.calcularvalorrestante(); $ctrl.calcularnumerohorasparcelas();" gb-money class="form-control" ng-disabled="$ctrl.tipo == 'M'" ng-required="$ctrl.tipo == 'P'"/>
-					</td>
-					<td>
-						<button type="button" class="btn btn-default" ng-click="$ctrl.remover(parcela, $ctrl.calcularvalorrestante); $ctrl.calcularvalortotalparcelas(); $ctrl.calcularhorasrestantesparcela();">
-							<span class="glyphicon glyphicon-trash"></span>
-						</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		
-		<div class="panel panel-default form-group-sm"  ng-repeat="parcela in $ctrl.parcelas" ng-show="$ctrl.tipo == 'M' && !parcela.remover">
+		<div class="panel panel-default form-group-sm"  ng-repeat="parcela in $ctrl.parcelas" ng-show="!parcela.remover">
 			<div class="panel-heading">
 				<div class="col-sm-4">
 					<div class="input-group" >
@@ -136,22 +107,30 @@
 					<div class="col-sm-12" ng-repeat="parcelafase in parcela.parcelafases" ng-show="!parcelafase.remover">
 						<div class="panel panel-default form-group-sm">
 							<div class="panel-heading">
-								<div class="col-sm-6">
-									<div class="input-group" >
-										<span class="input-group-addon" for="tipo">Fase:</span> 
-									    <select type="number" value="20" ng-model="parcelafase.fase.id" ng-options="f.id as f.descricao for f in $ctrl.listafases" class="form-control">
-									    	<option value="">Selecione...</option>
-									    </select>
+								<div class="col-sm-10">
+									<div class="col-sm-5">
+										<div class="input-group" >
+											<span class="input-group-addon" for="tipo">Fase:</span> 
+										    <select type="number" value="20" ng-model="parcelafase.fase.id" ng-options="f.id as f.descricao for f in $ctrl.listafases" class="form-control">
+										    	<option value="">Selecione...</option>
+										    </select>
+										</div>
+									</div>
+									<div class="col-sm-5" ng-show="$ctrl.tipo == 'P'">
+										<div class="input-group" >
+											<span class="input-group-addon" for="tipo">Valor:</span> 
+										    <input type="text" value="20" ng-model="parcelafase.valor" ng-change="$ctrl.calcularvalortotalparcelas();$ctrl.calcularvalorrestante();" gb-money class="form-control">
+										</div>
 									</div>
 								</div>
-								<button type="button" class="btn btn-sm btn-default" ng-click="$ctrl.adicionarmedicao(parcelafase)">
+								<button type="button" class="btn btn-sm btn-default" ng-click="$ctrl.adicionarmedicao(parcelafase)" ng-show="$ctrl.tipo == 'M'">
 									Adicionar
 								</button>
-								<button type="button" class="btn btn-sm btn-default pull-right" ng-click="$ctrl.remover(parcelafase, $ctrl.calcularvalortotalparcelas); $ctrl.calcularhorasrestantesparcela();">
+								<button type="button" class="btn btn-sm btn-default " ng-click="$ctrl.remover(parcelafase, $ctrl.calcularvalortotalparcelas); $ctrl.calcularhorasrestantesparcela();">
 									<span class="glyphicon glyphicon-remove"></span>
 								</button>
 							</div>
-							<div class="panel-body">
+							<div class="panel-body" ng-show="$ctrl.tipo == 'M'">
 								<table class="table table-sm table-bordered">
 									<thead>
 										<tr>

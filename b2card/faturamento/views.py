@@ -74,9 +74,7 @@ class ParcelaList(APIView):
                 parcela.demanda = demanda
                 parcela.save()
                 
-                parcelafase_resp = None
-                if tipo_parcela == 'M':
-                    parcelafase_resp = self.gravar_parcelafases(parcela, parcelafase_list)
+                parcelafase_resp = self.gravar_parcelafases(parcela, parcelafase_list)
 
                 serializer = ParcelaSerializer(parcela).data
                 serializer['data_previsto_parcela'] = formatar_data(parcela.data_previsto_parcela)
@@ -109,20 +107,23 @@ class ParcelaList(APIView):
                     if 'parcela' in i:
                         del i['parcela']
                         
-                    medicoes = []
+                    medicoes = None
                     if 'medicoes' in i:
                         medicoes = i['medicoes']
                         del i['medicoes']
                     
                     parcela_fase = ParcelaFase(**i)
+                    parcela_fase.valor = converter_string_para_float(parcela_fase.valor);
                     parcela_fase.parcela = parcela
                     parcela_fase.fase = fase
                     parcela_fase.save();
                     
                     data = ParcelaFaseSerializer(parcela_fase).data
                     
-                    medicao_list = self.gravar_medicoes(parcela_fase, medicoes)
-                    data['medicoes'] = medicao_list
+                    if medicoes:
+                        medicao_list = self.gravar_medicoes(parcela_fase, medicoes)
+                        data['medicoes'] = medicao_list
+                        
                     parcelafase_list.append(data)
                 
                 elif 'id' in i:

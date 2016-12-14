@@ -24,7 +24,6 @@ class Parcela(models.Model):
     descricao = models.CharField(max_length = 200)
     valor_parcela = models.FloatField(max_length=30, null=True)
     status = models.CharField(max_length=2, choices=STATUS, null=True)
-    numero_horas = models.IntegerField(null=True)
     data_previsto_parcela = models.DateField(null=True)
     demanda = models.ForeignKey(Demanda, null=True)
     tipo_parcela = models.CharField(max_length=1, choices = TIPO_PARCELA, null=True)
@@ -32,6 +31,7 @@ class Parcela(models.Model):
 class ParcelaFase(models.Model):
     parcela = models.ForeignKey(Parcela)
     fase = models.ForeignKey(Fase)
+    valor = models.FloatField(max_length=30, null=True)
     
 class Medicao(models.Model):
     parcela_fase = models.ForeignKey(ParcelaFase, null=True)

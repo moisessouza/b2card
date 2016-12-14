@@ -470,7 +470,12 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	$ctrl.salvardemanda = function (){
 		messageinfo("salvando...");
 		DemandaService.salvardemanda($ctrl.demanda, function(data){
-			$window.location.href = '/demandas/editar/' + data.id;
+			share.demanda = data;
+			$ctrl.demanda = data;
+			configuraritensfaturamento(data);
+			configurarorcamento(data);
+			$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(data.id, $ctrl.changeatividade);
+			messagesuccess('salvo!')
 		});
 	}
 	
