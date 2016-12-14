@@ -3,6 +3,7 @@
 demandas.controller('ModalParcelasController', function ($scope, $window, $uibModalInstance, demanda, listavalorhora, CommonsService, ParcelaService){
 	var $ctrl = this;
 	
+	$ctrl.demanda = demanda;
 	$ctrl.total_orcamento = demanda.orcamento.total_orcamento;
 	$ctrl.listavalorhora = listavalorhora;
 	$ctrl.listafases = demanda.orcamento.fases;
@@ -120,6 +121,135 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 		}
 	}
 	
+	var buscarquantidadefase = function (fase, valorhora) {
+		var itensfase = fase.itensfase;
+		if (itensfase) {
+			for (var int = 0; int < itensfase.length; int++) {
+				var itemfase = itensfase[int];
+				if (itemfase.valor_hora.id == valorhora.id) {
+					return itemfase.quantidade_horas;
+				}
+			}
+		}
+	}
+	
+	var calcularvalormedicoes = function () {
+		for (let parcela of $ctrl.parcelas) {
+			for (let parcelafase of parcela.parcelafases) {
+				for (let medicao of parcelafase.medicoes) {
+					if (medicao.valor){
+						medicao.valor_total = CommonsService.formatarnumero(CommonsService.stringparafloat(medicao.valor) * medicao.quantidade_horas);
+					} 
+				}
+			}
+		}
+	}
+	
+	/*$ctrl.gerarparcelas = function (){
+		
+		if ($ctrl.numero_vezes){
+			
+			$ctrl.parcelas = [];
+			
+			var fasequantidadesobra = {}
+			
+			for (var int = 0; int < $ctrl.numero_vezes; int++) {
+				if ($ctrl.listafases){
+
+					var listaparcelafase = [];
+					
+					for (var lf = 0; lf < $ctrl.listafases.length; lf++) {
+						var fase = $ctrl.listafases[lf];
+						
+						if (!fasequantidadesobra[fase.id]){
+							fasequantidadesobra[fase.id] = {};
+							for (let itemfase of fase.itensfase) {
+								if (!fasequantidadesobra[fase.id][itemfase.valor_hora.id]){
+									fasequantidadesobra[fase.id][itemfase.valor_hora.id] = itemfase.quantidade_horas;
+								}
+							}
+						}
+						
+						var medicoes = [];
+						
+						var parcelafase = {
+							fase: fase,
+							medicoes: medicoes
+						}
+						
+						var valorhoralist = $ctrl.valorhoraobject[fase.id];
+						
+						if (valorhoralist){
+							for (var vh = 0; vh < valorhoralist.length; vh++) {
+								var valorhora = valorhoralist[vh];
+								
+								var quantidade = buscarquantidadefase(fase, valorhora);
+								
+								var quantidade_horas = parseInt(quantidade / $ctrl.numero_vezes)
+								
+								if (fasequantidadesobra[fase.id][valorhora.id]){
+									fasequantidadesobra[fase.id][valorhora.id] -= quantidade_horas;
+								} 
+								
+								var medicao = {
+									valor_hora: valorhora,
+									valor: CommonsService.formatarnumero(valorhora.vigencia.valor),
+									quantidade_horas: quantidade_horas
+								}
+								
+								medicoes.push(medicao);
+								
+							}
+						}
+						
+						listaparcelafase.push(parcelafase);
+						
+					}
+					
+					var parcela = {
+						parcelafases: listaparcelafase
+					}
+					
+					$ctrl.parcelas.push(parcela);
+					
+				}
+			}
+			
+			for (var lf = 0; lf < $ctrl.listafases.length; lf++) {
+				
+				var fase = $ctrl.listafases(lf);
+				
+				for (var vh = 0; vh < $ctrl.listavalorhora.length; vh++) {
+					var valorhora = $ctrl.listavalorhora[vh];
+					var quantidadehoras = fasequantidadehoras[fase.id][valorhora.id];
+					for (let itemfase of fase.itensfase) {
+						if (itemfase.valor_hora.id == valorhora.id) {
+							var quantidadesobra = itemfase.quantidade_horas
+						}
+					}
+					
+				}
+				
+			}
+			
+			var ultimaparcela = $ctrl.parcelas[$ctrl.parcelas.length-1];
+			
+			for (let parcelafase of ultimaparcela.parcelafases) {
+				var fase = parcelafase.fase;
+				for (let medicao of parcelafase.medicoes) {
+					var sobra = fasequantidadesobra[fase.id][medicao.valor_hora.id];
+					medicao.quantidade_horas+=sobra;
+				}
+			}
+			
+			calcularvalormedicoes();
+			$ctrl.calcularvalortotalparcelas();
+			$ctrl.calcularvalorrestante();
+			$ctrl.calcularhorasrestantesparcela();
+			
+		}
+	}*/
+	
 	$ctrl.gerarparcelas = function (){
 		
 		$ctrl.parcelas = [];
@@ -141,6 +271,7 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 				}
 				valortotal+=valorparcela;
 				$ctrl.parcelas.push(parcela);
+					
 			}
 			
 			var diferenca = CommonsService.stringparafloat(demanda.orcamento.total_orcamento) - valortotal;
@@ -154,6 +285,7 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 			$ctrl.calcularvalorrestante();
 			
 		}
+		
 	}
 	
 	$ctrl.calcularnumerohorasparcelas = function () {

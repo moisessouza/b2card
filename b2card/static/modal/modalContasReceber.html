@@ -3,6 +3,19 @@
 	<div class="col-sm-4">
 		<div class="panel panel-primary form-group-sm">
 			<div class="panel-body">
+				<div class="form-group">
+					<label>Demanda ID</label>
+					<input type="text" ng-model="$ctrl.demanda.id" class="form-control" disabled/>
+				</div>
+				<div class="form-group">
+					<label>Demanda descrição</label>
+					<input type="text" ng-model="$ctrl.demanda.descricao" class="form-control" disabled/>
+				</div>
+			</div>
+			
+		</div>
+		<div class="panel panel-primary form-group-sm">
+			<div class="panel-body">
 				<div class="row">
 					<div class="col-sm-4">
 						<div class="form-group">
@@ -29,9 +42,13 @@
 						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+		<div class="panel panel-primary form-group-sm" ng-show="$ctrl.tipo=='P'">
+			<div class="panel-body">
 				<div class="row">
 					<div class="col-sm-12">
-						<div class="input-group" ng-show="$ctrl.tipo=='P'">
+						<div class="input-group">
 							<span class="input-group-addon" for="tipo">Numero de vezes</span> 
 						    <input type="number" ng-model="$ctrl.numero_vezes" class="form-control" required/>
 						</div>
@@ -39,12 +56,11 @@
 				</div>
 				<div class="row">
 					<div class="col-sm-6">
-						<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.gerarparcelas()" ng-disabled="!$ctrl.numero_vezes" ng-show="$ctrl.tipo=='P'">
+						<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.gerarparcelas()" ng-disabled="!$ctrl.numero_vezes">
 					  		<span class="glyphicon"></span> Gerar parcelas
 						</button>
 					</div>
 				</div>
-				
 			</div>
 		</div>
 		<div class="panel panel-primary form-group-sm" ng-show="$ctrl.tipo=='M'">
@@ -64,7 +80,7 @@
 		<span class="glyphicon glyphicon-plus"></span> Adicionar parcela
 	</button>
 	<form name="parcelas" style="height: 75%; overflow-y: scroll;">
-		<table class="table table-sm table-bordered table-striped table-highlight margin-top" ng-show="($ctrl.tipo == 'P' && $ctrl.parcelas)">
+		<table class="table table-sm table-bordered table-striped table-highlight margin-top ng-hide" ng-show="($ctrl.tipo == 'P' && $ctrl.parcelas)">
 			<thead>
 				<tr class="active">
 					<th>Descrição</th>
@@ -93,7 +109,7 @@
 			</tbody>
 		</table>
 		
-		<div class="panel panel-default form-group-sm"  ng-repeat="parcela in $ctrl.parcelas" ng-show="$ctrl.tipo=='M' && !parcela.remover">
+		<div class="panel panel-default form-group-sm"  ng-repeat="parcela in $ctrl.parcelas" ng-show="$ctrl.tipo == 'M' && !parcela.remover">
 			<div class="panel-heading">
 				<div class="col-sm-4">
 					<div class="input-group" >
@@ -118,7 +134,7 @@
 			<div class="panel-body">
 				<div class="row">
 					<div class="col-sm-12" ng-repeat="parcelafase in parcela.parcelafases" ng-show="!parcelafase.remover">
-						<div class="panel panel-default form-group-sm" ng-show="$ctrl.tipo=='M'">
+						<div class="panel panel-default form-group-sm">
 							<div class="panel-heading">
 								<div class="col-sm-6">
 									<div class="input-group" >
@@ -128,12 +144,12 @@
 									    </select>
 									</div>
 								</div>
-									<button type="button" class="btn btn-sm btn-default" ng-click="$ctrl.adicionarmedicao(parcelafase)">
-										Adicionar
-									</button>
-									<button type="button" class="btn btn-sm btn-default pull-right" ng-click="$ctrl.remover(parcelafase, $ctrl.calcularvalortotalparcelas); $ctrl.calcularhorasrestantesparcela();">
-										<span class="glyphicon glyphicon-remove"></span>
-									</button>
+								<button type="button" class="btn btn-sm btn-default" ng-click="$ctrl.adicionarmedicao(parcelafase)">
+									Adicionar
+								</button>
+								<button type="button" class="btn btn-sm btn-default pull-right" ng-click="$ctrl.remover(parcelafase, $ctrl.calcularvalortotalparcelas); $ctrl.calcularhorasrestantesparcela();">
+									<span class="glyphicon glyphicon-remove"></span>
+								</button>
 							</div>
 							<div class="panel-body">
 								<table class="table table-sm table-bordered">
@@ -176,7 +192,7 @@
 				</div>
 				<div class="form-group form-group-sm col-sm-5">
 					<label for="descricao">Valor total</label> 
-				    <input type="text" id="descricao" name="descricao" ng-model="parcela.valor_parcela" class="form-control" disabled ng-required="$ctrl.tipo == 'M'"/>
+				    <input type="text" id="descricao" name="descricao" ng-model="parcela.valor_parcela" class="form-control" disabled ng-required="$ctrl.tipo == 'M' && !parcela.remover"/>
 				</div>
 			</div>
 		</div>

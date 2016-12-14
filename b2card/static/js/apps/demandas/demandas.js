@@ -102,11 +102,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		});
 			
 		modalInstance.result.then(function(data) {
-			$ctrl.demanda.parcelas = data.parcelas;
-			$ctrl.demanda.tipo_parcela = data.tipo_parcela;
-			//configurarparcelas($ctrl.demanda);
-			$ctrl.calcularvalorrestante();
-			$ctrl.calcularhorasrestantesparcela();
+			configurardemanda($ctrl.demanda.id);
 		}, function() {
 			// $log.info('Modal dismissed at: ' + new Date());
 		});
@@ -150,60 +146,66 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		
 	}
 	
-	if (demanda_id) {
-		$ctrl.demanda = DemandaService.buscardemanda(demanda_id, function (data){
-			
-			$ctrl.show=true;
-			
-			var ocorrencias = data.ocorrencias;
-			for ( var i in ocorrencias ){
-				ocorrencias[i].show = false;
-			}
-			
-			var tarefas = data.tarefas;
-			for ( var i in tarefas ){
-				tarefas[i].show = false;
-			}
-			
-			configurarorcamento(data);
-			configuraritensfaturamento(data);
-			//configurarparcelas(data);
-			
-			/*ParcelaService.buscartotalhoras(data.id, function (data){
-				$ctrl.parcela.total_horas = data.total_horas
-				$ctrl.calcularvalorrestante();
-			});
-			
-			ParcelaService.buscartotalhorasporvalorhora(data.id, function(data){
-				$ctrl.valorhoras_horas_raw = data;
+	var configurardemanda = function (demanda_id) {
+	
+		if (demanda_id) {
+			$ctrl.demanda = DemandaService.buscardemanda(demanda_id, function (data){
 				
-				for (var i = 0; i < $ctrl.valorhoras_horas_raw.length; i++){
-					$ctrl.valorhoras_horas_raw[i].horas_restantes = $ctrl.valorhoras_horas_raw[i].total_horas;
+				$ctrl.show=true;
+				
+				var ocorrencias = data.ocorrencias;
+				for ( var i in ocorrencias ){
+					ocorrencias[i].show = false;
 				}
 				
-				$ctrl.calcularhorasrestantesparcela();
-			});*/
+				var tarefas = data.tarefas;
+				for ( var i in tarefas ){
+					tarefas[i].show = false;
+				}
+				
+				configurarorcamento(data);
+				configuraritensfaturamento(data);
+				//configurarparcelas(data);
+				
+				/*ParcelaService.buscartotalhoras(data.id, function (data){
+					$ctrl.parcela.total_horas = data.total_horas
+					$ctrl.calcularvalorrestante();
+				});
+				
+				ParcelaService.buscartotalhorasporvalorhora(data.id, function(data){
+					$ctrl.valorhoras_horas_raw = data;
+					
+					for (var i = 0; i < $ctrl.valorhoras_horas_raw.length; i++){
+						$ctrl.valorhoras_horas_raw[i].horas_restantes = $ctrl.valorhoras_horas_raw[i].total_horas;
+					}
+					
+					$ctrl.calcularhorasrestantesparcela();
+				});*/
+				
+				
+				$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(demanda_id, $ctrl.changeatividade);
+				
+			});
 			
+			share.demanda = $ctrl.demanda;
 			
-			$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(demanda_id, $ctrl.changeatividade);
-			
-		});
-		
-		share.demanda = $ctrl.demanda;
-		
-	} else {
-		$ctrl.demanda = {
-			'itens_faturamento': [{}],
-			'propostas':[{}],
-			'tarefas':[{}],
-			'observacoes':[{}],
-			'ocorrencias':[{}],
-			'orcamento': {},
-			'atividades': [{}]
+		} else {
+			$ctrl.demanda = {
+				'itens_faturamento': [{}],
+				'propostas':[{}],
+				'tarefas':[{}],
+				'observacoes':[{}],
+				'ocorrencias':[{}],
+				'orcamento': {},
+				'atividades': [{}]
+			}
+			$ctrl.show=true;
+			$ctrl.listacentroresultadoshoras = []
 		}
-		$ctrl.show=true;
-		$ctrl.listacentroresultadoshoras = []
+	
 	}
+	
+	configurardemanda(demanda_id);
 	
 	$ctrl.adicionaritem = function () {
 		$ctrl.demanda.itens_faturamento.unshift({
@@ -467,15 +469,8 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	
 	$ctrl.salvardemanda = function (){
 		messageinfo("salvando...");
-		
 		DemandaService.salvardemanda($ctrl.demanda, function(data){
-			share.demanda = data;
-			$ctrl.demanda = data;
-			configuraritensfaturamento(data);
-			configurarorcamento(data);
-			//configurarparcelas(data)
-			$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(data.id, $ctrl.changeatividade);
-			messagesuccess('salvo!')
+			$window.location.href = '/demandas/editar/' + data.id;
 		});
 	}
 	

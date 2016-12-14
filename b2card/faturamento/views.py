@@ -6,10 +6,11 @@ from rest_framework.response import Response
 from utils.utils import converter_string_para_float, converter_string_para_data, formatar_data
 from demandas.models import Demanda, Fase
 from exceptions import Exception
-from cadastros.models import ValorHora, TipoHora
+from cadastros.models import ValorHora, TipoHora, Vigencia
 from rest_framework.decorators import api_view
 from demandas.serializers import FaseSerializer
-from cadastros.serializers import TipoHoraSerializer, ValorHoraSerializer
+from cadastros.serializers import TipoHoraSerializer, ValorHoraSerializer, VigenciaSerializer
+import datetime
 
 # Create your views here.
 
@@ -191,8 +192,17 @@ def buscar_tipo_hora_por_fases(request, demanda_id, format=None):
     for i in fase_list:
         serializer = FaseSerializer(i).data
         faseserializer_list.append(serializer)
-        valorhora_list = ValorHora.objects.filter(itemfase__fase = i).distinct()
-        serializer['valorhora'] = ValorHoraSerializer(valorhora_list, many=True).data
+        valor_horas = ValorHora.objects.filter(itemfase__fase = i).distinct()
+        
+        valor_hora_list = []
+        for i in valor_horas:
+            vigencia = Vigencia.objects.filter(valor_hora=i, data_inicio__lte = datetime.date.today(), data_fim__gte = datetime.date.today())
+            if vigencia:
+                valor_hora_data = ValorHoraSerializer(i).data    
+                valor_hora_data['vigencia'] = VigenciaSerializer(vigencia[0]).data
+                valor_hora_list.append(valor_hora_data)
+        
+        serializer['valorhora'] = valor_hora_list
         
     
     return Response(faseserializer_list)
