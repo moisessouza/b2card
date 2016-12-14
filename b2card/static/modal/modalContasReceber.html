@@ -63,6 +63,20 @@
 				</div>
 			</div>
 		</div>
+		<!-- <div class="panel panel-primary form-group-sm" ng-repeat="fase in $ctrl.listafases" ng-show="$ctrl.tipo=='P'">
+			<div class="panel-heading">
+				{{fase.descricao}}
+			</div>
+			<div class="panel-body">
+				
+				<div class="input-group">
+					<span class="input-group-addon" for="tipo">Valor total</span> 
+				    <input type="text" ng-model="fase.valor_total" class="form-control" disabled/>
+				</div>
+				
+			</div>
+		</div>
+		 -->
 		<div class="panel panel-primary form-group-sm" ng-show="$ctrl.tipo=='M'">
 			<div class="panel-body">
 				<div class="row" ng-repeat="valorhora_hora in $ctrl.valorhoras_horas">

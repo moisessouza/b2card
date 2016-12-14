@@ -175,7 +175,7 @@ demandas.controller('ModalParcelasController', function ($scope, $window, $uibMo
 				for (var lf = 0; lf < total_fases; lf++) {
 					
 					var fase = $ctrl.listafases[lf];
-					var valorparcelafase = parseFloat(CommonsService.arredondar(valorparcela / total_fases));
+					var valorparcelafase = parseFloat(CommonsService.arredondar(CommonsService.stringparafloat(fase.valor_total) / $ctrl.numero_vezes));
 					
 					var parcelafase = {
 						fase: fase,
