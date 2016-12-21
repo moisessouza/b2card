@@ -23,6 +23,14 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 				$ctrl.messagem = 'Nenhum registro foi encontrado!';
 			} else {
 				$ctrl.messagem = null;
+				for (let parcela of data) {
+					parcela.valor_parcela = CommonsService.formatarnumero(parcela.valor_parcela);
+					if (parcela.parcelafases){
+						for (let parcelafase of parcela.parcelafases) {
+							parcelafase.valor = CommonsService.formatarnumero(parcelafase.valor);
+						}
+					}
+				}
 			}
 			
 		});	
