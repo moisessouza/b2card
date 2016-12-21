@@ -47,7 +47,7 @@ button.margin {
 				<div class="col-sm-1">
 					<div class="form-group">
 						<label for="total_orcamento">Demanda ID</label>
-						<input type="number" class="form-control"/>
+						<input type="number" ng-model="$ctrl.arguments.demanda_id" class="form-control"/>
 					</div>
 				</div>
 				<div class="col-sm-2">
@@ -67,7 +67,7 @@ button.margin {
 				<div class="col-sm-2">
 					<div class="form-group">
 						<label for="status">Status</label>
-						<select type="text" id="status" name="status" class="form-control">
+						<select type="text" id="status" name="status" ng-model="$ctrl.arguments.status" class="form-control">
 							<option value="">Selecione...</option>
 							<option value="PE">Previsto</option>
 							<option value="PA">Pendente aprovação</option>

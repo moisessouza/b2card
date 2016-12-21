@@ -213,13 +213,25 @@ def search_contas_receber(request, format=None):
     
     data = request.data;
     
+    argumentos = {}
     
-    date = data['mes']
+    if 'demanda_id' in data and data['demanda_id']:
+        argumentos['demanda__id'] = data['demanda_id']
     
-    mes = date[0:date.index('/')]
-    ano = date[date.index('/') + 1 : len(date)]
+    if 'mes' in data and len(data['mes']) > 0:
+        date = data['mes']
+        mes = date[0:date.index('/')]
+        ano = date[date.index('/') + 1 : len(date)]
+        argumentos['data_previsto_parcela__month'] = mes
+        argumentos['data_previsto_parcela__year'] = ano
     
-    parcelas = Parcela.objects.filter(data_previsto_parcela__month = mes, data_previsto_parcela__year = ano);
+    if 'cliente_id' in data:
+        argumentos['demanda__cliente__id'] = data['cliente_id']
+    
+    if 'status' in data:
+        argumentos['status'] = data['status']
+    
+    parcelas = Parcela.objects.filter(**argumentos);
     
     parcela_list = []
     for i in parcelas:
