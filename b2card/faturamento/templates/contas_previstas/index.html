@@ -39,7 +39,7 @@ button.margin {
 
 {%verbatim%}
 
-<div ng-app="contasreceber"  ng-controller="ContasReceberController as $ctrl">
+<div ng-app="contasreceber" class="ng-hide" ng-show="$ctrl.show" ng-controller="ContasReceberController as $ctrl">
 
 	<div class="alert alert-danger" ng-show="$ctrl.messagem">
 		 {{$ctrl.messagem}}

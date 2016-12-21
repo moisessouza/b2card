@@ -5,6 +5,8 @@ var contasreceber = angular.module('contasreceber', ['contasreceber-service', 'p
 contasreceber.controller('ContasReceberController', function ($scope, $window, $uibModal, DemandaService, ContasReceberService, ValorHoraService, ParcelaService, CommonsService){
 	var $ctrl = this;
 	
+	$ctrl.show = true;
+	
 	var date = new Date();
 	
 	var mes = (date.getMonth() + 1) + "/" + date.getFullYear();
@@ -68,9 +70,9 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 				});
 					
 				modalInstance.result.then(function(data) {
-					configurardemanda($ctrl.demanda.id);
+					$ctrl.pesquisar();
 				}, function() {
-					// $log.info('Modal dismissed at: ' + new Date());
+					$ctrl.pesquisar();
 				});
 				
 			});
