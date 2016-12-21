@@ -210,7 +210,16 @@ def buscar_tipo_hora_por_fases(request, demanda_id, format=None):
 
 @api_view(['POST'])
 def search_contas_receber(request, format=None):
-    parcelas = Parcela.objects.all();
+    
+    data = request.data;
+    
+    
+    date = data['mes']
+    
+    mes = date[0:date.index('/')]
+    ano = date[date.index('/') + 1 : len(date)]
+    
+    parcelas = Parcela.objects.filter(data_previsto_parcela__month = mes, data_previsto_parcela__year = ano);
     
     parcela_list = []
     for i in parcelas:

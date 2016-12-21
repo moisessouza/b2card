@@ -1,12 +1,18 @@
 "use strict";
 
-var contasreceber = angular.module('contasreceber', ['contasreceber-service', 'parcela-services', 'valorhora-services', 'parcela', 'commons', 'ui.bootstrap', 'ui.mask']);
+var contasreceber = angular.module('contasreceber', ['contasreceber-service', 'parcela-services', 'demandas-services', 'valorhora-services', 'parcela', 'commons', 'ui.bootstrap', 'ui.mask']);
 
-contasreceber.controller('ContasReceberController', function ($scope, $window, $uibModal, ContasReceberService, ValorHoraService, ParcelaService, CommonsService){
+contasreceber.controller('ContasReceberController', function ($scope, $window, $uibModal, DemandaService, ContasReceberService, ValorHoraService, ParcelaService, CommonsService){
 	var $ctrl = this;
 	
+	var date = new Date();
+	
+	var mes = (date.getMonth() + 1) + "/" + date.getFullYear();
+	
+	$ctrl.listaclientes= DemandaService.buscarclientes();
+	
 	$ctrl.arguments = {
-			'mes': '12/2016'
+			'mes': mes
 	}
 	
 	$ctrl.pesquisar = function () {

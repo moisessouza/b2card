@@ -4,6 +4,7 @@
 {% block script %}
 	<script src="/static/js/apps/faturamento/contasreceber/contasreceber.js"></script>
 	<script src="/static/js/apps/faturamento/contasreceber/contasreceber-service.js"></script>
+	<script src="/static/js/apps/demandas/demandas-services.js"></script>
 	<script src="/static/js/apps/faturamento/parcela.js"></script>
 	<script src="/static/js/apps/faturamento/parcela-services.js"></script>
 	<script src="/static/js/apps/cadastros/valorhora/valorhora-services.js"></script>
@@ -52,13 +53,13 @@ button.margin {
 				<div class="col-sm-2">
 					<div class="form-group">
 						<label for="mes">Mês</label>
-						<input type="text" id="mes" name="mes" ng-model="$ctrl.arguments.mes" ui-mask="99/99/9999" model-view-value="true"  class="form-control"/>
+						<input type="text" id="mes" name="mes" ng-model="$ctrl.arguments.mes" ui-mask="99/9999" model-view-value="true"  class="form-control"/>
 					</div>
 				</div>
 				<div class="col-sm-2">
 					<div class="form-group">
 						<label for="cliente">Cliente</label>
-						<select type="text" id="cliente" name="cliente" class="form-control">
+						<select type="text" id="cliente" name="cliente" ng-model="$ctrl.arguments.cliente_id" class="form-control" ng-options="c.id as c.razao_social for c in $ctrl.listaclientes">
 							<option value="">Selecione...</option>
 						</select>
 					</div>
@@ -68,6 +69,11 @@ button.margin {
 						<label for="status">Status</label>
 						<select type="text" id="status" name="status" class="form-control">
 							<option value="">Selecione...</option>
+							<option value="PE">Previsto</option>
+							<option value="PA">Pendente aprovação</option>
+							<option value="PF">Pendente faturamento</option>
+							<option value="FA">Faturado</option>
+							<option value="PA">Pago</option>
 						</select>
 					</div>
 				</div>
