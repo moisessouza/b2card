@@ -1,6 +1,6 @@
 "use strict";
 
-var demandas = angular.module('demandas', ['demandas-services', 'centrocusto-services', 'valorhora-services', 'parcela-services',
+var demandas = angular.module('demandas', ['demandas-services', 'centrocusto-services', 'valorhora-services', 'parcela', 'parcela-services',
                                            'centroresultado-services', 'unidadeadministrativa-services', 'commons', 'ui.bootstrap', 'ui.mask']);
 
 demandas.factory('share', function(){
@@ -81,7 +81,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	}
 	
 	$ctrl.modalprevisaofaturamento = function (){
-			var modalInstance = $uibModal.open({
+		var modalInstance = $uibModal.open({
 			animation : $ctrl.animationsEnabled,
 			ariaLabelledBy : 'modal-title',
 			ariaDescribedBy : 'modal-body',

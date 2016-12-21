@@ -37,6 +37,10 @@ parcelaservices.service('ParcelaService', function($resource){
 		buscarlistavalorhoraporfase: function (demanda_id, callback){
 			var Parcela = $resource('/faturamento/api/parcela/fase/tipohora/:demanda_id/');
 			return Parcela.query({demanda_id: demanda_id}, callback);
+		},
+		buscarorcamentopordemandaid: function(demanda_id, callback){
+			var Parcela = $resource('/faturamento/api/orcamento/:demanda_id/');
+			return Parcela.get({demanda_id: demanda_id}, callback);
 		}
 	}
 });

@@ -2,7 +2,13 @@
 {% extends "base_page.html" %}
 
 {% block script %}
-
+	<script src="/static/js/apps/faturamento/contasreceber/contasreceber.js"></script>
+	<script src="/static/js/apps/faturamento/contasreceber/contasreceber-service.js"></script>
+	<script src="/static/js/apps/faturamento/parcela.js"></script>
+	<script src="/static/js/apps/faturamento/parcela-services.js"></script>
+	<script src="/static/js/apps/cadastros/valorhora/valorhora-services.js"></script>
+	<script src="/static/js/commons/commons.js"></script>
+	<script src="/static/js/angular/ui-bootstrap-tpls-2.2.0.min.js"></script>
 	<script src="/static/js/jquery/priceformat/jquery.priceformat.min.js"></script>
 {% endblock %}
 
@@ -10,58 +16,119 @@
 
 {%block content%}
 
-{% for demanda in demandas %}
+<style>
 
-<div class="panel panel-primary form-group-sm">
-	<div class="panel-body">
-		<div class="row">
-			<div class="col-sm-4">
-				<div class="form-group">
-					<label for="total_orcamento">Nome da demanda</label>
-					<input type="text" class="form-control" value="{{demanda.nome_demanda}}" disabled/>
+button.margin {
+	margin-top: 21px
+}
+
+.app-modal-window .modal-dialog {
+	  width: 100%;
+	  height: 100%;
+	  margin: 0;
+	  padding: 0;
+	}
+	.modal-content {
+	  height: auto;
+	  min-height: 100%;
+	  border-radius: 0;
+	}
+
+</style>
+
+{%verbatim%}
+
+<div ng-app="contasreceber"  ng-controller="ContasReceberController as $ctrl">
+
+	<div class="panel panel-primary form-group-sm">
+		<div class="panel-body">
+			<form name="arguments">
+				<div class="col-sm-1">
+					<div class="form-group">
+						<label for="total_orcamento">Demanda ID</label>
+						<input type="number" class="form-control"/>
+					</div>
 				</div>
-			</div>
+				<div class="col-sm-2">
+					<div class="form-group">
+						<label for="mes">Mês</label>
+						<input type="text" id="mes" name="mes" ng-model="$ctrl.arguments.mes" ui-mask="99/99/9999" model-view-value="true"  class="form-control"/>
+					</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="form-group">
+						<label for="cliente">Cliente</label>
+						<select type="text" id="cliente" name="cliente" class="form-control">
+							<option value="">Selecione...</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="form-group">
+						<label for="status">Status</label>
+						<select type="text" id="status" name="status" class="form-control">
+							<option value="">Selecione...</option>
+						</select>
+					</div>
+				</div>
+				<button type="button" class="btn btn-sm btn-default margin" ng-click="$ctrl.pesquisar();">Pesquisar</button>
+			</form>
 		</div>
-		
-		<table class="table table-sm table-bordered table-striped table-highlight">
-				<thead>
-					<tr class="active">
-						<th>ID</th>
-						<th>Descrição</th>
-						<th>Data previsto parcela</th>
-						<th>Valor da parcela</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for parcela in demanda.parcelas %}
-					<tr>
-						<td class="col-sm-1">
-							<input type="text" id="id" value="{{parcela.id}}" name="id" maxlength="30" class="form-control" disabled/>
-						</td>
-						<td class="col-sm-4">
-							<input type="text" id="descricao" value="{{parcela.descricao}}" name="descricao" maxlength="30" class="form-control"/>
-						</td>
-						<td class="col-sm-4">
-							<input type="text" id="data_previsto_parcela" value="{{parcela.data_previsto_parcela}}" name="data_previsto_parcela" maxlength="30" ui-mask="99/99/9999" model-view-value="true" class="form-control"/>
-						</td>
-						<td class="col-sm-4">
-							<input type="text" id="valor_parcela" value="{{parcela.valor_parcela}}" name="valor_parcela" ng-change="$ctrl.calcularparcela(parcela)" maxlength="30" gb-money class="form-control"/>
-						</td>
-						<td>
-							<button type="button" class="btn btn-default" ng-click="$ctrl.remover(parcela, $ctrl.calcularvalorrestante)">
-								<span class="glyphicon glyphicon-trash"></span>
-							</button>
-						</td>
-					</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		
 	</div>
+	
+	<table class="table table-sm table-bordered table-striped table-highlight">
+		<thead>
+			<tr class="active">
+				<th>Cliente</th>
+				<th>Demanda</th>
+				<th>Data</th>
+				<th></th>
+				<th>Total</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="contareceber in $ctrl.resultados" ng-click="$ctrl.abrircontasreceber(contareceber);">
+				<td>
+					{{contareceber.demanda.cliente.razao_social}}
+				</td>
+				<td>
+					{{contareceber.demanda.nome_demanda}}
+				</td>
+				<td>
+					{{contareceber.data_previsto_parcela}}
+				</td>
+				<td>
+					<table class="table table-sm">	
+						<thead>
+							<tr>
+								<th>
+									Fase
+								</th>
+								<th>
+									Valor
+								</th>
+							</tr>					
+						<tbody>
+							<tr ng-repeat="parcelafase in contareceber.parcelafases">
+								<td>
+									{{parcelafase.fase.descricao}}
+								</td>
+								<td>
+									{{parcelafase.valor}}
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+				<td>
+					{{contareceber.valor_parcela}}
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
 </div>
 
-<br>
-{% endfor %}
+{%endverbatim%}
 
 {%endblock%}

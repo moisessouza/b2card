@@ -4,11 +4,11 @@ from faturamento.models import Parcela, Medicao, ParcelaFase
 from faturamento.serializers import ParcelaSerializer, MedicaoSerializer, ParcelaFaseSerializer
 from rest_framework.response import Response
 from utils.utils import converter_string_para_float, converter_string_para_data, formatar_data
-from demandas.models import Demanda, Fase
+from demandas.models import Demanda, Fase, Orcamento
 from exceptions import Exception
 from cadastros.models import ValorHora, TipoHora, Vigencia
 from rest_framework.decorators import api_view
-from demandas.serializers import FaseSerializer
+from demandas.serializers import FaseSerializer, OrcamentoSerializer
 from cadastros.serializers import TipoHoraSerializer, ValorHoraSerializer, VigenciaSerializer
 import datetime
 
@@ -207,5 +207,31 @@ def buscar_tipo_hora_por_fases(request, demanda_id, format=None):
         
     
     return Response(faseserializer_list)
+
+@api_view(['POST'])
+def search_contas_receber(request, format=None):
+    parcelas = Parcela.objects.all();
+    
+    parcela_list = []
+    for i in parcelas:
+        parcela = ParcelaSerializer(i).data
+        parcelafases = ParcelaFase.objects.filter(parcela = i)
+        parcelafases = ParcelaFaseSerializer(parcelafases, many=True).data
+        parcela['parcelafases'] = parcelafases
+        parcela_list.append(parcela) 
+    
+    return Response(parcela_list)
+
+@api_view(['GET'])
+def buscar_orcamento_demanda_id(request, demanda_id, format=None):
+    
+    orcamento = Orcamento.objects.filter(demanda__id = demanda_id);
+    data = OrcamentoSerializer(orcamento[0]).data
+    
+    fases = Fase.objects.filter(orcamento = orcamento);
+    fases = FaseSerializer(fases, many=True).data
+    data['fases'] = fases
+    
+    return Response(data);
     
     

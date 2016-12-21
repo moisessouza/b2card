@@ -153,7 +153,7 @@
 									<tbody>
 										<tr ng-repeat="medicao in parcelafase.medicoes" ng-show="!medicao.remover">
 											<td>
-												<select id="valorhora" name="valorhora" ng-model="medicao.valor_hora.id" class="form-control" ng-change="$ctrl.changevalorhora(medicao); $ctrl.changequantidadehoras(medicao);" ng-options="v.id as v.descricao for v in $ctrl.valorhoraobject[parcelafase.fase.id]" ng-required="$ctrl.tipo == 'M' && !parcela.remover">
+												<select id="valorhora" name="valorhora" ng-model="medicao.valor_hora.id" class="form-control" ng-change="$ctrl.changevalorhora(medicao); $ctrl.changequantidadehoras(medicao);" ng-options="v.id as v.descricao for v in $ctrl.valorhoraobject[parcelafase.fase.id]" ng-required="$ctrl.tipo == 'M' && !parcela.remover && !parcelafase.remover && !medicao.remover">
 										    		<option value="">Selecione um tipo...</option>
 										    	</select>
 											</td>
@@ -161,7 +161,7 @@
 												<input type="text" id="valor" ng-model="medicao.valor" name="valor" class="form-control" value="2,00" disabled/>
 											</td>
 											<td>
-												<input type="number" id="quantidade_horas" ng-model="medicao.quantidade_horas" ng-change="$ctrl.changequantidadehoras(medicao)" name="quantidade_horas" class="form-control" ng-required="$ctrl.tipo == 'M' && !parcela.remover"/>
+												<input type="number" id="quantidade_horas" ng-model="medicao.quantidade_horas" ng-change="$ctrl.changequantidadehoras(medicao)" name="quantidade_horas" class="form-control" ng-required="$ctrl.tipo == 'M' && !parcela.remover && !parcelafase.remover && !medicao.remover"/>
 											</td>
 											<td>
 												<input type="text" id="valor_total" name="valor_total" ng-model="medicao.valor_total" class="form-control" value="30,00" disabled/>

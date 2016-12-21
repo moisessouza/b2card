@@ -1,6 +1,8 @@
 "use strict";
 
-demandas.controller('ModalParcelasController', function ($scope, $window, $uibModalInstance, demanda, listavalorhora, CommonsService, ParcelaService){
+var parcela = angular.module('parcela', ['valorhora-services', 'parcela-services', 'commons', 'ui.bootstrap', 'ui.mask']);
+
+parcela.controller('ModalParcelasController', function ($scope, $window, $uibModalInstance, demanda, listavalorhora, CommonsService, ParcelaService){
 	var $ctrl = this;
 	
 	$ctrl.demanda = demanda;

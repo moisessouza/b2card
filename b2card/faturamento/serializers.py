@@ -6,12 +6,13 @@ Created on 14 de set de 2016
 from rest_framework import serializers
 from faturamento.models import Parcela, Medicao, ParcelaFase
 from cadastros.serializers import ValorHoraSerializer
-from demandas.serializers import FaseSerializer
+from demandas.serializers import FaseSerializer, DemandaSerializer
 
 class ParcelaSerializer(serializers.ModelSerializer):
+    demanda = DemandaSerializer()
     class Meta:
         model = Parcela
-        fields = ('id', 'descricao', 'valor_parcela', 'status', 'data_previsto_parcela', 'tipo_parcela')
+        fields = ('id', 'descricao', 'valor_parcela', 'status', 'data_previsto_parcela', 'tipo_parcela', 'demanda')
         
 class MedicaoSerializer(serializers.ModelSerializer):
     valor_hora = ValorHoraSerializer()
