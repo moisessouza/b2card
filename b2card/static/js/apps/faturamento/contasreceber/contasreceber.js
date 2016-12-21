@@ -16,7 +16,16 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 	}
 	
 	$ctrl.pesquisar = function () {
-		$ctrl.resultados = ContasReceberService.pesquisarcontasreceber($ctrl.arguments);	
+		ContasReceberService.pesquisarcontasreceber($ctrl.arguments,function (data) {
+			$ctrl.resultados = data;
+			
+			if (data.length <= 0) {
+				$ctrl.messagem = 'Nenhum registro foi retornado ';
+			} else {
+				$ctrl.messagem = null;
+			}
+			
+		});	
 	}
 	
 	$ctrl.abrircontasreceber = function (contareceber) {

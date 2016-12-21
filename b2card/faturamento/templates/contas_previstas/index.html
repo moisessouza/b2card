@@ -41,6 +41,10 @@ button.margin {
 
 <div ng-app="contasreceber"  ng-controller="ContasReceberController as $ctrl">
 
+	<div class="alert alert-danger" ng-show="$ctrl.messagem">
+		 {{$ctrl.messagem}}
+	</div>
+	
 	<div class="panel panel-primary form-group-sm">
 		<div class="panel-body">
 			<form name="arguments">
