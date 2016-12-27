@@ -94,7 +94,8 @@
 			<thead>
 				<tr class="active">
 					<th width="9%">Parcela</th>
-					<th width="22%">Fase</th>
+					<th>Data</th>
+					<th width="18%">Fase</th>
 					<th width="27%">Perfil</th>
 					<th width="10%">Horas</th>
 					<th width="14%">Valor</th>
@@ -103,12 +104,17 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="parcela in $ctrl.parcelas">
-					<td><input type="text" ng-model="parcela.descricao" class="form-control"/></td>
+					<td>
+						<input type="text" ng-model="parcela.descricao" class="form-control"/>
+					</td>
+					<td>
+						<input type="text" class="form-control" ng-model="parcela.data_previsto_parcela" ui-mask="99/99/9999" model-view-value="true" ng-required="!parcela.remover"/>
+					</td>
 					<td colspan="4">
 						<table class="table">
 							<tbody>
 								<tr ng-repeat="parcelafase in parcela.parcelafases">
-									<td width="30%">
+									<td width="26%">
 										<select type="number" value="20" ng-model="parcelafase.fase.id" ng-options="f.id as f.descricao for f in $ctrl.listafases" class="form-control">
 									    	<option value="">Selecione...</option>
 									    </select>
@@ -124,7 +130,7 @@
 												<td width="21%">
 													<input type="number" id="quantidade_horas" ng-model="medicao.quantidade_horas" ng-change="$ctrl.changequantidadehoras(medicao)" name="quantidade_horas" class="form-control" ng-required="$ctrl.tipo == 'M' && !parcela.remover && !parcelafase.remover && !medicao.remover"/>
 												</td>
-												<td width="100%">
+												<td>
 													<input type="text" id="valor_total" name="valor_total" ng-model="medicao.valor_total" class="form-control" value="30,00" disabled/>
 												</td>
 											</tr>
@@ -134,7 +140,9 @@
 							</tbody>
 						</table>
 					</td>
-					<td></td>
+					<td>
+						<input type="text" id="descricao" name="descricao" ng-model="parcela.valor_parcela" class="form-control" disabled ng-required="$ctrl.tipo == 'M' && !parcela.remover"/>
+					</td>
 				</tr>
 			</tbody>
 		</table>
