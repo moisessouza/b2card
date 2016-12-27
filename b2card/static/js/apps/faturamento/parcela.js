@@ -247,7 +247,9 @@ parcela.controller('ModalParcelasController', function ($scope, $window, $uibMod
 		$ctrl.parcelas.push({
 			status: 'PE',
 			parcelafases: [{
-				medicoes: [{}]
+				medicoes: [{},{}]
+			},{
+				medicoes: [{},{}]
 			}]
 		});
 	}

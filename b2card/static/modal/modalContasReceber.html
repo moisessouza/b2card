@@ -89,6 +89,57 @@
 		<span class="glyphicon glyphicon-plus"></span> Adicionar parcela
 	</button>
 	<form name="parcelas" style="height: 75%; overflow-y: scroll;">
+		
+		<table class="table table-sm table-bordered table-striped table-highlight">
+			<thead>
+				<tr class="active">
+					<th width="9%">Parcela</th>
+					<th width="22%">Fase</th>
+					<th width="27%">Perfil</th>
+					<th width="10%">Horas</th>
+					<th width="14%">Valor</th>
+					<th>Valor total</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="parcela in $ctrl.parcelas">
+					<td><input type="text" ng-model="parcela.descricao" class="form-control"/></td>
+					<td colspan="4">
+						<table class="table">
+							<tbody>
+								<tr ng-repeat="parcelafase in parcela.parcelafases">
+									<td width="30%">
+										<select type="number" value="20" ng-model="parcelafase.fase.id" ng-options="f.id as f.descricao for f in $ctrl.listafases" class="form-control">
+									    	<option value="">Selecione...</option>
+									    </select>
+									</td>
+									<td>
+										<table>
+											<tr ng-repeat="medicao in parcelafase.medicoes">
+												<td width="53%">
+													<select id="valorhora" name="valorhora" ng-model="medicao.valor_hora.id" class="form-control" ng-change="$ctrl.changevalorhora(medicao); $ctrl.changequantidadehoras(medicao);" ng-options="v.id as v.descricao for v in $ctrl.valorhoraobject[parcelafase.fase.id]" ng-required="$ctrl.tipo == 'M' && !parcela.remover && !parcelafase.remover && !medicao.remover">
+											    		<option value="">Selecione um tipo...</option>
+											    	</select>
+												</td>
+												<td width="21%">
+													<input type="number" id="quantidade_horas" ng-model="medicao.quantidade_horas" ng-change="$ctrl.changequantidadehoras(medicao)" name="quantidade_horas" class="form-control" ng-required="$ctrl.tipo == 'M' && !parcela.remover && !parcelafase.remover && !medicao.remover"/>
+												</td>
+												<td width="100%">
+													<input type="text" id="valor_total" name="valor_total" ng-model="medicao.valor_total" class="form-control" value="30,00" disabled/>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<!--
 		<div class="panel panel-default form-group-sm"  ng-repeat="parcela in $ctrl.parcelas" ng-show="!parcela.remover">
 			<div class="panel-heading">
 				<div class="col-sm-4">
@@ -184,6 +235,7 @@
 				</div>
 			</div>
 		</div>
+		 -->
 	</form>
 </div>
 <div class="modal-footer">
