@@ -61,12 +61,12 @@
 			<div class="col-sm-8" style="margin-bottom: 5px;">
 				<div class="col-sm-3">
 					<div class="input-group">
-					    <input type="number" ng-model="$ctrl.numero_vezes" class="form-control"/>
+					    <input type="number" ng-model="$ctrl.numero_vezes" class="form-control" ng-disabled="$ctrl.parcelas.length > 0"/>
 					    <span class="input-group-addon" for="tipo">Vezes</span>
 					</div>
 				</div>
 				<div class="col-sm-2">
-					<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.gerarparcelas()" ng-disabled="!$ctrl.numero_vezes">
+					<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.gerarparcelas()" ng-disabled="!$ctrl.numero_vezes || $ctrl.parcelas.length > 0">
 			  			<span class="glyphicon"></span> Gerar parcelas
 					</button>
 				</div>

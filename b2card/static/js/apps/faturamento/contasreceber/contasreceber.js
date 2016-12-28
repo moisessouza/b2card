@@ -43,6 +43,12 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 		ParcelaService.buscarorcamentopordemandaid(contareceber.demanda.id, function(data){
 			contareceber.demanda.orcamento = data;
 			
+			for (let fase of data.fases) {
+				for (let itemfase of fase.itensfase) {
+					itemfase.valor_total = CommonsService.formatarnumero(itemfase.valor_total);
+				}
+			}
+			
 			ValorHoraService.buscarvalorhoraporcliente(contareceber.demanda.cliente.id, function (data) {
 				
 				var listavalorhora = data;

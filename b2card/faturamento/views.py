@@ -4,11 +4,12 @@ from faturamento.models import Parcela, Medicao, ParcelaFase
 from faturamento.serializers import ParcelaSerializer, MedicaoSerializer, ParcelaFaseSerializer
 from rest_framework.response import Response
 from utils.utils import converter_string_para_float, converter_string_para_data, formatar_data
-from demandas.models import Demanda, Fase, Orcamento
+from demandas.models import Demanda, Fase, Orcamento, ItemFase
 from exceptions import Exception
 from cadastros.models import ValorHora, TipoHora, Vigencia
 from rest_framework.decorators import api_view
-from demandas.serializers import FaseSerializer, OrcamentoSerializer
+from demandas.serializers import FaseSerializer, OrcamentoSerializer,\
+    ItemFaseSerializer
 from cadastros.serializers import TipoHoraSerializer, ValorHoraSerializer, VigenciaSerializer
 import datetime
 
@@ -245,6 +246,12 @@ def buscar_orcamento_demanda_id(request, demanda_id, format=None):
     
     fases = Fase.objects.filter(orcamento = orcamento);
     fases = FaseSerializer(fases, many=True).data
+    
+    for i in fases:
+        itensfase = ItemFase.objects.filter(fase__id = i['id'])
+        itensfase = ItemFaseSerializer(itensfase, many=True).data
+        i['itensfase'] = itensfase
+    
     data['fases'] = fases
     
     return Response(data);
