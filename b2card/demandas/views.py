@@ -134,17 +134,16 @@ class DemandaDetail(APIView):
             parcela = ParcelaSerializer(i).data
             parcela['data_previsto_parcela'] = formatar_data(i.data_previsto_parcela)
             
-            if i.tipo_parcela == 'M':
-                parcelafase_list = ParcelaFase.objects.filter(parcela = i)
-                parcelafaseserializer_list = []
-                for pf in parcelafase_list:
-                    parcelafaseserializer = ParcelaFaseSerializer(pf).data
-                    medicoes = Medicao.objects.filter(parcela_fase = pf)
-                    medicao_list = MedicaoSerializer(medicoes, many=True).data
-                    parcelafaseserializer['medicoes'] = medicao_list
-                    
-                    parcelafaseserializer_list.append(parcelafaseserializer)
-                parcela['parcelafases'] = parcelafaseserializer_list
+            parcelafase_list = ParcelaFase.objects.filter(parcela = i)
+            parcelafaseserializer_list = []
+            for pf in parcelafase_list:
+                parcelafaseserializer = ParcelaFaseSerializer(pf).data
+                medicoes = Medicao.objects.filter(parcela_fase = pf)
+                medicao_list = MedicaoSerializer(medicoes, many=True).data
+                parcelafaseserializer['medicoes'] = medicao_list
+                
+                parcelafaseserializer_list.append(parcelafaseserializer)
+            parcela['parcelafases'] = parcelafaseserializer_list
                 
             parcelas_list.append(parcela)
         

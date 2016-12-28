@@ -41,12 +41,6 @@ class ParcelaList(APIView):
         parcela_list = []
         if 'parcelas' in request.data:
             parcela_list = request.data['parcelas']
-            
-        tipo_parcela = None
-        if 'tipo_parcela' in request.data:
-            tipo_parcela = request.data['tipo_parcela']
-            demanda.tipo_parcela = tipo_parcela
-            demanda.save()
         
         parcela_resp = []
         for i in parcela_list:
@@ -56,6 +50,9 @@ class ParcelaList(APIView):
                 if 'valor_parcela' in i:
                     valor_parcela = converter_string_para_float(i['valor_parcela'])
                     del i['valor_parcela']
+                
+                if 'demanda' in i:
+                    del i['demanda']
                 
                 data_previsto_parcela = None
                 if 'data_previsto_parcela' in i:
@@ -70,7 +67,6 @@ class ParcelaList(APIView):
                 parcela = Parcela(**i)
                 parcela.valor_parcela = valor_parcela
                 parcela.data_previsto_parcela = data_previsto_parcela
-                parcela.tipo_parcela = tipo_parcela
                 parcela.demanda = demanda
                 parcela.save()
                 
@@ -86,7 +82,6 @@ class ParcelaList(APIView):
                 parcela.delete()
         
         context = {
-            'tipo_parcela': tipo_parcela,
             'parcelas': parcela_resp
         }
         
@@ -146,7 +141,6 @@ class ParcelaList(APIView):
                     
                     medicao = Medicao(**i)
                     medicao.valor_hora = valor_hora
-                    medicao.valor = converter_string_para_float(medicao.valor)   
                     medicao.valor_total = converter_string_para_float(medicao.valor_total)
                     medicao.parcela_fase = parcela_fase
                     medicao.save()

@@ -16,7 +16,7 @@ class DemandaSerializer (serializers.ModelSerializer):
     unidade_administrativa = UnidadeAdministrativaSerializer()
     class Meta:
         model = Demanda
-        fields = ('id', 'cliente','nome_demanda','descricao','status_demanda','codigo_demanda', 'unidade_administrativa', 'tipo_parcela')
+        fields = ('id', 'cliente','nome_demanda','descricao','status_demanda','codigo_demanda', 'unidade_administrativa')
         
 class FaturamentoDemandaSerializer(serializers.ModelSerializer):
     class Meta:

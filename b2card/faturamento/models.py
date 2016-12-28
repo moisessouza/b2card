@@ -7,11 +7,6 @@ from cadastros.models import ValorHora
 
 # Create your models here.
 
-TIPO_PARCELA = (
-    ('P', 'Parcela'),
-    ('M', 'Medição')
-)
-
 STATUS = (
     ('PE', 'Previsto'),
     ('PA', 'Pendente aprovação'),
@@ -26,7 +21,6 @@ class Parcela(models.Model):
     status = models.CharField(max_length=2, choices=STATUS, null=True)
     data_previsto_parcela = models.DateField(null=True)
     demanda = models.ForeignKey(Demanda, null=True)
-    tipo_parcela = models.CharField(max_length=1, choices = TIPO_PARCELA, null=True)
     
 class ParcelaFase(models.Model):
     parcela = models.ForeignKey(Parcela)
@@ -36,6 +30,5 @@ class ParcelaFase(models.Model):
 class Medicao(models.Model):
     parcela_fase = models.ForeignKey(ParcelaFase, null=True)
     valor_hora = models.ForeignKey(ValorHora, default=None)
-    valor = models.FloatField()
-    quantidade_horas = models.IntegerField()
+    quantidade_horas = models.FloatField()
     valor_total = models.FloatField()

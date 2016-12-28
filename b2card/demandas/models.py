@@ -43,7 +43,6 @@ class Demanda(models.Model):
     status_demanda = models.CharField(max_length=1, choices=STATUS_DEMANDA, null=True)
     codigo_demanda = models.CharField(max_length=12, null=True)
     unidade_administrativa = models.ForeignKey(UnidadeAdministrativa, default=None, null=True)
-    tipo_parcela = models.CharField(max_length=1, choices=TIPO_PARCELA, null=True)
     
 class Atividade(models.Model):
     titulo = models.CharField(max_length=100)
