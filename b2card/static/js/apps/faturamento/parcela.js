@@ -96,7 +96,7 @@ parcela.controller('ModalParcelasController', function ($scope, $window, $uibMod
 								var medicao = parcelafase.medicoes[m];
 								for (var j = 0; j < $ctrl.valorhoras_horas.length; j++){
 									var valorhora_hora = $ctrl.valorhoras_horas[j];
-									if (!medicao.remover && medicao.quantidade_horas && medicao.valor_hora.id == valorhora_hora.fase__itemfase__valor_hora__id){
+									if (!medicao.remover && medicao.quantidade_horas && medicao.valor_hora && medicao.valor_hora.id == valorhora_hora.fase__itemfase__valor_hora__id){
 										valorhora_hora.horas_restantes -= medicao.quantidade_horas;
 									}
 								}
@@ -177,14 +177,26 @@ parcela.controller('ModalParcelasController', function ($scope, $window, $uibMod
 				for (var lf = 0; lf < total_fases; lf++) {
 					
 					var fase = $ctrl.listafases[lf];
-					var valorparcelafase = parseFloat(CommonsService.arredondar(CommonsService.stringparafloat(fase.valor_total) / $ctrl.numero_vezes));
 					
+					var medicoes = [];
+					
+					for (let itemfase of fase.itensfase) {
+						var valor_medicao = parseFloat(CommonsService.arredondar(CommonsService.stringparafloat(itemfase.valor_total) / $ctrl.numero_vezes));
+						var horas = CommonsService.arredondar(valor_medicao * itemfase.quantidade_horas / CommonsService.stringparafloat(itemfase.valor_total));
+						var medicao = {
+							valor_hora: itemfase.valor_hora,
+							valor_total: CommonsService.formatarnumero(valor_medicao),
+							quantidade_horas: horas							
+						};
+						medicoes.push(medicao);
+						valortotal+=valor_medicao;
+					}
+
 					var parcelafase = {
 						fase: fase,
-						valor: CommonsService.formatarnumero(valorparcelafase)
+						medicoes: medicoes
 					}
 					
-					valortotal+=valorparcelafase;
 					parcela.parcelafases.push(parcelafase);
 					
 				}
@@ -194,10 +206,15 @@ parcela.controller('ModalParcelasController', function ($scope, $window, $uibMod
 			
 			var ultimaparcela = $ctrl.parcelas[$ctrl.parcelas.length-1];
 			
-			var diferenca = CommonsService.stringparafloat(demanda.orcamento.total_orcamento) - valortotal;
-			diferenca = CommonsService.stringparafloat(ultimaparcela.parcelafases[ultimaparcela.parcelafases.length - 1].valor) + diferenca;
+			var parcelafase = ultimaparcela.parcelafases[ultimaparcela.parcelafases.length - 1];
 			
-			ultimaparcela.parcelafases[ultimaparcela.parcelafases.length - 1].valor = CommonsService.formatarnumero(diferenca);
+			var diferenca = parseFloat(CommonsService.arredondar(CommonsService.stringparafloat(demanda.orcamento.total_orcamento) - valortotal));
+			diferenca = CommonsService.stringparafloat(parcelafase.medicoes[parcelafase.medicoes.length - 1].valor_total) + diferenca;
+			
+			parcelafase.medicoes[parcelafase.medicoes.length - 1].valor_total = CommonsService.formatarnumero(diferenca);
+			
+			var horas = CommonsService.arredondar(CommonsService.stringparafloat(parcelafase.medicoes[parcelafase.medicoes.length - 1].valor_total) * parcelafase.fase.itensfase[parcelafase.fase.itensfase.length - 1].quantidade_horas / CommonsService.stringparafloat(parcelafase.fase.itensfase[parcelafase.fase.itensfase.length - 1].valor_total));
+			parcelafase.medicoes[parcelafase.medicoes.length - 1].quantidade_horas = horas;
 			
 			$ctrl.calcularvalortotalparcelas();
 			$ctrl.calcularvalorrestante();
@@ -244,13 +261,25 @@ parcela.controller('ModalParcelasController', function ($scope, $window, $uibMod
 		if (!$ctrl.parcelas){
 			$ctrl.parcelas = [];
 		}
+		
+		var parcelasfases = [];
+		
+		for (let fase of $ctrl.listafases) {
+			
+			var medicoes = [];
+			
+			for (var j = 0; j < fase.itensfase.length; j++) {
+				medicoes.push({});			
+			}
+			
+			parcelasfases.push({
+				medicoes: medicoes
+			});			
+		}
+		
 		$ctrl.parcelas.push({
 			status: 'PE',
-			parcelafases: [{
-				medicoes: [{},{}]
-			},{
-				medicoes: [{},{}]
-			}]
+			parcelafases: parcelasfases
 		});
 	}
 	
@@ -294,15 +323,91 @@ parcela.controller('ModalParcelasController', function ($scope, $window, $uibMod
 									valortotalparcela+=CommonsService.stringparafloat(medicao.valor_total);
 								}
 							}
-						} else if (parcelafase.valor) {
-							valortotalparcela+=CommonsService.stringparafloat(parcelafase.valor);
 						}
 					}
 				}
 			}
 			parcela.valor_parcela = CommonsService.formatarnumero(valortotalparcela);
+		}
+		
+		$ctrl.verificarduplicidadefase = function (parcela, parcelafase, old_value) {
+			
+			for (let pf of parcela.parcelafases){
+				if (pf != parcelafase && pf.fase && pf.fase.id == parcelafase.fase.id ) {
+					alert("Este fase já está relacionado com esta parcela, favor selecionar outra");
+					if (old_value) {
+						parcelafase.fase.id = old_value;
+					} else {
+						parcelafase.fase.id = '';
+					}
+				}
+			}
 			
 		}
+		
+		$ctrl.verificarduplicidade = function (parcelafase, medicao, old_value) {
+			
+			for (let med of parcelafase.medicoes) {
+				if (med != medicao && med.valor_hora && med.valor_hora.id == medicao.valor_hora.id) {
+					alert("Este valor hora já está relacionado com esta fase, favor selecionar outro");
+					if (old_value) {
+						medicao.valor_hora.id = old_value;
+					} else {
+						medicao.valor_hora.id = '';
+					}
+				}
+			}
+		}
+		
+		$ctrl.verificarduplicidadefase = function (parcelafase, old_value) {
+			
+		}
+		
+		$ctrl.calcularhorasmedicoes = function () {
+			for (let parcela of $ctrl.parcelas) {
+				var valortotalparcela = 0;
+				if (parcela.parcelafases){
+					for (var pf = 0; pf < parcela.parcelafases.length; pf++) {
+						var parcelafase = parcela.parcelafases[pf];
+						if(!parcelafase.remover){
+							if (parcelafase.medicoes && parcelafase.medicoes.length > 0) {
+								for (let medicao of parcelafase.medicoes) {
+									if (medicao.valor_hora && medicao.valor_total){
+										var fase;
+	
+										for (let f of $ctrl.listafases) {
+											if (f.id == parcelafase.fase.id){
+												fase = f;
+												break;
+											}
+										}
+										
+										var itemfase;
+										
+										for (let item of fase.itensfase) {
+											if (item.valor_hora.id == medicao.valor_hora.id) {
+												itemfase = item;
+												break;
+											}
+										}
+										
+										var horas = CommonsService.arredondar(CommonsService.stringparafloat(medicao.valor_total) * itemfase.quantidade_horas / CommonsService.stringparafloat(itemfase.valor_total));
+										medicao.quantidade_horas = horas;
+									}
+								}
+							}
+						}
+					}
+				}
+				
+			}
+			
+			$ctrl.calcularvalortotalparcelas();
+			$ctrl.calcularvalorrestante();
+			$ctrl.calcularhorasrestantesparcela();
+			
+		}
+			
 		
 		$ctrl.calcularvalorrestante();
 		$ctrl.calcularhorasrestantesparcela();
@@ -327,8 +432,26 @@ parcela.controller('ModalParcelasController', function ($scope, $window, $uibMod
 	}
 	
 	$ctrl.changequantidadehoras = function(medicao){
-		if (medicao.valor){
-			medicao.valor_total = CommonsService.formatarnumero(CommonsService.stringparafloat(medicao.valor) * medicao.quantidade_horas);
+		
+		if (medicao.quantidade_horas) {
+			medicao.quantidade_horas = medicao.quantidade_horas.replace(/[^0-9\.]/g, '');
+		}
+		
+		if (medicao.valor_hora){
+			var valor_hora_id = medicao.valor_hora.id;
+			var vigencia;
+			
+			for (var int = 0; int < $ctrl.listavalorhora.length; int++) {
+				var valorhora = $ctrl.listavalorhora[int];
+				if (valorhora.id == valor_hora_id) {
+					vigencia = valorhora.vigencia;
+					break;
+				}
+			}
+		}
+		
+		if (medicao.valor_hora && vigencia){
+			medicao.valor_total = CommonsService.formatarnumero(vigencia.valor * medicao.quantidade_horas);
 		}
 		
 		$ctrl.calcularvalortotalparcelas();
