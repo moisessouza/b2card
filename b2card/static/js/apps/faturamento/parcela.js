@@ -66,11 +66,30 @@ parcela.controller('ModalParcelasController', function ($scope, $window, $uibMod
 	});
 	
 	ParcelaService.buscartotalhorasporvalorhora(demanda.id, function(data){
-		$ctrl.valorhoras_horas_raw = data;
 		
-		for (var i = 0; i < $ctrl.valorhoras_horas_raw.length; i++){
-			$ctrl.valorhoras_horas_raw[i].horas_restantes = $ctrl.valorhoras_horas_raw[i].total_horas;
+		$ctrl.objeto_horas_raw = {};
+		
+		for (let o of data) {
+			
+			if (!$ctrl.objeto_horas_raw[o.fase__id]) {
+				$ctrl.objeto_horas_raw[o.fase__id] = {
+					fase_id: o.fase__id,
+					fase_descricao: o.fase__descricao
+				}
+			}
+			
+			if (!$ctrl.objeto_horas_raw[o.fase__id][o.fase__itemfase__valor_hora__id]){
+				$ctrl.objeto_horas_raw[o.fase__id][o.fase__itemfase__valor_hora__id] = {
+					valor_hora_id: o.fase__itemfase__valor_hora__id,
+					valor_hora_descricao: o.fase__itemfase__valor_hora__descricao,
+					total_horas: o.total_horas,
+					horas_restantes: o.total_horas
+				}
+			}
+			
 		}
+		
+		console.log($ctrl.objeto_horas_raw);
 		
 		$ctrl.calcularhorasrestantesparcela();
 	});
@@ -80,8 +99,8 @@ parcela.controller('ModalParcelasController', function ($scope, $window, $uibMod
 	}
 	
 	$ctrl.calcularhorasrestantesparcela = function () {
-		$ctrl.valorhoras_horas = [];
-		angular.copy($ctrl.valorhoras_horas_raw, $ctrl.valorhoras_horas);
+		$ctrl.objeto_horas = {};
+		angular.copy($ctrl.objeto_horas_raw, $ctrl.objeto_horas);
 		if ($ctrl.parcelas){
 			for (var i = 0; i < $ctrl.parcelas.length; i++) {
 				var parcela = $ctrl.parcelas[i];
@@ -91,11 +110,8 @@ parcela.controller('ModalParcelasController', function ($scope, $window, $uibMod
 						if (!parcelafase.remover && parcelafase.medicoes){
 							for (var m = 0; m < parcelafase.medicoes.length; m++){
 								var medicao = parcelafase.medicoes[m];
-								for (var j = 0; j < $ctrl.valorhoras_horas.length; j++){
-									var valorhora_hora = $ctrl.valorhoras_horas[j];
-									if (!medicao.remover && medicao.quantidade_horas && medicao.valor_hora && medicao.valor_hora.id == valorhora_hora.fase__itemfase__valor_hora__id){
-										valorhora_hora.horas_restantes -= medicao.quantidade_horas;
-									}
+								if (parcelafase.fase && medicao.valor_hora && medicao.quantidade_horas){
+									$ctrl.objeto_horas[parcelafase.fase.id][medicao.valor_hora.id].horas_restantes-=medicao.quantidade_horas;
 								}
 							}
 						}
