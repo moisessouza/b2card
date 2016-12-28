@@ -158,6 +158,8 @@ parcela.controller('ModalParcelasController', function ($scope, $window, $uibMod
 		
 		$ctrl.parcelas = [];
 		
+		var currentDate = new Date();
+		
 		if (demanda.orcamento.total_orcamento && $ctrl.numero_vezes){
 			var valorparcela = parseFloat(CommonsService.arredondar(CommonsService.stringparafloat(demanda.orcamento.total_orcamento) / $ctrl.numero_vezes));
 			
@@ -168,8 +170,11 @@ parcela.controller('ModalParcelasController', function ($scope, $window, $uibMod
 				var parcela = {
 					descricao: (int + 1) + '/' + $ctrl.numero_vezes,
 					status: 'PE',
-					parcelafases: []
+					parcelafases: [],
+					data_previsto_parcela: CommonsService.dataparastring(currentDate)
 				}
+				
+				currentDate.setMonth(currentDate.getMonth() + 1);
 				
 				$ctrl.parcelas.push(parcela);
 				
