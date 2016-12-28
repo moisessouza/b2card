@@ -1,154 +1,144 @@
 <meta charset="utf-8">
 <div class="modal-body" id="modal-body">
-	<div class="col-sm-4">
-		<div class="panel panel-primary form-group-sm">
-			<div class="panel-heading">
-				Demanda
-			</div>
-			<div class="panel-body">
-				<div class="form-group col-sm-3">
-					<input type="text" ng-model="$ctrl.demanda.id" class="form-control" disabled/>
-				</div>
-				<div class="form-group col-sm-4">
-					<input type="text" ng-model="$ctrl.demanda.nome_demanda" class="form-control" disabled/>
-				</div>
-			</div>
-		</div>
-		<div class="panel panel-primary form-group-sm">
-			<div class="panel-body">
-				<div class="row">
-					<div class="col-sm-4">
-						<div class="form-group">
-							<label for="total_orcamento">Total</label>
-							<input type="text" id="total_orcamento" name="total_orcamento" ng-model="$ctrl.total_orcamento" class="form-control" disabled/>
-						</div>
+
+	<div class="panel panel-primary form-group-sm" style="padding-bottom: 0px;"> 
+		<div class="panel-body">
+			<div class="col-sm-4">
+				<div class="panel panel-primary form-group-sm" style="padding-bottom: 0px; margin-bottom:5px;">
+					<div class="panel-heading">
+						Demanda
 					</div>
-					<div class="col-sm-4">
-						<div class="form-group">
-							<label for="total_orcamento">Valor restante</label>
-							<input type="text" id="total_orcamento" name="total_orcamento" ng-model="$ctrl.valor_restante" class="form-control" disabled/>
+					<div class="panel-body">
+						<div class="form-group col-sm-3">
+							<input type="text" ng-model="$ctrl.demanda.id" class="form-control" disabled/>
+						</div>
+						<div class="form-group col-sm-4">
+							<input type="text" ng-model="$ctrl.demanda.nome_demanda" class="form-control" disabled/>
 						</div>
 					</div>
 				</div>
+				<div class="panel panel-primary form-group-sm" style="padding-bottom: 0px; margin-bottom:5px;">
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-sm-4">
+								<div class="form-group">
+									<label for="total_orcamento">Total</label>
+									<input type="text" id="total_orcamento" name="total_orcamento" ng-model="$ctrl.total_orcamento" class="form-control" disabled/>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="form-group">
+									<label for="total_orcamento">Valor restante</label>
+									<input type="text" id="total_orcamento" name="total_orcamento" ng-model="$ctrl.valor_restante" class="form-control" disabled/>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-sm panel-primary" ng-repeat="objeto_hora in $ctrl.objeto_horas" ng-show="objeto_hora.fase_descricao" style="padding-bottom: 0px; margin-bottom:5px;">
+					<div class="panel-heading">
+						{{objeto_hora.fase_descricao}}
+					</div>
+					<div class="panel-body">
+						<table class="table table-sm">
+							<tbody>
+								<tr ng-repeat="valor_hora in objeto_hora" ng-show="valor_hora.valor_hora_descricao">
+									<td>
+										<input type="text" ng-model="valor_hora.valor_hora_descricao" class="form-control" disabled/>
+									</td>
+									<td class="col-sm-2">
+										<input type="text" ng-model="valor_hora.total_horas" class="form-control" disabled/>
+									</td>
+									<td class="col-sm-2">
+										<input type="text" ng-model="valor_hora.horas_restantes" class="form-control" disabled/>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
 			</div>
-		</div>
-		<div class="panel panel-primary form-group-sm" ng-show="$ctrl.parcelas.length == 0">
-			<div class="panel-body">
-				<div class="col-sm-7">
+			<div class="col-sm-8" style="margin-bottom: 5px;">
+				<div class="col-sm-3">
 					<div class="input-group">
-					    <input type="number" ng-model="$ctrl.numero_vezes" class="form-control" required/>
+					    <input type="number" ng-model="$ctrl.numero_vezes" class="form-control"/>
 					    <span class="input-group-addon" for="tipo">Vezes</span>
 					</div>
 				</div>
-				<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.gerarparcelas()" ng-disabled="!$ctrl.numero_vezes">
-			  		<span class="glyphicon"></span> Gerar parcelas
-				</button>
+				<div class="col-sm-2">
+					<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.gerarparcelas()" ng-disabled="!$ctrl.numero_vezes">
+			  			<span class="glyphicon"></span> Gerar parcelas
+					</button>
+				</div>
+				<div class="col-sm-1">
+					<button type="button" class="btn btn-sm btn-default" ng-click="$ctrl.adicionarparcela()">
+						<span class="glyphicon glyphicon-plus"></span> Adicionar parcela
+					</button>
+				</div>
 			</div>
-		</div>
-		<div class="panel panel-sm panel-primary" ng-repeat="objeto_hora in $ctrl.objeto_horas" ng-show="objeto_hora.fase_descricao">
-			<div class="panel-heading">
-				{{objeto_hora.fase_descricao}}
-			</div>
-			<div class="panel-body">
-				<table class="table">
-					<tbody>
-						<tr ng-repeat="valor_hora in objeto_hora" ng-show="valor_hora.valor_hora_descricao">
-							<td>
-								{{valor_hora.valor_hora_descricao}}
-							</td>
-							<td>
-								{{valor_hora.total_horas}}
-							</td>
-							<td>
-								{{valor_hora.horas_restantes.toFixed(2)}}
-							</td>
-						</tr>
-					</tbody>
-				</table>
+			<div class="col-sm-8">
+				<form name="parcelas" style="height: 75%; overflow-y: scroll;">
+					
+					<table class="table table-sm table-bordered table-striped table-highlight">
+						<thead>
+							<tr class="active">
+								<th width="9%">Parcela</th>
+								<th>Data</th>
+								<th width="18%">Fase</th>
+								<th width="27%">Perfil</th>
+								<th width="10%">Horas</th>
+								<th width="14%">Valor</th>
+								<th>Valor total</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="parcela in $ctrl.parcelas">
+								<td>
+									<input type="text" ng-model="parcela.descricao" class="form-control"/>
+								</td>
+								<td>
+									<input type="text" class="form-control" ng-model="parcela.data_previsto_parcela" ui-mask="99/99/9999" model-view-value="true" ng-required="!parcela.remover"/>
+								</td>
+								<td colspan="4">
+									<table class="table">
+										<tbody>
+											<tr ng-repeat="parcelafase in parcela.parcelafases">
+												<td width="26%">
+													<select ng-model="parcelafase.fase.id" ng-options="f.id as f.descricao for f in $ctrl.listafases" ng-change="$ctrl.verificarduplicidadefase(parcela, parcelafase, {{ parcelafase.fase && parcelafase.fase.id ? parcelafase.fase.id : 'null' }})" class="form-control">
+												    	<option value="">Selecione...</option>
+												    </select>
+												</td>
+												<td>
+													<table>
+														<tr ng-repeat="medicao in parcelafase.medicoes">
+															<td width="53%">
+																<select id="valorhora" name="valorhora" ng-model="medicao.valor_hora.id" class="form-control" ng-change="$ctrl.verificarduplicidade(parcelafase, medicao, {{ medicao.valor_hora && medicao.valor_hora.id ? medicao.valor_hora.id : 'null' }}); $ctrl.changevalorhora(medicao); $ctrl.changequantidadehoras(medicao);" ng-options="v.id as v.descricao for v in $ctrl.valorhoraobject[parcelafase.fase.id]">
+														    		<option value="">Selecione um tipo...</option>
+														    	</select>
+															</td>
+															<td width="21%">
+																<input type="text" id="quantidade_horas" ng-model="medicao.quantidade_horas" ng-change="$ctrl.changequantidadehoras(medicao)" gb-number name="quantidade_horas" class="form-control"/>
+															</td>
+															<td>
+																<input type="text" id="valor_total" name="valor_total" ng-model="medicao.valor_total" ng-change="$ctrl.calcularhorasmedicoes()" gb-money class="form-control"/>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+								<td>
+									<input type="text" id="descricao" name="descricao" ng-model="parcela.valor_parcela" class="form-control" disabled/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</form>
 			</div>
 		</div>
 	</div>
-	<div class="col-sm-8">
-		<div class="col-sm-3">
-			<div class="input-group input-group-sm">
-			    <input type="number" ng-model="$ctrl.numero_vezes" class="form-control"/>
-			    <span class="input-group-addon" for="tipo">Vezes</span>
-			</div>
-		</div>
-		<div class="col-sm-2">
-			<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.gerarparcelas()" ng-disabled="!$ctrl.numero_vezes">
-	  			<span class="glyphicon"></span> Gerar parcelas
-			</button>
-		</div>
-		<div class="col-sm-1">
-			<button type="button" class="btn btn-sm btn-default" ng-click="$ctrl.adicionarparcela()">
-				<span class="glyphicon glyphicon-plus"></span> Adicionar parcela
-			</button>
-		</div>
-	</div>
-	<div class="col-sm-8">
-		<form name="parcelas" style="height: 75%; overflow-y: scroll;">
-			
-			<table class="table table-sm table-bordered table-striped table-highlight">
-				<thead>
-					<tr class="active">
-						<th width="9%">Parcela</th>
-						<th>Data</th>
-						<th width="18%">Fase</th>
-						<th width="27%">Perfil</th>
-						<th width="10%">Horas</th>
-						<th width="14%">Valor</th>
-						<th>Valor total</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="parcela in $ctrl.parcelas">
-						<td>
-							<input type="text" ng-model="parcela.descricao" class="form-control"/>
-						</td>
-						<td>
-							<input type="text" class="form-control" ng-model="parcela.data_previsto_parcela" ui-mask="99/99/9999" model-view-value="true" ng-required="!parcela.remover"/>
-						</td>
-						<td colspan="4">
-							<table class="table">
-								<tbody>
-									<tr ng-repeat="parcelafase in parcela.parcelafases">
-										<td width="26%">
-											<select ng-model="parcelafase.fase.id" ng-options="f.id as f.descricao for f in $ctrl.listafases" ng-change="$ctrl.verificarduplicidadefase(parcela, parcelafase, {{ parcelafase.fase && parcelafase.fase.id ? parcelafase.fase.id : 'null' }})" class="form-control">
-										    	<option value="">Selecione...</option>
-										    </select>
-										</td>
-										<td>
-											<table>
-												<tr ng-repeat="medicao in parcelafase.medicoes">
-													<td width="53%">
-														<select id="valorhora" name="valorhora" ng-model="medicao.valor_hora.id" class="form-control" ng-change="$ctrl.verificarduplicidade(parcelafase, medicao, {{ medicao.valor_hora && medicao.valor_hora.id ? medicao.valor_hora.id : 'null' }}); $ctrl.changevalorhora(medicao); $ctrl.changequantidadehoras(medicao);" ng-options="v.id as v.descricao for v in $ctrl.valorhoraobject[parcelafase.fase.id]">
-												    		<option value="">Selecione um tipo...</option>
-												    	</select>
-													</td>
-													<td width="21%">
-														<input type="text" id="quantidade_horas" ng-model="medicao.quantidade_horas" ng-change="$ctrl.changequantidadehoras(medicao)" gb-number name="quantidade_horas" class="form-control"/>
-													</td>
-													<td>
-														<input type="text" id="valor_total" name="valor_total" ng-model="medicao.valor_total" ng-change="$ctrl.calcularhorasmedicoes()" gb-money class="form-control"/>
-													</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</td>
-						<td>
-							<input type="text" id="descricao" name="descricao" ng-model="parcela.valor_parcela" class="form-control" disabled/>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</form>
-	</div>
+	<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.gravarparcelas()" ng-disabled="parcelas.$invalid">Gravar</button>
+	<button type="button" class="btn btn-sm btn-primary"  ng-click="$ctrl.fechar()">Sair</button>	
 </div>
-<div class="modal-footer">
-	<button type="button" class="btn btn-primary" ng-click="$ctrl.gravarparcelas()" ng-disabled="parcelas.$invalid">Gravar</button>
-  	<button type="button" class="btn btn-primary"  ng-click="$ctrl.fechar()">Sair</button>
-</div> 
