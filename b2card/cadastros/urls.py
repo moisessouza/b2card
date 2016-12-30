@@ -26,7 +26,8 @@ urlpatterns = [
     url(r'^contagerencial/', include('cadastros.url_contagerencial')),
     url(r'^naturezaoperacao/', include('cadastros.url_naturezaoperacao')),
     url(r'^valorhora/', include('cadastros.url_valorhora')),
-    url(r'^unidadeadministrativa/', include('cadastros.url_unidadeadministrativa'))
+    url(r'^unidadeadministrativa/', include('cadastros.url_unidadeadministrativa')),
+    url(r'^pessoa/', include('cadastros.url_pessoa'))
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

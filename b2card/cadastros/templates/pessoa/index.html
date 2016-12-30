@@ -1,0 +1,20 @@
+<meta charset="utf-8">
+{% extends "base_page.html" %}
+
+{% block script %}
+	<script src="/static/js/apps/cadastros/pessoa/pessoa.js"></script>
+	<script src="/static/js/apps/cadastros/pessoa/pessoa-services.js"></script>
+	<script src="/static/js/commons/commons.js"></script>
+	<script src="/static/js/angular/ui-bootstrap-tpls-2.2.0.min.js"></script>
+	<script src="/static/js/jquery/priceformat/jquery.priceformat.min.js"></script>
+{% endblock %}
+
+{%block content%}
+
+<a href="{% url 'cadastros:pessoa_novo' %}" class="btn btn-default" >Novo</a>
+
+{%verbatim%}
+
+{%endverbatim%}
+
+{%endblock%}
