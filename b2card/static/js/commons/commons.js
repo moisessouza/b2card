@@ -2,6 +2,9 @@
 
 var commons = angular.module('commons', ['ui.bootstrap']);
 
+var $scope_message = null;
+var messages = {}
+
 commons.directive('gbMoney', function () {
     return {
         require: '?ngModel',
@@ -96,6 +99,24 @@ commons.directive('gbMoney', function () {
 			} else {
 				return null;
 			}
+		}
+	}
+}).controller('MessageController', function ($scope){
+	var $ctrl = this;
+	$ctrl.show=true;
+	$ctrl.messages = messages;
+	$scope_message = $scope;
+}).service('MessageService', function(){
+	return {
+		messageinfo: function (msg){
+			messages.clazz = 'label-primary';	
+			messages.message = msg;
+			$scope_message.$apply();
+		},
+		messagesuccess: function (msg) {
+			messages.clazz = 'label-success';
+			messages.message = msg;
+			$scope_message.$apply();
 		}
 	}
 });

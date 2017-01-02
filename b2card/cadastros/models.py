@@ -58,7 +58,7 @@ STATUS_PESSOA = (
     ('I', 'INATIVO')
 )
 
-class CadastroPessoa(models.Model):
+class Pessoa(models.Model):
     nome_razao_social = models.CharField(max_length=30)
     tipo = models.CharField(choices=TIPO, max_length=1)
     tipo_pessoa = models.CharField(choices=TIPO_PESSOA, max_length=1)
@@ -101,7 +101,7 @@ DEFICIENCIA = (
 )
 
 class PessoaFisica(models.Model):
-    pessoa = models.ForeignKey(CadastroPessoa, default = None)
+    pessoa = models.ForeignKey(Pessoa, default = None)
     cpf = models.CharField(max_length=16, default=None)
     rg = models.CharField(max_length=16, default=None)
     orgao_emissor = models.CharField(max_length=6)
@@ -113,9 +113,9 @@ class PessoaFisica(models.Model):
     nacionalidade = models.CharField(max_length=30, default=None)
     sexo = models.CharField(max_length=1, choices=SEXO)
     grau_instrucao = models.CharField(max_length=2, choices = GRAU_INSTRUCAO, default = None)
-    nome_pai = models.CharField(max_length = 30, default = None)
+    nome_pai = models.CharField(max_length = 30, default = None, null = True)
     nome_mae = models.CharField(max_length = 30, default = None)
-    deficiencia = models.CharField(max_length=1, choices= DEFICIENCIA, default = None)
+    deficiencia = models.CharField(max_length=1, choices= DEFICIENCIA, default = None, null=True)
     num_pis = models.CharField(max_length=14, default= None)
     data_emicao_pis = models.DateField()
     num_titulo_eleitoral = models.CharField(max_length=30, default=None)
@@ -125,7 +125,7 @@ class PessoaFisica(models.Model):
     categoria_doc_militar = models.CharField(max_length = 10, default = None)
     
 class PessoaJuridica(models.Model):
-    pessoa = models.ForeignKey(CadastroPessoa, default = None)
+    pessoa = models.ForeignKey(Pessoa, default = None)
     cnpj = models.CharField(max_length=19, default = None)
     nome_fantasia = models.CharField(max_length=30, default = None)
     inscricao_estadual = models.CharField(max_length=20, default = None)
@@ -139,7 +139,7 @@ TIPO_ENDERECO = (
 )
 
 class EnderecoPessoa(models.Model):
-    pessoa = models.ForeignKey(CadastroPessoa, default = None)
+    pessoa = models.ForeignKey(Pessoa, default = None)
     tipo = models.CharField(max_length = 2, choices = TIPO_ENDERECO, default = None)
     logradouro = models.CharField(max_length = 20)
     numero = models.CharField(max_length = 10)
@@ -155,7 +155,7 @@ TIPO_TELEFONE = (
 )
 
 class TelefonePessoa(models.Model):
-    pessoa = models.ForeignKey(CadastroPessoa, default = None)
+    pessoa = models.ForeignKey(Pessoa, default = None)
     tipo = models.CharField(max_length = 1, choices = TIPO_TELEFONE, default = None)
     numero = models.CharField(max_length = 20)
     
@@ -176,7 +176,7 @@ TIPO_CONTA = (
 )
 
 class DadosBancariosPessoa(models.Model):
-    pessoa = models.ForeignKey(CadastroPessoa, default = None)
+    pessoa = models.ForeignKey(Pessoa, default = None)
     tipo_conta = models.CharField(max_length = 1, choices = TIPO_CONTA, default = None)
     nome_banco = models.CharField(max_length = 20, default = None)
     cod_banco = models.CharField(max_length = 4)
@@ -197,7 +197,7 @@ class Prestador(models.Model):
     data_exame_admissional = models.DateField(default = None)
     data_exame_demissional = models.DateField(null = True, default = None)
     data_ultimo_exame_periodico = models.DateField(null = True, default = None)
-    dataa_ultima_avaliacao = models.DateField(null = True, default = None)
+    data_ultima_avaliacao = models.DateField(null = True, default = None)
     data_proxima_avaliacao = models.DateField(null = True, default = None)
     dados_complementares = models.TextField(null = True, default = None)
     usuario = models.ForeignKey(User, default = None, null = True)

@@ -4,9 +4,12 @@
 {% block script %}
 	<script src="/static/js/apps/cadastros/pessoa/pessoa.js"></script>
 	<script src="/static/js/apps/cadastros/pessoa/pessoa-services.js"></script>
-	<script src="/static/js/commons/commons.js"></script>
+	<script src="/static/js/apps/cadastros/centrocusto/centrocusto-services.js"></script>
 	<script src="/static/js/angular/ui-bootstrap-tpls-2.2.0.min.js"></script>
 	<script src="/static/js/jquery/priceformat/jquery.priceformat.min.js"></script>
+	<script type="text/javascript">
+	  	angular.bootstrap(document.getElementById('pessoa'), ['pessoa']);
+ 	</script>
 {% endblock %}
 
 {%block content%}
@@ -14,6 +17,25 @@
 <a href="{% url 'cadastros:pessoa_novo' %}" class="btn btn-default" >Novo</a>
 
 {%verbatim%}
+
+<div id="pessoa" ng-controller="ListPessoaController as $ctrl">
+	<table>
+		<thead>
+			<tr>
+				<th>
+					Nome
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="pessoa in $ctrl.pessoas" ng-click="$ctrl.redirecionar(pessoa)">
+				<td>
+					{{pessoa.nome_razao_social}}
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
 
 {%endverbatim%}
 

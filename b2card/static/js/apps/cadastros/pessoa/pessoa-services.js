@@ -14,6 +14,21 @@ pessoaservices.config(['$httpProvider', function($httpProvider) {
 
 pessoaservices.service('PessoaService', function($resource){
 	return {
-		
+		buscarpessoas: function () {
+			var Pessoa = $resource('/cadastros/pessoa/api/list');
+			return Pessoa.query();
+		},
+		buscarpessoa: function (pessoa_id, callback){
+			var Pessoa = $resource('/cadastros/pessoa/api/:id');
+			return Pessoa.get({id:pessoa_id}, callback);
+		},
+		salvarpessoa: function (pessoa, callback) {
+			var Pessoa = $resource('/cadastros/pessoa/api/new/');
+			return Pessoa.save({}, pessoa, callback);
+		},
+		deletarpessoa: function (pessoa_id, callback) {
+			var Pessoa = $resource('/cadastros/pessoa/api/:id');
+			return Pessoa.remove({id:pessoa_id}, {}, callback);
+		},
 	}
 });

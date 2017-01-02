@@ -13,3 +13,8 @@ input[ui-mask='99/99/9999'] {
 input[gb-cpf] {
 	width: 100px
 }
+
+form .ng-invalid {
+    border:1px solid #f00;
+    background-color: #FFA;
+}
