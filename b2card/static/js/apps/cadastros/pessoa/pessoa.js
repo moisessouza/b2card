@@ -5,6 +5,8 @@ var pessoa = angular.module('pessoa', ['pessoa-services', 'centrocusto-services'
 pessoa.controller('PessoaController', function ($scope, $window, PessoaService, CentroCustoService){
 	var $ctrl = this;
 	
+	$ctrl.show = true;
+	
 	$ctrl.listacentrocusto = CentroCustoService.buscarcentrocustos();
 	
 	$ctrl.pessoa = {

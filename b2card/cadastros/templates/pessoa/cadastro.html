@@ -14,474 +14,479 @@
 
 {%verbatim%}
 
-<style>
+<div ng-app="pessoa" ng-controller="PessoaController as $ctrl" class="ng-hide" ng-show="$ctrl.show">
 	
-	input[ui-mask] {
-		width: 80px
-	}
-	
-</style>
-
-<div ng-app="pessoa" ng-controller="PessoaController as $ctrl">
-	
-	<div class="panel panel-primary form-group-sm margin-top">
-		<div class="panel-heading">
-			Cadastro de pessoa
-		</div>
-		<div class="panel-body">
-			<div>
-				<div class="row">
+	<ul class="nav nav-tabs">
+	  <li class="active"><a data-toggle="tab" href="#dadoscadastro">Cadastro de pessoa</a></li>
+	  <li ng-show="$ctrl.pessoa.prestador.tipo_prestador == 'S' || $ctrl.pessoa.prestador.tipo_prestador == 'A' || $ctrl.pessoa.prestador.tipo_prestador == 'F'"><a data-toggle="tab" href="#dadosprestador">Prestador</a></li>
+	</ul>
+	<div class="tab-content">
+		<div id="dadoscadastro" class="tab-pane in active">
+			<div class="panel panel-primary form-group-sm margin-top"style="margin-top: 15px">
+				<div class="panel-body">
+					<div>
+						<div class="row">
+							<div class="col-sm-2">
+								<div class="form-group">
+									<label class="control-label" for="id">Nome/Razão Social</label>
+									<input type="text" ng-model="$ctrl.pessoa.nome_razao_social" class="form-control" maxlength="30"/>
+								</div>
+							</div>
+							<div class="col-sm-1">
+								<div class="form-group">
+									<label class="control-label" for="id">Tipo Pessoa</label>
+									<select class="form-control" ng-model = "$ctrl.pessoa.tipo">
+										<option value="">Selecione...</option>
+										<option value="F">PF</option>
+										<option value="J">PJ</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-2" style="width: 130px">
+								<div class="form-group">
+									<label class="control-label" for="id">Tipo</label>
+									<select class="form-control" ng-model = "$ctrl.pessoa.tipo_pessoa" >
+										<option value="">Selecione...</option>
+										<option value="C">Cliente</option>
+										<option value="F">Fornecedor</option>
+										<option value="A">Ambos</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-2" style="width: 130px">
+								<div class="form-group">
+									<label class="control-label" for="id">Centro de custo</label>
+									<select class="form-control" ng-model = "$ctrl.pessoa.centro_custo.id" ng-options="c.id as c.nome for c in $ctrl.listacentrocusto">
+										<option value="">Selecione...</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-2" style="width: 130px">
+								<div class="form-group">
+									<label class="control-label" for="id">Data contratação</label>
+									<input type="text" class="form-control" ng-model = "$ctrl.pessoa.data_contratacao" ui-mask="99/99/9999" model-view-value="true"/>
+								</div>
+							</div>
+							<div class="col-sm-2" style="width: 130px">
+								<div class="form-group">
+									<label class="control-label" for="id">Data da rescisão</label>
+									<input type="text" class="form-control" ng-model = "$ctrl.pessoa.data_rescisao" ui-mask="99/99/9999" model-view-value="true"/>
+								</div>
+							</div>
+							<div class="col-sm-2" style="width: 130px">
+								<div class="form-group">
+									<label class="control-label" for="id">Data fim aditivo</label>
+									<input type="text" class="form-control" ng-model = "$ctrl.pessoa.data_fim_aditivo" ui-mask="99/99/9999" model-view-value="true"/>
+								</div>
+							</div>
+							<div class="col-sm-2" style="width: 130px">
+								<div class="form-group">
+									<label class="control-label" for="id">Renegociação</label>
+									<input type="text" class="form-control" ng-model = "$ctrl.pessoa.data_renegociacao_valor" ui-mask="99/99/9999" model-view-value="true"/>
+								</div>
+							</div>
+							<div class="col-sm-2" style="width: 130px">
+								<div class="form-group">
+									<label class="control-label" for="id">Status</label>
+									<select class="form-control" ng-model = "$ctrl.pessoa.status">
+										<option value="">Selecione...</option>
+										<option value="A">Ativo</option>
+										<option value="I">Inativo</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-2" ng-show="$ctrl.pessoa.tipo=='F' && ($ctrl.pessoa.tipo_pessoa == 'F' || $ctrl.pessoa.tipo_pessoa == 'A')">
+								<div class="form-group">
+									<label class="control-label" for="id">Tipo de prestador</label>
+									<select class="form-control" ng-model = "$ctrl.pessoa.prestador.tipo_prestador">
+										<option value="">Selecione...</option>
+										<option value="S">Sócio</option>
+										<option value="A">Autonomo</option>
+										<option value="F">Funcionário</option>
+										<option value="P">PJ</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row" ng-show="$ctrl.pessoa.tipo_pessoa == 'C' || $ctrl.pessoa.tipo_pessoa == 'A'">
+							<div class="col-sm-2" style="width: 158px">
+								<div class="form-group">
+									<label class="control-label" for="id">Dias para faturamento</label>
+									<input type="number" class="form-control" ng-model = "$ctrl.pessoa.dias_faturamento" style="width: 80px"/>
+								</div>
+							</div>
+							<div class="col-sm-2" style="width: 152px" ng-show="$ctrl.pessoa.tipo_pessoa == 'C' || $ctrl.pessoa.tipo_pessoa == 'A'">
+								<div class="form-group">
+									<label class="control-label" for="id">Dias para pagamento</label>
+									<input type="number" class="form-control" ng-model = "$ctrl.dias_pagamento" style="width: 80px"/>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-primary form-group-sm margin-top" ng-show="$ctrl.pessoa.tipo=='F'">
+				<div class="panel-heading">
+					Dados de pessoa física
+				</div>
+				<div class="panel-body">
+					<div class="col-sm-1">
+						<div class="form-group">
+							<label class="control-label" for="id">RG</label>
+							<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.rg" ui-mask="99.999.999" model-view-value="true"/>
+						</div>
+					</div>
+					<div class="col-sm-1" style="width: 115px">
+						<div class="form-group">
+							<label class="control-label" for="id">Órgão emissor</label>
+							<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.orgao_emissor" maxlength="6" style="width: 80px"/>
+						</div>
+					</div>
+					<div class="col-sm-1" style="width: 110px">
+						<div class="form-group">
+							<label class="control-label" for="id">CPF</label>
+							<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.cpf" gb-cpf maxlength="16"/>
+						</div>
+					</div>
+					<div class="col-sm-1" style="width: 136px">
+						<div class="form-group">
+							<label class="control-label" for="id">Data de expedição</label>
+							<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.data_expedicao" ui-mask="99/99/9999" model-view-value="true"/>
+						</div>
+					</div>
+					<div class="col-sm-1" style="width: 231px">
+						<div class="form-group">
+							<label class="control-label" for="id">Email</label>
+							<input type="email" class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.email"/>
+						</div>
+					</div>
+					<div class="col-sm-1" style="width: 144px">
+						<div class="form-group">
+							<label class="control-label" for="id">Data de nascimento</label>
+							<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.data_nascimento" ui-mask="99/99/9999" model-view-value="true"/>
+						</div>
+					</div>
+					<div class="col-sm-1" style="width: 128px">
+						<div class="form-group">
+							<label class="control-label" for="id">Estado civil</label>
+							<select class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.estado_civil">
+								<option value="">Selecione...</option>
+								<option value="S">Solteiro</option>
+								<option value="C">Casado</option>
+								<option value="D">Divorciado</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-sm-1" style="width: 179px">
+						<div class="form-group">
+							<label class="control-label" for="id">Naturalidade</label>
+							<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.naturalidade"/>
+						</div>
+					</div>
+					<div class="col-sm-1" style="width: 179px">
+						<div class="form-group">
+							<label class="control-label" for="id">Nacionalidade</label>
+							<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.nacionalidade"/>
+						</div>
+					</div>
+					<div class="col-sm-1" style="width: 123px">
+						<div class="form-group">
+							<label class="control-label" for="id">Sexo</label>
+							<select class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.sexo">
+								<option value="">Selecione...</option>
+								<option value="M">Masculino</option>
+								<option value="F">Feminino</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-sm-1" style="width: 143px">
+						<div class="form-group">
+							<label class="control-label" for="id">Grau de instrução</label>
+							<select class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.grau_instrucao">
+								<option value="">Selecione...</option>
+								<option value="1G">Primeiro grau</option>
+								<option value="2G">Segundo grau</option>
+								<option value="GR">Graduado</option>
+								<option value="PO">Pós-graduado</option>
+								<option value="DO">Doutorado</option>
+								<option value="ME">Mestrado</option>
+							</select>
+						</div>
+					</div>
 					<div class="col-sm-2">
 						<div class="form-group">
-							<label class="control-label" for="id">Nome/Razão Social</label>
-							<input type="text" ng-model="$ctrl.pessoa.nome_razao_social" class="form-control" maxlength="30"/>
+							<label class="control-label" for="id">Nome do pai</label>
+							<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.nome_pai" maxlength="30"/>
+						</div>
+					</div>
+					<div class="col-sm-2">
+						<div class="form-group">
+							<label class="control-label" for="id">Nome da mãe</label>
+							<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.nome_mae" maxlength="30"/>
+						</div>
+					</div>
+					<div class="col-sm-1" style="width: 127px">
+						<div class="form-group">
+							<label class="control-label" for="id">Deficiência</label>
+							<select class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.deficiencia">
+								<option value="">Selecione...</option>
+								<option value="F">Física</option>
+								<option value="A">Auditiva</option>
+								<option value="V">Visual</option>
+								<option value="I">Intelectual</option>
+								<option value="M">Mental</option>
+								<option value="R">Reabilitado</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-sm-2" style="width: 122px">
+						<div class="form-group">
+							<label class="control-label" for="id">PIS</label>
+							<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.num_pis" maxlength="14"/>
+						</div>
+					</div>
+					<div class="col-sm-1" style="width: 144px">
+						<div class="form-group">
+							<label class="control-label" for="id">Data emição pis</label>
+							<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.data_emicao_pis" ui-mask="99/99/9999" model-view-value="true"/>
+						</div>
+					</div>
+					<div class="col-sm-2" style="width: 174px">
+						<div class="form-group">
+							<label class="control-label" for="id">Número do título eleitoral</label>
+							<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.num_titulo_eleitoral" maxlength="13"/>
 						</div>
 					</div>
 					<div class="col-sm-1">
 						<div class="form-group">
-							<label class="control-label" for="id">Tipo Pessoa</label>
-							<select class="form-control" ng-model = "$ctrl.pessoa.tipo">
-								<option value="">Selecione...</option>
-								<option value="F">PF</option>
-								<option value="J">PJ</option>
-							</select>
+							<label class="control-label" for="id">Zona</label>
+							<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.zona" maxlength="4"/>
 						</div>
 					</div>
-					<div class="col-sm-2" style="width: 130px">
+					<div class="col-sm-1">
 						<div class="form-group">
-							<label class="control-label" for="id">Tipo</label>
-							<select class="form-control" ng-model = "$ctrl.pessoa.tipo_pessoa" >
-								<option value="">Selecione...</option>
-								<option value="C">Cliente</option>
-								<option value="F">Fornecedor</option>
-								<option value="A">Ambos</option>
-							</select>
+							<label class="control-label" for="id">Seção</label>
+							<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.secao" maxlength="2"/>
 						</div>
 					</div>
-					<div class="col-sm-2" style="width: 130px">
+					<div class="col-sm-1" style="width: 136px">
 						<div class="form-group">
-							<label class="control-label" for="id">Centro de custo</label>
-							<select class="form-control" ng-model = "$ctrl.pessoa.centro_custo.id" ng-options="c.id as c.nome for c in $ctrl.listacentrocusto"></select>
+							<label class="control-label" for="id">Documento militar</label>
+							<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.doc_militar" maxlength="6"/>
 						</div>
 					</div>
-					<div class="col-sm-2" style="width: 130px">
+					<div class="col-sm-1" style="width: 66px">
 						<div class="form-group">
-							<label class="control-label" for="id">Data contratação</label>
-							<input type="text" class="form-control" ng-model = "$ctrl.pessoa.data_contratacao" ui-mask="99/99/9999" model-view-value="true"/>
-						</div>
-					</div>
-					<div class="col-sm-2" style="width: 130px">
-						<div class="form-group">
-							<label class="control-label" for="id">Data da rescisão</label>
-							<input type="text" class="form-control" ng-model = "$ctrl.pessoa.data_rescisao" ui-mask="99/99/9999" model-view-value="true"/>
-						</div>
-					</div>
-					<div class="col-sm-2" style="width: 130px">
-						<div class="form-group">
-							<label class="control-label" for="id">Data fim aditivo</label>
-							<input type="text" class="form-control" ng-model = "$ctrl.pessoa.data_fim_aditivo" ui-mask="99/99/9999" model-view-value="true"/>
-						</div>
-					</div>
-					<div class="col-sm-2" style="width: 130px">
-						<div class="form-group">
-							<label class="control-label" for="id">Renegociação</label>
-							<input type="text" class="form-control" ng-model = "$ctrl.pessoa.data_renegociacao_valor" ui-mask="99/99/9999" model-view-value="true"/>
-						</div>
-					</div>
-					<div class="col-sm-2" style="width: 130px">
-						<div class="form-group">
-							<label class="control-label" for="id">Status</label>
-							<select class="form-control" ng-model = "$ctrl.pessoa.status">
-								<option value="">Selecione...</option>
-								<option value="A">Ativo</option>
-								<option value="I">Inativo</option>
-							</select>
-						</div>
-					</div>
-					<div class="col-sm-2">
-						<div class="form-group">
-							<label class="control-label" for="id">Status</label>
-							<select class="form-control" ng-model = "$ctrl.pessoa.prestador.tipo_prestador">
-								<option value="">Selecione...</option>
-								<option value="S">Sócio</option>
-								<option value="A">Autonomo</option>
-								<option value="F">Funcionário</option>
-								<option value="P">PJ</option>
-							</select>
+							<label class="control-label" for="id">Categoria</label>
+							<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.categoria_doc_militar" maxlength="2"/>
 						</div>
 					</div>
 				</div>
-				<div class="row" ng-show="$ctrl.pessoa.prestador.tipo_prestador">
-					<div class="col-sm-1" style="width: 164px">
+			</div>
+			<div class="panel panel-primary form-group-sm margin-top" ng-show="$ctrl.pessoa.tipo=='J'">
+				<div class="panel-heading">
+					Dados de pessoa jurídica
+				</div>
+				<div class="panel-body">
+					<div class="col-sm-1" style="width: 149px">
 						<div class="form-group">
-							<label class="control-label">Data exame admicional</label>
-							<input class="form-control"  ng-model="$ctrl.pessoa.prestador.data_exame_admissional" ui-mask="99/99/9999" model-view-value="true"> 
+							<label class="control-label" for="id">CNPJ</label>
+							<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_juridica.cnpj" gb-cnpj/>
 						</div>
 					</div>
-					<div class="col-sm-1" style="width: 164px">
+					<div class="col-sm-1" style="width: 149px">
 						<div class="form-group">
-							<label class="control-label">Data exame demicional</label>
-							<input class="form-control" ng-model="$ctrl.pessoa.prestador.data_exame_demissional" ui-mask="99/99/9999" model-view-value="true"> 
+							<label class="control-label" for="id">Nome fantasia</label>
+							<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_juridica.nome_fantasia" maxlength="30"/>
 						</div>
 					</div>
-					<div class="col-sm-1" style="width: 193px">
+					<div class="col-sm-1" style="width: 149px">
 						<div class="form-group">
-							<label class="control-label">Data último exame periódico</label>
-							<input class="form-control" ng-model="$ctrl.pessoa.prestador.data_ultimo_exame_periodico" ui-mask="99/99/9999" model-view-value="true"> 
+							<label class="control-label" for="id">Inscricao estadual</label>
+							<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_juridica.inscricao_estadual" maxlength="30"/>
 						</div>
 					</div>
-					<div class="col-sm-1" style="width: 164px">
+					<div class="col-sm-1" style="width: 149px">
 						<div class="form-group">
-							<label class="control-label">Data última avaliação</label>
-							<input class="form-control" ng-model="$ctrl.pessoa.prestador.dataa_ultima_avaliacao" ui-mask="99/99/9999" model-view-value="true"> 
-						</div>
-					</div>
-					<div class="col-sm-1" style="width: 193px">
-						<div class="form-group">
-							<label class="control-label">Data próxima avaliação</label>
-							<input class="form-control" ng-model="$ctrl.pessoa.prestador.data_proxima_avaliacao" ui-mask="99/99/9999" model-view-value="true"> 
-						</div>
-					</div>
-					<div class="col-sm-12">
-						<div class="form-group">
-							<label class="control-label">Dados complementares</label>
-							<textarea class="form-control" ng-model="$ctrl.pessoa.prestador.dados_complementares"></textarea>
+							<label class="control-label" for="id">Inscricao municipal</label>
+							<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_juridica.inscricao_municipal" maxlength="30"/>
 						</div>
 					</div>
 				</div>
-				<div class="row" ng-show="$ctrl.pessoa.tipo_pessoa == 'C' || $ctrl.pessoa.tipo_pessoa == 'A'">
-					<div class="col-sm-2" style="width: 158px">
-						<div class="form-group">
-							<label class="control-label" for="id">Dias para faturamento</label>
-							<input type="number" class="form-control" ng-model = "$ctrl.pessoa.dias_faturamento" style="width: 80px"/>
-						</div>
+			</div>
+			<div class="panel panel-primary form-group-sm" ng-show="$ctrl.pessoa.tipo=='F' || $ctrl.pessoa.tipo=='J'">
+				<div class="panel-heading">
+					Endereço
+				</div>
+				<div class="panel-body">
+					<button class="btn btn-sm btn-primary" style="margin-bottom: 8px">Adicionar</button>
+		    		<table class="table table-sm table-bordered table-striped table-highlight" style="font-size: 12px">
+		    			<thead>
+		    				<tr>
+		    					<th>Tipo</th>
+		    					<th>Logradouro</th>
+		    					<th>Número</th>
+		    					<th>Complemento</th>
+		    					<th>Cidade</th>
+		    					<th>Estado</th>
+		    					<th>CEP</th>
+		    				</tr>
+		    			</thead>
+		    			<tbody>
+		    				<tr ng-repeat="endereco in $ctrl.pessoa.enderecos">
+		    					<td>
+		    						<select ng-model="endereco.tipo" class="form-control">
+		    							<option value="">Selecione...</option>
+		    							<option value="RE">Residencial</option>
+		    							<option value="CO">Comercial</option>
+		    							<option value="CB">Cobrança</option>
+		    							<option value="EN">Entrega</option>
+		    						</select>
+		    					</td>
+		    					<td>
+		    						<input type="text" class="form-control" ng-model="endereco.logradouro">
+		    					</td>
+		    					<td>
+		    						<input type="text" class="form-control" ng-model="endereco.numero">
+		    					</td>
+		    					<td>
+		    						<input type="text" class="form-control" ng-model="endereco.complemento">
+		    					</td>
+		    					<td>
+		    						<input type="text" class="form-control" ng-model="endereco.cidade">
+		    					</td>
+		    					<td>
+		    						<input type="text" class="form-control" ng-model="endereco.estado">
+		    					</td>
+		    					<td>
+		    						<input type="text" class="form-control" ng-model="endereco.cep">
+		    					</td>
+		    				</tr>
+		    			</tbody>
+		    		</table>
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="panel panel-primary form-group-sm" ng-show="$ctrl.pessoa.tipo=='F' || $ctrl.pessoa.tipo=='J'">
+					<div class="panel-heading">
+						Telefone
 					</div>
-					<div class="col-sm-2" style="width: 152px" ng-show="$ctrl.pessoa.tipo_pessoa == 'C' || $ctrl.pessoa.tipo_pessoa == 'A'">
-						<div class="form-group">
-							<label class="control-label" for="id">Dias para pagamento</label>
-							<input type="number" class="form-control" ng-model = "$ctrl.dias_pagamento" style="width: 80px"/>
-						</div>
+					<div class="panel-body">
+						<button class="btn btn-sm btn-primary" style="margin-bottom: 8px">Adicionar</button>
+						<table class="table table-sm table-bordered table-striped table-highlight"  style="font-size: 12px">
+							<thead>
+								<tr>
+									<th>Tipo</th>
+									<th>Número</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="telefone in $ctrl.pessoa.telefones">
+									<td>
+										<select class="form-control" ng-model="telefone.tipo">
+											<option value="">Selecione...</option>
+											<option value="R">Residencial</option>
+											<option value="C">Comercial</option>
+											<option value="M">Celular</option>
+										</select>
+									</td>
+									<td>
+										<input class="form-control" ng-model="telefone.numero" ui-mask="{{telefone.tipo == 'M' ? '(+99) 99 99999-9999' : '(+99) 99 9999-9999'}}" model-view-value="true" style="width: 100%"/>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-7">
+				<div class="panel panel-primary form-group-sm" ng-show="$ctrl.pessoa.tipo=='F' || $ctrl.pessoa.tipo=='J'">
+					<div class="panel-heading">
+						Dados bancários
+					</div>
+					<div class="panel-body">
+						<button class="btn btn-sm btn-primary" style="margin-bottom: 8px">Adicionar</button>
+						<table class="table table-sm table-bordered table-striped table-highlight"  style="font-size: 12px">
+							<thead>
+								<tr>
+									<th>Tipo</th>
+									<th>Nome do banco</th>
+									<th>Código do banco</th>
+									<th>Código da agência</th>
+									<th>Numero da conta</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="dado_bancario in $ctrl.pessoa.dados_bancarios">
+									<td>
+										<select class="form-control" ng-model="telefone.tipo">
+											<option value="">Selecione...</option>
+											<option value="S">Conta salário</option>
+											<option value="C">Conta corrente</option>
+											<option value="P">Conta poupança</option>
+										</select>
+									</td>
+									<td>
+										<input type="number" class="form-control" />
+									</td>
+									<td>
+										<input type="number" class="form-control"/>
+									</td>
+									<td>
+										<input type="number" class="form-control"/>
+									</td>
+									<td>
+										<input type="number" class="form-control"/>
+									</td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="panel panel-primary form-group-sm margin-top" ng-show="$ctrl.pessoa.tipo=='F'">
-		<div class="panel-heading">
-			Dados de pessoa física
-		</div>
-		<div class="panel-body">
-			<div class="col-sm-1">
-				<div class="form-group">
-					<label class="control-label" for="id">RG</label>
-					<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.rg" ui-mask="99.999.999" model-view-value="true"/>
+		<div id="dadosprestador" class="tab-pane">
+			<div class="panel panel-primary form-group-sm" ng-show="$ctrl.pessoa.tipo=='F' || $ctrl.pessoa.tipo=='J'" style="margin-top: 15px">
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-sm-1" style="width: 164px">
+							<div class="form-group">
+								<label class="control-label">Data exame admicional</label>
+								<input class="form-control"  ng-model="$ctrl.pessoa.prestador.data_exame_admissional" ui-mask="99/99/9999" model-view-value="true"> 
+							</div>
+						</div>
+						<div class="col-sm-1" style="width: 164px">
+							<div class="form-group">
+								<label class="control-label">Data exame demicional</label>
+								<input class="form-control" ng-model="$ctrl.pessoa.prestador.data_exame_demissional" ui-mask="99/99/9999" model-view-value="true"> 
+							</div>
+						</div>
+						<div class="col-sm-1" style="width: 193px">
+							<div class="form-group">
+								<label class="control-label">Data último exame periódico</label>
+								<input class="form-control" ng-model="$ctrl.pessoa.prestador.data_ultimo_exame_periodico" ui-mask="99/99/9999" model-view-value="true"> 
+							</div>
+						</div>
+						<div class="col-sm-1" style="width: 164px">
+							<div class="form-group">
+								<label class="control-label">Data última avaliação</label>
+								<input class="form-control" ng-model="$ctrl.pessoa.prestador.dataa_ultima_avaliacao" ui-mask="99/99/9999" model-view-value="true"> 
+							</div>
+						</div>
+						<div class="col-sm-1" style="width: 193px">
+							<div class="form-group">
+								<label class="control-label">Data próxima avaliação</label>
+								<input class="form-control" ng-model="$ctrl.pessoa.prestador.data_proxima_avaliacao" ui-mask="99/99/9999" model-view-value="true"> 
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label class="control-label">Dados complementares</label>
+								<textarea class="form-control" ng-model="$ctrl.pessoa.prestador.dados_complementares"></textarea>
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>
-			<div class="col-sm-1" style="width: 115px">
-				<div class="form-group">
-					<label class="control-label" for="id">Órgão emissor</label>
-					<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.orgao_emissor" maxlength="6" style="width: 80px"/>
-				</div>
-			</div>
-			<div class="col-sm-1" style="width: 110px">
-				<div class="form-group">
-					<label class="control-label" for="id">CPF</label>
-					<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.cpf" gb-cpf maxlength="16" style="width: 93px"/>
-				</div>
-			</div>
-			<div class="col-sm-1" style="width: 136px">
-				<div class="form-group">
-					<label class="control-label" for="id">Data de expedição</label>
-					<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.data_expedicao" ui-mask="99/99/9999" model-view-value="true"/>
-				</div>
-			</div>
-			<div class="col-sm-1" style="width: 231px">
-				<div class="form-group">
-					<label class="control-label" for="id">Email</label>
-					<input type="email" class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.email"/>
-				</div>
-			</div>
-			<div class="col-sm-1" style="width: 144px">
-				<div class="form-group">
-					<label class="control-label" for="id">Data de nascimento</label>
-					<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.data_nascimento" ui-mask="99/99/9999" model-view-value="true"/>
-				</div>
-			</div>
-			<div class="col-sm-1" style="width: 128px">
-				<div class="form-group">
-					<label class="control-label" for="id">Estado civil</label>
-					<select class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.estado_civil">
-						<option value="">Selecione...</option>
-						<option value="S">Solteiro</option>
-						<option value="C">Casado</option>
-						<option value="D">Divorciado</option>
-					</select>
-				</div>
-			</div>
-			<div class="col-sm-1" style="width: 179px">
-				<div class="form-group">
-					<label class="control-label" for="id">Naturalidade</label>
-					<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.naturalidade"/>
-				</div>
-			</div>
-			<div class="col-sm-1" style="width: 179px">
-				<div class="form-group">
-					<label class="control-label" for="id">Nacionalidade</label>
-					<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.nacionalidade"/>
-				</div>
-			</div>
-			<div class="col-sm-1" style="width: 123px">
-				<div class="form-group">
-					<label class="control-label" for="id">Sexo</label>
-					<select class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.sexo">
-						<option value="">Selecione...</option>
-						<option value="M">Masculino</option>
-						<option value="F">Feminino</option>
-					</select>
-				</div>
-			</div>
-			<div class="col-sm-1" style="width: 143px">
-				<div class="form-group">
-					<label class="control-label" for="id">Grau de instrução</label>
-					<select class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.grau_instrucao">
-						<option value="">Selecione...</option>
-						<option value="1G">Primeiro grau</option>
-						<option value="2G">Segundo grau</option>
-						<option value="GR">Graduado</option>
-						<option value="PO">Pós-graduado</option>
-						<option value="DO">Doutorado</option>
-						<option value="ME">Mestrado</option>
-					</select>
-				</div>
-			</div>
-			<div class="col-sm-2">
-				<div class="form-group">
-					<label class="control-label" for="id">Nome do pai</label>
-					<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.nome_pai" maxlength="30"/>
-				</div>
-			</div>
-			<div class="col-sm-2">
-				<div class="form-group">
-					<label class="control-label" for="id">Nome da mãe</label>
-					<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.nome_mae" maxlength="30"/>
-				</div>
-			</div>
-			<div class="col-sm-1" style="width: 127px">
-				<div class="form-group">
-					<label class="control-label" for="id">Deficiência</label>
-					<select class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.deficiencia">
-						<option value="">Selecione...</option>
-						<option value="F">Física</option>
-						<option value="A">Auditiva</option>
-						<option value="V">Visual</option>
-						<option value="I">Intelectual</option>
-						<option value="M">Mental</option>
-						<option value="R">Reabilitado</option>
-					</select>
-				</div>
-			</div>
-			<div class="col-sm-2" style="width: 122px">
-				<div class="form-group">
-					<label class="control-label" for="id">PIS</label>
-					<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.num_pis" maxlength="14"/>
-				</div>
-			</div>
-			<div class="col-sm-1" style="width: 144px">
-				<div class="form-group">
-					<label class="control-label" for="id">Data emição pis</label>
-					<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.data_emicao_pis" ui-mask="99/99/9999" model-view-value="true"/>
-				</div>
-			</div>
-			<div class="col-sm-2" style="width: 174px">
-				<div class="form-group">
-					<label class="control-label" for="id">Número do título eleitoral</label>
-					<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.num_titulo_eleitoral" maxlength="13"/>
-				</div>
-			</div>
-			<div class="col-sm-1">
-				<div class="form-group">
-					<label class="control-label" for="id">Zona</label>
-					<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.zona" maxlength="4"/>
-				</div>
-			</div>
-			<div class="col-sm-1">
-				<div class="form-group">
-					<label class="control-label" for="id">Seção</label>
-					<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.secao" maxlength="2"/>
-				</div>
-			</div>
-			<div class="col-sm-1" style="width: 136px">
-				<div class="form-group">
-					<label class="control-label" for="id">Documento militar</label>
-					<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.doc_militar" maxlength="6"/>
-				</div>
-			</div>
-			<div class="col-sm-1" style="width: 66px">
-				<div class="form-group">
-					<label class="control-label" for="id">Categoria</label>
-					<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.categoria_doc_militar" maxlength="2"/>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="panel panel-primary form-group-sm margin-top" ng-show="$ctrl.pessoa.tipo=='J'">
-		<div class="panel-heading">
-			Dados de pessoa jurídica
-		</div>
-		<div class="panel-body">
-			<div class="col-sm-1" style="width: 149px">
-				<div class="form-group">
-					<label class="control-label" for="id">CNPJ</label>
-					<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_juridica.cnpj" gb-cnpj/>
-				</div>
-			</div>
-			<div class="col-sm-1" style="width: 149px">
-				<div class="form-group">
-					<label class="control-label" for="id">Nome fantasia</label>
-					<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_juridica.nome_fantasia" maxlength="30"/>
-				</div>
-			</div>
-			<div class="col-sm-1" style="width: 149px">
-				<div class="form-group">
-					<label class="control-label" for="id">Inscricao estadual</label>
-					<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_juridica.inscricao_estadual" maxlength="30"/>
-				</div>
-			</div>
-			<div class="col-sm-1" style="width: 149px">
-				<div class="form-group">
-					<label class="control-label" for="id">Inscricao municipal</label>
-					<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_juridica.inscricao_municipal" maxlength="30"/>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="panel panel-primary form-group-sm" ng-show="$ctrl.pessoa.tipo=='F' || $ctrl.pessoa.tipo=='J'">
-		<div class="panel-heading">
-			Endereço
-		</div>
-		<div class="panel-body">
-			<button class="btn btn-sm btn-primary" style="margin-bottom: 8px">Adicionar</button>
-    		<table class="table table-sm table-bordered table-striped table-highlight" style="font-size: 12px">
-    			<thead>
-    				<tr>
-    					<th>Tipo</th>
-    					<th>Logradouro</th>
-    					<th>Número</th>
-    					<th>Complemento</th>
-    					<th>Cidade</th>
-    					<th>Estado</th>
-    					<th>CEP</th>
-    				</tr>
-    			</thead>
-    			<tbody>
-    				<tr ng-repeat="endereco in $ctrl.pessoa.enderecos">
-    					<td>
-    						<select ng-model="endereco.tipo" class="form-control">
-    							<option value="">Selecione...</option>
-    							<option value="RE">Residencial</option>
-    							<option value="CO">Comercial</option>
-    							<option value="CB">Cobrança</option>
-    							<option value="EN">Entrega</option>
-    						</select>
-    					</td>
-    					<td>
-    						<input type="text" class="form-control" ng-model="endereco.logradouro">
-    					</td>
-    					<td>
-    						<input type="text" class="form-control" ng-model="endereco.numero">
-    					</td>
-    					<td>
-    						<input type="text" class="form-control" ng-model="endereco.complemento">
-    					</td>
-    					<td>
-    						<input type="text" class="form-control" ng-model="endereco.cidade">
-    					</td>
-    					<td>
-    						<input type="text" class="form-control" ng-model="endereco.estado">
-    					</td>
-    					<td>
-    						<input type="text" class="form-control" ng-model="endereco.cep">
-    					</td>
-    				</tr>
-    			</tbody>
-    		</table>
-		</div>
-	</div>
-	<div class="col-sm-3">
-		<div class="panel panel-primary form-group-sm" ng-show="$ctrl.pessoa.tipo=='F' || $ctrl.pessoa.tipo=='J'">
-			<div class="panel-heading">
-				Telefone
-			</div>
-			<div class="panel-body">
-				<button class="btn btn-sm btn-primary" style="margin-bottom: 8px">Adicionar</button>
-				<table class="table table-sm table-bordered table-striped table-highlight"  style="font-size: 12px">
-					<thead>
-						<tr>
-							<th>Tipo</th>
-							<th>Número</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="telefone in $ctrl.pessoa.telefones">
-							<td>
-								<select class="form-control" ng-model="telefone.tipo">
-									<option value="">Selecione...</option>
-									<option value="R">Residencial</option>
-									<option value="C">Comercial</option>
-									<option value="M">Celular</option>
-								</select>
-							</td>
-							<td>
-								<input class="form-control" ng-model="telefone.numero" ui-mask="{{telefone.tipo == 'M' ? '(+99) 99 99999-9999' : '(+99) 99 9999-9999'}}" model-view-value="true" style="width: 100%"/>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
-	<div class="col-sm-6">
-		<div class="panel panel-primary form-group-sm" ng-show="$ctrl.pessoa.tipo=='F' || $ctrl.pessoa.tipo=='J'">
-			<div class="panel-heading">
-				Dados bancários
-			</div>
-			<div class="panel-body">
-				<button class="btn btn-sm btn-primary" style="margin-bottom: 8px">Adicionar</button>
-				<table class="table table-sm table-bordered table-striped table-highlight"  style="font-size: 12px">
-					<thead>
-						<tr>
-							<th>Tipo</th>
-							<th>Nome do banco</th>
-							<th>Código do banco</th>
-							<th>Código da agência</th>
-							<th>Numero da conta</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="dado_bancario in $ctrl.pessoa.dados_bancarios">
-							<td>
-								<select class="form-control" ng-model="telefone.tipo">
-									<option value="">Selecione...</option>
-									<option value="S">Conta salário</option>
-									<option value="C">Conta corrente</option>
-									<option value="P">Conta poupança</option>
-								</select>
-							</td>
-							<td>
-								<input class="form-control"/>
-							</td>
-							<td>
-								<input class="form-control"/>
-							</td>
-							<td>
-								<input class="form-control"/>
-							</td>
-							<td>
-								<input class="form-control"/>
-							</td>
-						</tr>
-					</tbody>
-				</table>
 			</div>
 		</div>
 	</div>

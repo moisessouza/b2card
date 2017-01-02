@@ -5,3 +5,11 @@ div.buttonbar {
 table.table {
 	font-size: 12px
 }
+
+input[ui-mask='99/99/9999'] {
+	width: 80px
+}
+
+input[gb-cpf] {
+	width: 100px
+}
