@@ -207,6 +207,8 @@ class PessoaDetail(APIView):
                 prestador.data_ultima_avaliacao = converter_string_para_data(p['data_ultima_avaliacao'])
                 prestador.data_ultimo_exame_periodico = converter_string_para_data(p['data_ultimo_exame_periodico'])
                 
+                prestador.save();
+                
             elif 'id' in p:
                 prestador = Prestador.objects.get(pk=p['id'])
                 prestador.delete()
