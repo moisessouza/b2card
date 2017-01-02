@@ -319,7 +319,7 @@
 					Endereço
 				</div>
 				<div class="panel-body">
-					<button class="btn btn-sm btn-primary" style="margin-bottom: 8px">Adicionar</button>
+					<button class="btn btn-sm btn-primary" style="margin-bottom: 8px" ng-click="$ctrl.adicionarendereco()">Adicionar</button>
 		    		<table class="table table-sm table-bordered table-striped table-highlight" style="font-size: 12px">
 		    			<thead>
 		    				<tr>
@@ -330,10 +330,11 @@
 		    					<th>Cidade</th>
 		    					<th>Estado</th>
 		    					<th>CEP</th>
+		    					<th></th>
 		    				</tr>
 		    			</thead>
 		    			<tbody>
-		    				<tr ng-repeat="endereco in $ctrl.pessoa.enderecos">
+		    				<tr ng-repeat="endereco in $ctrl.pessoa.enderecos" ng-show="!endereco.remover">
 		    					<td>
 		    						<select ng-model="endereco.tipo" class="form-control">
 		    							<option value="">Selecione...</option>
@@ -361,6 +362,11 @@
 		    					<td>
 		    						<input type="text" class="form-control" ng-model="endereco.cep">
 		    					</td>
+		    					<td>
+									<button type="button" class="btn btn-default" ng-click="$ctrl.remover(endereco)">
+										<span class="glyphicon glyphicon-trash"></span>
+									</button>
+								</td>
 		    				</tr>
 		    			</tbody>
 		    		</table>
@@ -372,16 +378,17 @@
 						Telefone
 					</div>
 					<div class="panel-body">
-						<button class="btn btn-sm btn-primary" style="margin-bottom: 8px">Adicionar</button>
+						<button class="btn btn-sm btn-primary" style="margin-bottom: 8px" ng-click="$ctrl.adicionartelefone()">Adicionar</button>
 						<table class="table table-sm table-bordered table-striped table-highlight"  style="font-size: 12px">
 							<thead>
 								<tr>
 									<th>Tipo</th>
 									<th>Número</th>
+									<th></th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="telefone in $ctrl.pessoa.telefones">
+								<tr ng-repeat="telefone in $ctrl.pessoa.telefones" ng-show="!telefone.remover">
 									<td>
 										<select class="form-control" ng-model="telefone.tipo">
 											<option value="">Selecione...</option>
@@ -392,6 +399,11 @@
 									</td>
 									<td>
 										<input class="form-control" ng-model="telefone.numero" ui-mask="{{telefone.tipo == 'M' ? '(+99) 99 99999-9999' : '(+99) 99 9999-9999'}}" model-view-value="true" style="width: 100%"/>
+									</td>
+									<td>
+										<button type="button" class="btn btn-default" ng-click="$ctrl.remover(telefone)">
+											<span class="glyphicon glyphicon-trash"></span>
+										</button>
 									</td>
 								</tr>
 							</tbody>
@@ -405,7 +417,7 @@
 						Dados bancários
 					</div>
 					<div class="panel-body">
-						<button class="btn btn-sm btn-primary" style="margin-bottom: 8px">Adicionar</button>
+						<button class="btn btn-sm btn-primary" style="margin-bottom: 8px" ng-click="$ctrl.adicionardadosbancarios()">Adicionar</button>
 						<table class="table table-sm table-bordered table-striped table-highlight"  style="font-size: 12px">
 							<thead>
 								<tr>
@@ -414,10 +426,11 @@
 									<th>Código do banco</th>
 									<th>Código da agência</th>
 									<th>Numero da conta</th>
+									<th></th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="dado_bancario in $ctrl.pessoa.dados_bancarios">
+								<tr ng-repeat="dado_bancario in $ctrl.pessoa.dados_bancarios" ng-show="!dado_bancario.remover">
 									<td>
 										<select class="form-control" ng-model="telefone.tipo">
 											<option value="">Selecione...</option>
@@ -437,6 +450,11 @@
 									</td>
 									<td>
 										<input type="number" class="form-control"/>
+									</td>
+									<td>
+										<button type="button" class="btn btn-default" ng-click="$ctrl.remover(dado_bancario)">
+											<span class="glyphicon glyphicon-trash"></span>
+										</button>
 									</td>
 								</tr>
 							</tbody>

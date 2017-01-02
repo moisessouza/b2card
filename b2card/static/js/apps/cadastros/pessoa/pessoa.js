@@ -15,6 +15,22 @@ pessoa.controller('PessoaController', function ($scope, $window, PessoaService, 
 		dados_bancarios:[{}]
 	}
 	
+	$ctrl.adicionarendereco = function () {
+		$ctrl.pessoa.enderecos.push({});
+	}
+	
+	$ctrl.adicionartelefone = function () {
+		$ctrl.pessoa.telefones.push({});
+	}
+	
+	$ctrl.adicionardadosbancarios = function () {
+		$ctrl.pessoa.dados_bancarios.push({});
+	}
+	
+	$ctrl.remover = function (objeto) {
+		objeto.remover=true;
+	}
+	
 }).controller('ListPessoaController', function ($scope, $window, PessoaService){
 	var $ctrl = this;
 });
