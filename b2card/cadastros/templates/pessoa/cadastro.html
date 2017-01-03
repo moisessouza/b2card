@@ -43,14 +43,12 @@ button.exclude {
 <div id="pessoa" ng-controller="PessoaController as $ctrl" class="ng-hide" ng-show="$ctrl.show">
 	
 	<form name="cadastro">
-	
 		<ul class="nav nav-tabs">
 		  <li class="active"><a data-toggle="tab" href="#dadoscadastro">Cadastro de pessoa</a></li>
 		  <li ng-show="$ctrl.pessoa.tipo=='J'"><a data-toggle="tab" href="#telefonecontato">Telefone de contato</a></li>
 		  <li ng-show="$ctrl.pessoa.pessoa_fisica.prestador.tipo_prestador == 'S' || $ctrl.pessoa.pessoa_fisica.prestador.tipo_prestador == 'A' || $ctrl.pessoa.pessoa_fisica.prestador.tipo_prestador == 'F'"><a data-toggle="tab" href="#dadosprestador">Prestador</a></li>
 		</ul>
 		<div class="tab-content">
-			
 			<div id="dadoscadastro" class="tab-pane in active">
 				<div class="panel panel-primary form-group-sm margin-top"style="margin-top: 15px">
 					<div class="panel-body">
@@ -332,14 +330,14 @@ button.exclude {
 						</div>
 						<div class="col-sm-1" style="width: 149px">
 							<div class="form-group">
-								<label class="control-label" for="id">Inscricao estadual</label>
-								<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_juridica.inscricao_estadual" maxlength="30" ng-required="$ctrl.pessoa.tipo=='J'"/>
+								<label class="control-label" for="id">Inscrição estadual</label>
+								<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_juridica.inscricao_estadual" maxlength="30"/>
 							</div>
 						</div>
 						<div class="col-sm-1" style="width: 149px">
 							<div class="form-group">
-								<label class="control-label" for="id">Inscricao municipal</label>
-								<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_juridica.inscricao_municipal" maxlength="30" ng-required="$ctrl.pessoa.tipo=='J'"/>
+								<label class="control-label" for="id">Inscrição municipal</label>
+								<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_juridica.inscricao_municipal" maxlength="30"/>
 							</div>
 						</div>
 					</div>
@@ -381,7 +379,7 @@ button.exclude {
 			    						<input type="text" class="form-control" ng-model="endereco.numero" ng-required="!endereco.remover">
 			    					</td>
 			    					<td>
-			    						<input type="text" class="form-control" ng-model="endereco.complemento" ng-required="!endereco.remover">
+			    						<input type="text" class="form-control" ng-model="endereco.complemento">
 			    					</td>
 			    					<td>
 			    						<input type="text" class="form-control" ng-model="endereco.cidade" ng-required="!endereco.remover">
@@ -509,11 +507,11 @@ button.exclude {
 								<div class="panel-body">
 									<div class="form-group">
 										<label class="control-label">Nome do contato</label>
-										<input type="text" class="form-control" ng-model="contato.nome"> 
+										<input type="text" class="form-control" ng-model="contato.nome" ng-required="!contato.remover"> 
 									</div>
 									<div class="form-group">
 										<label class="control-label">Email</label>
-										<input type="email" class="form-control" ng-model="contato.email"> 
+										<input type="email" class="form-control" ng-model="contato.email" ng-required="!contato.remover"> 
 									</div>
 									<button class="btn btn-primary" ng-click="$ctrl.adicionartelefonecontato(contato)" style="margin-bottom: 15px">Adicionar</button>
 									<table class="table table-sm table-bordered table-striped table-highlight" >
@@ -527,7 +525,7 @@ button.exclude {
 										<tbody>
 											<tr ng-repeat="telefone in contato.telefones" ng-show="!telefone.remover">
 												<td>
-													<select class="form-control" ng-model="telefone.tipo" ng-required="!telefone.remover">
+													<select class="form-control" ng-model="telefone.tipo" ng-required="!telefone.remover && !contato.remover">
 														<option value="">Selecione...</option>
 														<option value="R">Residencial</option>
 														<option value="C">Comercial</option>
@@ -535,7 +533,7 @@ button.exclude {
 													</select>
 												</td>
 												<td>
-													<input class="form-control" ng-model="telefone.numero" ui-mask="{{telefone.tipo == 'M' ? '(+99) 99 99999-9999' : '(+99) 99 9999-9999'}}" model-view-value="true" style="width: 100%" ng-required="!telefone.remover"/>
+													<input class="form-control" ng-model="telefone.numero" ui-mask="{{telefone.tipo == 'M' ? '(+99) 99 99999-9999' : '(+99) 99 9999-9999'}}" model-view-value="true" style="width: 100%" ng-required="!telefone.remover && !contato.remover"/>
 												</td>
 												<td>
 													<button type="button" class="btn btn-default" ng-click="$ctrl.remover(telefone, contato.telefones)">
@@ -609,8 +607,10 @@ button.exclude {
 				</div>
 			</div>
 		</div>
-		<button class="btn btn-primary" ng-click="$ctrl.salvar()" ng-disabled="cadastro.$invalid" >Salvar</button>
-		<button class="btn btn-danger" ng-click="$ctrl.deletarpessoa()">Deletar</button>
+		<div class="col-sm-12" style="margin-bottom: 15px; padding-left: 0px">
+			<button class="btn btn-primary" ng-click="$ctrl.salvar()" ng-disabled="cadastro.$invalid" >Salvar</button>
+			<button class="btn btn-danger" ng-click="$ctrl.deletarpessoa()">Deletar</button>
+		</div>
 	</form>
 	
 	<script type="text/ng-template" id="myModalContent.html">

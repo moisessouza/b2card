@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from cadastros.models import TipoHora, CentroCusto, Pessoa, TelefonePessoa,\
     EnderecoPessoa, DadosBancariosPessoa, PessoaFisica, Prestador,\
-    PessoaJuridica
+    PessoaJuridica, Contato, TelefoneContato
 from cadastros import serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -9,7 +9,7 @@ from utils.utils import converter_string_para_data, formatar_data
 from cadastros.serializers_pessoa import PessoaSerializer,\
     EnderecoPessoaSerializer, TelefonePessoaSerializer,\
     DadosBancariosPessoaSerializer, PessoaFisicaSerializer, PrestadorSerializer,\
-    PessoaJuridicaSerializer
+    PessoaJuridicaSerializer, ContatoSerializer, TelefoneContatoSerializer
 from recursos.models import Cargo
 
 def index(request):
@@ -160,6 +160,18 @@ class PessoaDetail(APIView):
         pessoa_juridica = PessoaJuridica.objects.filter(pessoa = pessoa)
         if pessoa_juridica:
             data = PessoaJuridicaSerializer(pessoa_juridica[0]).data
+            
+            contatos = Contato.objects.filter(pessoa_juridica = pessoa_juridica)
+            contatos_list = []
+
+            for contato in contatos:
+                data_contato = ContatoSerializer(contato).data
+                telefones = TelefoneContato.objects.filter(contato = contato)
+                data_contato['telefones'] = TelefoneContatoSerializer(telefones, many=True).data
+                contatos_list.append(data_contato)
+            
+            data['contatos'] = contatos_list
+            
             return data
         
         return None
@@ -196,10 +208,45 @@ class PessoaDetail(APIView):
         pessoa_fisica.save()
     
     def gravar_pessoa_juridica(self, pj, pessoa):
+        
+        contatos = None
+        if 'contatos' in pj:
+            contatos = pj['contatos']
+            del pj['contatos']
+        
         pessoa_juridica = PessoaJuridica(**pj)
         pessoa_juridica.pessoa = pessoa
         pessoa_juridica.save()
+        
+        self.gravar_contatos(contatos, pessoa_juridica)
       
+    def gravar_contatos(self, contatos, pessoa_juridica):
+        for i in contatos:
+            if 'remover' not in i or i['remover'] is False:
+                telefones = None
+                if 'telefones' in i:
+                    telefones = i['telefones']
+                    del i['telefones']
+                    
+                contato = Contato(**i)
+                contato.pessoa_juridica = pessoa_juridica
+                contato.save()
+                
+                self.gravar_telefones_contato(telefones, contato)
+            elif 'id' in i:
+                contato = Contato.objects.get(pk=i['id'])
+                contato.delete()
+                 
+    def gravar_telefones_contato(self, telefones, contato):
+        for i in telefones:
+            if 'remover' not in i or i['remover'] is False:
+                telefone = TelefoneContato(**i)
+                telefone.contato = contato
+                telefone.save()
+            elif 'id' in i:
+                telefone = TelefoneContato.objects.get(pk=i['id'])
+                telefone.delete()
+                
     def gravar_prestador(self, p, pessoa_fisica):
         if p:
             campos = ('tipo_prestador', 'data_exame_admissional', 'data_exame_demissional', 'data_proxima_avaliacao', 'data_ultima_avaliacao', 'data_ultimo_exame_periodico', 'cargo')

@@ -39,21 +39,34 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 	$ctrl.remover = function (objeto, lista) {
 		objeto.remover=true;
 		
-		var possuiitem = false;
-		for (let l of lista) {
-			if (!l.remover) {
-				possuiitem = true;
-				break;
+		if (lista) {
+			var possuiitem = false;
+			for (let l of lista) {
+				if (!l.remover) {
+					possuiitem = true;
+					break;
+				}
 			}
-		}
-		
-		if (!possuiitem) {
-			lista.push({});
+			
+			if (!possuiitem) {
+				lista.push({});
+			}
 		}
 		
 	}
 	
 	$ctrl.adicionarcontato = function () {
+		
+		if(!$ctrl.pessoa.pessoa_juridica) {
+			$ctrl.pessoa.pessoa_juridica = {
+				contatos: []
+			}
+		}
+		
+		if (!$ctrl.pessoa.pessoa_juridica.contatos){
+			$ctrl.pessoa.pessoa_juridica.contatos = [];
+		}
+		
 		$ctrl.pessoa.pessoa_juridica.contatos.push({
 			telefones:[{}]
 		});
