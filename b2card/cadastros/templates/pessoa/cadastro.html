@@ -379,7 +379,7 @@
 			    						<input type="text" class="form-control" ng-model="endereco.cep" ng-required="!endereco.remover">
 			    					</td>
 			    					<td>
-										<button type="button" class="btn btn-default" ng-click="$ctrl.remover(endereco)">
+										<button type="button" class="btn btn-default" ng-click="$ctrl.remover(endereco, $ctrl.pessoa.enderecos)">
 											<span class="glyphicon glyphicon-trash"></span>
 										</button>
 									</td>
@@ -417,7 +417,7 @@
 											<input class="form-control" ng-model="telefone.numero" ui-mask="{{telefone.tipo == 'M' ? '(+99) 99 99999-9999' : '(+99) 99 9999-9999'}}" model-view-value="true" style="width: 100%" ng-required="!telefone.remover"/>
 										</td>
 										<td>
-											<button type="button" class="btn btn-default" ng-click="$ctrl.remover(telefone)">
+											<button type="button" class="btn btn-default" ng-click="$ctrl.remover(telefone, $ctrl.pessoa.telefones)">
 												<span class="glyphicon glyphicon-trash"></span>
 											</button>
 										</td>
@@ -468,7 +468,7 @@
 											<input type="text" class="form-control" ng-model="dado_bancario.num_conta" ng-required="!dado_bancario.remover"/>
 										</td>
 										<td>
-											<button type="button" class="btn btn-default" ng-click="$ctrl.remover(dado_bancario)">
+											<button type="button" class="btn btn-default" ng-click="$ctrl.remover(dado_bancario, $ctrl.pessoa.dados_bancarios)">
 												<span class="glyphicon glyphicon-trash"></span>
 											</button>
 										</td>

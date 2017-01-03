@@ -33,8 +33,21 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 		$ctrl.pessoa.dados_bancarios.push({});
 	}
 	
-	$ctrl.remover = function (objeto) {
+	$ctrl.remover = function (objeto, lista) {
 		objeto.remover=true;
+		
+		var possuiitem = false;
+		for (let l of lista) {
+			if (!l.remover) {
+				possuiitem = true;
+				break;
+			}
+		}
+		
+		if (!possuiitem) {
+			lista.push({});
+		}
+		
 	}
 	
 	$ctrl.salvar = function () {
@@ -79,6 +92,7 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 	
 }).controller('ListPessoaController', function ($scope, $window, PessoaService){
 	var $ctrl = this;
+	$ctrl.show = true;
 	
 	$ctrl.pessoas = PessoaService.buscarpessoas();
 	
