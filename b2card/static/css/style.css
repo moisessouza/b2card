@@ -2,8 +2,12 @@ div.buttonbar {
 	margin-top: 2em;
 }
 
-table.table {
+table.table{
 	font-size: 12px
+}
+
+table.table.nested, table.table.nested tr  {
+	background-color: transparent;
 }
 
 input[ui-mask='99/99/9999'] {
