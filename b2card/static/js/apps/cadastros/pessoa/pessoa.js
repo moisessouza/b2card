@@ -8,7 +8,16 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 	$ctrl.show = true;
 	
 	if (pessoa_id) {
-		$ctrl.pessoa = PessoaService.buscarpessoa(pessoa_id)
+		$ctrl.pessoa = PessoaService.buscarpessoa(pessoa_id, function (pessoa) {
+			RecursosService.buscarusuariosnaousados(function (data){
+				$ctrl.listausuarios = data;
+				if (pessoa.pessoa_fisica && pessoa.pessoa_fisica.prestador){
+					RecursosService.buscarusuarioprestador(pessoa.pessoa_fisica.prestador.id, function (data){
+						$ctrl.listausuarios = $ctrl.listausuarios.concat(data);
+					})
+				}
+			});
+		});
 	} else {
 		$ctrl.pessoa = {
 			enderecos:[{}],
@@ -18,10 +27,10 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 				contatos: []
 			}
 		}
+		$ctrl.listausuarios = RecursosService.buscarusuariosnaousados();
 	}
 	
 	$ctrl.listacargos = RecursosService.buscarcargos();
-	
 	$ctrl.listacentrocusto = CentroCustoService.buscarcentrocustos();
 	
 	$ctrl.adicionarendereco = function () {

@@ -194,7 +194,7 @@ class Prestador(models.Model):
     pessoa_fisica = models.ForeignKey(PessoaFisica, default = None)
     tipo_prestador = models.CharField(max_length = 1, choices = TIPO_PRESTADOR)
     cargo = models.ForeignKey(Cargo, default = None, null=True)
-    data_exame_admissional = models.DateField(default = None)
+    data_exame_admissional = models.DateField(default = None, null=True)
     data_exame_demissional = models.DateField(null = True, default = None)
     data_ultimo_exame_periodico = models.DateField(null = True, default = None)
     data_ultima_avaliacao = models.DateField(null = True, default = None)

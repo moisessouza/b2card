@@ -45,8 +45,11 @@ button.exclude {
 	<form name="cadastro">
 		<ul class="nav nav-tabs">
 		  <li class="active"><a data-toggle="tab" href="#dadoscadastro">Cadastro de pessoa</a></li>
-		  <li ng-show="$ctrl.pessoa.tipo=='J'"><a data-toggle="tab" href="#telefonecontato">Telefone de contato</a></li>
-		  <li ng-show="$ctrl.pessoa.pessoa_fisica.prestador.tipo_prestador == 'S' || $ctrl.pessoa.pessoa_fisica.prestador.tipo_prestador == 'A' || $ctrl.pessoa.pessoa_fisica.prestador.tipo_prestador == 'F'"><a data-toggle="tab" href="#dadosprestador">Prestador</a></li>
+		  <li><a data-toggle="tab" href="#endereco">Endereco</a></li>
+		  <li><a data-toggle="tab" href="#telefone">Telefone</a></li>
+		  <li><a data-toggle="tab" href="#dadosbancarios">Dados bancários</a></li>
+		  <li ng-show="$ctrl.pessoa.tipo=='J'"><a data-toggle="tab" href="#telefonecontato">Contato</a></li>
+		  <li ng-show="$ctrl.pessoa.tipo=='F'"><a data-toggle="tab" href="#dadosprestador">Prestador</a></li>
 		</ul>
 		<div class="tab-content">
 			<div id="dadoscadastro" class="tab-pane in active">
@@ -120,18 +123,6 @@ button.exclude {
 											<option value="">Selecione...</option>
 											<option value="A">Ativo</option>
 											<option value="I">Inativo</option>
-										</select>
-									</div>
-								</div>
-								<div class="col-sm-2" ng-show="$ctrl.pessoa.tipo=='F' && ($ctrl.pessoa.tipo_pessoa == 'F' || $ctrl.pessoa.tipo_pessoa == 'A')">
-									<div class="form-group">
-										<label class="control-label" for="id">Tipo de prestador</label>
-										<select class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.prestador.tipo_prestador">
-											<option value="">Selecione...</option>
-											<option value="S">Sócio</option>
-											<option value="A">Autonomo</option>
-											<option value="F">Funcionário</option>
-											<option value="P">PJ</option>
 										</select>
 									</div>
 								</div>
@@ -342,10 +333,9 @@ button.exclude {
 						</div>
 					</div>
 				</div>
-				<div class="panel panel-primary form-group-sm" ng-show="$ctrl.pessoa.tipo=='F' || $ctrl.pessoa.tipo=='J'">
-					<div class="panel-heading">
-						Endereço
-					</div>
+			</div>
+			<div id="endereco" class="tab-pane">
+				<div class="panel panel-primary form-group-sm" style="margin-top: 15px">
 					<div class="panel-body">
 						<button class="btn btn-sm btn-primary" style="margin-bottom: 8px" ng-click="$ctrl.adicionarendereco()">Adicionar</button>
 			    		<table class="table table-sm table-bordered table-striped table-highlight" style="font-size: 12px">
@@ -400,11 +390,10 @@ button.exclude {
 			    		</table>
 					</div>
 				</div>
+			</div>
+			<div id="telefone" class="tab-pane">
 				<div class="col-sm-3">
-					<div class="panel panel-primary form-group-sm" ng-show="$ctrl.pessoa.tipo=='F' || $ctrl.pessoa.tipo=='J'">
-						<div class="panel-heading">
-							Telefone
-						</div>
+					<div class="panel panel-primary form-group-sm" ng-show="$ctrl.pessoa.tipo=='F' || $ctrl.pessoa.tipo=='J'" style="margin-top: 15px">
 						<div class="panel-body">
 							<button class="btn btn-sm btn-primary" style="margin-bottom: 8px" ng-click="$ctrl.adicionartelefone()">Adicionar</button>
 							<table class="table table-sm table-bordered table-striped table-highlight"  style="font-size: 12px">
@@ -439,11 +428,10 @@ button.exclude {
 						</div>
 					</div>
 				</div>
+			</div>
+			<div id="dadosbancarios" class="tab-pane">
 				<div class="col-sm-9">
-					<div class="panel panel-primary form-group-sm" ng-show="$ctrl.pessoa.tipo=='F' || $ctrl.pessoa.tipo=='J'">
-						<div class="panel-heading">
-							Dados bancários
-						</div>
+					<div class="panel panel-primary form-group-sm" ng-show="$ctrl.pessoa.tipo=='F' || $ctrl.pessoa.tipo=='J'" style="margin-top: 15px">
 						<div class="panel-body">
 							<button class="btn btn-sm btn-primary" style="margin-bottom: 8px" ng-click="$ctrl.adicionardadosbancarios()">Adicionar</button>
 							<table class="table table-sm table-bordered table-striped table-highlight"  style="font-size: 12px">
@@ -491,7 +479,7 @@ button.exclude {
 					</div>
 				</div>
 			</div>
-			<div id="telefonecontato" class="tab-pane" >
+			<div id="telefonecontato" class="tab-pane">
 				<div class="row">
 					<div class="col-sm-3">
 						<button class="btn btn-primary" ng-click="$ctrl.adicionarcontato()" style="margin: 15px 0px 15px 0px">Adicionar</button>
@@ -550,9 +538,21 @@ button.exclude {
 				</div>
 			</div>
 			<div id="dadosprestador" class="tab-pane">
-				<div class="panel panel-primary form-group-sm" ng-show="$ctrl.pessoa.tipo=='F' || $ctrl.pessoa.tipo=='J'" style="margin-top: 15px">
+				<div class="panel panel-primary form-group-sm" ng-show="$ctrl.pessoa.tipo=='F'" style="margin-top: 15px">
 					<div class="panel-body">
 						<div class="row">
+							<div class="col-sm-2" ng-show="$ctrl.pessoa.tipo=='F'">
+								<div class="form-group">
+									<label class="control-label" for="id">Tipo de prestador</label>
+									<select class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.prestador.tipo_prestador">
+										<option value="">Selecione...</option>
+										<option value="S">Sócio</option>
+										<option value="A">Autonomo</option>
+										<option value="F">Funcionário</option>
+										<option value="P">PJ</option>
+									</select>
+								</div>
+							</div>
 							<div class="col-sm-1" style="width: 164px">
 								<div class="form-group">
 									<label class="control-label">Data exame admicional</label>
@@ -593,6 +593,16 @@ button.exclude {
 									    <span class="input-group-btn">
 									       	<button class="btn btn-sm btn-secondary" type="button" ng-click="$ctrl.open()" style="height: 26px;">+</button>
 									   	</span>
+								    </div>
+							 	</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="form-group">
+								 	<label for="coordenador">Associar usuário</label>
+								 	<div class="input-group">
+									    <select id="cargo" name="cargo" class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.prestador.usuario.id" ng-options="c.id as c.username for c in $ctrl.listausuarios">
+									    	<option value="">Selecione um usuário...</option>
+									    </select>
 								    </div>
 							 	</div>
 							</div>

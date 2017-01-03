@@ -11,6 +11,7 @@ from cadastros.serializers_pessoa import PessoaSerializer,\
     DadosBancariosPessoaSerializer, PessoaFisicaSerializer, PrestadorSerializer,\
     PessoaJuridicaSerializer, ContatoSerializer, TelefoneContatoSerializer
 from recursos.models import Cargo
+from django.contrib.auth.models import User
 
 def index(request):
     return render(request, 'pessoa/index.html')
@@ -256,16 +257,28 @@ class PessoaDetail(APIView):
                 if 'cargo' in p:
                     cargo = Cargo.objects.get(pk=p['cargo']['id'])
                     del p['cargo']
+                    
+                usuario = None
+                if 'usuario' in p:
+                    usuario = User.objects.get(pk=p['usuario']['id'])
+                    del p['usuario']
                 
                 prestador = Prestador(**p)
                 
                 prestador.pessoa_fisica = pessoa_fisica
-                prestador.data_exame_admissional = converter_string_para_data(p['data_exame_admissional'])
-                prestador.data_exame_demissional = converter_string_para_data(p['data_exame_demissional'])
-                prestador.data_proxima_avaliacao = converter_string_para_data(p['data_proxima_avaliacao'])
-                prestador.data_ultima_avaliacao = converter_string_para_data(p['data_ultima_avaliacao'])
-                prestador.data_ultimo_exame_periodico = converter_string_para_data(p['data_ultimo_exame_periodico'])
+                if 'data_exame_admissional' in p:
+                    prestador.data_exame_admissional = converter_string_para_data(p['data_exame_admissional'])
+                if 'data_exame_demissional'in p:
+                    prestador.data_exame_demissional = converter_string_para_data(p['data_exame_demissional'])
+                if 'data_proxima_avaliacao' in p:
+                    prestador.data_proxima_avaliacao = converter_string_para_data(p['data_proxima_avaliacao'])
+                if 'data_ultima_avaliacao' in p:
+                    prestador.data_ultima_avaliacao = converter_string_para_data(p['data_ultima_avaliacao'])
+                if 'data_ultimo_exame_periodico' in p:
+                    prestador.data_ultimo_exame_periodico = converter_string_para_data(p['data_ultimo_exame_periodico'])
+                    
                 prestador.cargo = cargo
+                prestador.usuario = usuario
                 
                 prestador.save();
                 

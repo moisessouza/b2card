@@ -8,7 +8,7 @@ demandas.factory('share', function(){
 });
 
 demandas.controller('DemandaController', function ($scope, $window, $uibModal, $log, DemandaService, ParcelaService,
-		CentroCustoService, ValorHoraService, CommonsService, CentroResultadoService, UnidadeAdministrativaService, share){
+		CentroCustoService, ValorHoraService, CommonsService, CentroResultadoService, UnidadeAdministrativaService, share, MessageService){
 	var $ctrl = this; 
 	
 	var messageinfo = function (msg){
@@ -468,14 +468,14 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	
 	
 	$ctrl.salvardemanda = function (){
-		messageinfo("salvando...");
+		MessageService.messageinfo('Salvando...');
 		DemandaService.salvardemanda($ctrl.demanda, function(data){
 			share.demanda = data;
 			$ctrl.demanda = data;
 			configuraritensfaturamento(data);
 			configurarorcamento(data);
 			$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(data.id, $ctrl.changeatividade);
-			messagesuccess('salvo!')
+			MessageService.messagesuccess('Salvo com sucesso!')
 		});
 	}
 	

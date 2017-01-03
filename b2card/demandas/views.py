@@ -553,7 +553,7 @@ class DemandaDetail(APIView):
         self.salvar_ocorrencias(ocorrencias, demanda)
         self.salvar_orcamento(orcamento, demanda)
         self.salvar_atividade(atividades, demanda)
-        self.salvar_parcelas(parcelas, demanda)
+        #self.salvar_parcelas(parcelas, demanda)
         
         return Response(self.serializarDemanda(demanda.id))
     

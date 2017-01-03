@@ -18,21 +18,9 @@ from rest_framework import routers, serializers, viewsets
 from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
 
-app_name='recursos'
+app_name='seguranca'
 
 urlpatterns = [
-    url(r'^$', views.index, name='inicial'),
-    url(r'^novo/$', views.novo, name='novo'),
-    url(r'^gravar/$', views.executar, name='gravar'),
-    url(r'^(?P<cliente_id>[0-9]+)/$', views.editar, name='editar'),
-    url(r'^api/list/$', views.FuncionarioList.as_view()),
-    url(r'^api/new/$', views.FuncionarioDetail.as_view()),
-    url(r'^api/(?P<funcionario_id>[0-9]+)/$', views.FuncionarioDetail.as_view()),
-    url(r'^api/cargo/list/$', views.CargoList.as_view()),
-    url(r'^api/cargo/new/$', views.CargoDetail.as_view()),
-    url(r'^api/cargo/(?P<cargo_id>[0-9]+)/$', views.CargoDetail.as_view()),
-    url(r'^api/usuarios/(?P<prestador_id>[0-9]+)/$', views.buscar_usuario_prestador),
-    url(r'^api/usuarios/$', views.buscar_usuarios_nao_usados)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

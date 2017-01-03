@@ -42,7 +42,7 @@ class PessoaJuridicaSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id')
+        fields = ('id', 'username')
         
 class PrestadorSerializer(serializers.ModelSerializer):
     usuario = UserSerializer()

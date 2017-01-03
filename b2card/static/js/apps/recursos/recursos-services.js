@@ -26,6 +26,14 @@ recursosservices.service('RecursosService', function($resource){
 			var Cargo = $resource('/recursos/api/cargo/:id/')
 			return Cargo.remove({'id':cargo.id}, callback);
 		},
+		buscarusuariosnaousados: function (callback) {
+			var Usuarios = $resource('/recursos/api/usuarios/');
+			return Usuarios.query(callback);
+		}, 
+		buscarusuarioprestador: function (id_prestador, callback) {
+			var Usuarios = $resource('/recursos/api/usuarios/:id');
+			return Usuarios.query({id:id_prestador}, callback)
+		},
 		salvarfuncionario: function (funcionario, callback) {
 			var Funcionario = $resource('/recursos/api/new/');
 			Funcionario.save(funcionario, callback);

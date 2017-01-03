@@ -6,6 +6,10 @@ from recursos import serializers
 from rest_framework.response import Response
 from recursos.serializers import CargoSerializer, FuncionarioSerializer
 from datetime import datetime
+from rest_framework.decorators import api_view
+from django.contrib.auth.models import User
+from cadastros.serializers_pessoa import UserSerializer
+from cadastros.models import Prestador
 
 
 
@@ -154,4 +158,21 @@ class CargoDetail(APIView):
         
         serializer = serializers.CargoSerializer(cargo)
         return Response(serializer.data)
-        
+    
+@api_view(['GET'])
+def buscar_usuarios_nao_usados(request, format=None):
+    usuarios = User.objects.all()
+    usuarios_list = []
+    
+    for i in usuarios:
+        prestador = Prestador.objects.filter(usuario = i)
+        if len(prestador) == 0:
+            usuarios_list.append(i)
+    data = UserSerializer(usuarios_list, many=True).data
+       
+    return Response(data)
+
+@api_view(['GET'])
+def buscar_usuario_prestador(request, prestador_id, format=None):
+    usuario = User.objects.filter(prestador__id=prestador_id)
+    return Response(UserSerializer(usuario, many=True).data)
