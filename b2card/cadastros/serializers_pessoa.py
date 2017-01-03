@@ -3,6 +3,7 @@ from cadastros.models import Pessoa, EnderecoPessoa, TelefonePessoa,\
     DadosBancariosPessoa, PessoaFisica, Prestador, PessoaJuridica
 from cadastros.serializers import CentroCustoSerializer
 from django.contrib.auth.models import User
+from recursos.serializers import CargoSerializer
 
 class PessoaSerializer(serializers.ModelSerializer):
     centro_custo = CentroCustoSerializer()
@@ -44,7 +45,8 @@ class UserSerializer(serializers.ModelSerializer):
         
 class PrestadorSerializer(serializers.ModelSerializer):
     usuario = UserSerializer()
+    cargo = CargoSerializer()
     class Meta:
         model = Prestador
         fields = ('id', 'tipo_prestador', 'cargo', 'data_exame_admissional', 'data_exame_demissional', 'data_ultimo_exame_periodico', 'data_ultima_avaliacao', 
-                  'data_proxima_avaliacao', 'dados_complementares', 'usuario')
+                  'data_proxima_avaliacao', 'dados_complementares', 'usuario', 'cargo')

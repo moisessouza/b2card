@@ -5,6 +5,7 @@
 	<script src="/static/js/apps/cadastros/pessoa/pessoa.js"></script>
 	<script src="/static/js/apps/cadastros/pessoa/pessoa-services.js"></script>
 	<script src="/static/js/apps/cadastros/centrocusto/centrocusto-services.js"></script>
+	<script src="/static/js/apps/recursos/recursos-services.js"></script>
 	<script src="/static/js/angular/ui-bootstrap-tpls-2.2.0.min.js"></script>
 	<script src="/static/js/jquery/priceformat/jquery.priceformat.min.js"></script>
 	
@@ -32,7 +33,7 @@
 	
 		<ul class="nav nav-tabs">
 		  <li class="active"><a data-toggle="tab" href="#dadoscadastro">Cadastro de pessoa</a></li>
-		  <li ng-show="$ctrl.pessoa.prestador.tipo_prestador == 'S' || $ctrl.pessoa.prestador.tipo_prestador == 'A' || $ctrl.pessoa.prestador.tipo_prestador == 'F'"><a data-toggle="tab" href="#dadosprestador">Prestador</a></li>
+		  <li ng-show="$ctrl.pessoa.pessoa_fisica.prestador.tipo_prestador == 'S' || $ctrl.pessoa.pessoa_fisica.prestador.tipo_prestador == 'A' || $ctrl.pessoa.pessoa_fisica.prestador.tipo_prestador == 'F'"><a data-toggle="tab" href="#dadosprestador">Prestador</a></li>
 		</ul>
 		<div class="tab-content">
 			
@@ -113,7 +114,7 @@
 								<div class="col-sm-2" ng-show="$ctrl.pessoa.tipo=='F' && ($ctrl.pessoa.tipo_pessoa == 'F' || $ctrl.pessoa.tipo_pessoa == 'A')">
 									<div class="form-group">
 										<label class="control-label" for="id">Tipo de prestador</label>
-										<select class="form-control" ng-model = "$ctrl.pessoa.prestador.tipo_prestador">
+										<select class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.prestador.tipo_prestador">
 											<option value="">Selecione...</option>
 											<option value="S">Sócio</option>
 											<option value="A">Autonomo</option>
@@ -512,6 +513,19 @@
 									<input class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.prestador.data_proxima_avaliacao" ui-mask="99/99/9999" model-view-value="true"> 
 								</div>
 							</div>
+							<div class="col-sm-2">
+								<div class="form-group">
+								 	<label for="coordenador">Cargo</label>
+								 	<div class="input-group">
+									    <select id="cargo" name="cargo" class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.prestador.cargo.id" ng-options="c.id as c.nome_cargo for c in $ctrl.listacargos">
+									    	<option value="">Selecione um cargo...</option>
+									    </select>
+									    <span class="input-group-btn">
+									       	<button class="btn btn-sm btn-secondary" type="button" ng-click="$ctrl.open()" style="height: 26px;">+</button>
+									   	</span>
+								    </div>
+							 	</div>
+							</div>
 							<div class="col-sm-12">
 								<div class="form-group">
 									<label class="control-label">Dados complementares</label>
@@ -526,6 +540,36 @@
 		<button class="btn btn-primary" ng-click="$ctrl.salvar()" ng-disabled="cadastro.$invalid" >Salvar</button>
 		<button class="btn btn-danger" ng-click="$ctrl.deletarpessoa()">Deletar</button>
 	</form>
+	
+	<script type="text/ng-template" id="myModalContent.html">
+		<div class="modal-header">
+			<h3 class="modal-title" id="modal-title">Cargos</h3>
+		</div>
+		<div class="modal-body" id="modal-body">
+			<div class="form-group">
+				<label for="numero_proposta">Nome do cargo</label>
+				<input type="text" id="numero_proposta" class="form-control" ng-model="$ctrl.nome_cargo" placeholder="Nome do cargo"/>
+			</div>
+			<button class="btn btn-primary" type="button" ng-click="$ctrl.salvar()">Salvar</button>
+			<button class="btn btn-danger" type="button" ng-show="$ctrl.cargo.id" ng-click="$ctrl.deletar()">Deletar</button>
+			<table class="table table-hover">
+ 				<thead>
+ 					<tr>
+	  					<th>Nome do cargo</th>
+ 					</tr>
+ 				</thead>
+ 				<tbody>
+ 					<tr ng-repeat="cargo in $ctrl.listacargos" ng-click="$ctrl.edit(cargo)">
+ 						<td ng-bind="cargo.nome_cargo"></td>
+ 					</tr>
+ 				</tbody>
+ 			</table>
+		</div>
+		<div class="modal-footer">
+    		<button class="btn btn-primary" type="button" ng-click="$ctrl.close()">Sair</button>
+		</div> 
+	</script>
+	
 </div> 
 {%endverbatim%}
 

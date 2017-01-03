@@ -10,6 +10,7 @@ from cadastros.serializers_pessoa import PessoaSerializer,\
     EnderecoPessoaSerializer, TelefonePessoaSerializer,\
     DadosBancariosPessoaSerializer, PessoaFisicaSerializer, PrestadorSerializer,\
     PessoaJuridicaSerializer
+from recursos.models import Cargo
 
 def index(request):
     return render(request, 'pessoa/index.html')
@@ -166,7 +167,13 @@ class PessoaDetail(APIView):
     def serializar_prestador(self, pessoa_fisica):
         prestador = Prestador.objects.filter(pessoa_fisica = pessoa_fisica)
         if prestador:
-            return PrestadorSerializer(prestador[0]).data
+            data = PrestadorSerializer(prestador[0]).data
+            data['data_exame_admissional'] = formatar_data(prestador[0].data_exame_admissional)
+            data['data_exame_demissional'] = formatar_data(prestador[0].data_exame_demissional)
+            data['data_ultimo_exame_periodico'] = formatar_data(prestador[0].data_ultimo_exame_periodico)
+            data['data_ultima_avaliacao'] = formatar_data(prestador[0].data_ultima_avaliacao)
+            data['data_proxima_avaliacao'] = formatar_data(prestador[0].data_proxima_avaliacao)
+            return data
         
         return None
     
@@ -195,8 +202,13 @@ class PessoaDetail(APIView):
       
     def gravar_prestador(self, p, pessoa_fisica):
         if p:
-            campos = ('tipo_prestador', 'data_exame_admissional', 'data_exame_demissional', 'data_proxima_avaliacao', 'data_ultima_avaliacao', 'data_ultimo_exame_periodico')
+            campos = ('tipo_prestador', 'data_exame_admissional', 'data_exame_demissional', 'data_proxima_avaliacao', 'data_ultima_avaliacao', 'data_ultimo_exame_periodico', 'cargo')
             if len([campo for campo in campos if campo in p]) > 0:
+                
+                cargo = None
+                if 'cargo' in p:
+                    cargo = Cargo.objects.get(pk=p['cargo']['id'])
+                    del p['cargo']
                 
                 prestador = Prestador(**p)
                 
@@ -206,6 +218,7 @@ class PessoaDetail(APIView):
                 prestador.data_proxima_avaliacao = converter_string_para_data(p['data_proxima_avaliacao'])
                 prestador.data_ultima_avaliacao = converter_string_para_data(p['data_ultima_avaliacao'])
                 prestador.data_ultimo_exame_periodico = converter_string_para_data(p['data_ultimo_exame_periodico'])
+                prestador.cargo = cargo
                 
                 prestador.save();
                 

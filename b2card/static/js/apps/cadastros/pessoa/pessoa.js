@@ -1,8 +1,8 @@
 "use strict";
 
-var pessoa = angular.module('pessoa', ['pessoa-services', 'centrocusto-services', 'commons', 'ui.bootstrap', 'ui.mask']);
+var pessoa = angular.module('pessoa', ['pessoa-services', 'centrocusto-services', 'recursos-services', 'commons', 'ui.bootstrap', 'ui.mask']);
 
-pessoa.controller('PessoaController', function ($scope, $window, PessoaService, CentroCustoService, MessageService){
+pessoa.controller('PessoaController', function ($scope, $window, $uibModal, PessoaService, CentroCustoService, MessageService, RecursosService){
 	var $ctrl = this;
 	
 	$ctrl.show = true;
@@ -16,6 +16,8 @@ pessoa.controller('PessoaController', function ($scope, $window, PessoaService, 
 			dados_bancarios:[{}]
 		}
 	}
+	
+	$ctrl.listacargos = RecursosService.buscarcargos();
 	
 	$ctrl.listacentrocusto = CentroCustoService.buscarcentrocustos();
 	
@@ -51,6 +53,30 @@ pessoa.controller('PessoaController', function ($scope, $window, PessoaService, 
 		dado_bancario.cod_agencia = dado_bancario.cod_agencia.replace(/[^0-9\-]/g, '');
 	}
 	
+	
+	$ctrl.open = function (size, parentSelector) {
+	    var modalInstance = $uibModal.open({
+	      animation: $ctrl.animationsEnabled,
+	      ariaLabelledBy: 'modal-title',
+	      ariaDescribedBy: 'modal-body',
+	      templateUrl: 'myModalContent.html',
+	      controller: 'ModalInstanceCtrl',
+	      controllerAs: '$ctrl',
+	      size: size,
+	      resolve: {
+	        demanda: function () {
+	          return $scope.demanda;
+	        }
+	      }
+	    });
+	    
+	    modalInstance.result.then(function (proposta) {
+	    	$ctrl.listacargos = RecursosService.buscarcargos();
+	    }, function () {
+	        //$log.info('Modal dismissed at: ' + new Date());
+	    });
+	};
+	
 }).controller('ListPessoaController', function ($scope, $window, PessoaService){
 	var $ctrl = this;
 	
@@ -60,4 +86,50 @@ pessoa.controller('PessoaController', function ($scope, $window, PessoaService, 
 		$window.location.href = '/cadastros/pessoa/editar/' + pessoa.id
 	}
 	
+}).controller('ModalInstanceCtrl', function($scope, $uibModalInstance, RecursosService){
+	
+	var $ctrl = this;
+	
+	$ctrl.listacargos = RecursosService.buscarcargos();
+	
+	$ctrl.salvar = function () {
+		
+		if (!$ctrl.cargo)
+			$ctrl.cargo = {}
+		
+		$ctrl.cargo.nome_cargo = $ctrl.nome_cargo;
+		RecursosService.salvarcargo($ctrl.cargo, function (data){
+			if (!$ctrl.cargo.edit){
+				$ctrl.listacargos.push(data);
+			}
+			$ctrl.cargo = {}
+			$ctrl.nome_cargo = "";
+		});
+	}
+	
+	$ctrl.deletar = function () {
+		RecursosService.deletarcargo($ctrl.cargo, function (data){
+			$ctrl.listacargos.splice($ctrl.listacargos.indexOf($ctrl.cargo), 1);
+			$ctrl.cargo = {}
+			$ctrl.nome_cargo = "";
+		});
+	}
+	
+	$ctrl.deletar = function () {
+		RecursosService.deletarcargo($ctrl.cargo, function (data){
+			$ctrl.listacargos.splice($ctrl.listacargos.indexOf($ctrl.cargo), 1);
+			$ctrl.cargo = {}
+			$ctrl.nome_cargo = "";
+		});
+	}
+	
+	$ctrl.edit = function (cargo) {
+		$ctrl.cargo = cargo;
+		$ctrl.cargo.edit=true;
+		$ctrl.nome_cargo = cargo.nome_cargo;
+	}
+	
+	$ctrl.close = function () {
+	   $uibModalInstance.close({});
+	};
 });
