@@ -468,7 +468,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	
 	
 	$ctrl.salvardemanda = function (){
-		MessageService.messageinfo('Salvando...');
+		MessageService.clear();
 		DemandaService.salvardemanda($ctrl.demanda, function(data){
 			share.demanda = data;
 			$ctrl.demanda = data;

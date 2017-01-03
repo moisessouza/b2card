@@ -86,6 +86,7 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 	}
 	
 	$ctrl.salvar = function () {
+		MessageService.clear();
 		$ctrl.pessoa = PessoaService.salvarpessoa($ctrl.pessoa, function () {
 			MessageService.messagesuccess('Cadastro realizado com sucesso!');
 		});

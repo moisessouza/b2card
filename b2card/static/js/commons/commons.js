@@ -108,6 +108,11 @@ commons.directive('gbMoney', function () {
 	$scope_message = $scope;
 }).service('MessageService', function(){
 	return {
+		clear: function () {
+			messages.clazz = null;	
+			messages.message = null;
+			$scope_message.$apply();
+		},
 		messageinfo: function (msg){
 			messages.clazz = 'label-primary';	
 			messages.message = msg;
