@@ -259,7 +259,7 @@ class PessoaDetail(APIView):
                     del p['cargo']
                     
                 usuario = None
-                if 'usuario' in p:
+                if 'usuario' in p and p['usuario'] is not None:
                     usuario = User.objects.get(pk=p['usuario']['id'])
                     del p['usuario']
                 
