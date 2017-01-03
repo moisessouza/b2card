@@ -27,12 +27,26 @@
 
 {%verbatim%}
 
+<style>
+
+button.exclude {
+	margin: 2px 0 0 0;
+    padding: 6px;
+    line-height: 6px;
+    position: relative;
+    bottom: 10px;
+    left: 382px;
+}
+
+</style>
+
 <div id="pessoa" ng-controller="PessoaController as $ctrl" class="ng-hide" ng-show="$ctrl.show">
 	
 	<form name="cadastro">
 	
 		<ul class="nav nav-tabs">
 		  <li class="active"><a data-toggle="tab" href="#dadoscadastro">Cadastro de pessoa</a></li>
+		  <li ng-show="$ctrl.pessoa.tipo=='J'"><a data-toggle="tab" href="#telefonecontato">Telefone de contato</a></li>
 		  <li ng-show="$ctrl.pessoa.pessoa_fisica.prestador.tipo_prestador == 'S' || $ctrl.pessoa.pessoa_fisica.prestador.tipo_prestador == 'A' || $ctrl.pessoa.pessoa_fisica.prestador.tipo_prestador == 'F'"><a data-toggle="tab" href="#dadosprestador">Prestador</a></li>
 		</ul>
 		<div class="tab-content">
@@ -475,6 +489,64 @@
 									</tr>
 								</tbody>
 							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="telefonecontato" class="tab-pane" >
+				<div class="row">
+					<div class="col-sm-3">
+						<button class="btn btn-primary" ng-click="$ctrl.adicionarcontato()" style="margin: 15px 0px 15px 0px">Adicionar</button>
+					</div>
+				</div>
+				<div class="row">
+					<div>
+						<div class="col-sm-4" ng-repeat="contato in $ctrl.pessoa.pessoa_juridica.contatos">
+							<div class="panel panel-primary form-group-sm" ng-show="!contato.remover">
+								<div class="panel-heading" style="height: 25px">	
+									<button class="btn btn-danger exclude" ng-click="$ctrl.remover(contato)">x</button>
+								</div>
+								<div class="panel-body">
+									<div class="form-group">
+										<label class="control-label">Nome do contato</label>
+										<input type="text" class="form-control" ng-model="contato.nome"> 
+									</div>
+									<div class="form-group">
+										<label class="control-label">Email</label>
+										<input type="email" class="form-control" ng-model="contato.email"> 
+									</div>
+									<button class="btn btn-primary" ng-click="$ctrl.adicionartelefonecontato(contato)" style="margin-bottom: 15px">Adicionar</button>
+									<table class="table table-sm table-bordered table-striped table-highlight" >
+										<thead>
+											<tr>
+												<th>Tipo</th>
+												<th>Número</th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="telefone in contato.telefones" ng-show="!telefone.remover">
+												<td>
+													<select class="form-control" ng-model="telefone.tipo" ng-required="!telefone.remover">
+														<option value="">Selecione...</option>
+														<option value="R">Residencial</option>
+														<option value="C">Comercial</option>
+														<option value="M">Celular</option>
+													</select>
+												</td>
+												<td>
+													<input class="form-control" ng-model="telefone.numero" ui-mask="{{telefone.tipo == 'M' ? '(+99) 99 99999-9999' : '(+99) 99 9999-9999'}}" model-view-value="true" style="width: 100%" ng-required="!telefone.remover"/>
+												</td>
+												<td>
+													<button type="button" class="btn btn-default" ng-click="$ctrl.remover(telefone, contato.telefones)">
+														<span class="glyphicon glyphicon-trash"></span>
+													</button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

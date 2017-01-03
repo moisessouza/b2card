@@ -13,7 +13,10 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 		$ctrl.pessoa = {
 			enderecos:[{}],
 			telefones:[{}],
-			dados_bancarios:[{}]
+			dados_bancarios:[{}],
+			pessoa_juridica: {
+				contatos: []
+			}
 		}
 	}
 	
@@ -48,6 +51,16 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 			lista.push({});
 		}
 		
+	}
+	
+	$ctrl.adicionarcontato = function () {
+		$ctrl.pessoa.pessoa_juridica.contatos.push({
+			telefones:[{}]
+		});
+	}
+	
+	$ctrl.adicionartelefonecontato = function(contato){
+		contato.telefones.push({});
 	}
 	
 	$ctrl.salvar = function () {
