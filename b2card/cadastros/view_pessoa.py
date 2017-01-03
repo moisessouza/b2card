@@ -204,9 +204,9 @@ class PessoaDetail(APIView):
         pessoa_fisica.data_nascimento = converter_string_para_data(pf['data_expedicao'])
         pessoa_fisica.data_emicao_pis = converter_string_para_data(pf['data_emicao_pis'])
         
-        self.gravar_prestador(prestador, pessoa_fisica)
-        
         pessoa_fisica.save()
+        
+        self.gravar_prestador(prestador, pessoa_fisica)
     
     def gravar_pessoa_juridica(self, pj, pessoa):
         
