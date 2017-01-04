@@ -6,7 +6,7 @@ from django.shortcuts import redirect
 
 class AuthenticationB2CardMiddleware(object):
     
-    urls_permited = ['/autenticacao/', '/autenticacao/login/']
+    urls_permited = ['/b2card/autenticacao/', '/b2card/autenticacao/login/']
     
     def __init__(self, get_response):
         self.get_response = get_response
