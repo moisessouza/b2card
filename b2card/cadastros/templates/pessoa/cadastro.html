@@ -161,16 +161,16 @@ button.exclude {
 								<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.orgao_emissor" maxlength="6" style="width: 80px" ng-required="$ctrl.pessoa.tipo=='F'"/>
 							</div>
 						</div>
-						<div class="col-sm-1" style="width: 110px">
-							<div class="form-group">
-								<label class="control-label" for="id">CPF</label>
-								<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.cpf" gb-cpf maxlength="16" ng-required="$ctrl.pessoa.tipo=='F'"/>
-							</div>
-						</div>
 						<div class="col-sm-1" style="width: 136px">
 							<div class="form-group">
 								<label class="control-label" for="id">Data de expedição</label>
 								<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.data_expedicao" ui-mask="99/99/9999" model-view-value="true" ng-required="$ctrl.pessoa.tipo=='F'"/>
+							</div>
+						</div>
+						<div class="col-sm-1" style="width: 110px">
+							<div class="form-group">
+								<label class="control-label" for="id">CPF</label>
+								<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.cpf" gb-cpf maxlength="16" ng-required="$ctrl.pessoa.tipo=='F'"/>
 							</div>
 						</div>
 						<div class="col-sm-1" style="width: 231px">
