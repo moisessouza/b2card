@@ -15,29 +15,29 @@ demandasservices.config(['$httpProvider', function($httpProvider) {
 demandasservices.service('DemandaService', function($resource){
 	return {
 		buscarclientes: function(callback){
-			var Clientes = $resource('/clientes/api/list')
+			var Clientes = $resource(BASE_URL + 'clientes/api/list')
 			var result = Clientes.query(callback);
 			return result;
 		},
 		buscarfuncionarios: function(callback){
-			var Recursos = $resource('/recursos/api/list')
+			var Recursos = $resource(BASE_URL + 'recursos/api/list')
 			var result = Recursos.query(callback);
 			return result;
 		},
 		salvardemanda: function(data, callback){
-			var Demandas = $resource('/demandas/api/new/');
+			var Demandas = $resource(BASE_URL + 'demandas/api/new/');
 			return Demandas.save(data, callback);
 		},
 		buscardemanda: function(id, callback){
-			var Demandas = $resource('/demandas/api/:id');
+			var Demandas = $resource(BASE_URL + 'demandas/api/:id');
 			return Demandas.get({id:id}, callback);
 		},
 		deletardemanda: function(id, callback){
-			var Demandas = $resource('/demandas/api/:id');
+			var Demandas = $resource(BASE_URL + 'demandas/api/:id');
 			return Demandas.remove({id:id}, callback);
 		},
 		buscarcentroresultadoshora: function(demanda_id, callback){
-			var Demandas = $resource('/demandas/api/:id/centroresultadoshora/');
+			var Demandas = $resource(BASE_URL + 'demandas/api/:id/centroresultadoshora/');
 			return Demandas.query({id:demanda_id}, callback);
 		}
 	}

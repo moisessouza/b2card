@@ -15,15 +15,15 @@ centroresultadoservices.config(['$httpProvider', function($httpProvider) {
 centroresultadoservices.service('CentroResultadoService', function($resource){
 	return {
 		buscarcentroresultados: function (callback) {
-			var CentroResultado = $resource('/cadastros/centroresultado/api/list/');
+			var CentroResultado = $resource(BASE_URL + 'cadastros/centroresultado/api/list/');
 			return CentroResultado.query(callback);
 		},
 		salvar: function(data, callback) {
-			var CentroResultado = $resource('/cadastros/centroresultado/api/detail/');
+			var CentroResultado = $resource(BASE_URL + 'cadastros/centroresultado/api/detail/');
 			return CentroResultado.save(data, callback);
 		},
 		deletar: function(data, callback){
-			var CentroResultado = $resource('/cadastros/centroresultado/api/:id/');
+			var CentroResultado = $resource(BASE_URL + 'cadastros/centroresultado/api/:id/');
 			return CentroResultado.remove({id: data.id}, data, callback);
 		}
 	}

@@ -15,15 +15,15 @@ contagerencialservices.config(['$httpProvider', function($httpProvider) {
 contagerencialservices.service('ContaGerencialService', function($resource){
 	return {
 		buscarcontagerenciais: function (callback) {
-			var ContaGerencial = $resource('/cadastros/contagerencial/api/list/');
+			var ContaGerencial = $resource(BASE_URL + 'cadastros/contagerencial/api/list/');
 			return ContaGerencial.query(callback);
 		},
 		salvar: function(data, callback) {
-			var ContaGerencial = $resource('/cadastros/contagerencial/api/detail/');
+			var ContaGerencial = $resource(BASE_URL + 'cadastros/contagerencial/api/detail/');
 			return ContaGerencial.save(data, callback);
 		},
 		deletar: function(data, callback){
-			var ContaGerencial = $resource('/cadastros/contagerencial/api/:id/');
+			var ContaGerencial = $resource(BASE_URL + 'cadastros/contagerencial/api/:id/');
 			return ContaGerencial.remove({id: data.id}, data, callback);
 		}
 	}

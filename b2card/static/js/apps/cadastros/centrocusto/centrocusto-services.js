@@ -15,15 +15,15 @@ centrocustoservices.config(['$httpProvider', function($httpProvider) {
 centrocustoservices.service('CentroCustoService', function($resource){
 	return {
 		buscarcentrocustos: function (callback) {
-			var CentroCusto = $resource('/cadastros/centrocusto/api/list/');
+			var CentroCusto = $resource(BASE_URL + 'cadastros/centrocusto/api/list/');
 			return CentroCusto.query(callback);
 		},
 		salvar: function(data, callback) {
-			var CentroCusto = $resource('/cadastros/centrocusto/api/detail/');
+			var CentroCusto = $resource(BASE_URL + 'cadastros/centrocusto/api/detail/');
 			return CentroCusto.save(data, callback);
 		},
 		deletar: function(data, callback){
-			var CentroCusto = $resource('/cadastros/centrocusto/api/:id/');
+			var CentroCusto = $resource(BASE_URL + 'cadastros/centrocusto/api/:id/');
 			return CentroCusto.remove({id: data.id}, data, callback);
 		}
 	}

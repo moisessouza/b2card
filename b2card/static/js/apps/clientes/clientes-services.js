@@ -15,15 +15,15 @@ clientesservices.config(['$httpProvider', function($httpProvider) {
 clientesservices.service('ClientesService', function($resource){
 	return {
 		buscarcliente: function(id, callback){
-			var Cliente = $resource('/clientes/api/:id/');
+			var Cliente = $resource(BASE_URL + 'clientes/api/:id/');
 			return Cliente.get({id:id}, callback);
 		},
 		salvarcliente: function(cliente, callback){
-			var Cliente = $resource('/clientes/api/new/');
+			var Cliente = $resource(BASE_URL + 'clientes/api/new/');
 			return Cliente.save(cliente, callback);
 		},
 		deletarcliente: function(cliente, callback){
-			var Cliente = $resource('/clientes/api/:id/');
+			var Cliente = $resource(BASE_URL + 'clientes/api/:id/');
 			return Cliente.remove({id: cliente.id}, callback);
 		}
 	}

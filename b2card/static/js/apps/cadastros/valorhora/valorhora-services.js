@@ -15,19 +15,19 @@ valorhoraservice.config(['$httpProvider', function($httpProvider) {
 valorhoraservice.service('ValorHoraService', function($resource){
 	return {
 		buscarvalorhora: function (valor_hora_id, callback){
-			var ValorHora = $resource('/cadastros/valorhora/api/:id/');
+			var ValorHora = $resource(BASE_URL + 'cadastros/valorhora/api/:id/');
 			return ValorHora.get({id: valor_hora_id}, callback);
 		},
 		salvar: function (data, callback) {
-			var ValorHora = $resource('/cadastros/valorhora/api/detail/');
+			var ValorHora = $resource(BASE_URL + 'cadastros/valorhora/api/detail/');
 			return ValorHora.save(data, callback);
 		},
 		deletar: function (valor_hora_id, callback) {
-			var ValorHora = $resource('/cadastros/valorhora/api/:id/');
+			var ValorHora = $resource(BASE_URL + 'cadastros/valorhora/api/:id/');
 			return ValorHora.remove({id: valor_hora_id}, callback)
 		},
 		buscarvalorhoraporcliente: function (cliente_id, callback) {
-			var ValorHora = $resource('/cadastros/valorhora/api/cliente/:id/');
+			var ValorHora = $resource(BASE_URL + 'cadastros/valorhora/api/cliente/:id/');
 			return ValorHora.query({id: cliente_id}, callback)
 		}
 	}

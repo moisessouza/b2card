@@ -62,7 +62,7 @@ recursos.controller('RecursosController', function ($scope, $uibModal, $window, 
 		var confirm = $window.confirm("Tem certeza que deseja deletar esse funcionário?");
 		if (confirm){
 			RecursosService.deletarfuncionario($ctrl.funcionario.id, function (data){
-				$window.location.href = '/recursos/';
+				$window.location.href = BASE_URL + 'recursos/';
 			});
 		}
 	};
