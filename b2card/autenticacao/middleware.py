@@ -8,6 +8,7 @@ import importlib
 class AuthenticationB2CardMiddleware(object):
 
     urls_permited = importlib.import_module(os.environ['DJANGO_SETTINGS_MODULE']).URL_PER
+    base_url = importlib.import_module(os.environ['DJANGO_SETTINGS_MODULE']).BASE_URL
     
     def __init__(self, get_response):
         self.get_response = get_response
@@ -22,7 +23,7 @@ class AuthenticationB2CardMiddleware(object):
 
 
         if request.user.is_authenticated:
-            if request.path == '/':
+            if request.path == self.base_url:
                 response = redirect('inicial:inicial')
             else:
                 response = self.get_response(request)
