@@ -1,12 +1,13 @@
 '''
     Middleware para verificacao de autenticacao
 '''
-
+import os
 from django.shortcuts import redirect
+import importlib
 
 class AuthenticationB2CardMiddleware(object):
     
-    urls_permited = ['/autenticacao/', '/autenticacao/login/']
+    urls_permited = importlib.import_module(os.environ['DJANGO_SETTINGS_MODULE']).URL_PER
     
     def __init__(self, get_response):
         self.get_response = get_response
