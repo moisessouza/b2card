@@ -6,7 +6,7 @@ from django.shortcuts import redirect
 import importlib
 
 class AuthenticationB2CardMiddleware(object):
-    
+
     urls_permited = importlib.import_module(os.environ['DJANGO_SETTINGS_MODULE']).URL_PER
     
     def __init__(self, get_response):

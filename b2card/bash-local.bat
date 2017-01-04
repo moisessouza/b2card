@@ -1,0 +1,1 @@
+python manage.py collectstatic -c --noinput --settings='b2card.local' --pythonpath=C:/xampp/htdocs/wsgi/b2card/b2card
