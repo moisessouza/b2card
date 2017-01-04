@@ -222,31 +222,33 @@ class PessoaDetail(APIView):
         self.gravar_contatos(contatos, pessoa_juridica)
       
     def gravar_contatos(self, contatos, pessoa_juridica):
-        for i in contatos:
-            if 'remover' not in i or i['remover'] is False:
-                telefones = None
-                if 'telefones' in i:
-                    telefones = i['telefones']
-                    del i['telefones']
+        if contatos:
+            for i in contatos:
+                if 'remover' not in i or i['remover'] is False:
+                    telefones = None
+                    if 'telefones' in i:
+                        telefones = i['telefones']
+                        del i['telefones']
+                        
+                    contato = Contato(**i)
+                    contato.pessoa_juridica = pessoa_juridica
+                    contato.save()
                     
-                contato = Contato(**i)
-                contato.pessoa_juridica = pessoa_juridica
-                contato.save()
-                
-                self.gravar_telefones_contato(telefones, contato)
-            elif 'id' in i:
-                contato = Contato.objects.get(pk=i['id'])
-                contato.delete()
+                    self.gravar_telefones_contato(telefones, contato)
+                elif 'id' in i:
+                    contato = Contato.objects.get(pk=i['id'])
+                    contato.delete()
                  
     def gravar_telefones_contato(self, telefones, contato):
-        for i in telefones:
-            if 'remover' not in i or i['remover'] is False:
-                telefone = TelefoneContato(**i)
-                telefone.contato = contato
-                telefone.save()
-            elif 'id' in i:
-                telefone = TelefoneContato.objects.get(pk=i['id'])
-                telefone.delete()
+        if telefones:
+            for i in telefones:
+                if 'remover' not in i or i['remover'] is False:
+                    telefone = TelefoneContato(**i)
+                    telefone.contato = contato
+                    telefone.save()
+                elif 'id' in i:
+                    telefone = TelefoneContato.objects.get(pk=i['id'])
+                    telefone.delete()
                 
     def gravar_prestador(self, p, pessoa_fisica):
         if p:
@@ -287,36 +289,37 @@ class PessoaDetail(APIView):
                 prestador.delete()
     
     def gravar_telefones(self, telefones, pessoa):
-        
-        for i in telefones:
-            if 'remover' not in i or i['remover'] is False:
-                telefone = TelefonePessoa(**i)
-                telefone.pessoa = pessoa
-                telefone.save()
-            elif 'id' in i:
-                telefone = TelefonePessoa.objects.get(pk=i['id'])
-                telefone.delete()
+        if telefones:
+            for i in telefones:
+                if 'remover' not in i or i['remover'] is False:
+                    telefone = TelefonePessoa(**i)
+                    telefone.pessoa = pessoa
+                    telefone.save()
+                elif 'id' in i:
+                    telefone = TelefonePessoa.objects.get(pk=i['id'])
+                    telefone.delete()
             
     def gravar_enderecos(self, enderecos, pessoa):
-        for i in enderecos:
-            if 'remover' not in i or i['remover'] is False:
-                endereco = EnderecoPessoa(**i)
-                endereco.pessoa = pessoa
-                endereco.save()
-            elif 'id' in i:
-                endereco = EnderecoPessoa.objects.get(pk=i['id'])
-                endereco.delete()     
+        if enderecos:
+            for i in enderecos:
+                if 'remover' not in i or i['remover'] is False:
+                    endereco = EnderecoPessoa(**i)
+                    endereco.pessoa = pessoa
+                    endereco.save()
+                elif 'id' in i:
+                    endereco = EnderecoPessoa.objects.get(pk=i['id'])
+                    endereco.delete()     
      
     def gravar_dados_bancarios(self, dados_bancarios, pessoa):
-        for i in dados_bancarios:
-            if 'remover' not in i or i['remover'] is False:
-                dado_bancario = DadosBancariosPessoa(**i)
-                dado_bancario.pessoa = pessoa
-                dado_bancario.save()
-            elif 'id' in i:
-                dado_bancario = DadosBancariosPessoa.objects.get(pk=i['id'])
-                dado_bancario.delete()
-                
+        if dados_bancarios:
+            for i in dados_bancarios:
+                if 'remover' not in i or i['remover'] is False:
+                    dado_bancario = DadosBancariosPessoa(**i)
+                    dado_bancario.pessoa = pessoa
+                    dado_bancario.save()
+                elif 'id' in i:
+                    dado_bancario = DadosBancariosPessoa.objects.get(pk=i['id'])
+                    dado_bancario.delete()
                 
     def delete(self, request, pessoa_id, format=None):
         pessoa = Pessoa.objects.get(pk=pessoa_id)

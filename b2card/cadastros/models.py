@@ -63,7 +63,7 @@ class Pessoa(models.Model):
     tipo = models.CharField(choices=TIPO, max_length=1)
     tipo_pessoa = models.CharField(choices=TIPO_PESSOA, max_length=1)
     centro_custo = models.ForeignKey(CentroCusto, default=None)
-    data_contratacao = models.DateField()
+    data_contratacao = models.DateField(null=True)
     data_rescisao = models.DateField( null=True, default=None)
     data_fim_aditivo = models.DateField(null=True, default=None)
     data_renegociacao_valor = models.DateField(null=True, default=None)
@@ -127,9 +127,9 @@ class PessoaFisica(models.Model):
 class PessoaJuridica(models.Model):
     pessoa = models.ForeignKey(Pessoa, default = None)
     cnpj = models.CharField(max_length=19, default = None)
-    nome_fantasia = models.CharField(max_length=30, default = None)
-    inscricao_estadual = models.CharField(max_length=20, default = None)
-    inscricao_municipal = models.CharField(max_length=20, default = None)
+    nome_fantasia = models.CharField(max_length=30, default = None, null=True)
+    inscricao_estadual = models.CharField(max_length=20, default = None, null=True)
+    inscricao_municipal = models.CharField(max_length=20, default = None, null=True)
     
 TIPO_ENDERECO = (
     ('RE', 'RESIDENCIAL'),
