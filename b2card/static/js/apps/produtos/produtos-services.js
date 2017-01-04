@@ -15,7 +15,7 @@ produtosservices.config(['$httpProvider', function($httpProvider) {
 produtosservices.service('MateriaisService', function ($resource) {
 	return {
 		buscarmateriais:function () {
-			var Materiais = $resource('/materiais/api/list/');
+			var Materiais = $resource(BASE_URL + 'materiais/api/list/');
 			var result = Materiais.query();
 			return result;
 		}
@@ -24,7 +24,7 @@ produtosservices.service('MateriaisService', function ($resource) {
 }).service('ProdutoService', function ($resource){
 	return {
 		buscarproduto: function (id, callback) {
-			var Produto = $resource('/produtos/api/:id');
+			var Produto = $resource(BASE_URL + 'produtos/api/:id');
 			var result = Produto.get({'id': id}, function (data) {
 				if (callback) {
 					callback(data);
@@ -33,7 +33,7 @@ produtosservices.service('MateriaisService', function ($resource) {
 			return result;
 		},
 		salvarproduto: function (data, callback) {
-			var Produto = $resource('/produtos/api/save/');
+			var Produto = $resource(BASE_URL + 'produtos/api/save/');
 			var result = Produto.save(data, function (data) {
 				if (callback){
 					callback(data);
@@ -42,7 +42,7 @@ produtosservices.service('MateriaisService', function ($resource) {
 			return result;
 		},
 		buscartodosprodutos: function(callback){
-			var Produto = $resource('/produtos/api/list/')
+			var Produto = $resource(BASE_URL + 'produtos/api/list/')
 			var result = Produto.query(callback);
 			return result;
 		}

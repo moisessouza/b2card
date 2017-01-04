@@ -15,12 +15,12 @@ orcamentosservices.config(['$httpProvider', function($httpProvider) {
 orcamentosservices.service('OrcamentosService', function($resource){
 	return {
 		buscarorcamento: function(orcamento_id, callback){
-			Orcamento = $resource('/orcamentos/api/:id')
+			Orcamento = $resource(BASE_URL + 'orcamentos/api/:id')
 			var result = Orcamento.get({id:orcamento_id}, callback);
 			return result;
 		},
 		salvar: function(data, callback) {
-			Orcamento = $resource('/orcamentos/api/save/');
+			Orcamento = $resource(BASE_URL + 'orcamentos/api/save/');
 			var result = Orcamento.save(data, function (data) {
 				if (callback){
 					callback(data);

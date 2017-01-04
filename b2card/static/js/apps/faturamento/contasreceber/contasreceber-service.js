@@ -15,7 +15,7 @@ contasreceberservice.config(['$httpProvider', function($httpProvider) {
 contasreceberservice.service('ContasReceberService', function($resource){
 	return {
 		pesquisarcontasreceber: function (args, callback){
-			var Parcela = $resource('/faturamento/api/contasreceber/search/', {}, {
+			var Parcela = $resource(BASE_URL + 'faturamento/api/contasreceber/search/', {}, {
 				'search':  {
 					method:'POST',
 					isArray:true

@@ -15,15 +15,15 @@ centrocustoservices.config(['$httpProvider', function($httpProvider) {
 centrocustoservices.service('UnidadeAdministrativaService', function($resource){
 	return {
 		buscarunidadeadministrativas: function (callback) {
-			var UnidadeAdministrativa = $resource('/cadastros/unidadeadministrativa/api/list/');
+			var UnidadeAdministrativa = $resource(BASE_URL + 'cadastros/unidadeadministrativa/api/list/');
 			return UnidadeAdministrativa.query(callback);
 		},
 		salvar: function(data, callback) {
-			var UnidadeAdministrativa = $resource('/cadastros/unidadeadministrativa/api/detail/');
+			var UnidadeAdministrativa = $resource(BASE_URL + 'cadastros/unidadeadministrativa/api/detail/');
 			return UnidadeAdministrativa.save(data, callback);
 		},
 		deletar: function(data, callback){
-			var UnidadeAdministrativa = $resource('/cadastros/unidadeadministrativa/api/:id/');
+			var UnidadeAdministrativa = $resource(BASE_URL + 'cadastros/unidadeadministrativa/api/:id/');
 			return UnidadeAdministrativa.remove({id: data.id}, data, callback);
 		}
 	}

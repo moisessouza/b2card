@@ -94,7 +94,7 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 	
 	$ctrl.deletarpessoa = function (){
 		PessoaService.deletarpessoa($ctrl.pessoa.id, function () {
-			$window.location.href = '/cadastros/pessoa/';
+			$window.location.href = BASE_URL + 'cadastros/pessoa/';
 		});
 	}
 	
@@ -133,7 +133,7 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 	$ctrl.pessoas = PessoaService.buscarpessoas();
 	
 	$ctrl.redirecionar = function (pessoa) {
-		$window.location.href = '/cadastros/pessoa/editar/' + pessoa.id
+		$window.location.href = BASE_URL + 'cadastros/pessoa/editar/' + pessoa.id
 	}
 	
 }).controller('ModalInstanceCtrl', function($scope, $uibModalInstance, RecursosService){

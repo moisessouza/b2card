@@ -15,15 +15,15 @@ naturezaoperacaoservices.config(['$httpProvider', function($httpProvider) {
 naturezaoperacaoservices.service('NaturezaOperacaoService', function($resource){
 	return {
 		buscarnaturezaoperacoes: function (callback) {
-			var NaturezaOperacao = $resource('/cadastros/naturezaoperacao/api/list/');
+			var NaturezaOperacao = $resource(BASE_URL + 'cadastros/naturezaoperacao/api/list/');
 			return NaturezaOperacao.query(callback);
 		},
 		salvar: function(data, callback) {
-			var NaturezaOperacao = $resource('/cadastros/naturezaoperacao/api/detail/');
+			var NaturezaOperacao = $resource(BASE_URL + 'cadastros/naturezaoperacao/api/detail/');
 			return NaturezaOperacao.save(data, callback);
 		},
 		deletar: function(data, callback){
-			var NaturezaOperacao = $resource('/cadastros/naturezaoperacao/api/:id/');
+			var NaturezaOperacao = $resource(BASE_URL + 'cadastros/naturezaoperacao/api/:id/');
 			return NaturezaOperacao.remove({id: data.id}, data, callback);
 		}
 	}

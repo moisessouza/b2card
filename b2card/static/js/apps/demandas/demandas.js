@@ -481,7 +481,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	
 	$ctrl.deletar = function () {
 		DemandaService.deletardemanda($ctrl.demanda.id, function(data){
-			$window.location.href = '/demandas/';
+			$window.location.href = BASE_URL + 'demandas/';
 		});
 	}
 	

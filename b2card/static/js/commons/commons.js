@@ -2,6 +2,7 @@
 
 var commons = angular.module('commons', ['ui.bootstrap']);
 
+var BASE_URL = '/'
 var $scope_message = null;
 var messages = {}
 
