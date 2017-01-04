@@ -20,9 +20,7 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 		});
 	} else {
 		$ctrl.pessoa = {
-			enderecos:[{}],
-			telefones:[{}],
-			dados_bancarios:[{}],
+			status: 'A',
 			pessoa_juridica: {
 				contatos: []
 			}
@@ -34,34 +32,28 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 	$ctrl.listacentrocusto = CentroCustoService.buscarcentrocustos();
 	
 	$ctrl.adicionarendereco = function () {
+		if(!$ctrl.pessoa.enderecos){
+			$ctrl.pessoa.enderecos = [];
+		}
 		$ctrl.pessoa.enderecos.push({});
 	}
 	
 	$ctrl.adicionartelefone = function () {
+		if (!$ctrl.pessoa.telefones) {
+			$ctrl.pessoa.telefones = [];
+		}
 		$ctrl.pessoa.telefones.push({});
 	}
 	
 	$ctrl.adicionardadosbancarios = function () {
+		if(!$ctrl.pessoa.dados_bancarios){
+			$ctrl.pessoa.dados_bancarios = [];
+		}
 		$ctrl.pessoa.dados_bancarios.push({});
 	}
 	
 	$ctrl.remover = function (objeto, lista) {
 		objeto.remover=true;
-		
-		if (lista) {
-			var possuiitem = false;
-			for (let l of lista) {
-				if (!l.remover) {
-					possuiitem = true;
-					break;
-				}
-			}
-			
-			if (!possuiitem) {
-				lista.push({});
-			}
-		}
-		
 	}
 	
 	$ctrl.adicionarcontato = function () {

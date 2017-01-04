@@ -95,7 +95,7 @@ button.exclude {
 								<div class="col-sm-2" style="width: 130px">
 									<div class="form-group">
 										<label class="control-label" for="id">Data contratação</label>
-										<input type="text" class="form-control" ng-model = "$ctrl.pessoa.data_contratacao" ui-mask="99/99/9999" model-view-value="true" required/>
+										<input type="text" class="form-control" ng-model = "$ctrl.pessoa.data_contratacao" ui-mask="99/99/9999" model-view-value="true"/>
 									</div>
 								</div>
 								<div class="col-sm-2" style="width: 130px">
@@ -316,7 +316,7 @@ button.exclude {
 						<div class="col-sm-1" style="width: 149px">
 							<div class="form-group">
 								<label class="control-label" for="id">Nome fantasia</label>
-								<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_juridica.nome_fantasia" maxlength="30" ng-required="$ctrl.pessoa.tipo=='J'"/>
+								<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_juridica.nome_fantasia" maxlength="30"/>
 							</div>
 						</div>
 						<div class="col-sm-1" style="width: 149px">
@@ -393,7 +393,7 @@ button.exclude {
 			</div>
 			<div id="telefone" class="tab-pane">
 				<div class="col-sm-3">
-					<div class="panel panel-primary form-group-sm" ng-show="$ctrl.pessoa.tipo=='F' || $ctrl.pessoa.tipo=='J'" style="margin-top: 15px">
+					<div class="panel panel-primary form-group-sm" style="margin-top: 15px">
 						<div class="panel-body">
 							<button class="btn btn-sm btn-primary" style="margin-bottom: 8px" ng-click="$ctrl.adicionartelefone()">Adicionar</button>
 							<table class="table table-sm table-bordered table-striped table-highlight"  style="font-size: 12px">
@@ -431,7 +431,7 @@ button.exclude {
 			</div>
 			<div id="dadosbancarios" class="tab-pane">
 				<div class="col-sm-9">
-					<div class="panel panel-primary form-group-sm" ng-show="$ctrl.pessoa.tipo=='F' || $ctrl.pessoa.tipo=='J'" style="margin-top: 15px">
+					<div class="panel panel-primary form-group-sm" style="margin-top: 15px">
 						<div class="panel-body">
 							<button class="btn btn-sm btn-primary" style="margin-bottom: 8px" ng-click="$ctrl.adicionardadosbancarios()">Adicionar</button>
 							<table class="table table-sm table-bordered table-striped table-highlight"  style="font-size: 12px">
