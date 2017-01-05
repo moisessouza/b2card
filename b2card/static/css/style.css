@@ -1,3 +1,31 @@
+
+nav.navbar, nav.navbar a, nav.navbar ul, nav.navbar li {
+	background-color: #007d9a;
+	border-color: #007d9a;
+	color: #fff;
+	border-radius: 0
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+	background-color: #007d9a;
+	border-color: #007d9a;
+	color: #fff;
+	border-radius: 10px 10px 0px 0px
+}
+
+.nav-tabs>li>a:hover{
+	border-radius: 10px 10px 0px 0px
+}
+
+.panel-primary>.panel-heading, .btn-primary{
+	background-color: #007d9a;
+	border-color: #007d9a;
+}
+
+nav.navbar a:hover, nav.navbar a:focus{ 
+	color: #333;
+}
+
 div.buttonbar {
 	margin-top: 2em;
 }
