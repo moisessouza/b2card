@@ -39,7 +39,13 @@ class PessoaJuridicaSerializer(serializers.ModelSerializer):
     class Meta:
         model = PessoaJuridica
         fields = ('id', 'cnpj', 'nome_fantasia', 'inscricao_estadual', 'inscricao_municipal')
-
+        
+class PessoaJuridicaComPessoaSerializer(serializers.ModelSerializer):
+    pessoa = PessoaSerializer()
+    class Meta:
+        model = PessoaJuridica
+        fields = ('id', 'cnpj', 'nome_fantasia', 'inscricao_estadual', 'inscricao_municipal', 'pessoa')
+        
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
