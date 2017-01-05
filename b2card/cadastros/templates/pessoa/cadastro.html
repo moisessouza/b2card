@@ -5,6 +5,9 @@
 	<script src="/static/js/apps/cadastros/pessoa/pessoa.js"></script>
 	<script src="/static/js/apps/cadastros/pessoa/pessoa-services.js"></script>
 	<script src="/static/js/apps/cadastros/centrocusto/centrocusto-services.js"></script>
+	<script src="/static/js/apps/cadastros/centroresultado/centroresultado-services.js"></script>
+	<script src="/static/js/apps/cadastros/contagerencial/contagerencial-services.js"></script>
+	<script src="/static/js/apps/cadastros/naturezaoperacao/naturezaoperacao-services.js"></script>
 	<script src="/static/js/apps/recursos/recursos-services.js"></script>
 	<script src="/static/js/angular/ui-bootstrap-tpls-2.2.0.min.js"></script>
 	<script src="/static/js/jquery/priceformat/jquery.priceformat.min.js"></script>
@@ -50,6 +53,8 @@ button.exclude {
 		  <li><a data-toggle="tab" href="#dadosbancarios">Dados bancários</a></li>
 		  <li ng-show="$ctrl.pessoa.tipo=='J'"><a data-toggle="tab" href="#telefonecontato">Contato</a></li>
 		  <li ng-show="$ctrl.pessoa.tipo=='F'"><a data-toggle="tab" href="#dadosprestador">Prestador</a></li>
+		  <li><a data-toggle="tab" href="#apropriacoes">Apropriacao</a></li>
+		  <li><a data-toggle="tab" href="#custoprestador">Custo prestador</a></li>
 		</ul>
 		<div class="tab-content">
 			<div id="dadoscadastro" class="tab-pane in active">
@@ -640,9 +645,73 @@ button.exclude {
 					</div>
 				</div>
 			</div>
+			<div id="apropriacoes" class="tab-pane">
+				<div class="panel panel-primary form-group-sm">
+					<div class="panel-body">
+						<div class="row">
+							  <div class="form-group col-sm-3">
+							    <label for="centro_custo">Centro de custo</label>
+							    <select class="form-control" id="centro_custo" name="centro_custo" ng-model="$ctrl.pessoa.apropriacao.centro_custo.id" ng-options="c.id as c.nome for c in $ctrl.listacentrocusto">
+							    	<option value="">Selecione...</option>
+							    </select>
+							  </div>
+							  <div class="form-group col-sm-3">
+							    <label for="centro_resultado">Centro de resultado</label>
+							    <select class="form-control" id="centro_resultado" name="centro_resultado" ng-model="$ctrl.pessoa.apropriacao.centro_resultado.id" ng-options="c.id as c.nome for c in $ctrl.centroresultadolist">
+							    	<option value="">Selecione...</option>
+							    </select>
+							  </div>
+							  <div class="form-group col-sm-3">
+							    <label for="conta_gerencial">Conta gerencial</label>
+							    <select class="form-control" id="conta_gerencial" name="conta_gerencial" ng-model="$ctrl.pessoa.apropriacao.conta_gerencial.id" ng-options="c.id as c.nome for c in $ctrl.contagerenciallist">
+							    	<option value="">Selecione...</option>
+							    </select>
+							  </div>
+							  <div class="form-group col-sm-3">
+							    <label for="natureza_operacao">Natureza da operação</label>
+							    <select class="form-control" id="natureza_operacao" name="natureza_operacao" ng-model="$ctrl.pessoa.apropriacao.natureza_operacao.id" ng-options="c.id as c.nome for c in $ctrl.naturezaoperacaolist">
+							    	<option value="">Selecione...</option>
+							    </select>
+							  </div>
+						 </div>
+					</div>
+				</div>
+			</div>
+			<div id="custoprestador" class="tab-pane">
+				<div class="row">
+					<div class="col-sm-3">
+						<button class="btn btn-primary margin-top margin-botton margin-left" ng-click="$ctrl.adicionarcustoprestador()">Adicionar</button>
+					</div>
+				</div>
+				<div class="col-sm-4">
+					<table class="table table-sm">
+						<thead>
+							<tr>
+								<th>Data inicio</th>
+								<th>Data fim</th>
+								<th>Valor</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="custo_prestador in $ctrl.pessoa.pessoa_fisica.custos_prestador" ng-show="!custo_prestador.remover">
+								<td>
+									<input class="form-control" ng-model="custo_prestador.data_inicio" ui-mask="99/99/9999" ng-change="$ctrl.validardatacusto(custo_prestador)" model-view-value="true" ng-required="!custo_prestador.remover">
+								</td>
+								<td>
+									<input class="form-control" ng-model="custo_prestador.data_fim" ui-mask="99/99/9999" ng-change="$ctrl.validardatacusto(custo_prestador)" model-view-value="true">
+								</td>
+								<td>
+									<input class="form-control" ng-model="custo_prestador.valor" gb-money ng-required="!custo_prestador.remover">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
 		<div class="col-sm-12" style="margin-bottom: 15px; padding-left: 0px">
-			<button class="btn btn-primary" ng-click="$ctrl.salvar()" ng-disabled="cadastro.$invalid || !$ctrl.datasvalidas" >Salvar</button>
+			<button class="btn btn-primary" ng-click="$ctrl.salvar()" ng-disabled="cadastro.$invalid || !$ctrl.datasvalidas || !$ctrl.datascustovalidas" >Salvar</button>
 			<button class="btn btn-danger" ng-click="$ctrl.deletarpessoa()">Deletar</button>
 		</div>
 	</form>

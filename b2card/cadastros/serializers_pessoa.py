@@ -1,8 +1,10 @@
 from rest_framework import serializers
 from cadastros.models import Pessoa, EnderecoPessoa, TelefonePessoa,\
     DadosBancariosPessoa, PessoaFisica, Prestador, PessoaJuridica, Contato,\
-    TelefoneContato
-from cadastros.serializers import CentroCustoSerializer
+    TelefoneContato, Apropriacao, CustoPrestador
+from cadastros.serializers import CentroCustoSerializer,\
+    UnidadeAdministrativaSerializer, CentroResultadoSerializer,\
+    ContaGerencialSerializer, NaturezaOperacaoSerializer
 from django.contrib.auth.models import User
 from recursos.serializers import CargoSerializer
 
@@ -61,3 +63,19 @@ class TelefoneContatoSerializer(serializers.ModelSerializer):
     class Meta:
         model = TelefoneContato
         fields = ('id', 'tipo', 'numero')
+        
+        
+class ApropriacaoSerializer(serializers.ModelSerializer):
+    unidade_administrativa = UnidadeAdministrativaSerializer()
+    centro_custo = CentroCustoSerializer()
+    centro_resultado = CentroResultadoSerializer()
+    conta_gerencial = ContaGerencialSerializer()
+    natureza_operacao = NaturezaOperacaoSerializer()
+    class Meta:
+        model = Apropriacao
+        fields = ('id', 'unidade_administrativa', 'centro_custo', 'centro_resultado', 'conta_gerencial', 'natureza_operacao')
+        
+class CustoPrestadorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=CustoPrestador
+        fields = ('id', 'data_inicio', 'data_fim', 'valor')

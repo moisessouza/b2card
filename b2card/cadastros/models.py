@@ -203,3 +203,17 @@ class Prestador(models.Model):
     data_proxima_avaliacao = models.DateField(null = True, default = None)
     dados_complementares = models.TextField(null = True, default = None)
     usuario = models.ForeignKey(User, default = None, null = True)
+    
+class Apropriacao(models.Model):
+    pessoa = models.ForeignKey(Pessoa, default = None)
+    unidade_administrativa = models.ForeignKey(UnidadeAdministrativa, default = None, null = True)
+    centro_custo = models.ForeignKey(CentroCusto, default = None, null = True)
+    centro_resultado = models.ForeignKey(CentroResultado, default = None, null = True)
+    conta_gerencial = models.ForeignKey(ContaGerencial, default = None, null = True)
+    natureza_operacao = models.ForeignKey(NaturezaOperacao, default = None, null = True)
+    
+class CustoPrestador(models.Model):
+    pessoa_fisica = models.ForeignKey(PessoaFisica, default = None)
+    data_inicio = models.DateField(default = None)
+    data_fim = models.DateField(default = None, null = True)
+    valor = models.FloatField(max_length=30, default = None)

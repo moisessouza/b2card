@@ -1,17 +1,23 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render
-from cadastros.models import TipoHora, CentroCusto, Pessoa, TelefonePessoa,\
-    EnderecoPessoa, DadosBancariosPessoa, PessoaFisica, Prestador,\
-    PessoaJuridica, Contato, TelefoneContato
-from cadastros import serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from utils.utils import converter_string_para_data, formatar_data
-from cadastros.serializers_pessoa import PessoaSerializer,\
-    EnderecoPessoaSerializer, TelefonePessoaSerializer,\
-    DadosBancariosPessoaSerializer, PessoaFisicaSerializer, PrestadorSerializer,\
-    PessoaJuridicaSerializer, ContatoSerializer, TelefoneContatoSerializer
+
+from cadastros import serializers
+from cadastros.models import TipoHora, CentroCusto, Pessoa, TelefonePessoa, \
+    EnderecoPessoa, DadosBancariosPessoa, PessoaFisica, Prestador, \
+    PessoaJuridica, Contato, TelefoneContato, CentroResultado, \
+    UnidadeAdministrativa, ContaGerencial, Apropriacao, NaturezaOperacao, \
+    CustoPrestador
+from cadastros.serializers_pessoa import PessoaSerializer, \
+    EnderecoPessoaSerializer, TelefonePessoaSerializer, \
+    DadosBancariosPessoaSerializer, PessoaFisicaSerializer, PrestadorSerializer, \
+    PessoaJuridicaSerializer, ContatoSerializer, TelefoneContatoSerializer, \
+    ApropriacaoSerializer, CustoPrestadorSerializer
 from recursos.models import Cargo
-from django.contrib.auth.models import User
+from utils.utils import converter_string_para_data, formatar_data, \
+    converter_string_para_float
+
 
 def index(request):
     return render(request, 'pessoa/index.html')
@@ -84,6 +90,11 @@ class PessoaDetail(APIView):
         if 'pessoa_juridica' in data:
             pessoa_juridica = data['pessoa_juridica']
             del data['pessoa_juridica']
+        
+        apropriacao = None
+        if 'apropriacao' in data:
+            apropriacao = data['apropriacao']
+            del data['apropriacao']
             
         pessoa = Pessoa(**data)
         pessoa.centro_custo = centro_custo
@@ -92,6 +103,7 @@ class PessoaDetail(APIView):
         self.gravar_telefones(telefones, pessoa)
         self.gravar_enderecos(enderecos, pessoa)
         self.gravar_dados_bancarios(dados_bancarios, pessoa)
+        self.gravar_apropriacao(apropriacao, pessoa)
         
         if data['tipo'] == 'F':
             self.gravar_pessoa_fisica(pessoa_fisica, pessoa)
@@ -117,6 +129,7 @@ class PessoaDetail(APIView):
         data['dados_bancarios'] = self.serializar_dados_bancarios(pessoa)
         data['pessoa_fisica'] = self.serializar_pessoa_fisica(pessoa)
         data['pessoa_juridica'] = self.serializar_pessoa_juridica(pessoa)
+        data['apropriacao'] = self.serializar_apropriacao(pessoa)
         
         return data
     
@@ -148,10 +161,23 @@ class PessoaDetail(APIView):
             data['data_nascimento'] = formatar_data(pessoa_fisica[0].data_nascimento)
             data['data_emicao_pis'] = formatar_data(pessoa_fisica[0].data_emicao_pis)
             data['prestadores'] = self.serializar_prestador(pessoa_fisica[0])
+            data['custos_prestador'] = self.serializar_custos_prestador(pessoa_fisica[0])
             return data
         
         return None
     
+    def serializar_custos_prestador(self, pessoa_fisica):
+        custos_prestador = CustoPrestador.objects.filter(pessoa_fisica = pessoa_fisica)
+        if custos_prestador:
+            custo_prestador_list = []
+            for custo_prestador in custos_prestador:
+                data = CustoPrestadorSerializer(custo_prestador).data
+                data['data_inicio'] = formatar_data(custo_prestador.data_inicio)
+                data['data_fim'] = formatar_data(custo_prestador.data_fim)
+                custo_prestador_list.append(data)
+            return custo_prestador_list
+        return None
+
     def serializar_pessoa_juridica(self, pessoa):
         pessoa_juridica = PessoaJuridica.objects.filter(pessoa = pessoa)
         if pessoa_juridica:
@@ -190,6 +216,61 @@ class PessoaDetail(APIView):
         
         return None
     
+    def serializar_apropriacao(self, pessoa):
+        apropriacao = Apropriacao.objects.filter(pessoa = pessoa)
+        if apropriacao:
+            apropriacao = apropriacao[0]
+            return ApropriacaoSerializer(apropriacao).data
+        
+        return None
+    
+    def gravar_apropriacao(self, apr, pessoa):
+        
+        campos = ('unidade_administrativa', 'centro_custo', 'centro_resultado', 'conta_gerencial', 'natureza_operacao')
+        if len([campo for campo in campos if campo in apr]) > 0:
+            unidade_administrativa = None
+            if 'unidade_administrativa' in apr and apr['unidade_administrativa']:
+                if apr['unidade_administrativa']['id']:
+                    unidade_administrativa = UnidadeAdministrativa.objects.get(pk=apr['unidade_administrativa']['id'])
+                del apr['unidade_administrativa']
+            
+            centro_custo = None
+            if 'centro_custo' in apr and apr['centro_custo']:
+                if apr['centro_custo']['id']:
+                    centro_custo = CentroCusto.objects.get(pk=apr['centro_custo']['id'])
+                del apr['centro_custo']
+                
+            centro_resultado = None
+            if 'centro_resultado' in apr and apr['centro_resultado']:
+                if apr['centro_resultado']['id']:
+                    centro_resultado = CentroResultado.objects.get(pk=apr['centro_resultado']['id'])
+                del apr['centro_resultado']
+                
+            conta_gerencial = None
+            if 'conta_gerencial' in apr and apr['conta_gerencial']:
+                if apr['conta_gerencial']['id']:
+                    conta_gerencial = ContaGerencial.objects.get(pk=apr['conta_gerencial']['id'])
+                del apr['conta_gerencial']
+                
+            natureza_operacao = None
+            if 'natureza_operacao' in apr and apr['natureza_operacao']:
+                if apr['natureza_operacao']['id']:
+                    natureza_operacao = NaturezaOperacao.objects.get(pk=apr['natureza_operacao']['id'])
+                del apr['natureza_operacao']
+                
+            apropriacao = Apropriacao(**apr)
+            apropriacao.pessoa = pessoa
+            apropriacao.unidade_administrativa = unidade_administrativa
+            apropriacao.centro_custo = centro_custo
+            apropriacao.centro_resultado = centro_resultado
+            apropriacao.conta_gerencial = conta_gerencial
+            apropriacao.natureza_operacao = natureza_operacao
+            apropriacao.save()
+        elif 'id' in apr:
+            apropriacao = Apropriacao.objects.get(apr['id'])
+            apropriacao.delete()
+        
+    
     def gravar_pessoa_fisica(self, pf, pessoa):
        
         prestadores = None
@@ -197,17 +278,38 @@ class PessoaDetail(APIView):
             prestadores = pf['prestadores']
             del pf['prestadores']
              
+        custos_prestador = None
+        if 'custos_prestador' in pf:
+            custos_prestador = pf['custos_prestador']
+            del pf['custos_prestador']
+        
         pessoa_fisica = PessoaFisica(**pf)
 
         pessoa_fisica.pessoa = pessoa
         pessoa_fisica.data_expedicao = converter_string_para_data(pf['data_expedicao'])
-        pessoa_fisica.data_nascimento = converter_string_para_data(pf['data_expedicao'])
+        pessoa_fisica.data_nascimento = converter_string_para_data(pf['data_nascimento'])
         pessoa_fisica.data_emicao_pis = converter_string_para_data(pf['data_emicao_pis'])
         
         pessoa_fisica.save()
         
         self.gravar_prestador(prestadores, pessoa_fisica)
+        self.gravar_custo_prestador(custos_prestador, pessoa_fisica)
     
+    def gravar_custo_prestador(self, custos_prestador, pessoa_fisica):
+        if custos_prestador:
+            for custo_prestador_list in custos_prestador:
+                if 'remover' not in custo_prestador_list or custo_prestador_list['remover'] == False:
+                    custo = CustoPrestador(**custo_prestador_list)
+                    custo.pessoa_fisica = pessoa_fisica
+                    custo.data_inicio = converter_string_para_data(custo_prestador_list['data_inicio'])
+                    if 'data_fim' in custo_prestador_list:
+                        custo.data_fim = converter_string_para_data(custo_prestador_list['data_fim'])
+                    custo.valor = converter_string_para_float(custo_prestador_list['valor'])
+                    custo.save()
+                elif 'id' in custo_prestador_list:
+                    custo = CustoPrestador.objects.get(pk=custo_prestador_list['id'])
+                    custo.delete()
+        
     def gravar_pessoa_juridica(self, pj, pessoa):
         
         contatos = None
@@ -262,8 +364,9 @@ class PessoaDetail(APIView):
                         del p['cargo']
                         
                     usuario = None
-                    if 'usuario' in p and p['usuario'] is not None:
-                        usuario = User.objects.get(pk=p['usuario']['id'])
+                    if 'usuario' in p and p['usuario']:
+                        if p['usuario']['id']:
+                            usuario = User.objects.get(pk=p['usuario']['id'])
                         del p['usuario']
                     
                     prestador = Prestador(**p)
