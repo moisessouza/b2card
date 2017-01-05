@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^api/new/$', view_pessoa.PessoaDetail.as_view()),
     url(r'^api/(?P<pessoa_id>[0-9]+)/$', view_pessoa.PessoaDetail.as_view()),
     url(r'^api/list/$', view_pessoa.PessoaList.as_view()),
+    url(r'^api/pessoajuridica/list', view_pessoa.PessoaJuridicaList.as_view())
 ]

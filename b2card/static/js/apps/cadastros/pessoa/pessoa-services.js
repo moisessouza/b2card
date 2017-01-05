@@ -30,5 +30,9 @@ pessoaservices.service('PessoaService', function($resource){
 			var Pessoa = $resource(BASE_URL + 'cadastros/pessoa/api/:id');
 			return Pessoa.remove({id:pessoa_id}, {}, callback);
 		},
+		buscarpessoasjuridicas: function (callback){
+			var PessoaJuridica = $resource(BASE_URL + 'cadastros/pessoa/api/pessoajuridica/list');
+			return PessoaJuridica.query(callback);
+		}
 	}
 });

@@ -48,10 +48,11 @@ class UserSerializer(serializers.ModelSerializer):
 class PrestadorSerializer(serializers.ModelSerializer):
     usuario = UserSerializer()
     cargo = CargoSerializer()
+    pessoa_juridica = PessoaJuridicaSerializer()
     class Meta:
         model = Prestador
         fields = ('id', 'tipo_prestador', 'cargo', 'data_contratacao', 'data_rescisao', 'data_fim_aditivo', 'data_exame_admissional', 'data_exame_demissional', 'data_ultimo_exame_periodico', 'data_ultima_avaliacao', 
-                  'data_proxima_avaliacao', 'dados_complementares', 'usuario', 'cargo')
+                  'data_proxima_avaliacao', 'dados_complementares', 'usuario', 'cargo', 'pessoa_juridica')
         
 class ContatoSerializer(serializers.ModelSerializer):
     class Meta:

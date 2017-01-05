@@ -202,6 +202,7 @@ class Prestador(models.Model):
     data_proxima_avaliacao = models.DateField(null = True, default = None)
     dados_complementares = models.TextField(null = True, default = None)
     usuario = models.ForeignKey(User, default = None, null = True)
+    pessoa_juridica = models.ForeignKey(PessoaJuridica, default = None, null = True)
     
 class Apropriacao(models.Model):
     pessoa = models.ForeignKey(Pessoa, default = None)

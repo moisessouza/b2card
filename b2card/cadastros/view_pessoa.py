@@ -37,7 +37,13 @@ class PessoaList(APIView):
         pessoas = Pessoa.objects.all()
         data = PessoaSerializer(pessoas, many=True).data
         return Response(data)
-
+    
+class PessoaJuridicaList(APIView):
+    def get(self, request, format=None):
+        pessoas = Pessoa.objects.filter(pessoajuridica__id__isnull=False, tipo='J')
+        data = PessoaSerializer(pessoas, many=True).data
+        return Response(data)
+    
 class PessoaDetail(APIView):
     
     def get(self, request, pessoa_id, format=None):
@@ -224,51 +230,51 @@ class PessoaDetail(APIView):
         return None
     
     def gravar_apropriacao(self, apr, pessoa):
-        
-        campos = ('unidade_administrativa', 'centro_custo', 'centro_resultado', 'conta_gerencial', 'natureza_operacao')
-        if len([campo for campo in campos if campo in apr]) > 0:
-            unidade_administrativa = None
-            if 'unidade_administrativa' in apr and apr['unidade_administrativa']:
-                if apr['unidade_administrativa']['id']:
-                    unidade_administrativa = UnidadeAdministrativa.objects.get(pk=apr['unidade_administrativa']['id'])
-                del apr['unidade_administrativa']
+        if apr:
+            campos = ('unidade_administrativa', 'centro_custo', 'centro_resultado', 'conta_gerencial', 'natureza_operacao')
+            if len([campo for campo in campos if campo in apr]) > 0:
+                unidade_administrativa = None
+                if 'unidade_administrativa' in apr and apr['unidade_administrativa']:
+                    if apr['unidade_administrativa']['id']:
+                        unidade_administrativa = UnidadeAdministrativa.objects.get(pk=apr['unidade_administrativa']['id'])
+                    del apr['unidade_administrativa']
+                
+                centro_custo = None
+                if 'centro_custo' in apr and apr['centro_custo']:
+                    if apr['centro_custo']['id']:
+                        centro_custo = CentroCusto.objects.get(pk=apr['centro_custo']['id'])
+                    del apr['centro_custo']
+                    
+                centro_resultado = None
+                if 'centro_resultado' in apr and apr['centro_resultado']:
+                    if apr['centro_resultado']['id']:
+                        centro_resultado = CentroResultado.objects.get(pk=apr['centro_resultado']['id'])
+                    del apr['centro_resultado']
+                    
+                conta_gerencial = None
+                if 'conta_gerencial' in apr and apr['conta_gerencial']:
+                    if apr['conta_gerencial']['id']:
+                        conta_gerencial = ContaGerencial.objects.get(pk=apr['conta_gerencial']['id'])
+                    del apr['conta_gerencial']
+                    
+                natureza_operacao = None
+                if 'natureza_operacao' in apr and apr['natureza_operacao']:
+                    if apr['natureza_operacao']['id']:
+                        natureza_operacao = NaturezaOperacao.objects.get(pk=apr['natureza_operacao']['id'])
+                    del apr['natureza_operacao']
+                    
+                apropriacao = Apropriacao(**apr)
+                apropriacao.pessoa = pessoa
+                apropriacao.unidade_administrativa = unidade_administrativa
+                apropriacao.centro_custo = centro_custo
+                apropriacao.centro_resultado = centro_resultado
+                apropriacao.conta_gerencial = conta_gerencial
+                apropriacao.natureza_operacao = natureza_operacao
+                apropriacao.save()
+            elif 'id' in apr:
+                apropriacao = Apropriacao.objects.get(apr['id'])
+                apropriacao.delete()
             
-            centro_custo = None
-            if 'centro_custo' in apr and apr['centro_custo']:
-                if apr['centro_custo']['id']:
-                    centro_custo = CentroCusto.objects.get(pk=apr['centro_custo']['id'])
-                del apr['centro_custo']
-                
-            centro_resultado = None
-            if 'centro_resultado' in apr and apr['centro_resultado']:
-                if apr['centro_resultado']['id']:
-                    centro_resultado = CentroResultado.objects.get(pk=apr['centro_resultado']['id'])
-                del apr['centro_resultado']
-                
-            conta_gerencial = None
-            if 'conta_gerencial' in apr and apr['conta_gerencial']:
-                if apr['conta_gerencial']['id']:
-                    conta_gerencial = ContaGerencial.objects.get(pk=apr['conta_gerencial']['id'])
-                del apr['conta_gerencial']
-                
-            natureza_operacao = None
-            if 'natureza_operacao' in apr and apr['natureza_operacao']:
-                if apr['natureza_operacao']['id']:
-                    natureza_operacao = NaturezaOperacao.objects.get(pk=apr['natureza_operacao']['id'])
-                del apr['natureza_operacao']
-                
-            apropriacao = Apropriacao(**apr)
-            apropriacao.pessoa = pessoa
-            apropriacao.unidade_administrativa = unidade_administrativa
-            apropriacao.centro_custo = centro_custo
-            apropriacao.centro_resultado = centro_resultado
-            apropriacao.conta_gerencial = conta_gerencial
-            apropriacao.natureza_operacao = natureza_operacao
-            apropriacao.save()
-        elif 'id' in apr:
-            apropriacao = Apropriacao.objects.get(apr['id'])
-            apropriacao.delete()
-        
     
     def gravar_pessoa_fisica(self, pf, pessoa):
        
@@ -368,6 +374,12 @@ class PessoaDetail(APIView):
                             usuario = User.objects.get(pk=p['usuario']['id'])
                         del p['usuario']
                     
+                    pessoa_juridica = None
+                    if 'pessoa_juridica' in p and p['pessoa_juridica']:
+                        if p['pessoa_juridica']['id']:
+                            pessoa_juridica = PessoaJuridica.objects.get(pk=p['pessoa_juridica']['id'])
+                        del p['pessoa_juridica']
+                        
                     prestador = Prestador(**p)
                     
                     prestador.pessoa_fisica = pessoa_fisica
@@ -394,6 +406,7 @@ class PessoaDetail(APIView):
                         
                     prestador.cargo = cargo
                     prestador.usuario = usuario
+                    prestador.pessoa_juridica = pessoa_juridica
                     
                     prestador.save();
                     

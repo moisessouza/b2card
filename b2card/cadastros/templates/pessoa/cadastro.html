@@ -606,6 +606,16 @@ button.exclude {
 							</div>
 							<div class="col-sm-2">
 								<div class="form-group">
+								 	<label for="coordenador">Empresa</label>
+								 	<div class="input-group">
+									    <select id="empresa" name="empresa" class="form-control" ng-model="prestador.pessoa_juridica.id" ng-options="c.pessoa_juridica.id as c.nome_razao_social for c in $ctrl.listapessoasjuridicas">
+									    	<option value="">Selecione a empresa...</option>
+									    </select>
+								    </div>
+							 	</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="form-group">
 								 	<label for="coordenador">Cargo</label>
 								 	<div class="input-group">
 									    <select id="cargo" name="cargo" class="form-control" ng-model="prestador.cargo.id" ng-options="c.id as c.nome_cargo for c in $ctrl.listacargos">
