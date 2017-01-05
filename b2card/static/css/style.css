@@ -51,7 +51,7 @@ table.table.nested, table.table.nested tr  {
 }
 
 input[ui-mask='99/99/9999'] {
-	width: 85px
+	width: 90px
 }
 
 input[gb-cpf] {
