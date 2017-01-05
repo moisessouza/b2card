@@ -13,7 +13,8 @@ from cadastros.serializers_pessoa import PessoaSerializer, \
     EnderecoPessoaSerializer, TelefonePessoaSerializer, \
     DadosBancariosPessoaSerializer, PessoaFisicaSerializer, PrestadorSerializer, \
     PessoaJuridicaSerializer, ContatoSerializer, TelefoneContatoSerializer, \
-    ApropriacaoSerializer, CustoPrestadorSerializer
+    ApropriacaoSerializer, CustoPrestadorSerializer,\
+    PessoaJuridicaComPessoaSerializer
 from recursos.models import Cargo
 from utils.utils import converter_string_para_data, formatar_data, \
     converter_string_para_float
@@ -40,8 +41,8 @@ class PessoaList(APIView):
     
 class PessoaJuridicaList(APIView):
     def get(self, request, format=None):
-        pessoas = Pessoa.objects.filter(pessoajuridica__id__isnull=False, tipo='J')
-        data = PessoaSerializer(pessoas, many=True).data
+        pessoas = PessoaJuridica.objects.filter(pessoa__tipo='J')
+        data = PessoaJuridicaComPessoaSerializer(pessoas, many=True).data
         return Response(data)
     
 class PessoaDetail(APIView):
@@ -360,12 +361,13 @@ class PessoaDetail(APIView):
     def gravar_prestador(self, prestadores, pessoa_fisica):
         if prestadores:
             for p in prestadores:
-                campos = ('tipo_prestador', 'data_exame_admissional', 'data_exame_demissional', 'data_proxima_avaliacao', 'data_ultima_avaliacao', 'data_ultimo_exame_periodico', 'cargo')
+                campos = ('tipo_prestador', 'pessoa_juridica', 'data_exame_admissional', 'data_exame_demissional', 'data_proxima_avaliacao', 'data_ultima_avaliacao', 'data_ultimo_exame_periodico', 'cargo')
                 if len([campo for campo in campos if campo in p]) > 0:
                     
                     cargo = None
-                    if 'cargo' in p:
-                        cargo = Cargo.objects.get(pk=p['cargo']['id'])
+                    if 'cargo' in p and p['cargo']:
+                        if p['cargo']['id']:
+                            cargo = Cargo.objects.get(pk=p['cargo']['id'])
                         del p['cargo']
                         
                     usuario = None

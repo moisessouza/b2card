@@ -44,7 +44,9 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 	$ctrl.naturezaoperacaolist = NaturezaOperacaoService.buscarnaturezaoperacoes();
 	$ctrl.listacargos = RecursosService.buscarcargos();
 	$ctrl.listacentrocusto = CentroCustoService.buscarcentrocustos();
-	$ctrl.listapessoasjuridicas = PessoaService.buscarpessoasjuridicas();
+	$ctrl.listapessoasjuridicas = PessoaService.buscarpessoasjuridicas(function (data) {
+		console.log(data);
+	});
 	
 	$ctrl.adicionarendereco = function () {
 		if(!$ctrl.pessoa.enderecos){
