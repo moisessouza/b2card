@@ -54,7 +54,7 @@ button.exclude {
 		  <li ng-show="$ctrl.pessoa.tipo=='J'"><a data-toggle="tab" href="#telefonecontato">Contato</a></li>
 		  <li ng-show="$ctrl.pessoa.tipo=='F'"><a data-toggle="tab" href="#dadosprestador">Prestador</a></li>
 		  <li><a data-toggle="tab" href="#apropriacoes">Apropriacao</a></li>
-		  <li><a data-toggle="tab" href="#custoprestador">Custo prestador</a></li>
+		  <li ng-show="$ctrl.pessoa.tipo=='F'"><a data-toggle="tab" href="#custoprestador">Custo prestador</a></li>
 		</ul>
 		<div class="tab-content">
 			<div id="dadoscadastro" class="tab-pane in active">
