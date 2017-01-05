@@ -115,12 +115,12 @@ commons.directive('gbMoney', function () {
 			$scope_message.$apply();
 		},
 		messageinfo: function (msg){
-			messages.clazz = 'label-primary';	
+			messages.clazz = 'alert-warning';	
 			messages.message = msg;
 			$scope_message.$apply();
 		},
 		messagesuccess: function (msg) {
-			messages.clazz = 'label-success';
+			messages.clazz = 'alert-success';
 			messages.message = msg;
 			$scope_message.$apply();
 		}

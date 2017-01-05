@@ -552,13 +552,13 @@ button.exclude {
 									<div class="col-sm-5">
 										<div class="form-group">
 											<label class="control-label" for="id">Data inicio</label>
-											<input type="text" class="form-control" ng-model = "prestador.data_inicio" ui-mask="99/99/9999" model-view-value="true" ng-required="!prestador.remover"/>
+											<input type="text" class="form-control" ng-model = "prestador.data_inicio" ui-mask="99/99/9999" model-view-value="true" ng-change="$ctrl.validardataprestador(prestador)" ng-required="!prestador.remover"/>
 										</div>
 									</div>
 									<div class="col-sm-5">
 										<div class="form-group">
 											<label class="control-label" for="id">Data fim</label>
-											<input type="text" class="form-control" ng-model = "prestador.data_fim" ui-mask="99/99/9999" model-view-value="true"/>
+											<input type="text" class="form-control" ng-model = "prestador.data_fim" ui-mask="99/99/9999" model-view-value="true" ng-change="$ctrl.validardataprestador(prestador)"/>
 										</div>
 									</div>
 								</div>
@@ -642,7 +642,7 @@ button.exclude {
 			</div>
 		</div>
 		<div class="col-sm-12" style="margin-bottom: 15px; padding-left: 0px">
-			<button class="btn btn-primary" ng-click="$ctrl.salvar()" ng-disabled="cadastro.$invalid" >Salvar</button>
+			<button class="btn btn-primary" ng-click="$ctrl.salvar()" ng-disabled="cadastro.$invalid || !$ctrl.datasvalidas" >Salvar</button>
 			<button class="btn btn-danger" ng-click="$ctrl.deletarpessoa()">Deletar</button>
 		</div>
 	</form>

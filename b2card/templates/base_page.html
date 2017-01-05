@@ -52,8 +52,8 @@
 			
 			{%verbatim%}
 			<div id="message-app" ng-controller="MessageController as $ctrl" class="ng-hide" ng-show="$ctrl.show">
-				<div class="alert {{$ctrl.messages.clazz}}" class="ng-hide" ng-show="$ctrl.messages.message">
-				  	{{ $ctrl.messages.message }}
+				<div class="alert {{$ctrl.messages.clazz}}" ng-show="$ctrl.messages.message">
+				  	<strong></strong>{{ $ctrl.messages.message }}
 				</div>
 			</div>
 			{%endverbatim%}

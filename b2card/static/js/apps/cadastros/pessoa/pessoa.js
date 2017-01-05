@@ -2,7 +2,7 @@
 
 var pessoa = angular.module('pessoa', ['pessoa-services', 'centrocusto-services', 'recursos-services', 'commons', 'ui.bootstrap', 'ui.mask']);
 
-pessoa.controller('PessoaController', function ($scope, $window, $uibModal, PessoaService, CentroCustoService, MessageService, RecursosService){
+pessoa.controller('PessoaController', function ($scope, $window, $uibModal, PessoaService, CentroCustoService, MessageService, CommonsService, RecursosService){
 	var $ctrl = this;
 	
 	$ctrl.show = true;
@@ -126,6 +126,57 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 	        //$log.info('Modal dismissed at: ' + new Date());
 	    });
 	};
+	
+	$ctrl.datasvalidas = true;
+	
+	$ctrl.validardataprestador = function (prestador) {
+		
+		if(!prestador.data_inicio){
+			return;
+		}
+		
+		MessageService.clear();
+		$ctrl.datasvalidas = true;
+		
+		var datainicio = CommonsService.stringparadata(prestador.data_inicio);
+		var datafim = prestador.data_fim ? CommonsService.stringparadata(prestador.data_fim) : null;
+		
+		if (datainicio >= datafim) {
+			$ctrl.datasvalidas = false;
+		}
+		
+		if ($ctrl.pessoa.pessoa_fisica.prestadores) {
+			for(let prestador_list of $ctrl.pessoa.pessoa_fisica.prestadores) {
+				if (prestador_list != prestador){
+					var datainiciolist = prestador_list.data_inicio;
+					var datafimlist = prestador_list.data_fim;
+					
+					datainiciolist = CommonsService.stringparadata(datainiciolist)
+					datafimlist = datafimlist ? CommonsService.stringparadata(datafimlist) : null
+							
+					if(!datafimlist){
+						$ctrl.datasvalidas = false;
+					}
+					
+					if (datainicio >= datainiciolist && datainicio <= datafimlist){
+						$ctrl.datasvalidas = false;
+					}
+					
+					if(datafim && datafimlist) {
+						if (datafim >= datainiciolist && datafim <= datafimlist){
+							$ctrl.datasvalidas = false;
+						}
+					}
+					
+				}
+			}
+		}
+		
+		if (!$ctrl.datasvalidas) {
+			MessageService.messageinfo('Certifique-se que as datas de vigência do prestador estão corretas.')
+		}
+		
+	}
 	
 }).controller('ListPessoaController', function ($scope, $window, PessoaService){
 	var $ctrl = this;
