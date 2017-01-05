@@ -11,11 +11,11 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 		$ctrl.pessoa = PessoaService.buscarpessoa(pessoa_id, function (pessoa) {
 			RecursosService.buscarusuariosnaousados(function (data){
 				$ctrl.listausuarios = data;
-				if (pessoa.pessoa_fisica && pessoa.pessoa_fisica.prestador){
+				/*if (pessoa.pessoa_fisica && pessoa.pessoa_fisica.prestador){
 					RecursosService.buscarusuarioprestador(pessoa.pessoa_fisica.prestador.id, function (data){
 						$ctrl.listausuarios = $ctrl.listausuarios.concat(data);
 					})
-				}
+				}*/
 			});
 		});
 	} else {
@@ -54,6 +54,15 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 	
 	$ctrl.remover = function (objeto, lista) {
 		objeto.remover=true;
+	}
+	
+	$ctrl.adicionarprestador = function () {
+		if (!$ctrl.pessoa.pessoa_fisica.prestadores){
+			$ctrl.pessoa.pessoa_fisica.prestadores = [];
+		}
+		
+		$ctrl.pessoa.pessoa_fisica.prestadores.push({});
+		
 	}
 	
 	$ctrl.adicionarcontato = function () {

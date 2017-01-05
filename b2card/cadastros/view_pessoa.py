@@ -85,11 +85,6 @@ class PessoaDetail(APIView):
             pessoa_juridica = data['pessoa_juridica']
             del data['pessoa_juridica']
             
-        prestador = None
-        if 'prestador' in data:
-            prestador = data['prestador']
-            del data['prestador']
-            
         pessoa = Pessoa(**data)
         pessoa.centro_custo = centro_custo
         pessoa.save()
@@ -152,7 +147,7 @@ class PessoaDetail(APIView):
             data['data_expedicao'] = formatar_data(pessoa_fisica[0].data_expedicao)
             data['data_nascimento'] = formatar_data(pessoa_fisica[0].data_nascimento)
             data['data_emicao_pis'] = formatar_data(pessoa_fisica[0].data_emicao_pis)
-            data['prestador'] = self.serializar_prestador(pessoa_fisica[0])
+            data['prestadores'] = self.serializar_prestador(pessoa_fisica[0])
             return data
         
         return None
@@ -178,24 +173,29 @@ class PessoaDetail(APIView):
         return None
     
     def serializar_prestador(self, pessoa_fisica):
-        prestador = Prestador.objects.filter(pessoa_fisica = pessoa_fisica)
-        if prestador:
-            data = PrestadorSerializer(prestador[0]).data
-            data['data_exame_admissional'] = formatar_data(prestador[0].data_exame_admissional)
-            data['data_exame_demissional'] = formatar_data(prestador[0].data_exame_demissional)
-            data['data_ultimo_exame_periodico'] = formatar_data(prestador[0].data_ultimo_exame_periodico)
-            data['data_ultima_avaliacao'] = formatar_data(prestador[0].data_ultima_avaliacao)
-            data['data_proxima_avaliacao'] = formatar_data(prestador[0].data_proxima_avaliacao)
-            return data
+        prestadores = Prestador.objects.filter(pessoa_fisica = pessoa_fisica)
+        if prestadores:
+            prestador_list = []
+            for p in prestadores:
+                data = PrestadorSerializer(p).data
+                data['data_inicio'] = formatar_data(p.data_inicio)
+                data['data_fim'] = formatar_data(p.data_fim)
+                data['data_exame_admissional'] = formatar_data(p.data_exame_admissional)
+                data['data_exame_demissional'] = formatar_data(p.data_exame_demissional)
+                data['data_ultimo_exame_periodico'] = formatar_data(p.data_ultimo_exame_periodico)
+                data['data_ultima_avaliacao'] = formatar_data(p.data_ultima_avaliacao)
+                data['data_proxima_avaliacao'] = formatar_data(p.data_proxima_avaliacao)
+                prestador_list.append(data)
+            return prestador_list
         
         return None
     
     def gravar_pessoa_fisica(self, pf, pessoa):
        
-        prestador = None
-        if 'prestador' in pf:
-            prestador = pf['prestador']
-            del pf['prestador']
+        prestadores = None
+        if 'prestadores' in pf:
+            prestadores = pf['prestadores']
+            del pf['prestadores']
              
         pessoa_fisica = PessoaFisica(**pf)
 
@@ -206,7 +206,7 @@ class PessoaDetail(APIView):
         
         pessoa_fisica.save()
         
-        self.gravar_prestador(prestador, pessoa_fisica)
+        self.gravar_prestador(prestadores, pessoa_fisica)
     
     def gravar_pessoa_juridica(self, pj, pessoa):
         
@@ -250,44 +250,49 @@ class PessoaDetail(APIView):
                     telefone = TelefoneContato.objects.get(pk=i['id'])
                     telefone.delete()
                 
-    def gravar_prestador(self, p, pessoa_fisica):
-        if p:
-            campos = ('tipo_prestador', 'data_exame_admissional', 'data_exame_demissional', 'data_proxima_avaliacao', 'data_ultima_avaliacao', 'data_ultimo_exame_periodico', 'cargo')
-            if len([campo for campo in campos if campo in p]) > 0:
-                
-                cargo = None
-                if 'cargo' in p:
-                    cargo = Cargo.objects.get(pk=p['cargo']['id'])
-                    del p['cargo']
+    def gravar_prestador(self, prestadores, pessoa_fisica):
+        if prestadores:
+            for p in prestadores:
+                campos = ('tipo_prestador', 'data_exame_admissional', 'data_exame_demissional', 'data_proxima_avaliacao', 'data_ultima_avaliacao', 'data_ultimo_exame_periodico', 'cargo')
+                if len([campo for campo in campos if campo in p]) > 0:
                     
-                usuario = None
-                if 'usuario' in p and p['usuario'] is not None:
-                    usuario = User.objects.get(pk=p['usuario']['id'])
-                    del p['usuario']
-                
-                prestador = Prestador(**p)
-                
-                prestador.pessoa_fisica = pessoa_fisica
-                if 'data_exame_admissional' in p:
-                    prestador.data_exame_admissional = converter_string_para_data(p['data_exame_admissional'])
-                if 'data_exame_demissional'in p:
-                    prestador.data_exame_demissional = converter_string_para_data(p['data_exame_demissional'])
-                if 'data_proxima_avaliacao' in p:
-                    prestador.data_proxima_avaliacao = converter_string_para_data(p['data_proxima_avaliacao'])
-                if 'data_ultima_avaliacao' in p:
-                    prestador.data_ultima_avaliacao = converter_string_para_data(p['data_ultima_avaliacao'])
-                if 'data_ultimo_exame_periodico' in p:
-                    prestador.data_ultimo_exame_periodico = converter_string_para_data(p['data_ultimo_exame_periodico'])
+                    cargo = None
+                    if 'cargo' in p:
+                        cargo = Cargo.objects.get(pk=p['cargo']['id'])
+                        del p['cargo']
+                        
+                    usuario = None
+                    if 'usuario' in p and p['usuario'] is not None:
+                        usuario = User.objects.get(pk=p['usuario']['id'])
+                        del p['usuario']
                     
-                prestador.cargo = cargo
-                prestador.usuario = usuario
-                
-                prestador.save();
-                
-            elif 'id' in p:
-                prestador = Prestador.objects.get(pk=p['id'])
-                prestador.delete()
-    
+                    prestador = Prestador(**p)
+                    
+                    prestador.pessoa_fisica = pessoa_fisica
+                    if 'data_inicio' in p:
+                        prestador.data_inicio = converter_string_para_data(p['data_inicio'])
+                    if 'data_fim' in p:
+                        prestador.data_fim = converter_string_para_data(p['data_fim'])
+                    if 'data_exame_admissional' in p:
+                        prestador.data_exame_admissional = converter_string_para_data(p['data_exame_admissional'])
+                    if 'data_exame_demissional'in p:
+                        prestador.data_exame_demissional = converter_string_para_data(p['data_exame_demissional'])
+                    if 'data_proxima_avaliacao' in p:
+                        prestador.data_proxima_avaliacao = converter_string_para_data(p['data_proxima_avaliacao'])
+                    if 'data_ultima_avaliacao' in p:
+                        prestador.data_ultima_avaliacao = converter_string_para_data(p['data_ultima_avaliacao'])
+                    if 'data_ultimo_exame_periodico' in p:
+                        prestador.data_ultimo_exame_periodico = converter_string_para_data(p['data_ultimo_exame_periodico'])
+                        
+                    prestador.cargo = cargo
+                    prestador.usuario = usuario
+                    
+                    prestador.save();
+                    
+                elif 'id' in p:
+                    prestador = Prestador.objects.get(pk=p['id'])
+                    prestador.delete()
+        
     def gravar_telefones(self, telefones, pessoa):
         if telefones:
             for i in telefones:

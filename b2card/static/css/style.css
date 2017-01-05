@@ -6,6 +6,14 @@ table.table{
 	font-size: 12px
 }
 
+button.margin-top {
+	margin-top: 15px
+}
+
+button.margin-botton{
+	margin-bottom: 15px
+}
+
 table.table.nested, table.table.nested tr  {
 	background-color: transparent;
 }

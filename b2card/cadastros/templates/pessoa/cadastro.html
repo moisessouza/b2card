@@ -537,14 +537,38 @@ button.exclude {
 					</div>
 				</div>
 			</div>
-			<div id="dadosprestador" class="tab-pane">
-				<div class="panel panel-primary form-group-sm" ng-show="$ctrl.pessoa.tipo=='F'" style="margin-top: 15px">
+			<div id="dadosprestador" class="tab-pane" ng-show="$ctrl.pessoa.tipo=='F'">
+				<button class="btn btn-primary margin-top margin-botton" ng-click="$ctrl.adicionarprestador()">
+					Adicionar
+				</button>
+				<div class="panel panel-primary form-group-sm" style="margin-top: 15px" ng-repeat="prestador in $ctrl.pessoa.pessoa_fisica.prestadores">
 					<div class="panel-body">
+						<div class="panel panel-primary form-group-sm" style="width: 250px">
+							<div class="panel-heading">
+								Vigência
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-sm-5">
+										<div class="form-group">
+											<label class="control-label" for="id">Data inicio</label>
+											<input type="text" class="form-control" ng-model = "prestador.data_inicio" ui-mask="99/99/9999" model-view-value="true" ng-required="!prestador.remover"/>
+										</div>
+									</div>
+									<div class="col-sm-5">
+										<div class="form-group">
+											<label class="control-label" for="id">Data fim</label>
+											<input type="text" class="form-control" ng-model = "prestador.data_fim" ui-mask="99/99/9999" model-view-value="true"/>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 						<div class="row">
 							<div class="col-sm-2" ng-show="$ctrl.pessoa.tipo=='F'">
 								<div class="form-group">
 									<label class="control-label" for="id">Tipo de prestador</label>
-									<select class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.prestador.tipo_prestador">
+									<select class="form-control" ng-model = "prestador.tipo_prestador">
 										<option value="">Selecione...</option>
 										<option value="S">Sócio</option>
 										<option value="A">Autonomo</option>
@@ -556,38 +580,38 @@ button.exclude {
 							<div class="col-sm-1" style="width: 164px">
 								<div class="form-group">
 									<label class="control-label">Data exame admicional</label>
-									<input class="form-control"  ng-model="$ctrl.pessoa.pessoa_fisica.prestador.data_exame_admissional" ui-mask="99/99/9999" model-view-value="true"> 
+									<input class="form-control"  ng-model="prestador.data_exame_admissional" ui-mask="99/99/9999" model-view-value="true"> 
 								</div>
 							</div>
 							<div class="col-sm-1" style="width: 164px">
 								<div class="form-group">
 									<label class="control-label">Data exame demicional</label>
-									<input class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.prestador.data_exame_demissional" ui-mask="99/99/9999" model-view-value="true"> 
+									<input class="form-control" ng-model="prestador.data_exame_demissional" ui-mask="99/99/9999" model-view-value="true"> 
 								</div>
 							</div>
 							<div class="col-sm-1" style="width: 193px">
 								<div class="form-group">
 									<label class="control-label">Data último exame periódico</label>
-									<input class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.prestador.data_ultimo_exame_periodico" ui-mask="99/99/9999" model-view-value="true"> 
+									<input class="form-control" ng-model="prestador.data_ultimo_exame_periodico" ui-mask="99/99/9999" model-view-value="true"> 
 								</div>
 							</div>
 							<div class="col-sm-1" style="width: 164px">
 								<div class="form-group">
 									<label class="control-label">Data última avaliação</label>
-									<input class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.prestador.data_ultima_avaliacao" ui-mask="99/99/9999" model-view-value="true"> 
+									<input class="form-control" ng-model="prestador.data_ultima_avaliacao" ui-mask="99/99/9999" model-view-value="true"> 
 								</div>
 							</div>
 							<div class="col-sm-1" style="width: 193px">
 								<div class="form-group">
 									<label class="control-label">Data próxima avaliação</label>
-									<input class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.prestador.data_proxima_avaliacao" ui-mask="99/99/9999" model-view-value="true"> 
+									<input class="form-control" ng-model="prestador.data_proxima_avaliacao" ui-mask="99/99/9999" model-view-value="true"> 
 								</div>
 							</div>
 							<div class="col-sm-2">
 								<div class="form-group">
 								 	<label for="coordenador">Cargo</label>
 								 	<div class="input-group">
-									    <select id="cargo" name="cargo" class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.prestador.cargo.id" ng-options="c.id as c.nome_cargo for c in $ctrl.listacargos">
+									    <select id="cargo" name="cargo" class="form-control" ng-model="prestador.cargo.id" ng-options="c.id as c.nome_cargo for c in $ctrl.listacargos">
 									    	<option value="">Selecione um cargo...</option>
 									    </select>
 									    <span class="input-group-btn">
@@ -600,7 +624,7 @@ button.exclude {
 								<div class="form-group">
 								 	<label for="coordenador">Associar usuário</label>
 								 	<div class="input-group">
-									    <select id="cargo" name="cargo" class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.prestador.usuario.id" ng-options="c.id as c.username for c in $ctrl.listausuarios">
+									    <select id="cargo" name="cargo" class="form-control" ng-model="prestador.usuario.id" ng-options="c.id as c.username for c in $ctrl.listausuarios">
 									    	<option value="">Selecione um usuário...</option>
 									    </select>
 								    </div>
@@ -609,7 +633,7 @@ button.exclude {
 							<div class="col-sm-12">
 								<div class="form-group">
 									<label class="control-label">Dados complementares</label>
-									<textarea class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.prestador.dados_complementares"></textarea>
+									<textarea class="form-control" ng-model="prestador.dados_complementares"></textarea>
 								</div>
 							</div>
 						</div>
