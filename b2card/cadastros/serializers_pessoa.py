@@ -9,11 +9,10 @@ from django.contrib.auth.models import User
 from recursos.serializers import CargoSerializer
 
 class PessoaSerializer(serializers.ModelSerializer):
-    centro_custo = CentroCustoSerializer()
     class Meta:
         model=Pessoa
-        fields = ('id', 'nome_razao_social', 'tipo', 'tipo_pessoa', 'centro_custo', 'data_contratacao', 'data_rescisao',
-                   'data_fim_aditivo', 'data_renegociacao_valor', 'dias_faturamento', 'dias_pagamento', 'status')
+        fields = ('id', 'nome_razao_social', 'tipo', 'tipo_pessoa', 
+                  'data_renegociacao_valor', 'dias_faturamento', 'dias_pagamento', 'status')
 
 class EnderecoPessoaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -51,7 +50,7 @@ class PrestadorSerializer(serializers.ModelSerializer):
     cargo = CargoSerializer()
     class Meta:
         model = Prestador
-        fields = ('id', 'tipo_prestador', 'cargo', 'data_exame_admissional', 'data_exame_demissional', 'data_ultimo_exame_periodico', 'data_ultima_avaliacao', 
+        fields = ('id', 'tipo_prestador', 'cargo', 'data_contratacao', 'data_rescisao', 'data_fim_aditivo', 'data_exame_admissional', 'data_exame_demissional', 'data_ultimo_exame_periodico', 'data_ultima_avaliacao', 
                   'data_proxima_avaliacao', 'dados_complementares', 'usuario', 'cargo')
         
 class ContatoSerializer(serializers.ModelSerializer):

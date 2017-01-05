@@ -119,11 +119,7 @@ class PessoaDetail(APIView):
         
         data = PessoaSerializer(pessoa).data
         
-        data['data_contratacao'] = formatar_data(pessoa.data_contratacao)
-        data['data_rescisao'] =  formatar_data(pessoa.data_rescisao)
-        data['data_fim_aditivo'] = formatar_data(pessoa.data_fim_aditivo)
         data['data_renegociacao_valor'] = formatar_data(pessoa.data_renegociacao_valor)
-        
         data['enderecos'] = self.serializar_enderecos(pessoa)
         data['telefones'] = self.serializar_telefones(pessoa)
         data['dados_bancarios'] = self.serializar_dados_bancarios(pessoa)
@@ -206,6 +202,9 @@ class PessoaDetail(APIView):
                 data = PrestadorSerializer(p).data
                 data['data_inicio'] = formatar_data(p.data_inicio)
                 data['data_fim'] = formatar_data(p.data_fim)
+                data['data_contratacao'] = formatar_data(p.data_contratacao)
+                data['data_rescisao'] = formatar_data(p.data_rescisao)
+                data['data_fim_aditivo'] = formatar_data(p.data_fim_aditivo)
                 data['data_exame_admissional'] = formatar_data(p.data_exame_admissional)
                 data['data_exame_demissional'] = formatar_data(p.data_exame_demissional)
                 data['data_ultimo_exame_periodico'] = formatar_data(p.data_ultimo_exame_periodico)
@@ -376,6 +375,12 @@ class PessoaDetail(APIView):
                         prestador.data_inicio = converter_string_para_data(p['data_inicio'])
                     if 'data_fim' in p:
                         prestador.data_fim = converter_string_para_data(p['data_fim'])
+                    if 'data_contratacao' in p:
+                        prestador.data_contratacao = converter_string_para_data(p['data_contratacao'])
+                    if 'data_rescisao' in p:
+                        prestador.data_rescisao = converter_string_para_data(p['data_rescisao'])
+                    if 'data_fim_aditivo' in p:
+                        prestador.data_fim_aditivo = converter_string_para_data(p['data_fim_aditivo'])
                     if 'data_exame_admissional' in p:
                         prestador.data_exame_admissional = converter_string_para_data(p['data_exame_admissional'])
                     if 'data_exame_demissional'in p:

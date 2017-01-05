@@ -91,32 +91,6 @@ button.exclude {
 								</div>
 								<div class="col-sm-2" style="width: 130px">
 									<div class="form-group">
-										<label class="control-label" for="id">Centro de custo</label>
-										<select class="form-control" ng-model = "$ctrl.pessoa.centro_custo.id" ng-options="c.id as c.nome for c in $ctrl.listacentrocusto" required>
-											<option value="">Selecione...</option>
-										</select>
-									</div>
-								</div>
-								<div class="col-sm-2" style="width: 130px">
-									<div class="form-group">
-										<label class="control-label" for="id">Data contratação</label>
-										<input type="text" class="form-control" ng-model = "$ctrl.pessoa.data_contratacao" ui-mask="99/99/9999" model-view-value="true"/>
-									</div>
-								</div>
-								<div class="col-sm-2" style="width: 130px">
-									<div class="form-group">
-										<label class="control-label" for="id">Data da rescisão</label>
-										<input type="text" class="form-control" ng-model = "$ctrl.pessoa.data_rescisao" ui-mask="99/99/9999" model-view-value="true"/>
-									</div>
-								</div>
-								<div class="col-sm-2" style="width: 130px">
-									<div class="form-group">
-										<label class="control-label" for="id">Data fim aditivo</label>
-										<input type="text" class="form-control" ng-model = "$ctrl.pessoa.data_fim_aditivo" ui-mask="99/99/9999" model-view-value="true"/>
-									</div>
-								</div>
-								<div class="col-sm-2" style="width: 130px">
-									<div class="form-group">
 										<label class="control-label" for="id">Renegociação</label>
 										<input type="text" class="form-control" ng-model = "$ctrl.pessoa.data_renegociacao_valor" ui-mask="99/99/9999" model-view-value="true"/>
 									</div>
@@ -582,31 +556,49 @@ button.exclude {
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-1" style="width: 164px">
+							<div class="col-sm-2" style="width: 130px">
+								<div class="form-group">
+									<label class="control-label" for="id">Data contratação</label>
+									<input type="text" class="form-control" ng-model = "prestador.data_contratacao" ui-mask="99/99/9999" model-view-value="true"/>
+								</div>
+							</div>
+							<div class="col-sm-2" style="width: 130px">
+								<div class="form-group">
+									<label class="control-label" for="id">Data da rescisão</label>
+									<input type="text" class="form-control" ng-model = "prestador.data_rescisao" ui-mask="99/99/9999" model-view-value="true"/>
+								</div>
+							</div>
+							<div class="col-sm-2" style="width: 130px" ng-show="prestador.tipo_prestador == 'A' || prestador.tipo_prestador == 'P'">
+								<div class="form-group">
+									<label class="control-label" for="id">Data fim aditivo</label>
+									<input type="text" class="form-control" ng-model = "prestador.data_fim_aditivo" ui-mask="99/99/9999" model-view-value="true"/>
+								</div>
+							</div>
+							<div class="col-sm-1" style="width: 164px" ng-show="prestador.tipo_prestador == 'F'">
 								<div class="form-group">
 									<label class="control-label">Data exame admicional</label>
 									<input class="form-control"  ng-model="prestador.data_exame_admissional" ui-mask="99/99/9999" model-view-value="true"> 
 								</div>
 							</div>
-							<div class="col-sm-1" style="width: 164px">
+							<div class="col-sm-1" style="width: 164px" ng-show="prestador.tipo_prestador == 'F'">
 								<div class="form-group">
 									<label class="control-label">Data exame demicional</label>
 									<input class="form-control" ng-model="prestador.data_exame_demissional" ui-mask="99/99/9999" model-view-value="true"> 
 								</div>
 							</div>
-							<div class="col-sm-1" style="width: 193px">
+							<div class="col-sm-1" style="width: 193px" ng-show="prestador.tipo_prestador == 'F'">
 								<div class="form-group">
 									<label class="control-label">Data último exame periódico</label>
 									<input class="form-control" ng-model="prestador.data_ultimo_exame_periodico" ui-mask="99/99/9999" model-view-value="true"> 
 								</div>
 							</div>
-							<div class="col-sm-1" style="width: 164px">
+							<div class="col-sm-1" style="width: 164px" ng-show="prestador.tipo_prestador == 'F'">
 								<div class="form-group">
 									<label class="control-label">Data última avaliação</label>
 									<input class="form-control" ng-model="prestador.data_ultima_avaliacao" ui-mask="99/99/9999" model-view-value="true"> 
 								</div>
 							</div>
-							<div class="col-sm-1" style="width: 193px">
+							<div class="col-sm-1" style="width: 193px" ng-show="prestador.tipo_prestador == 'F'">
 								<div class="form-group">
 									<label class="control-label">Data próxima avaliação</label>
 									<input class="form-control" ng-model="prestador.data_proxima_avaliacao" ui-mask="99/99/9999" model-view-value="true"> 
