@@ -21,7 +21,7 @@ from . import views
 app_name='faturamento'
 
 urlpatterns = [
-    url(r'^contasreceber', views.contas_receber_prevista, name="contasreceber"),
+    url(r'^contasreceber/$', views.contas_receber_prevista, name="contasreceber"),
     url(r'^api/parcela/new/$', views.ParcelaList.as_view()),
     url(r'^api/parcela/demanda/(?P<demanda_id>[0-9]+)/$', views.buscar_parcela_por_demanda_id),
     url(r'^api/parcela/fase/tipohora/(?P<demanda_id>[0-9]+)/$', views.buscar_tipo_hora_por_fases),
