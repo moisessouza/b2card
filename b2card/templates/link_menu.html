@@ -23,32 +23,46 @@
 							Funcionários
 						</a>
 						{%endcheck_permittion %}
+						{% check_permittion 'cadastros:tipohora' %}
 						<a href="{% url 'cadastros:tipohora' %}">
 							Tipo hora
 						</a>
+						{%endcheck_permittion %}
 						{% check_permittion 'cadastros:centrocusto' %}
 						<a href="{% url 'cadastros:centrocusto' %}">
 							Centros de custo
 						</a>
 						{%endcheck_permittion%}
+						{% check_permittion 'cadastros:centroresultado' %}
 						<a href="{% url 'cadastros:centroresultado' %}">
 							Centro de resultado
 						</a>
+						{%endcheck_permittion%}
+						{% check_permittion 'cadastros:contagerencial' %}
 						<a href="{% url 'cadastros:contagerencial' %}">
 							Conta gerencial
 						</a>
+						{%endcheck_permittion%}
+						{% check_permittion 'cadastros:naturezaoperacao' %}
 						<a href="{% url 'cadastros:naturezaoperacao' %}">
 							Natureza da operação
 						</a>
+						{%endcheck_permittion%}
+						{% check_permittion 'cadastros:valorhora' %}
 						<a href="{% url 'cadastros:valorhora' %}">
 							Valor hora
 						</a>
+						{%endcheck_permittion%}
+						{% check_permittion 'cadastros:unidadeadministrativa' %}
 						<a href="{% url 'cadastros:unidadeadministrativa' %}">
 							Unidade administrativa
 						</a>
+						{%endcheck_permittion%}
+						{% check_permittion 'cadastros:pessoa' %}
 						<a href="{% url 'cadastros:pessoa' %}">
 							Cadastro único
 						</a>
+						{%endcheck_permittion%}
 					</li>
         		</ul>
 			</li>
@@ -56,22 +70,27 @@
 				<a class="dropdown-toggle" data-toggle="dropdown" href="#">Financeiro
 				<span class="caret"></span></a>
 				<ul class="dropdown-menu">
-          			<li>
+          			<li>{% check_permittion 'faturamento:contasreceber' %}
           				<a href="{% url 'faturamento:contasreceber' %}">
 							Faturamento previsto
 						</a>
+						{%endcheck_permittion%}
           			</li>
           		</ul>
           	</li>
 			<li>
+				{% check_permittion 'clientes:inicial' %}
 				<a href="{% url 'clientes:inicial' %}">
 					Clientes
 				</a>
+				{%endcheck_permittion%}
 			</li>
 			<li>
+				{% check_permittion 'demandas:inicial' %}
 				<a href="{% url 'demandas:inicial' %}">
 					Demandas
 				</a>
+				{%endcheck_permittion%}
 			</li>
 			<li>
 				<a href="{% url 'autenticacao:logout_view' %}">
@@ -81,3 +100,11 @@
 		</ul>
  	</div>
  </nav>
+ 
+<script type="text/javascript">
+	$('nav li.dropdown').each(function(i,e){
+		if ($(e).find('.dropdown-menu li a').length == 0){
+			$(e).remove();
+		}
+	});
+ </script>
