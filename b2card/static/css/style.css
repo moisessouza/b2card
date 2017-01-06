@@ -62,3 +62,7 @@ form .ng-invalid {
     border:1px solid #f00;
     background-color: #FFA;
 }
+
+.display-none {
+	display: none
+}
