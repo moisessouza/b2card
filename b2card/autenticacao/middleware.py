@@ -32,7 +32,8 @@ class AuthenticationB2CardMiddleware(object):
                 if request.user.is_superuser:
                     response = self.get_response(request)
                 else:
-                    grupo_urls = GrupoURL.objects.filter(grupo__user__id=request.user.id)
+                    grupo_urls = GrupoURL.objects.filter(grupo__user__id=request.user.id, 
+                                grupo__user__prestador__pessoa_fisica__pessoa__status='A')
                     
                     has_permission = False
                     

@@ -1,5 +1,6 @@
 <meta charset="utf-8">
 
+{% load check_permittion %}
 <nav class="navbar">
 	<div class="container-fluid">
 		<div class="navbar-header">
@@ -17,15 +18,19 @@
 				<span class="caret"></span></a>
 				<ul class="dropdown-menu">
           			<li>
+          				{% check_permittion 'recursos:inicial' %}
 						<a href="{% url 'recursos:inicial' %}">
 							Funcionários
 						</a>
+						{%endcheck_permittion %}
 						<a href="{% url 'cadastros:tipohora' %}">
 							Tipo hora
 						</a>
+						{% check_permittion 'cadastros:centrocusto' %}
 						<a href="{% url 'cadastros:centrocusto' %}">
 							Centros de custo
 						</a>
+						{%endcheck_permittion%}
 						<a href="{% url 'cadastros:centroresultado' %}">
 							Centro de resultado
 						</a>

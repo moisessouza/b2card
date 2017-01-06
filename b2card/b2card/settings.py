@@ -15,7 +15,7 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-URL_PER = ['/autenticacao/', '/autenticacao/login/', '/autenticacao/not_permitted/']
+URL_PER = ['/autenticacao/', '/autenticacao/login/', '/autenticacao/logout/','/autenticacao/not_permitted/']
 BASE_URL = '/'
 
 # Quick-start development settings - unsuitable for production
