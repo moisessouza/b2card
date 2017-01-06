@@ -23,7 +23,8 @@ app_name='autenticacao'
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^login/$', views.executar, name='login'),
-    url(r'^logout/$', views.logout_view, name='logout_view')
+    url(r'^logout/$', views.logout_view, name='logout_view'),
+    url(r'^not_permitted/$', views.not_permitted, name='not_permitted')
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

@@ -4,6 +4,7 @@
 import os
 from django.shortcuts import redirect
 import importlib
+from autenticacao.models import GrupoURL
 
 class AuthenticationB2CardMiddleware(object):
 
@@ -21,12 +22,30 @@ class AuthenticationB2CardMiddleware(object):
         if request.path in self.urls_permited:
             return self.get_response(request)
 
-
+        if '/api/' in request.path: 
+            return self.get_response(request)
+        
         if request.user.is_authenticated:
             if request.path == self.base_url:
                 response = redirect('inicial:inicial')
             else:
-                response = self.get_response(request)
+                if request.user.is_superuser:
+                    response = self.get_response(request)
+                else:
+                    grupo_urls = GrupoURL.objects.filter(grupo__user__id=request.user.id)
+                    
+                    has_permission = False
+                    
+                    for i in grupo_urls:
+                        if i.url in request.path:
+                            has_permission = True
+                            break
+                        
+                    if has_permission:
+                        response = self.get_response(request)
+                    else:
+                        response = redirect('autenticacao:not_permitted')
+                    
         # Code to be executed for each request/response after
         # the view is called.
 

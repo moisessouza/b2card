@@ -21,3 +21,6 @@ def executar(request):
 def logout_view(request):
     logout(request)
     return redirect('autenticacao:index')
+
+def not_permitted(request):
+    return render(request, 'autenticacao/not_permitted.html')
