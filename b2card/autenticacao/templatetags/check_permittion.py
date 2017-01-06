@@ -35,7 +35,14 @@ class CheckNode(template.Node):
         if user.is_superuser:
             has_permission = True
         else:
-            grupo_urls = CACHE_GRUPOS[user.id]
+            grupo_urls = None
+            if user.id in CACHE_GRUPOS:
+                grupo_urls = CACHE_GRUPOS[user.id]
+            else:
+                grupo_urls = GrupoURL.objects.filter(grupo__user__id=user.id, 
+                    grupo__user__prestador__pessoa_fisica__pessoa__status='A')
+                CACHE_GRUPOS[user.id] = grupo_urls
+            
             url = resolve_url(self.url_name)
             for i in grupo_urls:
                 if i.url in url:
