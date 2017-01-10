@@ -44,10 +44,10 @@ def not_permitted(request):
     return render(request, 'autenticacao/not_permitted.html')
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def verificar_permissoes_abas(request):
     
-    grupo_urls = GrupoURL.objects.filter(grupo__user__id=request.user.id, url__contains='#')
+    grupo_urls = GrupoURL.objects.filter(grupo__user__id=request.user.id, url__in=request.data)
     
     abas = []
     

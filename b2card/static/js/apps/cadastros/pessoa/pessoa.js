@@ -43,7 +43,11 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 	$ctrl.listacargos = RecursosService.buscarcargos();
 	$ctrl.listacentrocusto = CentroCustoService.buscarcentrocustos();
 	$ctrl.listapessoasjuridicas = PessoaService.buscarpessoasjuridicas();
-	$ctrl.listaabasautorizadas = AutenticationService.buscarabasautorizadas(function (){
+	
+	var abas = ['#dadoscadastro', '#endereco', '#telefone', '#dadosbancarios', 
+		'#telefonecontato', '#dadosprestador', '#apropriacoes', '#custoprestador']
+	
+	$ctrl.listaabasautorizadas = AutenticationService.buscarabasautorizadas(abas, function (){
 		$ctrl.show = true;
 	});
 	

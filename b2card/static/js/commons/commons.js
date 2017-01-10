@@ -127,9 +127,11 @@ commons.directive('gbMoney', function () {
 	}
 }).service('AutenticationService', function ($resource){
 	return {
-		buscarabasautorizadas(callback){
-			var Autentication = $resource(BASE_URL + 'autenticacao/api/permissoesaba/');
-			return Autentication.query(callback);
+		buscarabasautorizadas(abas, callback){
+			var Autentication = $resource(BASE_URL + 'autenticacao/api/permissoesaba/', {}, {
+				'set': {method:'POST', isArray:true}
+			});
+			return Autentication.set({}, abas, callback);
 		}
 	}
 });

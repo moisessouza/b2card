@@ -335,7 +335,11 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	$ctrl.listafuncionarios = DemandaService.buscarfuncionarios();
 	$ctrl.listacentroresultados = CentroResultadoService.buscarcentroresultados();
 	$ctrl.listaunidadeadministrativas = UnidadeAdministrativaService.buscarunidadeadministrativas();
-	$ctrl.listaabasautorizadas = AutenticationService.buscarabasautorizadas();
+	
+	var abas = ['#dadosdemanda', '#orcamento', '#atividades', '#itens_faturamento', 
+		'#proposta', '#tarefas', '#observacoes', '#ocorrencias']
+	
+	$ctrl.listaabasautorizadas = AutenticationService.buscarabasautorizadas(abas);
 	
 	$ctrl.changevalorhora = function (itemfase) {
 		itemfase.valor_selecionado = CommonsService.formatarnumero(0);
