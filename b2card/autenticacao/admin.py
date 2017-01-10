@@ -5,6 +5,6 @@ from autenticacao.models import GrupoURL
 class GrupoUrlAdmin(admin.ModelAdmin):
     list_display = ('url', 'grupo')
     ordering = ('url',)
-    list_filter = ('url', 'grupo__name')
+    list_filter = ('grupo__name', 'url')
     
 admin.site.register(GrupoURL, GrupoUrlAdmin)
