@@ -110,18 +110,17 @@
 	</div>
 	
 	<ul class="nav nav-tabs">
-	  <li class="active"><a data-toggle="tab" href="#dadosdemanda">Dados da demanda</a></li>
-	  <li><a data-toggle="tab" href="#orcamento">Orçamento</a></li>
-	  <li><a data-toggle="tab" href="#atividades">Atividades</a></li>
-	  <li><a data-toggle="tab" href="#itens_faturamento">Itens de faturamento da demanda</a></li>
-	  <li><a data-toggle="tab" href="#proposta">Proposta</a></li>
-	  <li><a data-toggle="tab" href="#tarefas">Tarefas</a></li>
-	  <li><a data-toggle="tab" href="#observacoes">Observações</a></li>
-	  <li><a data-toggle="tab" href="#ocorrencias">Ocorrências</a></li>
-	  <!-- <li><a data-toggle="tab" href="#previsaofaturamento" ng-show="$ctrl.demanda.parcelas && $ctrl.demanda.parcelas.length > 0">Previsão de faturamento</a></li>  -->
+	  <li class="active" ng-show="$ctrl.verificardisponibilidadeaba('#dadosdemanda')"><a data-toggle="tab" href="#dadosdemanda">Dados da demanda</a></li>
+	  <li ng-show="$ctrl.verificardisponibilidadeaba('#orcamento')"><a data-toggle="tab" href="#orcamento">Orçamento</a></li>
+	  <li ng-show="$ctrl.verificardisponibilidadeaba('#atividades')"><a data-toggle="tab" href="#atividades">Atividades</a></li>
+	  <li ng-show="$ctrl.verificardisponibilidadeaba('#itens_faturamento')"><a data-toggle="tab" href="#itens_faturamento">Itens de faturamento da demanda</a></li>
+	  <li ng-show="$ctrl.verificardisponibilidadeaba('#proposta')"><a data-toggle="tab" href="#proposta">Proposta</a></li>
+	  <li ng-show="$ctrl.verificardisponibilidadeaba('#tarefas')"><a data-toggle="tab" href="#tarefas">Tarefas</a></li>
+	  <li ng-show="$ctrl.verificardisponibilidadeaba('#observacoes')"><a data-toggle="tab" href="#observacoes">Observações</a></li>
+	  <li ng-show="$ctrl.verificardisponibilidadeaba('#ocorrencias')"><a data-toggle="tab" href="#ocorrencias">Ocorrências</a></li>
 	</ul>
 	<div class="tab-content">
-		<div id="dadosdemanda" class="tab-pane in active">
+		<div id="dadosdemanda" ng-if="$ctrl.verificardisponibilidadeaba('#dadosdemanda')" class="tab-pane in active">
 			<form name="demanda">
 					
 				<div class="panel panel-primary form-group-sm margin-top">
@@ -196,7 +195,7 @@
 				</div>
 			</form>
 		</div>
-		<div id="orcamento" class="tab-pane">
+		<div id="orcamento" ng-if="$ctrl.verificardisponibilidadeaba('#orcamento')" class="tab-pane">
 			<form name="orcamento">
 				<div class="panel panel-primary margin-top">
 					<div class="panel-heading">
@@ -347,7 +346,7 @@
 				
 			</form>
 		</div>
-		<div id="atividades" class="tab-pane">
+		<div id="atividades" ng-if="$ctrl.verificardisponibilidadeaba('#atividades')" class="tab-pane">
 			<div class="row">
 				<div class="col-sm-8">
 					<form name="atividade">
@@ -473,7 +472,7 @@
 			</table>
 			
 		</div>
-  		<div id="itens_faturamento" class="tab-pane">
+  		<div id="itens_faturamento" ng-if="$ctrl.verificardisponibilidadeaba('#itens_faturamento')" class="tab-pane">
 			<button type="button" class="btn btn-primary margin" ng-click="$ctrl.adicionaritem()">
 		  		<span class="glyphicon glyphicon-plus"></span> Adicionar item
 			</button>
@@ -598,7 +597,7 @@
 			</form>
 		</div>
 		
-		<div id="proposta" class="tab-pane">
+		<div id="proposta" ng-if="$ctrl.verificardisponibilidadeaba('#proposta')" class="tab-pane">
 		   	
 		   	<button type="button" class="btn btn-primary margin" ng-click="$ctrl.adicionarproposta()">
 		  		<span class="glyphicon glyphicon-plus"></span> Adicionar proposta
@@ -657,7 +656,7 @@
 			</form>
 		</div>
 		
-		<div id="tarefas" class="tab-pane">
+		<div id="tarefas" ng-if="$ctrl.verificardisponibilidadeaba('#tarefas')" class="tab-pane">
 		
 			<button type="button" class="btn btn-primary margin" ng-click="$ctrl.adicionartarefa()">
 		  		<span class="glyphicon glyphicon-plus"></span> Adicionar tarefa
@@ -860,7 +859,7 @@
 			</form>
 		</div>
 	
-		<div id="observacoes" class="tab-pane">
+		<div id="observacoes" ng-if="$ctrl.verificardisponibilidadeaba('#observacoes')" class="tab-pane">
 			<button type="button" class="btn btn-primary margin" ng-click="$ctrl.adicionarobservacao()">
 		  		<span class="glyphicon glyphicon-plus"></span> Adicionar observação
 			</button>
@@ -890,7 +889,7 @@
 				</tbody>
 			</table>
 		</div>
-		<div id="ocorrencias" class="tab-pane">
+		<div id="ocorrencias" ng-if="$ctrl.verificardisponibilidadeaba('#ocorrencias')" class="tab-pane">
 		
 			<button type="button" class="btn btn-primary margin" ng-click="$ctrl.adicionarocorrencia()">
 		  		<span class="glyphicon glyphicon-plus"></span> Adicionar ocorrência
@@ -994,143 +993,6 @@
 				</div>
 			</form>
 		</div>
-		<!--  
-		<div id="previsaofaturamento" class="tab-pane" ng-show="$ctrl.demanda.parcelas && $ctrl.demanda.parcelas.length > 0">
-
-			<div class="panel panel-primary form-group-sm">
-				<div class="panel-body">
-					<div class="row">
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label for="total_orcamento">Total orcamento</label>
-								<input type="text" id="total_orcamento" name="total_orcamento" ng-model="$ctrl.demanda.orcamento.total_orcamento" class="form-control" disabled/>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label for="total_orcamento">Valor restante</label>
-								<input type="text" id="total_orcamento" name="total_orcamento" ng-model="$ctrl.parcela.valor_restante" class="form-control" disabled/>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-			<div class="panel panel-primary form-group-sm" ng-show="$ctrl.demanda.tipo_parcela=='M'">
-				<div class="panel-body">
-					<div class="col-sm-3" ng-repeat="valorhora_hora in $ctrl.valorhoras_horas">
-						<div class="input-group" >
-							<span class="input-group-addon" for="tipo">{{valorhora_hora.fase__itemfase__valor_hora__descricao}}</span> 
-						    <input type="number" value="20" ng-model="valorhora_hora.horas_restantes" class="form-control" disabled/>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<button type="button" class="btn btn-default margin" ng-click="$ctrl.adicionarparcela()">Adicionar parcela</button>
-			
-			<table class="table table-sm table-bordered table-striped table-highlight" ng-show="$ctrl.demanda.tipo_parcela == 'P'">
-				<thead>
-					<tr class="active">
-						<th>Descrição</th>
-						<th>Data previsto parcela</th>
-						<th>Valor da parcela</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="parcela in $ctrl.demanda.parcelas" ng-show="!parcela.remover">
-						<td class="col-sm-4">
-							<input type="text" id="descricao" ng-model="parcela.descricao" name="descricao" maxlength="30" class="form-control"/>
-						</td>
-						<td class="col-sm-4">
-							<input type="text" id="data_previsto_parcela" ng-model="parcela.data_previsto_parcela" name="data_previsto_parcela" maxlength="30" ui-mask="99/99/9999" model-view-value="true" class="form-control"/>
-						</td>
-						<td class="col-sm-4">
-							<input type="text" id="valor_parcela" ng-model="parcela.valor_parcela" name="valor_parcela" ng-change="$ctrl.calcularvalorrestante(); $ctrl.calcularnumerohorasparcelas();" maxlength="30" gb-money class="form-control"/>
-						</td>
-						<td>
-							<button type="button" class="btn btn-default" ng-click="$ctrl.remover(parcela, $ctrl.calcularvalorrestante)">
-								<span class="glyphicon glyphicon-trash"></span>
-							</button>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			
-			<table class="table table-sm table-bordered table-striped table-highlight margin-top"  ng-show="$ctrl.demanda.tipo_parcela == 'M'">
-				<thead>
-					<tr class="active">
-						<th class="col-sm-1">Descrição</th>
-						<th class="col-sm-1" title="Data de Previsão da parcela">Previsão</th>
-						<th>Medições</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="parcela in $ctrl.demanda.parcelas" ng-show="!parcela.remover">
-						<td>
-							<input type="text" id="descricao" ng-model="parcela.descricao" name="descricao" maxlength="30" class="form-control" ng-required="$ctrl.demanda.tipo_parcela == 'M'"/>
-						</td>
-						<td>
-							<input type="text" id="data_prevista" ng-model="parcela.data_previsto_parcela" name="data_prevista" maxlength="30" ui-mask="99/99/9999" model-view-value="true"  title="Data de Previsão da parcela" class="form-control" ng-required="$ctrl.demanda.tipo_parcela == 'M'"/>
-						</td>
-						<td>
-							<button type="button" class="btn btn-default" ng-click="$ctrl.adicionarmedicao(parcela)">
-								Adicionar
-							</button>
-							<table class="table table-sm table-bordered">
-								<thead>
-									<tr>
-										<th class="col-sm-3">Tipo hora</th>
-										<th class="col-sm-2">Valor hora</th>
-										<th class="col-sm-2">Quantidade</th>
-										<th>Valor</th>
-										<th class="col-sm-1"></th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr ng-repeat="medicao in parcela.medicoes" ng-show="!medicao.remover">
-										<td>
-											<select id="valorhora" name="valorhora" ng-model="medicao.valor_hora.id" class="form-control" ng-change="$ctrl.changevalorhoraparcela(medicao); $ctrl.changequantidadehorasparcela(medicao);" ng-options="v.id as v.descricao for v in $ctrl.listavalorhora" ng-required="$ctrl.demanda.tipo_parcela == 'M'">
-									    		<option value="">Selecione um tipo...</option>
-									    	</select>
-										</td>
-										<td>
-											<input type="text" id="valor" ng-model="medicao.valor" name="valor" class="form-control" value="2,00" disabled/>
-										</td>
-										<td>
-											<input type="number" id="quantidade_horas" ng-model="medicao.quantidade_horas" ng-change="$ctrl.changequantidadehorasparcela(medicao)" name="quantidade_horas" class="form-control" ng-required="$ctrl.demanda.tipo_parcela == 'M'"/>
-										</td>
-										<td>
-											<input type="text" id="valor_total" name="valor_total" ng-model="medicao.valor_total" class="form-control" value="30,00" disabled/>
-										</td>
-										<td>
-											<button type="button" class="btn btn-default" ng-click="$ctrl.remover(medicao, $ctrl.calcularvalortotalparcelas); $ctrl.calcularhorasrestantesparcela();">
-												<span class="glyphicon glyphicon-trash"></span>
-											</button>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-							
-							<div class="form-group form-group-sm col-sm-5">
-								<label for="descricao">Valor total</label> 
-							    <input type="text" id="descricao" name="descricao" ng-model="parcela.valor_parcela" class="form-control" disabled ng-required="$ctrl.demanda.tipo_parcela == 'M'"/>
-							</div>
-							
-						</td>
-						<td>
-							<button type="button" class="btn btn-default" ng-click="$ctrl.remover(parcela, $ctrl.calcularvalorrestante); $ctrl.calcularhorasrestantesparcela();">
-								<span class="glyphicon glyphicon-trash"></span>
-							</button>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		-->
-		
 	</div>
 	
 	

@@ -47,17 +47,17 @@ button.exclude {
 	
 	<form name="cadastro">
 		<ul class="nav nav-tabs">
-		  <li class="active"><a data-toggle="tab" href="#dadoscadastro">Geral</a></li>
-		  <li><a data-toggle="tab" href="#endereco">Endereco</a></li>
-		  <li><a data-toggle="tab" href="#telefone">Telefone</a></li>
-		  <li><a data-toggle="tab" href="#dadosbancarios">Dados bancários</a></li>
-		  <li ng-show="$ctrl.pessoa.tipo=='J'"><a data-toggle="tab" href="#telefonecontato">Contato</a></li>
-		  <li ng-show="$ctrl.pessoa.tipo=='F'"><a data-toggle="tab" href="#dadosprestador">Prestador</a></li>
-		  <li><a data-toggle="tab" href="#apropriacoes">Apropriação</a></li>
-		  <li ng-show="$ctrl.pessoa.tipo=='F'"><a data-toggle="tab" href="#custoprestador">Custo prestador</a></li>
+		  <li class="active" ng-show="$ctrl.verificardisponibilidadeaba('#dadoscadastro')"><a data-toggle="tab" href="#dadoscadastro">Geral</a></li>
+		  <li ng-show="$ctrl.verificardisponibilidadeaba('#endereco')"><a data-toggle="tab" href="#endereco" >Endereco</a></li>
+		  <li ng-show="$ctrl.verificardisponibilidadeaba('#telefone')"><a data-toggle="tab" href="#telefone">Telefone</a></li>
+		  <li ng-show="$ctrl.verificardisponibilidadeaba('#dadosbancarios')"><a data-toggle="tab" href="#dadosbancarios">Dados bancários</a></li>
+		  <li ng-show="$ctrl.pessoa.tipo=='J' && $ctrl.verificardisponibilidadeaba('#telefonecontato')"><a data-toggle="tab" href="#telefonecontato">Contato</a></li>
+		  <li ng-show="$ctrl.pessoa.tipo=='F' && $ctrl.verificardisponibilidadeaba('#dadosprestador')"><a data-toggle="tab" href="#dadosprestador">Prestador</a></li>
+		  <li ng-show="$ctrl.verificardisponibilidadeaba('#apropriacoes')"><a data-toggle="tab" href="#apropriacoes">Apropriação</a></li>
+		  <li ng-show="$ctrl.pessoa.tipo=='F'  && $ctrl.verificardisponibilidadeaba('#custoprestador')"><a data-toggle="tab" href="#custoprestador">Custo prestador</a></li>
 		</ul>
 		<div class="tab-content">
-			<div id="dadoscadastro" class="tab-pane in active">
+			<div id="dadoscadastro" ng-if="$ctrl.verificardisponibilidadeaba('#dadoscadastro')" class="tab-pane in active">
 				<div class="panel panel-primary form-group-sm margin-top"style="margin-top: 15px">
 					<div class="panel-body">
 						<div>
@@ -313,7 +313,7 @@ button.exclude {
 					</div>
 				</div>
 			</div>
-			<div id="endereco" class="tab-pane">
+			<div id="endereco" ng-if="$ctrl.verificardisponibilidadeaba('#endereco')" class="tab-pane">
 				<div class="panel panel-primary form-group-sm" style="margin-top: 15px">
 					<div class="panel-body">
 						<button class="btn btn-sm btn-primary" style="margin-bottom: 8px" ng-click="$ctrl.adicionarendereco()">Adicionar</button>
@@ -370,7 +370,7 @@ button.exclude {
 					</div>
 				</div>
 			</div>
-			<div id="telefone" class="tab-pane">
+			<div id="telefone" ng-if="$ctrl.verificardisponibilidadeaba('#telefone')" class="tab-pane">
 				<div class="col-sm-3">
 					<div class="panel panel-primary form-group-sm" style="margin-top: 15px">
 						<div class="panel-body">
@@ -408,7 +408,7 @@ button.exclude {
 					</div>
 				</div>
 			</div>
-			<div id="dadosbancarios" class="tab-pane">
+			<div id="dadosbancarios" ng-if="$ctrl.verificardisponibilidadeaba('#dadosbancarios')" class="tab-pane">
 				<div class="col-sm-9">
 					<div class="panel panel-primary form-group-sm" style="margin-top: 15px">
 						<div class="panel-body">
@@ -458,7 +458,7 @@ button.exclude {
 					</div>
 				</div>
 			</div>
-			<div id="telefonecontato" class="tab-pane">
+			<div id="telefonecontato" ng-if="$ctrl.verificardisponibilidadeaba('#telefonecontato')" class="tab-pane">
 				<div class="row">
 					<div class="col-sm-3">
 						<button class="btn btn-primary" ng-click="$ctrl.adicionarcontato()" style="margin: 15px 0px 15px 0px">Adicionar</button>
@@ -516,7 +516,7 @@ button.exclude {
 					</div>
 				</div>
 			</div>
-			<div id="dadosprestador" class="tab-pane" ng-show="$ctrl.pessoa.tipo=='F'">
+			<div id="dadosprestador" ng-if="$ctrl.verificardisponibilidadeaba('#dadosprestador')" class="tab-pane" ng-show="$ctrl.pessoa.tipo=='F'">
 				<button class="btn btn-primary margin-top margin-botton" ng-click="$ctrl.adicionarprestador()">
 					Adicionar
 				</button>
@@ -647,7 +647,7 @@ button.exclude {
 					</div>
 				</div>
 			</div>
-			<div id="apropriacoes" class="tab-pane">
+			<div id="apropriacoes" ng-if="$ctrl.verificardisponibilidadeaba('#apropriacoes')" class="tab-pane">
 				<div class="panel panel-primary form-group-sm" style="margin-top: 15px">
 					<div class="panel-body">
 						<div class="row">
@@ -679,7 +679,7 @@ button.exclude {
 					</div>
 				</div>
 			</div>
-			<div id="custoprestador" class="tab-pane">
+			<div id="custoprestador" ng-if="$ctrl.verificardisponibilidadeaba('#custoprestador')" class="tab-pane">
 				<div class="row">
 					<div class="col-sm-3">
 						<button class="btn btn-primary margin-top margin-botton margin-left" ng-click="$ctrl.adicionarcustoprestador()">Adicionar</button>

@@ -24,7 +24,8 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^login/$', views.executar, name='login'),
     url(r'^logout/$', views.logout_view, name='logout_view'),
-    url(r'^not_permitted/$', views.not_permitted, name='not_permitted')
+    url(r'^not_permitted/$', views.not_permitted, name='not_permitted'),
+    url(r'^api/permissoesaba/$', views.verificar_permissoes_abas)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

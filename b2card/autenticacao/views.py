@@ -3,6 +3,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
 from cadastros.models import Pessoa
 from autenticacao.models import GrupoURL
+from datetime import datetime
+from django.db.models import Q
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 # Create your views here.
 def index(request):
@@ -19,7 +23,10 @@ def executar(request):
             login(request, user)
             return redirect('inicial:inicial')
         
-        pessoa = Pessoa.objects.filter(status='A', pessoafisica__prestador__usuario=user)
+        data_atual = datetime.now().date()
+        pessoa = Pessoa.objects.filter(Q(pessoafisica__prestador__data_fim__isnull=True) | Q(pessoafisica__prestador__data_fim__gte=data_atual), 
+            status='A', pessoafisica__prestador__usuario=user, pessoafisica__prestador__data_inicio__lte=data_atual)
+            
         if pessoa:
             login(request, user)
             return redirect('inicial:inicial')
@@ -35,3 +42,18 @@ def logout_view(request):
 
 def not_permitted(request):
     return render(request, 'autenticacao/not_permitted.html')
+
+
+@api_view(['GET'])
+def verificar_permissoes_abas(request):
+    
+    grupo_urls = GrupoURL.objects.filter(grupo__user__id=request.user.id, url__contains='#')
+    
+    abas = []
+    
+    for i in grupo_urls:
+        url = i.url
+        aba = url[url.index('#'):len(url)]
+        abas.append(aba)
+        
+    return Response(abas)

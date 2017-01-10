@@ -8,7 +8,7 @@ demandas.factory('share', function(){
 });
 
 demandas.controller('DemandaController', function ($scope, $window, $uibModal, $log, DemandaService, ParcelaService,
-		CentroCustoService, ValorHoraService, CommonsService, CentroResultadoService, UnidadeAdministrativaService, share, MessageService){
+		CentroCustoService, ValorHoraService, CommonsService, AutenticationService, CentroResultadoService, UnidadeAdministrativaService, share, MessageService){
 	var $ctrl = this; 
 	
 	var messageinfo = function (msg){
@@ -335,6 +335,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	$ctrl.listafuncionarios = DemandaService.buscarfuncionarios();
 	$ctrl.listacentroresultados = CentroResultadoService.buscarcentroresultados();
 	$ctrl.listaunidadeadministrativas = UnidadeAdministrativaService.buscarunidadeadministrativas();
+	$ctrl.listaabasautorizadas = AutenticationService.buscarabasautorizadas();
 	
 	$ctrl.changevalorhora = function (itemfase) {
 		itemfase.valor_selecionado = CommonsService.formatarnumero(0);
@@ -485,4 +486,32 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		});
 	}
 	
+	$ctrl.verificardisponibilidadeaba = function(aba){
+		if (!$ctrl.listaabasautorizadas || $ctrl.listaabasautorizadas.length == 0) {
+			return true;
+		}
+		
+		for (let i of $ctrl.listaabasautorizadas) {
+			if (i == aba){
+				return true;
+			}
+		}
+		
+		return false;
+		
+	}
+	
+});
+
+
+$(function(){
+	  var hash = window.location.hash;
+	  hash && $('ul.nav a[href="' + hash + '"]').tab('show');
+
+	  $('.nav-tabs a').click(function (e) {
+	    $(this).tab('show');
+	    var scrollmem = $('body').scrollTop() || $('html').scrollTop();
+	    window.location.hash = this.hash;
+	    $('html,body').scrollTop(scrollmem);
+	  });
 });

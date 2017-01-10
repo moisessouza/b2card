@@ -4,10 +4,8 @@ var pessoa = angular.module('pessoa', ['pessoa-services', 'centrocusto-services'
     'contagerencial-services',	'naturezaoperacao-services', 'recursos-services', 'commons', 'ui.bootstrap', 'ui.mask']);
 
 pessoa.controller('PessoaController', function ($scope, $window, $uibModal, PessoaService, CentroCustoService, 
-		CentroResultadoService, ContaGerencialService, NaturezaOperacaoService, MessageService, CommonsService, RecursosService){
+		CentroResultadoService, ContaGerencialService, NaturezaOperacaoService, AutenticationService, MessageService, CommonsService, RecursosService){
 	var $ctrl = this;
-	
-	$ctrl.show = true;
 	
 	if (pessoa_id) {
 		$ctrl.pessoa = PessoaService.buscarpessoa(pessoa_id, function (pessoa) {
@@ -45,6 +43,9 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 	$ctrl.listacargos = RecursosService.buscarcargos();
 	$ctrl.listacentrocusto = CentroCustoService.buscarcentrocustos();
 	$ctrl.listapessoasjuridicas = PessoaService.buscarpessoasjuridicas();
+	$ctrl.listaabasautorizadas = AutenticationService.buscarabasautorizadas(function (){
+		$ctrl.show = true;
+	});
 	
 	$ctrl.adicionarendereco = function () {
 		if(!$ctrl.pessoa.enderecos){
@@ -261,6 +262,23 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 		
 	}
 	
+	
+	$ctrl.verificardisponibilidadeaba = function(aba){
+		if (!$ctrl.listaabasautorizadas || $ctrl.listaabasautorizadas.length == 0) {
+			return true;
+		}
+		
+		for (let i of $ctrl.listaabasautorizadas) {
+			if (i == aba){
+				return true;
+			}
+		}
+		
+		return false;
+		
+	}
+	
+	
 }).controller('ListPessoaController', function ($scope, $window, PessoaService){
 	var $ctrl = this;
 	$ctrl.show = true;
@@ -317,4 +335,16 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 	$ctrl.close = function () {
 	   $uibModalInstance.close({});
 	};
+});
+
+$(function(){
+	  var hash = window.location.hash;
+	  hash && $('ul.nav a[href="' + hash + '"]').tab('show');
+
+	  $('.nav-tabs a').click(function (e) {
+	    $(this).tab('show');
+	    var scrollmem = $('body').scrollTop() || $('html').scrollTop();
+	    window.location.hash = this.hash;
+	    $('html,body').scrollTop(scrollmem);
+	  });
 });

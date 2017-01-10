@@ -1,6 +1,6 @@
 "use strict";
 
-var commons = angular.module('commons', ['ui.bootstrap']);
+var commons = angular.module('commons', ['ui.bootstrap',  'ngResource']);
 
 var BASE_URL = '/'
 var $scope_message = null;
@@ -123,6 +123,13 @@ commons.directive('gbMoney', function () {
 			messages.clazz = 'alert-success';
 			messages.message = msg;
 			$scope_message.$apply();
+		}
+	}
+}).service('AutenticationService', function ($resource){
+	return {
+		buscarabasautorizadas(callback){
+			var Autentication = $resource(BASE_URL + 'autenticacao/api/permissoesaba/');
+			return Autentication.query(callback);
 		}
 	}
 });
