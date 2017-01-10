@@ -4,8 +4,6 @@ from django.shortcuts import redirect
 from cadastros.models import Pessoa
 from autenticacao.models import GrupoURL
 
-#CACHE_GRUPOS = {}
-
 # Create your views here.
 def index(request):
     return render(request, 'autenticacao/index.html')
@@ -23,12 +21,6 @@ def executar(request):
         
         pessoa = Pessoa.objects.filter(status='A', pessoafisica__prestador__usuario=user)
         if pessoa:
-            
-            #grupo_urls = GrupoURL.objects.filter(grupo__user__id=user.id, 
-            #    grupo__user__prestador__pessoa_fisica__pessoa__status='A')
-            
-            #CACHE_GRUPOS[user.id] = grupo_urls       
-
             login(request, user)
             return redirect('inicial:inicial')
         else:

@@ -6,6 +6,8 @@ from django.shortcuts import redirect
 import importlib
 from autenticacao.models import GrupoURL
 
+CACHE_GRUPOS = {}
+
 class AuthenticationB2CardMiddleware(object):
 
     urls_permited = importlib.import_module(os.environ['DJANGO_SETTINGS_MODULE']).URL_PER
@@ -18,6 +20,11 @@ class AuthenticationB2CardMiddleware(object):
     def __call__(self, request):
         # Code to be executed for each request before
         # the view (and later middleware) are called.
+
+        grupo_urls = GrupoURL.objects.filter(grupo__user__id=request.user.id, 
+                                grupo__user__prestador__pessoa_fisica__pessoa__status='A')
+                    
+        CACHE_GRUPOS[request.user.id] = grupo_urls
 
         if request.path in self.urls_permited:
             return self.get_response(request)
@@ -32,8 +39,6 @@ class AuthenticationB2CardMiddleware(object):
                 if request.user.is_superuser:
                     response = self.get_response(request)
                 else:
-                    grupo_urls = GrupoURL.objects.filter(grupo__user__id=request.user.id, 
-                                grupo__user__prestador__pessoa_fisica__pessoa__status='A')
                     
                     has_permission = False
                     

@@ -8,7 +8,7 @@ import re
 from autenticacao.models import GrupoURL
 from django.shortcuts import resolve_url
 from django.core.cache import cache
-#from autenticacao.views import CACHE_GRUPOS
+from autenticacao.middleware import CACHE_GRUPOS
 
 register = template.Library()
 
@@ -35,13 +35,13 @@ class CheckNode(template.Node):
         if user.is_superuser:
             has_permission = True
         else:
-            #grupo_urls = None
-            #if user.id in CACHE_GRUPOS:
-            #    grupo_urls = CACHE_GRUPOS[user.id]
-            #else:
-            grupo_urls = GrupoURL.objects.filter(grupo__user__id=user.id, 
+            grupo_urls = None
+            if user.id in CACHE_GRUPOS:
+                grupo_urls = CACHE_GRUPOS[user.id]
+            else:
+                grupo_urls = GrupoURL.objects.filter(grupo__user__id=user.id, 
                     grupo__user__prestador__pessoa_fisica__pessoa__status='A')
-            #    CACHE_GRUPOS[user.id] = grupo_urls
+                CACHE_GRUPOS[user.id] = grupo_urls
             
             url = resolve_url(self.url_name)
             for i in grupo_urls:
