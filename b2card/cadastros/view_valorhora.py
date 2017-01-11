@@ -126,5 +126,11 @@ def buscar_valor_hora_por_cliente(request, cliente_id):
             valor_hora_data['vigencia'] = VigenciaSerializer(vigencia[0]).data
             valor_hora_list.append(valor_hora_data)
     return Response(valor_hora_list)
+
+@api_view(['GET'])
+def buscar_valor_hora_b2card(request):
+    valor_horas = ValorHora.objects.filter(centro_custo__nome='B2Card')
+    data = ValorHoraSerializer(valor_horas, many=True).data
+    return Response(data)
     
     

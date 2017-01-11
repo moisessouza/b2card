@@ -66,3 +66,7 @@ form .ng-invalid {
 .display-none {
 	display: none
 }
+
+select.combo-heading {
+	margin: 0px; padding: 0px; height: 17px;
+}

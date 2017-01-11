@@ -1,8 +1,9 @@
 from django.shortcuts import render
-from cadastros.models import TipoHora, CentroCusto
+from cadastros.models import TipoHora, CentroCusto, ValorHora
 from cadastros import serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from cadastros.serializers import ValorHoraSerializer
 
 def index(request):
     return render(request, 'centro_custo/index.html');
@@ -26,4 +27,4 @@ class CentroCustoDetail(APIView):
         centro_custo = CentroCusto.objects.get(pk=centrocusto_id)
         centro_custo.delete()
         serializer = serializers.CentroCustoSerializer(centro_custo)
-        return Response(serializer.data)    
+        return Response(serializer.data)   

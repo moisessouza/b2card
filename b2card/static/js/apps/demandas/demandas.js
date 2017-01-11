@@ -201,6 +201,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			}
 			$ctrl.show=true;
 			$ctrl.listacentroresultadoshoras = []
+			share.demanda = $ctrl.demanda;
 		}
 	
 	}
@@ -505,8 +506,36 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		
 	}
 	
-});
+	$ctrl.retornarurl = function(url) {
+		return BASE_URL + url;
+	}
+	
+}).controller('OrcamentoController', function(ValorHoraService, share){
+	var $ctrl = this;
+	$ctrl.demanda = share.demanda;
 
+	$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card();
+	
+	$ctrl.colunas = [{},{}];
+	$ctrl.atividades = [];
+	
+	$ctrl.adicionarcoluna = function () {
+		$ctrl.colunas.push({});
+	}
+	
+	$ctrl.adicionaratividade = function () {
+		var atividade = {
+			coluna : {}
+		}
+		$ctrl.atividades.push({})
+	}
+	
+	$ctrl.linkarcoluna = function(atividade, coluna){
+		console.log(atividade)
+		
+	}
+	
+});
 
 $(function(){
 	  var hash = window.location.hash;
