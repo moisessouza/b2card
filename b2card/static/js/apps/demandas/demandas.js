@@ -525,13 +525,23 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	
 	$ctrl.adicionaratividade = function () {
 		var atividade = {
-			coluna : {}
+			colunas : {}
 		}
 		$ctrl.atividades.push({})
 	}
 	
-	$ctrl.linkarcoluna = function(atividade, coluna){
+	$ctrl.changecoluna = function(atividade){
 		console.log(atividade)
+		
+		var total = 0;
+		for (let coluna of $ctrl.colunas) {
+			if (coluna.valor_hora && atividade.colunas[coluna.valor_hora.id]) {
+				total+=atividade.colunas[coluna.valor_hora.id].horas;
+			}
+		}
+		
+		atividade.horas_totais = total;
+		
 		
 	}
 	

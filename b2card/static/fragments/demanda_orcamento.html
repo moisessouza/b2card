@@ -37,10 +37,10 @@
 							<input type="text"  class="form-control"/>
 						</td>
 						<td ng-repeat="coluna in $ctrl.colunas">
-							<input type="number"  class="form-control" ng-model="atividade[coluna.valor_hora.id].horas" ng-change="$ctrl.linkarcoluna(atividade, coluna)"/>
+							<input type="number"  class="form-control" ng-model="atividade.colunas[coluna.valor_hora.id].horas" ng-change="$ctrl.changecoluna(atividade)"/>
 						</td>
 						<td>
-							<input type="text"  class="form-control"/>
+							<input type="text"  class="form-control" ng-model="atividade.horas_totais"/>
 						</td>
 						<td>
 							<button class="btn btn-default">
