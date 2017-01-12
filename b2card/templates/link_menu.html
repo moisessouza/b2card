@@ -63,6 +63,11 @@
 							Cadastro único
 						</a>
 						{%endcheck_permittion%}
+						{% check_permittion 'cadastros:fase' %}
+						<a href="{% url 'cadastros:fase' %}">
+							Fases
+						</a>
+						{%endcheck_permittion%}
 					</li>
         		</ul>
 			</li>

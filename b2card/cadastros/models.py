@@ -217,3 +217,6 @@ class CustoPrestador(models.Model):
     data_inicio = models.DateField(default = None)
     data_fim = models.DateField(default = None, null = True)
     valor = models.FloatField(max_length=30, default = None)
+    
+class Fase(models.Model):
+    descricao = models.CharField(max_length = 100, default = None)

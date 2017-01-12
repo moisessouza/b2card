@@ -1,7 +1,7 @@
 "use strict";
 
-var demandas = angular.module('demandas', ['demandas-services', 'centrocusto-services', 'valorhora-services', 'parcela', 'parcela-services',
-                                           'centroresultado-services', 'unidadeadministrativa-services', 'commons', 'ui.bootstrap', 'ui.mask']);
+var demandas = angular.module('demandas', ['demandas-services', 'centrocusto-services', 'fase-services', 'valorhora-services', 'parcela', 'parcela-services',
+                                           'centroresultado-services', 'unidadeadministrativa-services', 'ui.bootstrap', 'commons', 'ui.mask']);
 
 demandas.factory('share', function(){
 	  return {};
@@ -165,23 +165,6 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 				
 				configurarorcamento(data);
 				configuraritensfaturamento(data);
-				//configurarparcelas(data);
-				
-				/*ParcelaService.buscartotalhoras(data.id, function (data){
-					$ctrl.parcela.total_horas = data.total_horas
-					$ctrl.calcularvalorrestante();
-				});
-				
-				ParcelaService.buscartotalhorasporvalorhora(data.id, function(data){
-					$ctrl.valorhoras_horas_raw = data;
-					
-					for (var i = 0; i < $ctrl.valorhoras_horas_raw.length; i++){
-						$ctrl.valorhoras_horas_raw[i].horas_restantes = $ctrl.valorhoras_horas_raw[i].total_horas;
-					}
-					
-					$ctrl.calcularhorasrestantesparcela();
-				});*/
-				
 				
 				$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(demanda_id, $ctrl.changeatividade);
 				
@@ -510,11 +493,12 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		return BASE_URL + url;
 	}
 	
-}).controller('OrcamentoController', function(ValorHoraService, share){
+}).controller('OrcamentoController', function(ValorHoraService, FaseService, share){
 	var $ctrl = this;
 	$ctrl.demanda = share.demanda;
 
 	$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card();
+	$ctrl.listafases = FaseService.buscarfases();
 	
 	$ctrl.colunas = [{},{}];
 	$ctrl.atividades = [];
@@ -524,10 +508,16 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	}
 	
 	$ctrl.adicionaratividade = function () {
+		if (!$ctrl.demanda.orcamento.atividades) {
+			$ctrl.demanda.orcamento.atividades = [];
+		}
+		
 		var atividade = {
 			colunas : {}
 		}
-		$ctrl.atividades.push({})
+		
+		$ctrl.demanda.orcamento.atividades.push({})
+		
 	}
 	
 	$ctrl.changecoluna = function(atividade){

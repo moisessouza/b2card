@@ -152,3 +152,11 @@ class ItemFase(models.Model):
     quantidade_horas = models.IntegerField()
     valor_total = models.FloatField()
     
+class OrcamentoAtividade(models.Model):
+    orcamento = models.ForeignKey(Orcamento, default = None)
+    total_horas = models.IntegerField(default = None)
+    
+class PerfilAtividade(models.Model):
+    orcamento_atividade = models.ForeignKey(OrcamentoAtividade, default = None)
+    perfil = models.ForeignKey(ValorHora, default = None)
+    horas = models.IntegerField(default = None)

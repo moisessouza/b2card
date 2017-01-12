@@ -29,9 +29,11 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="atividade in $ctrl.atividades">
+					<tr ng-repeat="atividade in $ctrl.demanda.orcamento.atividades">
 						<td>
-							<input type="text"  class="form-control"/>
+							<select class="form-control" ng-model="atividade.fase.id" ng-options="f.id as f.descricao for f in $ctrl.listafases">
+								<option value="">Selecione...</option>
+							</select>
 						</td>
 						<td>
 							<input type="text"  class="form-control"/>

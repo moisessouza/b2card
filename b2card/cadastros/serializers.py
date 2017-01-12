@@ -5,7 +5,7 @@ Created on 14 de set de 2016
 '''
 from rest_framework import serializers
 from cadastros.models import TipoHora, CentroCusto, ContaGerencial, NaturezaOperacao, ValorHora, Vigencia,\
-    UnidadeAdministrativa
+    UnidadeAdministrativa, Fase
         
 class TipoHoraSerializer(serializers.ModelSerializer):
     class Meta:
@@ -52,3 +52,8 @@ class UnidadeAdministrativaSerializer(serializers.ModelSerializer):
     class Meta:
         model = UnidadeAdministrativa
         fields = ('id', 'codigo', 'nome')
+        
+class FaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Fase
+        fields = ('id', 'descricao')
