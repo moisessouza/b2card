@@ -29,20 +29,20 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="atividade in $ctrl.demanda.orcamento.atividades">
+					<tr ng-repeat="atividade in $ctrl.demanda.orcamento.orcamento_atividades">
 						<td>
 							<select class="form-control" ng-model="atividade.fase.id" ng-options="f.id as f.descricao for f in $ctrl.listafases">
 								<option value="">Selecione...</option>
 							</select>
 						</td>
 						<td>
-							<input type="text"  class="form-control"/>
+							<input type="text" ng-model="atividade.descricao" maxlength="100"  class="form-control"/>
 						</td>
 						<td ng-repeat="coluna in $ctrl.colunas">
 							<input type="number"  class="form-control" ng-model="atividade.colunas[coluna.valor_hora.id].horas" ng-change="$ctrl.changecoluna(atividade)"/>
 						</td>
 						<td>
-							<input type="text"  class="form-control" ng-model="atividade.horas_totais"/>
+							<input type="text"  class="form-control" ng-model="atividade.total_horas"/>
 						</td>
 						<td>
 							<button class="btn btn-default">

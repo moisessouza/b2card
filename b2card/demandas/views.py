@@ -2,11 +2,13 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from demandas.models import Demanda, FaturamentoDemanda, Proposta, Tarefa, Observacao, Ocorrencia,\
-    Orcamento, ItemFase, Fase, Atividade, ValorHoraFaturamento
+    Orcamento, ItemFase, Fase, Atividade, ValorHoraFaturamento, OrcamentoFase,\
+    OrcamentoAtividade, PerfilAtividade
 from clientes.models import Cliente
 from demandas.serializers import DemandaSerializer, FaturamentoDemandaSerializer, PropostaSerializer, TarefasSerializer,\
     ObservacaoSerializer, OcorrenciaSerializer, OrcamentoSerializer,\
-    ItemFaseSerializer, FaseSerializer, AtividadeSerializer, ValorHoraFaturamentoSerializer
+    ItemFaseSerializer, AtividadeSerializer, ValorHoraFaturamentoSerializer,\
+    OrcamentoFaseSerializer, OrcamentoAtividadeSerializer
 from utils.utils import converter_string_para_data, formatar_data, converter_string_para_float
 from recursos.models import Funcionario
 from cadastros.models import CentroCusto, ValorHora, CentroResultado, UnidadeAdministrativa
@@ -108,21 +110,7 @@ class DemandaDetail(APIView):
             ocorrencia['data_prevista_conclusao'] = formatar_data(i.data_prevista_conclusao)
             ocorrencias_list.append(ocorrencia)
             
-        orcamento_dict = {}
-        if  orcamentos:
-            orcamento = orcamentos[0]
-            orcamento_dict = OrcamentoSerializer(orcamento).data
-            fases = Fase.objects.filter(orcamento = orcamento)
-            
-            fases_list = []
-            for i in fases:
-                itens_fase = ItemFase.objects.filter(fase = i)
-                intes_fase_list = ItemFaseSerializer(itens_fase, many=True).data
-                fase_dict = FaseSerializer(i).data
-                fase_dict['itensfase'] = intes_fase_list
-                fases_list.append(fase_dict)
-                
-            orcamento_dict['fases'] = fases_list
+        orcamento_dict = self.serializar_orcamento(orcamentos)
         
         atividade_list = []
         if atividades:
@@ -161,7 +149,42 @@ class DemandaDetail(APIView):
     def get(self, request, demanda_id, format=None):
         data = self.serializarDemanda(demanda_id)
         return Response(data)
-
+    
+    def serializar_orcamento(self, orcamentos):
+        
+        orcamento_dict = {}
+        if  orcamentos:
+            orcamento = orcamentos[0]
+            orcamento_dict = OrcamentoSerializer(orcamento).data
+            fases = OrcamentoFase.objects.filter(orcamento = orcamento)
+            
+            fases_list = []
+            for i in fases:
+                itens_fase = ItemFase.objects.filter(fase = i)
+                intes_fase_list = ItemFaseSerializer(itens_fase, many=True).data
+                fase_dict = OrcamentoFaseSerializer(i).data
+                fase_dict['itensfase'] = intes_fase_list
+                fases_list.append(fase_dict)
+                
+            orcamento_dict['fases'] = fases_list
+            
+            orcamento_atividades = OrcamentoAtividade.objects.filter(orcamento = orcamento)
+            orcamento_atividades_list = []
+            
+            if orcamento_atividades:
+                for o in orcamento_atividades:
+                    orcamento_atividade_dict = OrcamentoAtividadeSerializer(o).data
+                    perfil_atividades = PerfilAtividade.objects.filter(orcamento_atividade = o)
+                    dict = {}
+                    for p in perfil_atividades:
+                        dict[p.id] = { 'horas': p.horas }
+                    orcamento_atividade_dict['colunas'] = dict
+                    orcamento_atividades_list.append(orcamento_atividade_dict)
+            orcamento_dict['orcamento_atividades'] = orcamento_atividades_list
+            
+        return orcamento_dict;
+        
+        
     def salvar_proposta(self, propostas, demanda):
         for i in propostas:
             if 'remover' not in i or i['remover'] is False:
@@ -368,12 +391,20 @@ class DemandaDetail(APIView):
             if orcamento_dict['fases']:
                 fases_list = orcamento_dict['fases']
             del orcamento_dict['fases']
+            
+        orcamento_atividades = None
+        if 'orcamento_atividades' in orcamento_dict:
+            if orcamento_dict['orcamento_atividades']:
+                orcamento_atividades = orcamento_dict['orcamento_atividades']
+            del orcamento_dict['orcamento_atividades']
         
         orcamento = Orcamento(**orcamento_dict)
         orcamento.total_orcamento = converter_string_para_float(orcamento.total_orcamento)
         orcamento.demanda = demanda
         orcamento.centro_custo = centro_custo
         orcamento.save();
+        
+        self.salvar_orcamento_atividades(orcamento_atividades, orcamento)
         
         if fases_list is not None:    
             for f in fases_list:
@@ -384,7 +415,7 @@ class DemandaDetail(APIView):
                             itens_fase = f['itensfase']
                             del f['itensfase']
                             
-                        fase = Fase(**f)
+                        fase = OrcamentoFase(**f)
                         fase.valor_total = converter_string_para_float(fase.valor_total)
                         fase.orcamento = orcamento
                         fase.save()
@@ -413,6 +444,37 @@ class DemandaDetail(APIView):
                 elif 'id' in f:
                     fase = Fase.objects.get(pk=f['id'])
                     fase.delete()
+    
+    def salvar_orcamento_atividades(self,orcamento_atividades, orcamento):
+        
+        for i in orcamento_atividades:
+            
+            if len([prop for prop in ['fase', 'horas_totais', 'descricao'] if prop in i]) >= 0:
+            
+                fase = None
+                if 'fase' in i:
+                    if i['fase']:
+                        fase = Fase.objects.get(pk=i['fase']['id'])
+                    del i['fase']
+                    
+                colunas = None
+                if 'colunas' in i:
+                    if i['colunas']:
+                        colunas = i['colunas']
+                    del i['colunas']
+                
+                orcamento_atividade = OrcamentoAtividade(**i)
+                orcamento_atividade.orcamento = orcamento
+                orcamento_atividade.fase = fase
+                orcamento_atividade.save()
+                
+                for id_valorhora, horas in colunas.iteritems():
+                    perfil_atividade = PerfilAtividade()
+                    perfil_atividade.orcamento_atividade = orcamento_atividade
+                    perfil_atividade.horas = horas['horas']
+                    valor_hora = ValorHora.objects.get(pk=id_valorhora)
+                    perfil_atividade.perfil = valor_hora
+                    perfil_atividade.save()
     
     def salvar_atividade(self, atividade_list, demanda):
         
@@ -589,16 +651,16 @@ class DemandaDetail(APIView):
 @api_view(['GET'])
 def buscar_total_horas_custo_resultado_por_demanda(request, demanda_id, format=None):
     
-    resultado = Orcamento.objects.filter(demanda__id=demanda_id).values('fase__itemfase__valor_hora__centro_resultado__id', 'fase__itemfase__valor_hora__centro_resultado__nome').annotate(total_horas = Sum('fase__itemfase__quantidade_horas'))
+    resultado = Orcamento.objects.filter(demanda__id=demanda_id).values('orcamentofase__itemfase__valor_hora__centro_resultado__id', 'orcamentofase__itemfase__valor_hora__centro_resultado__nome').annotate(total_horas = Sum('orcamentofase__itemfase__quantidade_horas'))
     return Response(resultado)
 
 @api_view(['GET'])
 def buscar_total_horas_orcamento(request, demanda_id, format=None):
-    resultado = Orcamento.objects.filter(demanda__id=demanda_id).values('id').annotate(total_horas = Sum('fase__itemfase__quantidade_horas'))
+    resultado = Orcamento.objects.filter(demanda__id=demanda_id).values('id').annotate(total_horas = Sum('orcamentofase__itemfase__quantidade_horas'))
     return Response(resultado[0])
 
 @api_view(['GET'])
 def buscar_total_horas_por_valor_hora(request, demanda_id, format=None):
-    resultado = Orcamento.objects.filter(demanda__id=demanda_id).values('fase__id', 'fase__descricao', 'fase__itemfase__valor_hora__id', 'fase__itemfase__valor_hora__descricao').annotate(total_horas = Sum('fase__itemfase__quantidade_horas'))
+    resultado = Orcamento.objects.filter(demanda__id=demanda_id).values('orcamentofase__id', 'orcamentofase__descricao', 'orcamentofase__itemfase__valor_hora__id', 'orcamentofase__itemfase__valor_hora__descricao').annotate(total_horas = Sum('orcamentofase__itemfase__quantidade_horas'))
     return Response(resultado)
     

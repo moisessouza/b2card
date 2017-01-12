@@ -3,8 +3,10 @@ from django.db import models
 from recursos.models import Funcionario
 from clientes.models import Cliente
 from datetime import datetime
-from cadastros.models import CentroCusto, ValorHora, CentroResultado, UnidadeAdministrativa
+from cadastros.models import CentroCusto, ValorHora, CentroResultado, UnidadeAdministrativa,\
+    Fase
 import faturamento
+import cadastros
 
 # Create your models here.
 
@@ -140,20 +142,22 @@ class Orcamento(models.Model):
     descricao = models.TextField(null=True, default = None)
     total_orcamento = models.FloatField(default = None, null=True)
     
-class Fase(models.Model):
+class OrcamentoFase(models.Model):
     descricao = models.CharField(max_length=100)
     valor_total = models.FloatField(default = None)
     orcamento = models.ForeignKey(Orcamento, default=None)
     
 class ItemFase(models.Model):
-    fase = models.ForeignKey(Fase, default = None)
+    fase = models.ForeignKey(OrcamentoFase, default = None)
     valor_hora = models.ForeignKey(ValorHora, default=None)
     valor_selecionado = models.FloatField()
     quantidade_horas = models.IntegerField()
     valor_total = models.FloatField()
     
 class OrcamentoAtividade(models.Model):
+    fase = models.ForeignKey(Fase)
     orcamento = models.ForeignKey(Orcamento, default = None)
+    descricao = models.CharField(max_length=100, default = None)
     total_horas = models.IntegerField(default = None)
     
 class PerfilAtividade(models.Model):

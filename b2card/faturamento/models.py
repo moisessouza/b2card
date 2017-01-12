@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from demandas.models import Demanda, Fase
+from demandas.models import Demanda, OrcamentoFase
 from cadastros.models import ValorHora
 
 # Create your models here.
@@ -24,7 +24,7 @@ class Parcela(models.Model):
     
 class ParcelaFase(models.Model):
     parcela = models.ForeignKey(Parcela)
-    fase = models.ForeignKey(Fase)
+    fase = models.ForeignKey(OrcamentoFase)
     valor = models.FloatField(max_length=30, null=True)
     
 class Medicao(models.Model):

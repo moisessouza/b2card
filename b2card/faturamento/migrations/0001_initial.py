@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('valor', models.FloatField(max_length=30, null=True)),
-                ('fase', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='demandas.Fase')),
+                ('fase', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='demandas.OrcamentoFase')),
                 ('parcela', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='faturamento.Parcela')),
             ],
         ),

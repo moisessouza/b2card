@@ -4,11 +4,11 @@ from faturamento.models import Parcela, Medicao, ParcelaFase
 from faturamento.serializers import ParcelaSerializer, MedicaoSerializer, ParcelaFaseSerializer
 from rest_framework.response import Response
 from utils.utils import converter_string_para_float, converter_string_para_data, formatar_data
-from demandas.models import Demanda, Fase, Orcamento, ItemFase
+from demandas.models import Demanda, Orcamento, ItemFase, OrcamentoFase
 from exceptions import Exception
 from cadastros.models import ValorHora, TipoHora, Vigencia
 from rest_framework.decorators import api_view
-from demandas.serializers import FaseSerializer, OrcamentoSerializer,\
+from demandas.serializers import OrcamentoFaseSerializer, OrcamentoSerializer,\
     ItemFaseSerializer
 from cadastros.serializers import TipoHoraSerializer, ValorHoraSerializer, VigenciaSerializer
 import datetime
@@ -97,7 +97,7 @@ class ParcelaList(APIView):
                     
                     fase = None
                     if 'fase' in i:
-                        fase = Fase.objects.get(pk=i['fase']['id'])
+                        fase = OrcamentoFase.objects.get(pk=i['fase']['id'])
                         del i['fase']
                     
                     if 'parcela' in i:
@@ -181,12 +181,12 @@ def buscar_parcela_por_demanda_id(request, demanda_id, format=None):
 @api_view(['GET'])
 def buscar_tipo_hora_por_fases(request, demanda_id, format=None):
     
-    fase_list = Fase.objects.filter(orcamento__demanda__id=demanda_id)
+    fase_list = OrcamentoFase.objects.filter(orcamento__demanda__id=demanda_id)
     
     faseserializer_list = []
     
     for i in fase_list:
-        serializer = FaseSerializer(i).data
+        serializer = OrcamentoFaseSerializer(i).data
         faseserializer_list.append(serializer)
         valor_horas = ValorHora.objects.filter(itemfase__fase = i).distinct()
         
@@ -244,8 +244,8 @@ def buscar_orcamento_demanda_id(request, demanda_id, format=None):
     orcamento = Orcamento.objects.filter(demanda__id = demanda_id);
     data = OrcamentoSerializer(orcamento[0]).data
     
-    fases = Fase.objects.filter(orcamento = orcamento);
-    fases = FaseSerializer(fases, many=True).data
+    fases = OrcamentoFase.objects.filter(orcamento = orcamento);
+    fases = OrcamentoFaseSerializer(fases, many=True).data
     
     for i in fases:
         itensfase = ItemFase.objects.filter(fase__id = i['id'])

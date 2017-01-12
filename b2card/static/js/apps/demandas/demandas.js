@@ -500,23 +500,22 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card();
 	$ctrl.listafases = FaseService.buscarfases();
 	
-	$ctrl.colunas = [{},{}];
-	$ctrl.atividades = [];
+	$ctrl.colunas = [{}];
 	
 	$ctrl.adicionarcoluna = function () {
 		$ctrl.colunas.push({});
 	}
 	
 	$ctrl.adicionaratividade = function () {
-		if (!$ctrl.demanda.orcamento.atividades) {
-			$ctrl.demanda.orcamento.atividades = [];
+		if (!$ctrl.demanda.orcamento.orcamento_atividades) {
+			$ctrl.demanda.orcamento.orcamento_atividades = [];
 		}
 		
 		var atividade = {
 			colunas : {}
 		}
 		
-		$ctrl.demanda.orcamento.atividades.push({})
+		$ctrl.demanda.orcamento.orcamento_atividades.push({});
 		
 	}
 	
@@ -530,7 +529,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			}
 		}
 		
-		atividade.horas_totais = total;
+		atividade.total_horas = total;
 		
 		
 	}

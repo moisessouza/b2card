@@ -6,7 +6,7 @@ Created on 14 de set de 2016
 from rest_framework import serializers
 from faturamento.models import Parcela, Medicao, ParcelaFase
 from cadastros.serializers import ValorHoraSerializer
-from demandas.serializers import FaseSerializer, DemandaSerializer
+from demandas.serializers import OrcamentoFaseSerializer, DemandaSerializer
 
 class ParcelaSerializer(serializers.ModelSerializer):
     demanda = DemandaSerializer()
@@ -22,7 +22,7 @@ class MedicaoSerializer(serializers.ModelSerializer):
         
 class ParcelaFaseSerializer(serializers.ModelSerializer):
     parcela = ParcelaSerializer()
-    fase = FaseSerializer()
+    fase = OrcamentoFaseSerializer()
     class Meta:
         model = ParcelaFase
         fields = ('id', 'parcela', 'fase', 'valor')
