@@ -16,5 +16,6 @@ DATABASES = {
         'PASSWORD': '5G6qqBp2z5Tp',
         'HOST': os.environ['OPENSHIFT_MYSQL_DB_HOST'],   # Or an IP Address that your DB is hosted on
         'PORT': os.environ['OPENSHIFT_MYSQL_DB_PORT'],
+        'ATOMIC_REQUESTS': True
     }
 }
