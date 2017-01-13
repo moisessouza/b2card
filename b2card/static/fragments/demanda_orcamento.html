@@ -58,7 +58,7 @@
 							<input type="text"  class="form-control" ng-model="atividade.total_horas" disabled/>
 						</td>
 						<td>
-							<button class="btn btn-default" ng-click="$ctrl.remover(atividade)">
+							<button class="btn btn-default" ng-click="$ctrl.remover(atividade); $ctrl.calculartotaiscolunas();">
 								<span class="glyphicon glyphicon-trash"></span>
 							</button>
 						</td>
