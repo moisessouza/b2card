@@ -501,11 +501,12 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	$ctrl.listafases = FaseService.buscarfases();
 	
 	$ctrl.colunas = [];
-	
+		
 	if ($ctrl.share.demanda.$promise) {
 		$ctrl.share.demanda.$promise.then(function (data){
 		
-			if ($ctrl.share.demanda.orcamento.orcamento_atividades) {
+			if ($ctrl.share.demanda.orcamento.orcamento_atividades &&
+					$ctrl.share.demanda.orcamento.orcamento_atividades.length > 0) {
 				
 				var lista_colunas = [];
 				for (let orcamento_atividade of $ctrl.share.demanda.orcamento.orcamento_atividades){
@@ -526,9 +527,22 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 				$ctrl.calculartotaiscolunas();
 				
 			} else {
-				$ctrl.colunas.push({});
+				$ctrl.colunas = [{},{}];
+				$ctrl.share.demanda.orcamento.orcamento_atividades = [];
+				for (var int = 0; int < 20; int++) {
+					$ctrl.share.demanda.orcamento.orcamento_atividades.push({
+						colunas : {}
+					});
+				}
 			}
 		});
+	} else {
+		$ctrl.share.demanda.orcamento.orcamento_atividades = [];
+		for (var int = 0; int < 20; int++) {
+			$ctrl.share.demanda.orcamento.orcamento_atividades.push({
+				colunas : {}
+			});
+		}
 	}
 	
 	$ctrl.calculartotaiscolunas = function () {
@@ -537,10 +551,12 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			for (let coluna of $ctrl.colunas) {
 				coluna.valor_total = 0;
 				for (let orcamento_atividade of $ctrl.share.demanda.orcamento.orcamento_atividades){
-					for (var valor_hora_id in orcamento_atividade.colunas){
-						if (coluna.valor_hora && coluna.valor_hora.id == valor_hora_id){
-							coluna.valor_total+=orcamento_atividade.colunas[valor_hora_id].horas;
-							total_colunas+=orcamento_atividade.colunas[valor_hora_id].horas;
+					if (!orcamento_atividade.remover){
+						for (var valor_hora_id in orcamento_atividade.colunas){
+							if (coluna.valor_hora && coluna.valor_hora.id == valor_hora_id){
+								coluna.valor_total+=orcamento_atividade.colunas[valor_hora_id].horas;
+								total_colunas+=orcamento_atividade.colunas[valor_hora_id].horas;
+							}
 						}
 					}
 				}
@@ -556,6 +572,21 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		}
 	}
 	
+	$ctrl.removercoluna = function (coluna){
+		
+		for (let orcamento_atividade of $ctrl.share.demanda.orcamento.orcamento_atividades){
+			if (orcamento_atividade.colunas && coluna.valor_hora && coluna.valor_hora.id ){
+				delete orcamento_atividade.colunas[coluna.valor_hora.id]
+			}
+		}
+		
+		$ctrl.colunas.splice($ctrl.colunas.indexOf(coluna), 1);
+		
+		$ctrl.changecoluna();	
+		$ctrl.calculartotaiscolunas();
+		
+	}
+	
 	$ctrl.adicionarcoluna = function () {
 		$ctrl.colunas.push({});
 	}
@@ -567,16 +598,18 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			var repetido = false;
 			
 			for (let c of $ctrl.colunas) {
-				if (c != coluna && c.valor_hora.id == coluna.valor_hora.id) {
-					repetido = true;
-					break;
+				if (c.valor_hora){
+					if (c != coluna && c.valor_hora.id == coluna.valor_hora.id) {
+						repetido = true;
+						break;
+					}
 				}
 			}
 			
 			if (!repetido){
 				if ($ctrl.share.demanda.orcamento.orcamento_atividades) {
 					for (let orcamento_atividade of $ctrl.share.demanda.orcamento.orcamento_atividades) {
-						if (orcamento_atividade.colunas){
+						if (orcamento_atividade.colunas && coluna.valor_hora && coluna.valor_hora.id ){
 							delete orcamento_atividade.colunas[coluna.valor_hora.id];
 						}
 					}

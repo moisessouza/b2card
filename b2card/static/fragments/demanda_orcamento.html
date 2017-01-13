@@ -17,15 +17,28 @@
 			<table class="table table-sm table-bordered table-striped table-highlight">
 				<thead>
 					<tr>
-						<td>Fase</td>
-						<td width="50%">Atividade</td>
-						<td ng-repeat="coluna in $ctrl.colunas">
-							<select class="form-control combo-heading" ng-model="coluna.valor_hora.id" ng-change="$ctrl.validarcolunaalterada(coluna, {{coluna.valor_hora && coluna.valor_hora.id? coluna.valor_hora.id : 'null'}})" ng-options="v.id as v.descricao for v in $ctrl.listavalorhorab2card">
-								<option value="">Selecione...</option>
-							</select>
+						<td style="width: 1%">
+							<div style="width: 140px">
+								Fase
+							</div>
 						</td>
-						<td>Total</td>
-						<td></td>
+						<td width="50%">Atividade</td>
+						<td ng-repeat="coluna in $ctrl.colunas" style="width: 1%">
+							<div style="width: 101px">
+								<select class="form-control combo-heading" style="width: 80px" ng-model="coluna.valor_hora.id" ng-change="$ctrl.validarcolunaalterada(coluna, {{coluna.valor_hora && coluna.valor_hora.id? coluna.valor_hora.id : 'null'}})" ng-options="v.id as v.descricao for v in $ctrl.listavalorhorab2card">
+									<option value="">Selecione...</option>
+								</select>
+								<button class="btn btn-primary button-heading" ng-click="$ctrl.removercoluna(coluna)">
+									<span class="glyphicon glyphicon-minus"></span>
+								</button>
+							</div>
+						</td>
+						<td style="width: 1%">
+							<div style="width: 48px">
+								Total
+							</div>
+						</td>
+						<td style="width: 1%"></td>
 					</tr>
 				</thead>
 				<tbody>

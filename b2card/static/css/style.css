@@ -30,6 +30,13 @@ div.buttonbar {
 	margin-top: 2em;
 }
 
+button.button-heading {
+	padding: 2px;
+	margin: 0;
+	position: relative;
+	bottom: 2px;
+}
+
 table.table{
 	font-size: 12px
 }
@@ -69,4 +76,5 @@ form .ng-invalid {
 
 select.combo-heading {
 	margin: 0px; padding: 0px; height: 17px;
+	display: inline;
 }
