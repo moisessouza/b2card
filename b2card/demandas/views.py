@@ -450,7 +450,9 @@ class DemandaDetail(APIView):
         if orcamento_atividades:
             for i in orcamento_atividades:
                 
-                if 'total_horas' in i and i['total_horas'] and ('remover' not in i or i['remover'] is False):
+                if ('total_horas' in i and 'fase' in i and i['fase'] and 
+                    'descricao' in i and i['descricao'] and i['total_horas'] and 
+                    ('remover' not in i or i['remover'] is False)):
                 
                     fase = None
                     if 'fase' in i:
