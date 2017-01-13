@@ -177,7 +177,7 @@ class DemandaDetail(APIView):
                     perfil_atividades = PerfilAtividade.objects.filter(orcamento_atividade = o)
                     dict = {}
                     for p in perfil_atividades:
-                        dict[p.id] = { 'horas': p.horas }
+                        dict[p.perfil.id] = { 'horas': p.horas }
                     orcamento_atividade_dict['colunas'] = dict
                     orcamento_atividades_list.append(orcamento_atividade_dict)
             orcamento_dict['orcamento_atividades'] = orcamento_atividades_list

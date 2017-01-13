@@ -490,7 +490,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	}
 	
 	$ctrl.retornarurl = function(url) {
-		return BASE_URL + url;
+		return BASE_URL + url +"?i=103";
 	}
 	
 }).controller('OrcamentoController', function(ValorHoraService, FaseService, share){
@@ -500,10 +500,97 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card();
 	$ctrl.listafases = FaseService.buscarfases();
 	
-	$ctrl.colunas = [{}];
+	$ctrl.colunas = [];
+	
+	$ctrl.demanda.$promise.then(function (data){
+	
+		if ($ctrl.demanda.orcamento.orcamento_atividades) {
+			
+			var lista_colunas = [];
+			for (let orcamento_atividade of $ctrl.demanda.orcamento.orcamento_atividades){
+				
+				for (var valor_hora_id in orcamento_atividade.colunas){
+					if(lista_colunas.indexOf(valor_hora_id) < 0){
+						lista_colunas.push(valor_hora_id)
+						$ctrl.colunas.push({
+							valor_hora: {
+								id:parseInt(valor_hora_id)
+							}
+						});
+					}
+				}
+				
+			}
+			
+			$ctrl.calculartotaiscolunas();
+			
+		} else {
+			$ctrl.colunas.push({});
+		}
+	});
+	
+	$ctrl.calculartotaiscolunas = function () {
+		if ($ctrl.demanda.orcamento.orcamento_atividades) {
+			
+			var total_colunas = 0; 
+			
+			for (let orcamento_atividade of $ctrl.demanda.orcamento.orcamento_atividades){
+				for (let coluna of $ctrl.colunas) {
+					for (var valor_hora_id in orcamento_atividade.colunas){
+						if (coluna.valor_hora && coluna.valor_hora.id == valor_hora_id){
+							if (coluna.valor_total){
+								coluna.valor_total+=orcamento_atividade.colunas[valor_hora_id].horas;
+								total_colunas+=orcamento_atividade.colunas[valor_hora_id].horas;
+							} else {
+								coluna.valor_total=orcamento_atividade.colunas[valor_hora_id].horas;
+								total_colunas+=orcamento_atividade.colunas[valor_hora_id].horas;
+							}
+						}
+					}
+				}
+			}
+			
+			$ctrl.total_colunas = total_colunas;
+			
+		}
+	}
+	
+	$ctrl.remover = function (i, callback){
+		i.remover = true;		
+		if (callback){
+			callback();
+		}
+	}
 	
 	$ctrl.adicionarcoluna = function () {
 		$ctrl.colunas.push({});
+	}
+	
+	$ctrl.validarcolunaalterada = function (coluna, valorhora_old) {
+		
+		if (coluna.valor_hora.id){
+			
+			var repetido = false;
+			
+			for (let c of $ctrl.colunas) {
+				if (c != coluna && c.valor_hora.id == coluna.valor_hora.id) {
+					repetido = true;
+					break;
+				}
+			}
+			
+			if (!repetido){
+				if ($ctrl.demanda.orcamento.orcamento_atividades) {
+					for (let orcamento_atividade of $ctrl.demanda.orcamento.orcamento_atividades) {
+						delete orcamento_atividade.colunas[coluna.valor_hora.id];
+					}
+				}
+				$ctrl.changecoluna();				
+			} else {
+				coluna.valor_hora.id = valorhora_old;
+				alert('Valor de coluna repetido.');
+			}
+		}
 	}
 	
 	$ctrl.adicionaratividade = function () {
@@ -519,18 +606,20 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		
 	}
 	
-	$ctrl.changecoluna = function(atividade){
-		console.log(atividade)
+	$ctrl.changecoluna = function(){
 		
 		var total = 0;
-		for (let coluna of $ctrl.colunas) {
-			if (coluna.valor_hora && atividade.colunas[coluna.valor_hora.id]) {
-				total+=atividade.colunas[coluna.valor_hora.id].horas;
+		if ($ctrl.demanda.orcamento.orcamento_atividades){
+			for (let orcamento_atividade of $ctrl.demanda.orcamento.orcamento_atividades){
+				var total = 0;
+				for (let coluna of $ctrl.colunas) {
+					if (coluna.valor_hora && orcamento_atividade.colunas[coluna.valor_hora.id]) {
+						total+=orcamento_atividade.colunas[coluna.valor_hora.id].horas;
+					}
+				}
+				orcamento_atividade.total_horas = total;
 			}
 		}
-		
-		atividade.total_horas = total;
-		
 		
 	}
 	

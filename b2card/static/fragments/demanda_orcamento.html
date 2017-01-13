@@ -20,7 +20,7 @@
 						<td>Fase</td>
 						<td width="50%">Atividade</td>
 						<td ng-repeat="coluna in $ctrl.colunas">
-							<select class="form-control combo-heading" ng-model="coluna.valor_hora.id" ng-options="v.id as v.descricao for v in $ctrl.listavalorhorab2card">
+							<select class="form-control combo-heading" ng-model="coluna.valor_hora.id" ng-change="$ctrl.validarcolunaalterada(coluna, {{coluna.valor_hora && coluna.valor_hora.id? coluna.valor_hora.id : 'null'}})" ng-options="v.id as v.descricao for v in $ctrl.listavalorhorab2card">
 								<option value="">Selecione...</option>
 							</select>
 						</td>
@@ -29,7 +29,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="atividade in $ctrl.demanda.orcamento.orcamento_atividades">
+					<tr ng-repeat="atividade in $ctrl.demanda.orcamento.orcamento_atividades" ng-show="!atividade.remover">
 						<td>
 							<select class="form-control" ng-model="atividade.fase.id" ng-options="f.id as f.descricao for f in $ctrl.listafases">
 								<option value="">Selecione...</option>
@@ -39,18 +39,33 @@
 							<input type="text" ng-model="atividade.descricao" maxlength="100"  class="form-control"/>
 						</td>
 						<td ng-repeat="coluna in $ctrl.colunas">
-							<input type="number"  class="form-control" ng-model="atividade.colunas[coluna.valor_hora.id].horas" ng-change="$ctrl.changecoluna(atividade)"/>
+							<input type="number"  class="form-control" ng-model="atividade.colunas[coluna.valor_hora.id].horas" ng-change="$ctrl.changecoluna()" ng-disabled="!coluna.valor_hora.id"/>
 						</td>
 						<td>
 							<input type="text"  class="form-control" ng-model="atividade.total_horas"/>
 						</td>
 						<td>
-							<button class="btn btn-default">
+							<button class="btn btn-default" ng-click="$ctrl.remover(atividade)">
 								<span class="glyphicon glyphicon-trash"></span>
 							</button>
 						</td>
 					</tr>
 				</tbody>
+				<tfoot>
+					<tr>
+						<td>
+							<input type="text" class="form-control" value="Totais" disabled/>
+						</td>
+						<td ></td>
+						<td ng-repeat="coluna in $ctrl.colunas" style="text-align: center;">
+							<input type="text" class="form-control" ng-model="coluna.valor_total" disabled/>
+						</td>
+						<td>
+							<input type="text" class="form-control" ng-model="$ctrl.total_colunas" disabled/>
+						</td>
+						<td></td>
+					</tr>
+				</tfoot>
 			</table>
 		
 		</div>
