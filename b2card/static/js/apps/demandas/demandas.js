@@ -29,7 +29,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		}
 	};
 	
-	$ctrl.atividade = {};
+	
 	
 	var configuraritensfaturamento = function (data) {
 		if (data.itens_faturamento) {
@@ -108,44 +108,6 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		});
 	}
 	
-	$ctrl.changeatividade = function () {
-		
-		var tipos_centro_resultado = {}
-		
-		for (var int = 0; int < $ctrl.demanda.atividades.length; int++) {
-			var atividade = $ctrl.demanda.atividades[int];
-			
-			if (!atividade.remover){
-			
-				var id_centro_resultado = atividade.centro_resultado.id;
-				var horas_previstas = atividade.horas_previstas;
-				
-				if (tipos_centro_resultado[id_centro_resultado]){
-					tipos_centro_resultado[id_centro_resultado]+=horas_previstas;
-				} else {
-					tipos_centro_resultado[id_centro_resultado]=horas_previstas;
-				}
-			
-			}
-		}	
-		
-		for(var int = 0; int < $ctrl.listacentroresultadoshoras.length; int++){
-		
-			var tipo_resultado_horas = $ctrl.listacentroresultadoshoras[int];
-			tipo_resultado_horas.horas_restantes = tipo_resultado_horas.total_horas;
-			
-			for (var id_tipo in tipos_centro_resultado){
-				
-				var horas_gastas = tipos_centro_resultado[id_tipo];
-
-				if (horas_gastas && tipo_resultado_horas.fase__itemfase__valor_hora__centro_resultado__id == id_tipo){
-					tipo_resultado_horas.horas_restantes = tipo_resultado_horas.total_horas - horas_gastas;
-				}
-			}
-		}
-		
-	}
-	
 	var configurardemanda = function (demanda_id) {
 	
 		if (demanda_id) {
@@ -166,7 +128,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 				configurarorcamento(data);
 				configuraritensfaturamento(data);
 				
-				$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(demanda_id, $ctrl.changeatividade);
+				$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(demanda_id);
 				
 			});
 			
@@ -278,35 +240,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		$ctrl.fase.itensfase.push({});
 	}
 	
-	$ctrl.novaatividade = function () {
-		$ctrl.atividade = {};
-	}
 	
-	$ctrl.salvaratividade = function () {
-		if(!$ctrl.demanda.atividades){
-			$ctrl.demanda.atividades = [];
-		}
-		
-		if ($ctrl.demanda.atividades.indexOf($ctrl.atividade) < 0){
-			$ctrl.demanda.atividades.push($ctrl.atividade);	
-		}
-		
-		for (var i in $ctrl.listafuncionarios){
-			var funcionario = $ctrl.listafuncionarios[i];
-			if (funcionario.id == $ctrl.atividade.responsavel.id){
-				$ctrl.atividade.responsavel.nome = funcionario.nome;
-			}
-		}
-		
-		$ctrl.changeatividade();
-		
-		$ctrl.atividade = {};
-		
-	}
-	
-	$ctrl.editaratividade = function (atividade) {
-		$ctrl.atividade = atividade;
-	}
 	
 	$ctrl.remover = function (i, callback){
 		i.remover = true;		
@@ -458,13 +392,15 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	
 	$ctrl.salvardemanda = function (){
 		MessageService.clear();
+		$ctrl.bloquearsalvar = true;
 		DemandaService.salvardemanda($ctrl.demanda, function(data){
 			share.demanda = data;
 			$ctrl.demanda = data;
 			configuraritensfaturamento(data);
 			configurarorcamento(data);
-			$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(data.id, $ctrl.changeatividade);
+			$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(data.id);
 			MessageService.messagesuccess('Salvo com sucesso!')
+			$ctrl.bloquearsalvar = false;
 		});
 	}
 	
@@ -655,6 +591,80 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		
 		$ctrl.calculartotaiscolunas();
 		
+	}
+	
+}).controller('AtividadeController', function(ValorHoraService, FaseService, share){
+	var $ctrl = this;
+	$ctrl.share = share;
+	
+	$ctrl.atividade = {};
+	
+	$ctrl.changeatividade = function () {
+		
+		var tipos_centro_resultado = {}
+		
+		for (var int = 0; int < $ctrl.share.demanda.atividades.length; int++) {
+			var atividade = $ctrl.share.demanda.atividades[int];
+			
+			if (!atividade.remover){
+			
+				var id_centro_resultado = atividade.centro_resultado.id;
+				var horas_previstas = atividade.horas_previstas;
+				
+				if (tipos_centro_resultado[id_centro_resultado]){
+					tipos_centro_resultado[id_centro_resultado]+=horas_previstas;
+				} else {
+					tipos_centro_resultado[id_centro_resultado]=horas_previstas;
+				}
+			
+			}
+		}	
+		
+		for(var int = 0; int < $ctrl.listacentroresultadoshoras.length; int++){
+		
+			var tipo_resultado_horas = $ctrl.listacentroresultadoshoras[int];
+			tipo_resultado_horas.horas_restantes = tipo_resultado_horas.total_horas;
+			
+			for (var id_tipo in tipos_centro_resultado){
+				
+				var horas_gastas = tipos_centro_resultado[id_tipo];
+
+				if (horas_gastas && tipo_resultado_horas.fase__itemfase__valor_hora__centro_resultado__id == id_tipo){
+					tipo_resultado_horas.horas_restantes = tipo_resultado_horas.total_horas - horas_gastas;
+				}
+			}
+		}
+		
+	}
+	
+	$ctrl.novaatividade = function () {
+		$ctrl.atividade = {};
+	}
+	
+	$ctrl.salvaratividade = function () {
+		if(!$ctrl.share.demanda.atividades){
+			$ctrl.share.demanda.atividades = [];
+		}
+		
+		if ($ctrl.share.demanda.atividades.indexOf($ctrl.atividade) < 0){
+			$ctrl.share.demanda.atividades.push($ctrl.atividade);	
+		}
+		
+		for (var i in $ctrl.listafuncionarios){
+			var funcionario = $ctrl.listafuncionarios[i];
+			if (funcionario.id == $ctrl.atividade.responsavel.id){
+				$ctrl.atividade.responsavel.nome = funcionario.nome;
+			}
+		}
+		
+		$ctrl.changeatividade();
+		
+		$ctrl.atividade = {};
+		
+	}
+	
+	$ctrl.editaratividade = function (atividade) {
+		$ctrl.atividade = atividade;
 	}
 	
 });
