@@ -490,68 +490,62 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	}
 	
 	$ctrl.retornarurl = function(url) {
-		return BASE_URL + url +"?i=103";
+		return BASE_URL + url +"?i=104";
 	}
 	
 }).controller('OrcamentoController', function(ValorHoraService, FaseService, share){
 	var $ctrl = this;
-	$ctrl.demanda = share.demanda;
+	$ctrl.share = share;
 
 	$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card();
 	$ctrl.listafases = FaseService.buscarfases();
 	
 	$ctrl.colunas = [];
 	
-	$ctrl.demanda.$promise.then(function (data){
-	
-		if ($ctrl.demanda.orcamento.orcamento_atividades) {
-			
-			var lista_colunas = [];
-			for (let orcamento_atividade of $ctrl.demanda.orcamento.orcamento_atividades){
+	if ($ctrl.share.demanda.$promise) {
+		$ctrl.share.demanda.$promise.then(function (data){
+		
+			if ($ctrl.share.demanda.orcamento.orcamento_atividades) {
 				
-				for (var valor_hora_id in orcamento_atividade.colunas){
-					if(lista_colunas.indexOf(valor_hora_id) < 0){
-						lista_colunas.push(valor_hora_id)
-						$ctrl.colunas.push({
-							valor_hora: {
-								id:parseInt(valor_hora_id)
-							}
-						});
+				var lista_colunas = [];
+				for (let orcamento_atividade of $ctrl.share.demanda.orcamento.orcamento_atividades){
+					
+					for (var valor_hora_id in orcamento_atividade.colunas){
+						if(lista_colunas.indexOf(valor_hora_id) < 0){
+							lista_colunas.push(valor_hora_id)
+							$ctrl.colunas.push({
+								valor_hora: {
+									id:parseInt(valor_hora_id)
+								}
+							});
+						}
 					}
+					
 				}
 				
+				$ctrl.calculartotaiscolunas();
+				
+			} else {
+				$ctrl.colunas.push({});
 			}
-			
-			$ctrl.calculartotaiscolunas();
-			
-		} else {
-			$ctrl.colunas.push({});
-		}
-	});
+		});
+	}
 	
 	$ctrl.calculartotaiscolunas = function () {
-		if ($ctrl.demanda.orcamento.orcamento_atividades) {
-			
+		if ($ctrl.share.demanda.orcamento.orcamento_atividades) {
 			var total_colunas = 0; 
-			
-			for (let orcamento_atividade of $ctrl.demanda.orcamento.orcamento_atividades){
-				for (let coluna of $ctrl.colunas) {
+			for (let coluna of $ctrl.colunas) {
+				coluna.valor_total = 0;
+				for (let orcamento_atividade of $ctrl.share.demanda.orcamento.orcamento_atividades){
 					for (var valor_hora_id in orcamento_atividade.colunas){
 						if (coluna.valor_hora && coluna.valor_hora.id == valor_hora_id){
-							if (coluna.valor_total){
-								coluna.valor_total+=orcamento_atividade.colunas[valor_hora_id].horas;
-								total_colunas+=orcamento_atividade.colunas[valor_hora_id].horas;
-							} else {
-								coluna.valor_total=orcamento_atividade.colunas[valor_hora_id].horas;
-								total_colunas+=orcamento_atividade.colunas[valor_hora_id].horas;
-							}
+							coluna.valor_total+=orcamento_atividade.colunas[valor_hora_id].horas;
+							total_colunas+=orcamento_atividade.colunas[valor_hora_id].horas;
 						}
 					}
 				}
 			}
-			
 			$ctrl.total_colunas = total_colunas;
-			
 		}
 	}
 	
@@ -580,12 +574,17 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			}
 			
 			if (!repetido){
-				if ($ctrl.demanda.orcamento.orcamento_atividades) {
-					for (let orcamento_atividade of $ctrl.demanda.orcamento.orcamento_atividades) {
-						delete orcamento_atividade.colunas[coluna.valor_hora.id];
+				if ($ctrl.share.demanda.orcamento.orcamento_atividades) {
+					for (let orcamento_atividade of $ctrl.share.demanda.orcamento.orcamento_atividades) {
+						if (orcamento_atividade.colunas){
+							delete orcamento_atividade.colunas[coluna.valor_hora.id];
+						}
 					}
 				}
-				$ctrl.changecoluna();				
+				
+				$ctrl.changecoluna();	
+				$ctrl.calculartotaiscolunas();
+				
 			} else {
 				coluna.valor_hora.id = valorhora_old;
 				alert('Valor de coluna repetido.');
@@ -594,32 +593,34 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	}
 	
 	$ctrl.adicionaratividade = function () {
-		if (!$ctrl.demanda.orcamento.orcamento_atividades) {
-			$ctrl.demanda.orcamento.orcamento_atividades = [];
+		if (!$ctrl.share.demanda.orcamento.orcamento_atividades) {
+			$ctrl.share.demanda.orcamento.orcamento_atividades = [];
 		}
 		
 		var atividade = {
 			colunas : {}
 		}
 		
-		$ctrl.demanda.orcamento.orcamento_atividades.push({});
+		$ctrl.share.demanda.orcamento.orcamento_atividades.push({});
 		
 	}
 	
 	$ctrl.changecoluna = function(){
 		
 		var total = 0;
-		if ($ctrl.demanda.orcamento.orcamento_atividades){
-			for (let orcamento_atividade of $ctrl.demanda.orcamento.orcamento_atividades){
+		if ($ctrl.share.demanda.orcamento.orcamento_atividades){
+			for (let orcamento_atividade of $ctrl.share.demanda.orcamento.orcamento_atividades){
 				var total = 0;
 				for (let coluna of $ctrl.colunas) {
-					if (coluna.valor_hora && orcamento_atividade.colunas[coluna.valor_hora.id]) {
+					if (coluna.valor_hora && orcamento_atividade.colunas && orcamento_atividade.colunas[coluna.valor_hora.id]) {
 						total+=orcamento_atividade.colunas[coluna.valor_hora.id].horas;
 					}
 				}
 				orcamento_atividade.total_horas = total;
 			}
 		}
+		
+		$ctrl.calculartotaiscolunas();
 		
 	}
 	

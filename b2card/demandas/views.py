@@ -447,34 +447,44 @@ class DemandaDetail(APIView):
     
     def salvar_orcamento_atividades(self,orcamento_atividades, orcamento):
         
-        for i in orcamento_atividades:
-            
-            if len([prop for prop in ['fase', 'horas_totais', 'descricao'] if prop in i]) >= 0:
-            
-                fase = None
-                if 'fase' in i:
-                    if i['fase']:
-                        fase = Fase.objects.get(pk=i['fase']['id'])
-                    del i['fase']
+        if orcamento_atividades:
+            for i in orcamento_atividades:
+                
+                if 'total_horas' in i and i['total_horas'] and ('remover' not in i or i['remover'] is False):
+                
+                    fase = None
+                    if 'fase' in i:
+                        if i['fase']:
+                            fase = Fase.objects.get(pk=i['fase']['id'])
+                        del i['fase']
+                        
+                    colunas = None
+                    if 'colunas' in i:
+                        if i['colunas']:
+                            colunas = i['colunas']
+                        del i['colunas']
                     
-                colunas = None
-                if 'colunas' in i:
-                    if i['colunas']:
-                        colunas = i['colunas']
-                    del i['colunas']
-                
-                orcamento_atividade = OrcamentoAtividade(**i)
-                orcamento_atividade.orcamento = orcamento
-                orcamento_atividade.fase = fase
-                orcamento_atividade.save()
-                
-                for id_valorhora, horas in colunas.iteritems():
-                    perfil_atividade = PerfilAtividade()
-                    perfil_atividade.orcamento_atividade = orcamento_atividade
-                    perfil_atividade.horas = horas['horas']
-                    valor_hora = ValorHora.objects.get(pk=id_valorhora)
-                    perfil_atividade.perfil = valor_hora
-                    perfil_atividade.save()
+                    orcamento_atividade = OrcamentoAtividade(**i)
+                    orcamento_atividade.orcamento = orcamento
+                    orcamento_atividade.fase = fase
+                    orcamento_atividade.save()
+        
+                    perfil_atividades = PerfilAtividade.objects.filter(orcamento_atividade__id = orcamento_atividade.id)
+                    if perfil_atividades:
+                        for perfil_atividade in perfil_atividades:
+                            perfil_atividade.delete()
+                    
+                    for id_valorhora, horas in colunas.iteritems():
+                        perfil_atividade = PerfilAtividade()
+                        perfil_atividade.orcamento_atividade = orcamento_atividade
+                        perfil_atividade.horas = horas['horas']
+                        valor_hora = ValorHora.objects.get(pk=id_valorhora)
+                        perfil_atividade.perfil = valor_hora
+                        perfil_atividade.save()
+        
+                elif 'id' in i:
+                    orcamento_atividade = OrcamentoAtividade.objects.get(pk=i['id'])
+                    orcamento_atividade.delete();
     
     def salvar_atividade(self, atividade_list, demanda):
         

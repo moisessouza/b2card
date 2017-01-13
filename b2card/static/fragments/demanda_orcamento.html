@@ -29,7 +29,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="atividade in $ctrl.demanda.orcamento.orcamento_atividades" ng-show="!atividade.remover">
+					<tr ng-repeat="atividade in $ctrl.share.demanda.orcamento.orcamento_atividades" ng-show="!atividade.remover">
 						<td>
 							<select class="form-control" ng-model="atividade.fase.id" ng-options="f.id as f.descricao for f in $ctrl.listafases">
 								<option value="">Selecione...</option>
@@ -42,7 +42,7 @@
 							<input type="number"  class="form-control" ng-model="atividade.colunas[coluna.valor_hora.id].horas" ng-change="$ctrl.changecoluna()" ng-disabled="!coluna.valor_hora.id"/>
 						</td>
 						<td>
-							<input type="text"  class="form-control" ng-model="atividade.total_horas"/>
+							<input type="text"  class="form-control" ng-model="atividade.total_horas" disabled/>
 						</td>
 						<td>
 							<button class="btn btn-default" ng-click="$ctrl.remover(atividade)">
@@ -51,7 +51,7 @@
 						</td>
 					</tr>
 				</tbody>
-				<tfoot>
+				<tfoot ng-show="$ctrl.share.demanda.orcamento.orcamento_atividades.length > 0">
 					<tr>
 						<td>
 							<input type="text" class="form-control" value="Totais" disabled/>
@@ -78,14 +78,14 @@
 							<div class="col-sm-6">
 								<div class="form-group form-group-sm">
 									<input type="text" id="total_orcamento" name="total_orcamento"
-										ng-model="$ctrl.demanda.orcamento.total_orcamento"
+										ng-model="$ctrl.share.demanda.orcamento.total_orcamento"
 										class="form-control" disabled="disabled" />
 								</div>
 							</div>
 							<div class="col-sm-6">
 								<button type="button" class="btn btn-sm btn-primary"
 									ng-click="$ctrl.modalprevisaofaturamento()"
-									ng-show="$ctrl.demanda.orcamento.id && $ctrl.demanda.orcamento.total_orcamento">Previsão
+									ng-show="$ctrl.share.demanda.orcamento.id && $ctrl.share.demanda.orcamento.total_orcamento">Previsão
 									de faturamento</button>
 							</div>
 						</div>
@@ -183,7 +183,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="fase in $ctrl.demanda.orcamento.fases"
+						<tr ng-repeat="fase in $ctrl.share.demanda.orcamento.fases"
 							ng-show="!fase.remover">
 							<td><label>{{fase.descricao}}</label></td>
 							<td>
