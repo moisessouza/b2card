@@ -110,7 +110,6 @@
 	  <li class="active" ng-show="$ctrl.verificardisponibilidadeaba('#dadosdemanda')"><a data-toggle="tab" href="#dadosdemanda">Dados da demanda</a></li>
 	  <li ng-show="$ctrl.verificardisponibilidadeaba('#orcamento')"><a data-toggle="tab" href="#orcamento">Orçamento</a></li>
 	  <li ng-show="$ctrl.verificardisponibilidadeaba('#atividades')"><a data-toggle="tab" href="#atividades">Atividades</a></li>
-	  <li ng-show="$ctrl.verificardisponibilidadeaba('#itens_faturamento')"><a data-toggle="tab" href="#itens_faturamento">Itens de faturamento da demanda</a></li>
 	  <li ng-show="$ctrl.verificardisponibilidadeaba('#proposta')"><a data-toggle="tab" href="#proposta">Proposta</a></li>
 	  <li ng-show="$ctrl.verificardisponibilidadeaba('#tarefas')"><a data-toggle="tab" href="#tarefas">Tarefas</a></li>
 	  <li ng-show="$ctrl.verificardisponibilidadeaba('#observacoes')"><a data-toggle="tab" href="#observacoes">Observações</a></li>
@@ -198,131 +197,6 @@
 		<div id="atividades" ng-if="$ctrl.verificardisponibilidadeaba('#atividades')" class="tab-pane">
 			<div ng-include="$ctrl.retornarurl('static/fragments/demanda_atividade.html')"></div>
 		</div>
-  		<div id="itens_faturamento" ng-if="$ctrl.verificardisponibilidadeaba('#itens_faturamento')" class="tab-pane">
-			<button type="button" class="btn btn-primary margin" ng-click="$ctrl.adicionaritem()">
-		  		<span class="glyphicon glyphicon-plus"></span> Adicionar item
-			</button>
-			
-			<form name="itensfaturamento" ng-repeat="item_faturamento in $ctrl.demanda.itens_faturamento" ng-show="!item_faturamento.remover">
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<strong>{{item_faturamento.descricao ? item_faturamento.descricao : '(Sem descrição)'}}</strong>
-						<div class="btn-group pull-right">
-							<button type="button" class="btn btn-primary" ng-click="$ctrl.remover(item_faturamento)">
-			  					<span class="glyphicon glyphicon-trash margin"></span>
-							</button>
-						</div>
-					</div>
-					<div class="panel-body">
-						<div class="row">
-							<div class="col-sm-6">
-								<div class="form-group form-group-sm">
-									<label for="descricao">Descrição</label> 
-								    <input type="text" id="descricao" name="descricao" ng-model="item_faturamento.descricao" class="form-control" required maxlength="200"/>
-								    <span class="red" ng-show="itensfaturamento.descricao.$invalid">Descrição é obrigatório.</span>
-								</div>
-							</div>
-							<div class="col-sm-6">
-								<div class="form-group form-group-sm">
-									<label for="numero_nota">Numero da nota</label> 
-								    <input type="text" id="numero_nota" name="numero_nota" ng-model="item_faturamento.numero_nota" class="form-control" required maxlength="30"/>
-								    <span class="red" ng-show="itensfaturamento.numero_nota.$invalid">Numero da nota é obrigatório.</span>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-sm-2">
-								<div class="form-group form-group-sm">
-									<label for="comissao_comercial">Status</label> 
-								     <select id="cargo" name="cargo" ng-model="item_faturamento.status" class="form-control">
-							    		<option value="">Selecione um tipo...</option>
-							    		<option value="P">Pendente aprovação</option>
-							    		<option value="A">Aprovado</option>
-							    		<option value="R">Reprovado</option>
-							    	</select>
-								</div>
-							</div>
-							<div class="col-sm-2">
-								<div class="form-group form-group-sm">
-									<label for="data_env_aprov">Data envio aprovação</label> 
-								    <input type="text" id="data_env_aprov" name="data_env_aprov" ng-model="item_faturamento.data_envio_aprovacao" ui-mask="99/99/9999" model-view-value="true" ng-change="$ctrl.changedataenvioaprovacao(item_faturamento)"  class="form-control"/>
-								</div>
-							</div>
-							<div class="col-sm-2">
-								<div class="form-group form-group-sm">
-									<label for="data_previsto_faturamento">Data previsto faturamento</label>
-								    <input type="text" id="data_previsto_faturamento" name="data_previsto_faturamento" ng-model="item_faturamento.data_previsto_faturamento" ui-mask="99/99/9999" model-view-value="true" ng-change="$ctrl.dataprevistofaturamento(item_faturamento)" class="form-control"/>
-								</div>
-							</div>
-							<div class="col-sm-2">
-								<div class="form-group form-group-sm">
-									<label for="data_previsto_pagamento">Data previsto pagamento</label> 
-								    <input type="text" id="data_previsto_pagamento" name="data_previsto_pagamento" ng-model="item_faturamento.data_previsto_pagamento" ui-mask="99/99/9999" model-view-value="true" class="form-control"/>
-								</div>
-							</div>
-							<div class="col-sm-2">
-								<div class="form-group form-group-sm">
-									<label for="data_fat">Data faturamento</label> 
-								    <input type="text" id="data_fat" name="data_fat" ng-model="item_faturamento.data_fatura" ui-mask="99/99/9999" model-view-value="true" class="form-control"/>
-								</div>
-							</div>
-							<div class="col-sm-2">
-								<div class="form-group form-group-sm">
-									<label for="data_pagamento">Data pagamento</label> 
-								    <input type="text" id="data_pagamento" name="data_pagamento" ng-model="item_faturamento.data_pagamento" ui-mask="99/99/9999" model-view-value="true" class="form-control"/>
-								</div>
-							</div>
-						</div>
-						
-						<button type="button" class="btn btn-primary margin" ng-click="$ctrl.adicionarvalorhora(item_faturamento)">
-					  		<span class="glyphicon glyphicon-plus"></span> Adicionar valor hora
-						</button>
-						
-						<table class="table table-sm table-bordered table-striped table-highlight">
-							<thead>
-								<tr class="active">
-									<th>Valor hora</th>
-									<th>Valor</th>
-									<th>Quantidade de horas</th>
-									<th>Valor faturamento</th>
-									<th></th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr ng-repeat="valorhora in item_faturamento.valorhoras" ng-show="!valorhora.remover">
-									<td>
-										<select id="cargo" name="cargo" ng-model="valorhora.valor_hora.id" ng-change="$ctrl.changevalorhoraitem(valorhora, item_faturamento)" class="form-control" ng-options="l.id as l.descricao for l in $ctrl.listavalorhora">
-								    		<option value="">Selecione um tipo...</option>
-								    	</select>
-									</td>
-									<td>
-										<input type="text" id="comissao_comercial" name="comissao_comercial" ng-model="valorhora.valor" ng-change="$ctrl.changevalorhoraitem(valorhora, item_faturamento)" maxlength="30" gb-money class="form-control" disabled/>
-									</td>
-									<td>
-										<input type="number" id="comissao_comercial" name="comissao_comercial" ng-model="valorhora.quantidade_horas" ng-change="$ctrl.changevalorhoraitem(valorhora, item_faturamento)" class="form-control"/>
-									</td>
-									<td>
-										<input type="text" id="valor_faturamento" name="valor_faturamento" ng-model="valorhora.valor_faturamento" maxlength="30" gb-money class="form-control" disabled/>
-									</td>
-									<td>
-										<button type="button" class="btn btn-default" ng-click="$ctrl.remover(valorhora); $ctrl.recalcularfaturamentototal(item_faturamento);">
-											<span class="glyphicon glyphicon-trash"></span>
-										</button>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-						<div class="col-sm-4">
-							<div class="form-group form-group-sm">
-								<label for="valor_total_faturamento">Valor total da fatura</label> 
-							    <input type="text" id="valor_total_faturamento" name="valor_total_faturamento" ng-model="item_faturamento.valor_total_faturamento" gb-money class="form-control" disabled/>
-							</div>
-						</div>
-					</div>
-				</div>
-			</form>
-		</div>
-		
 		<div id="proposta" ng-if="$ctrl.verificardisponibilidadeaba('#proposta')" class="tab-pane">
 		   	
 		   	<button type="button" class="btn btn-primary margin" ng-click="$ctrl.adicionarproposta()">

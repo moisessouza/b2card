@@ -1,26 +1,27 @@
-from django.shortcuts import render
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from demandas.models import Demanda, FaturamentoDemanda, Proposta, Tarefa, Observacao, Ocorrencia,\
-    Orcamento, ItemFase, Fase, Atividade, ValorHoraFaturamento, OrcamentoFase,\
-    OrcamentoAtividade, PerfilAtividade, AtividadeProfissional
-from clientes.models import Cliente
-from demandas.serializers import DemandaSerializer, FaturamentoDemandaSerializer, PropostaSerializer, TarefasSerializer,\
-    ObservacaoSerializer, OcorrenciaSerializer, OrcamentoSerializer,\
-    ItemFaseSerializer, AtividadeSerializer, ValorHoraFaturamentoSerializer,\
-    OrcamentoFaseSerializer, OrcamentoAtividadeSerializer,\
-    AtividadeProfissionalSerializer
-from utils.utils import converter_string_para_data, formatar_data, converter_string_para_float
-from recursos.models import Funcionario
-from cadastros.models import CentroCusto, ValorHora, CentroResultado, UnidadeAdministrativa,\
-    PessoaFisica
-from rest_framework.decorators import api_view
 from django.db.models.aggregates import Sum
+from django.shortcuts import render
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from cadastros.models import CentroCusto, ValorHora, CentroResultado, UnidadeAdministrativa, \
+    PessoaFisica
+from clientes.models import Cliente
+from demandas.models import Demanda, Proposta, Tarefa, Observacao, Ocorrencia, \
+    Orcamento, ItemFase, Fase, Atividade, OrcamentoFase, \
+    OrcamentoAtividade, PerfilAtividade, AtividadeProfissional
+from demandas.serializers import DemandaSerializer, PropostaSerializer, TarefasSerializer, \
+    ObservacaoSerializer, OcorrenciaSerializer, OrcamentoSerializer, \
+    ItemFaseSerializer, AtividadeSerializer, \
+    OrcamentoFaseSerializer, OrcamentoAtividadeSerializer, \
+    AtividadeProfissionalSerializer
 from faturamento.models import Parcela, Medicao, ParcelaFase
 from faturamento.serializers import ParcelaSerializer, MedicaoSerializer, ParcelaFaseSerializer
+from recursos.models import Funcionario
+from utils.utils import converter_string_para_data, formatar_data, converter_string_para_float
+
 
 # Create your views here.
-
 def index(request):
     
     demandas = Demanda.objects.all()
@@ -49,7 +50,6 @@ class DemandaDetail(APIView):
     def serializarDemanda(self, demanda_id):
         
         demanda = Demanda.objects.get(pk=demanda_id)
-        itens_faturamento = FaturamentoDemanda.objects.filter(demanda__id=demanda_id)
         propostas = Proposta.objects.filter(demanda__id=demanda_id)
         tarefas = Tarefa.objects.filter(demanda__id=demanda_id)
         observacoes = Observacao.objects.filter(demanda__id=demanda_id)
@@ -59,21 +59,6 @@ class DemandaDetail(APIView):
         parcelas = Parcela.objects.filter(demanda__id=demanda_id)
         
         data = DemandaSerializer(demanda).data
-        
-        itens_list = []
-        for i in itens_faturamento:
-            faturamento_demanda = FaturamentoDemandaSerializer(i).data
-            faturamento_demanda['data_envio_aprovacao'] = formatar_data(i.data_envio_aprovacao)
-            faturamento_demanda['data_previsto_faturamento'] = formatar_data(i.data_previsto_faturamento)
-            faturamento_demanda['data_previsto_pagamento'] = formatar_data(i.data_previsto_pagamento)
-            faturamento_demanda['data_pagamento'] = formatar_data(i.data_pagamento)
-            faturamento_demanda['data_fatura'] = formatar_data(i.data_fatura)
-            
-            valor_hora_faturamentos = ValorHoraFaturamento.objects.filter(faturamento_demanda = i)
-            valorhoras_list = ValorHoraFaturamentoSerializer(valor_hora_faturamentos, many=True).data
-            faturamento_demanda['valorhoras'] = valorhoras_list
-            
-            itens_list.append(faturamento_demanda)
         
         propostas_list = []
         for i in propostas:
@@ -150,7 +135,6 @@ class DemandaDetail(APIView):
                 
             parcelas_list.append(parcela)
         
-        data['itens_faturamento'] = itens_list
         data['propostas'] = propostas_list
         data['tarefas'] = tarefas_list
         data['observacoes'] = observacoes_list
@@ -222,64 +206,6 @@ class DemandaDetail(APIView):
                 if 'id' in i:
                     proposta = Proposta.objects.get(pk=i['id'])
                     proposta.delete()
-
-    def salvar_item_faturamento(self, itens_faturamento, demanda):
-        for i in itens_faturamento:
-            if 'remover' not in i or i['remover'] is False:
-                if 'descricao' in i and i['descricao'] is not None and 'numero_nota' in i and i['numero_nota'] is not None:
-                    
-                    valorhoras_list = [] 
-                    if 'valorhoras' in i and i['valorhoras'] is not None:
-                        valorhoras_list = i['valorhoras']
-                        del i['valorhoras']
-                    
-                    faturamento_demanda = FaturamentoDemanda(**i)
-                    faturamento_demanda.demanda = demanda
-                    
-                    if 'data_envio_aprovacao' in i:
-                        data_string = i['data_envio_aprovacao']
-                        faturamento_demanda.data_envio_aprovacao = converter_string_para_data(data_string)
-                    if 'data_previsto_faturamento' in i:
-                        data_string = i['data_previsto_faturamento']
-                        faturamento_demanda.data_previsto_faturamento = converter_string_para_data(data_string)
-                    if 'data_previsto_pagamento' in i:
-                        data_string = i['data_previsto_pagamento']
-                        faturamento_demanda.data_previsto_pagamento = converter_string_para_data(data_string)
-                    if 'data_pagamento' in i:
-                        data_string = i['data_pagamento']
-                        faturamento_demanda.data_pagamento = converter_string_para_data(data_string)
-                    if 'data_fatura' in i:
-                        data_string = i['data_fatura']
-                        faturamento_demanda.data_fatura = converter_string_para_data(data_string)
-                    faturamento_demanda.save()
-                    
-                    self.salvar_valor_hora_faturamento(faturamento_demanda, valorhoras_list)
-                    
-            else:
-                if 'id' in i:
-                    faturamento_demanda = FaturamentoDemanda.objects.get(pk=i['id'])
-                    faturamento_demanda.delete()
-
-    def salvar_valor_hora_faturamento(self, faturamento_demanda, valorhoras_list):
-        
-        for t in valorhoras_list:
-            if 'remover' not in t or t['remover'] is False:
-                
-                valor_hora = None
-                if 'valor_hora' in t:
-                    valor_hora = ValorHora.objects.get(pk=t['valor_hora']['id'])
-                    del t['valor_hora']
-                
-                valor_hora_faturamento = ValorHoraFaturamento(**t)
-                valor_hora_faturamento.valor_hora = valor_hora
-                valor_hora_faturamento.valor = converter_string_para_float(valor_hora_faturamento.valor)
-                valor_hora_faturamento.faturamento_demanda = faturamento_demanda
-                valor_hora_faturamento.save()
-                
-            elif 'id' in t:
-                valor_hora_faturamento = ValorHoraFaturamento.objects.get(pk=t['id'])
-                valor_hora_faturamento.delete()
-
     
     def salvar_tarefa(self, tarefas, demanda):
         for i in tarefas:
@@ -621,7 +547,6 @@ class DemandaDetail(APIView):
         unidade_administrativa = data['unidade_administrativa']
         unidade_administrativa = UnidadeAdministrativa.objects.get(pk=unidade_administrativa['id'])
         
-        itens_faturamento = data['itens_faturamento']
         propostas = data['propostas']
         tarefas = data['tarefas']
         observacoes = data['observacoes']
@@ -635,7 +560,6 @@ class DemandaDetail(APIView):
             del data['parcelas']
         
         del data['cliente']
-        del data['itens_faturamento']
         del data['propostas']
         del data['tarefas']
         del data['observacoes']
@@ -656,43 +580,17 @@ class DemandaDetail(APIView):
         
         self.salvar_tarefa(tarefas, demanda)
         self.salvar_proposta(propostas, demanda)
-        self.salvar_item_faturamento(itens_faturamento, demanda)
         self.salvar_observacoes(observacoes, demanda)
         self.salvar_ocorrencias(ocorrencias, demanda)
         self.salvar_orcamento(orcamento, demanda)
         self.salvar_atividade(atividades, demanda)
-        #self.salvar_parcelas(parcelas, demanda)
         
         return Response(self.serializarDemanda(demanda.id))
     
     def delete(self, request, demanda_id, format=None):
-        
         demanda = Demanda.objects.get(pk=demanda_id)
-        faturamento_demanda =  FaturamentoDemanda.objects.filter(demanda=demanda)
-        
-        for i in faturamento_demanda:
-            i.delete()
-            
-        demanda.delete()
-        
         data = DemandaSerializer(demanda).data
-        
-        itens = []
-        
-        for i in faturamento_demanda:
-            faturamento_demanda = FaturamentoDemandaSerializer(i).data
-            faturamento_demanda['data'] = formatar_data(i.data)
-            faturamento_demanda['data_envio_aprovacao'] = formatar_data(i.data_envio_aprovacao)
-            faturamento_demanda['data_aprovacao_fatura'] = formatar_data(i.data_aprovacao_fatura)
-            faturamento_demanda['data_fatura'] = formatar_data(i.data_fatura)
-            itens.append(faturamento_demanda)
-            
-        data['itens_faturamento'] = itens
-        
         return Response(data)
-        
-        return self.get(request, demanda_id, format=None)
-    
 
 @api_view(['GET'])
 def buscar_total_horas_custo_resultado_por_demanda(request, demanda_id, format=None):

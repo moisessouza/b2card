@@ -4,8 +4,8 @@ Created on 14 de set de 2016
 @author: moi09
 '''
 from rest_framework import serializers
-from demandas.models import Demanda, FaturamentoDemanda, Proposta, Tarefa, Observacao, Ocorrencia,\
-    Orcamento, Fase, ItemFase, Atividade, ValorHoraFaturamento, OrcamentoFase,\
+from demandas.models import Demanda, Proposta, Tarefa, Observacao, Ocorrencia,\
+    Orcamento, Fase, ItemFase, Atividade, OrcamentoFase,\
     OrcamentoAtividade, PerfilAtividade, AtividadeProfissional
 from clientes.serializers import ClienteSerializer
 from recursos.serializers import FuncionarioSerializer
@@ -19,17 +19,6 @@ class DemandaSerializer (serializers.ModelSerializer):
     class Meta:
         model = Demanda
         fields = ('id', 'cliente','nome_demanda','descricao','status_demanda','codigo_demanda', 'unidade_administrativa')
-        
-class FaturamentoDemandaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = FaturamentoDemanda
-        fields = ('id', 'descricao', 'numero_nota', 'valor_total_faturamento', 'status', 'data_envio_aprovacao', 'data_previsto_faturamento', 'data_previsto_pagamento', 'data_pagamento', 'data_fatura')
-
-class ValorHoraFaturamentoSerializer(serializers.ModelSerializer):
-    valor_hora = ValorHoraSerializer()
-    class Meta:
-        model = ValorHoraFaturamento
-        fields = ('id','valor_hora', 'valor', 'quantidade_horas', 'valor_faturamento')
         
 class PropostaSerializer(serializers.ModelSerializer):
     class Meta:

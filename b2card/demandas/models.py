@@ -57,26 +57,7 @@ class AtividadeProfissional(models.Model):
     atividade = models.ForeignKey(Atividade, default = None)
     pessoa_fisica = models.ForeignKey(PessoaFisica, default = None)
     quantidade_horas = models.IntegerField(default = None);
-        
-class FaturamentoDemanda(models.Model):
-    descricao = models.CharField(max_length = 200)
-    numero_nota = models.CharField(max_length = 30, default=None)
-    valor_total_faturamento = models.CharField(max_length=30, null=True)
-    status = models.CharField(max_length=1, choices=STATUS, null=True)
-    data_envio_aprovacao = models.DateField(null=True)
-    data_previsto_faturamento = models.DateField(null=True)
-    data_previsto_pagamento = models.DateField(null=True)
-    data_pagamento = models.DateField(null=True)
-    data_fatura = models.DateField(null=True)
-    demanda = models.ForeignKey(Demanda, null=True)
-    
-class ValorHoraFaturamento(models.Model):
-    valor_hora = models.ForeignKey(ValorHora, null=True)
-    valor = models.FloatField(null=True)
-    quantidade_horas = models.IntegerField(null=True)
-    valor_faturamento = models.CharField(max_length=30, null=True)
-    faturamento_demanda = models.ForeignKey(FaturamentoDemanda, null=True, on_delete=models.CASCADE) 
-    
+
 class Proposta(models.Model):
     data_recimento_solicitacao = models.DateField()
     data_limite_entrega = models.DateField(null=True)
