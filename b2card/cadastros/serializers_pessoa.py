@@ -35,6 +35,13 @@ class PessoaFisicaSerializer(serializers.ModelSerializer):
         fields = ('id', 'cpf', 'rg', 'orgao_emissor', 'data_expedicao', 'email', 'data_nascimento', 'estado_civil', 'naturalidade', 'nacionalidade', 'sexo',
                   'grau_instrucao', 'nome_pai', 'nome_mae', 'deficiencia', 'num_pis', 'data_emicao_pis', 'num_titulo_eleitoral', 'zona', 'secao', 'doc_militar', 'categoria_doc_militar')
 
+class PessoaFisicaComSerializer(serializers.ModelSerializer):
+    pessoa = PessoaSerializer()
+    class Meta:
+        model = PessoaFisica
+        fields = ('id', 'cpf', 'rg', 'orgao_emissor', 'data_expedicao', 'email', 'data_nascimento', 'estado_civil', 'naturalidade', 'nacionalidade', 'sexo',
+                  'grau_instrucao', 'nome_pai', 'nome_mae', 'deficiencia', 'num_pis', 'data_emicao_pis', 'num_titulo_eleitoral', 'zona', 'secao', 'doc_militar', 'categoria_doc_militar', 'pessoa')
+
 class PessoaJuridicaSerializer(serializers.ModelSerializer):
     class Meta:
         model = PessoaJuridica

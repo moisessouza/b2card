@@ -14,7 +14,7 @@ from cadastros.serializers_pessoa import PessoaSerializer, \
     DadosBancariosPessoaSerializer, PessoaFisicaSerializer, PrestadorSerializer, \
     PessoaJuridicaSerializer, ContatoSerializer, TelefoneContatoSerializer, \
     ApropriacaoSerializer, CustoPrestadorSerializer,\
-    PessoaJuridicaComPessoaSerializer
+    PessoaJuridicaComPessoaSerializer, PessoaFisicaComSerializer
 from recursos.models import Cargo
 from utils.utils import converter_string_para_data, formatar_data, \
     converter_string_para_float
@@ -43,6 +43,12 @@ class PessoaJuridicaList(APIView):
     def get(self, request, format=None):
         pessoas = PessoaJuridica.objects.filter(pessoa__tipo='J')
         data = PessoaJuridicaComPessoaSerializer(pessoas, many=True).data
+        return Response(data)
+    
+class PessoaFisicaList(APIView):
+    def get(self, request, format=None):
+        pessoas = PessoaFisica.objects.filter(pessoa__tipo='F')
+        data = PessoaFisicaComSerializer(pessoas, many=True).data
         return Response(data)
     
 class PessoaDetail(APIView):

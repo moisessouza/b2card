@@ -1,6 +1,6 @@
 "use strict";
 
-var demandas = angular.module('demandas', ['demandas-services', 'centrocusto-services', 'fase-services', 'valorhora-services', 'parcela', 'parcela-services',
+var demandas = angular.module('demandas', ['demandas-services', 'pessoa-services', 'centrocusto-services', 'fase-services', 'valorhora-services', 'parcela', 'parcela-services',
                                            'centroresultado-services', 'unidadeadministrativa-services', 'ui.bootstrap', 'commons', 'ui.mask']);
 
 demandas.factory('share', function(){
@@ -426,7 +426,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	}
 	
 	$ctrl.retornarurl = function(url) {
-		return BASE_URL + url +"?i=104";
+		return BASE_URL + url +"?i=105";
 	}
 	
 }).controller('OrcamentoController', function(ValorHoraService, FaseService, share){
@@ -593,79 +593,33 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		
 	}
 	
-}).controller('AtividadeController', function(ValorHoraService, FaseService, share){
+}).controller('AtividadeController', function(ValorHoraService, FaseService, PessoaService, share){
 	var $ctrl = this;
 	$ctrl.share = share;
 	
-	$ctrl.atividade = {};
+	$ctrl.listafases = FaseService.buscarfases();
+	$ctrl.profissionais = PessoaService.buscarprofissionais();
 	
-	$ctrl.changeatividade = function () {
-		
-		var tipos_centro_resultado = {}
-		
-		for (var int = 0; int < $ctrl.share.demanda.atividades.length; int++) {
-			var atividade = $ctrl.share.demanda.atividades[int];
-			
-			if (!atividade.remover){
-			
-				var id_centro_resultado = atividade.centro_resultado.id;
-				var horas_previstas = atividade.horas_previstas;
-				
-				if (tipos_centro_resultado[id_centro_resultado]){
-					tipos_centro_resultado[id_centro_resultado]+=horas_previstas;
-				} else {
-					tipos_centro_resultado[id_centro_resultado]=horas_previstas;
-				}
-			
-			}
-		}	
-		
-		for(var int = 0; int < $ctrl.listacentroresultadoshoras.length; int++){
-		
-			var tipo_resultado_horas = $ctrl.listacentroresultadoshoras[int];
-			tipo_resultado_horas.horas_restantes = tipo_resultado_horas.total_horas;
-			
-			for (var id_tipo in tipos_centro_resultado){
-				
-				var horas_gastas = tipos_centro_resultado[id_tipo];
-
-				if (horas_gastas && tipo_resultado_horas.fase__itemfase__valor_hora__centro_resultado__id == id_tipo){
-					tipo_resultado_horas.horas_restantes = tipo_resultado_horas.total_horas - horas_gastas;
-				}
-			}
+	$ctrl.share.demanda.atividades=[{
+		profissionais: [{}]
+	}];
+	
+	$ctrl.adicionar = function () {
+		$ctrl.share.demanda.atividades.push({
+			profissionais: [{}]
+		});	
+	}
+	
+	
+	$ctrl.adicionarprofissional = function (atividade) {
+		if (!atividade.profissionais) {
+			atividade.profissionais = [];
 		}
+		
+		atividade.profissionais.push({});
 		
 	}
 	
-	$ctrl.novaatividade = function () {
-		$ctrl.atividade = {};
-	}
-	
-	$ctrl.salvaratividade = function () {
-		if(!$ctrl.share.demanda.atividades){
-			$ctrl.share.demanda.atividades = [];
-		}
-		
-		if ($ctrl.share.demanda.atividades.indexOf($ctrl.atividade) < 0){
-			$ctrl.share.demanda.atividades.push($ctrl.atividade);	
-		}
-		
-		for (var i in $ctrl.listafuncionarios){
-			var funcionario = $ctrl.listafuncionarios[i];
-			if (funcionario.id == $ctrl.atividade.responsavel.id){
-				$ctrl.atividade.responsavel.nome = funcionario.nome;
-			}
-		}
-		
-		$ctrl.changeatividade();
-		
-		$ctrl.atividade = {};
-		
-	}
-	
-	$ctrl.editaratividade = function (atividade) {
-		$ctrl.atividade = atividade;
-	}
 	
 });
 

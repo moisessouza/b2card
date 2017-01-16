@@ -1,119 +1,78 @@
 <meta charset="utf-8">
-<div class="row" ng-controller="AtividadeController as $ctrl">
-	<div class="col-sm-8">
-		<form name="atividade">
-			<div class="panel panel-primary margin-top">
-				<div class="panel-heading">
-					<strong>{{$ctrl.atividade.titulo ? $ctrl.atividade.titulo : '(Sem título)'}}</strong>
-				</div>
-				<div class="panel-body">
-					<div class="row">
-						<div class="col-sm-2">
-							<div class="form-group form-group-sm">
-								<label for="id" >ID</label> 
-					    		<input id="id" name="id" type="text" ng-model="$ctrl.atividade.id" maxlength="100" class="form-control" disabled/>
-							</div>
-						</div>
-						<div class="col-sm-8">
-							<div class="form-group form-group-sm">
-								<label for="titulo" >Título</label> 
-					    		<input id="titulo" name="titulo" type="text" ng-model="$ctrl.atividade.titulo" maxlength="100" class="form-control" required/>
-					    		<span class="red" ng-show="atividade.titulo.$invalid">Título é obrigatório.</span>
-							</div>
-						</div>
+<div class="col-sm-12" ng-controller="AtividadeController as $ctrl">
+
+	<button class="btn btn-sm btn-primary margin" ng-click="$ctrl.adicionar()">
+		Adicionar
+	</button>
+	
+	<button class="btn btn-sm btn-primary margin">
+		Importar
+	</button>
+	
+	<table class="table table-sm table-bordered table-striped table-highlight" ng-repeat="atividade in $ctrl.share.demanda.atividades">
+		<thead>
+			<tr class="active">
+				<td style="width: 1%;">
+					<div style="width: 140px">
+						Fase
 					</div>
-					<div class="row">
-						<div class="col-sm-3">
-							<div class="form-group form-group-sm">
-								<label for="responsavel">Responsável</label> 
-					    		<select id="responsavel" name="responsavel" ng-model="$ctrl.atividade.responsavel.id" class="form-control" ng-options="f.id as f.nome for f in $ctrl.listafuncionarios" required>
-					    			<option value="">Selecione...</option>
-						    	</select>
-						    	<span class="red" ng-show="atividade.responsavel.$invalid">Responsável é obrigatório.</span>
-							</div>
-						</div>
-						<div class="col-sm-3">
-							<div class="form-group form-group-sm">
-								<label for="centro_resultado">Centro de resultado</label> 
-					    		<select id="centro_resultado" name="centro_resultado" ng-model="$ctrl.atividade.centro_resultado.id" ng-change="$ctrl.changeatividade()" ng-options="c.id as c.nome for c in $ctrl.listacentroresultados" class="form-control" required>
-					    			<option value="">Selecione...</option>
-					    		</select>
-					    		<span class="red" ng-show="atividade.centro_resultado.$invalid">Centro de resultado é obrigatório.</span>
-							</div>
-						</div>
-						<div class="col-sm-2">
-							<div class="form-group form-group-sm">
-								<label for="horas_previstas">Horas previstas</label> 
-					    		<input type="number" id="horas_previstas" class="form-control" ng-model="$ctrl.atividade.horas_previstas" ng-change="$ctrl.changeatividade()" name="horas_previstas" required/>
-					    		<span class="red" ng-show="atividade.horas_previstas.$invalid">Horas previstas é obrigatório.</span>
-							</div>
-						</div>
+				</td>
+				<td>Atividade</td>
+				<td style="width: 1%;">Data inicio</td>
+				<td style="width: 1%;">Data fim</td>
+				<td style="width: 1%;">
+					<div style="width: 140px">
+						Profissional
+						<button class="btn btn-primary button-heading" ng-click="$ctrl.adicionarprofissional(atividade)" style="float:right;">
+							<span class="glyphicon glyphicon-plus"></span>
+						</button>
 					</div>
-				</div>
-			</div>
-		</form>
-		<button type="button" class="btn btn-default margin" ng-click="$ctrl.salvaratividade()" ng-disabled="atividade.$invalid">
-	  		Incluir
-		</button>
-		<button type="button" class="btn btn-default margin" ng-click="$ctrl.novaatividade()">
-	  		Novo
-		</button>
-	</div>
-	<div class="col-sm-3">
-		<div class="panel panel-primary margin-top">
-			<div class="panel-heading">
-				<strong>Horas para cada centro de resultado</strong>
-			</div>
-			<div class="panel-body">
-				<div class="row" ng-repeat="centroresultadohora in $ctrl.listacentroresultadoshoras">
-					<div class="col-sm-12">
-						<label>{{centroresultadohora.fase__itemfase__valor_hora__centro_resultado__nome}}</label>
-						<div class="form-group form-group-sm">
-							Total horas
-							<input type="number" id="total_horas" class="form-control" ng-model="centroresultadohora.total_horas" name="total_horas" disabled/>
-						</div>
-						<div class="form-group form-group-sm">
-							Horas restantes
-							<input type="number" id="horas_restantes" ng-model="centroresultadohora.horas_restantes" class="form-control" name="horas_restantes" disabled/>
-						</div>
+				</td>
+				<td style="width: 1%;">
+					<div style="width: 86px">
+						Horas alocadas
 					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+				</td>
+				<td style="width: 1%;">
+				</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<select class="form-control" ng-model="atividade.fase.id" ng-options="f.id as f.descricao for f in $ctrl.listafases">
+			    		<option value="">Selecione uma fase...</option>
+			    	</select>
+				</td>
+				<td>
+					<input type="text" class="form-control" ng-model="atividade.descricao"/>
+				</td>
+				<td>
+					<input type="text" class="form-control" ng-model="atividade.data_inicio" ui-mask="99/99/9999" model-view-value="true"/>
+				</td>
+				<td>
+					<input type="text" class="form-control" ng-model="atividade.data_fim" ui-mask="99/99/9999" model-view-value="true"/>
+				</td>
+				<td>
+					<span ng-repeat="profissional in atividade.profissionais">
+						<select class="form-control" ng-model="profissional.pessoa.id" ng-options="p.id as p.pessoa.nome_razao_social for p in $ctrl.profissionais">
+				    		<option value="">Selecione um profissional...</option>
+				    	</select>
+			    	</span>
+				</td>
+				<td>
+					<span ng-repeat="profissional in atividade.profissionais">
+						<input type="number" class="form-control"/>
+					</span>
+				</td>
+				<td>
+					<button type="button" class="btn btn-default" ng-click="$ctrl.remover(proposta)">
+						<span class="glyphicon glyphicon-trash"></span>
+					</button>
+				</td>
+			</tr>
+		
+		</tbody>		
+	</table>
 </div>
-<table class="table table-sm table-bordered table-striped table-highlight">
-	<thead>
-		<tr class="active">
-			<th>ID</th>
-			<th>Título</th>
-			<th>Responsável</th>
-			<th></th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr ng-repeat="atividade in $ctrl.share.demanda.atividades" ng-show="!atividade.remover">
-			<td class="col-sm-1">
-				<input type="text" id="id" name="id" ng-model="atividade.id" maxlength="30" class="form-control" disabled/>
-			</td>
-			<td class="col-sm-6">
-				<input type="text" id="descricao" name="descricao" ng-model="atividade.titulo" maxlength="30" gb-money class="form-control" disabled/>
-			</td>
-			<td class="col-sm-6">
-				<input type="text" id="valor_total" name="valor_total" ng-model="atividade.responsavel.nome" maxlength="30" gb-money class="form-control" disabled/>
-			</td>
-			<td>
-				<button type="button" class="btn btn-default" ng-click="$ctrl.editaratividade(atividade)">
-					<span class="glyphicon glyphicon-edit"></span>
-				</button>
-			</td>
-			<td>
-				<button type="button" class="btn btn-default" ng-click="$ctrl.remover(atividade, $ctrl.changeatividade)">
-					<span class="glyphicon glyphicon-trash"></span>
-				</button>
-			</td>
-		</tr>
-	</tbody>
-</table>
 			
