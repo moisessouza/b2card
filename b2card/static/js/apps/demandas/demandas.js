@@ -591,33 +591,54 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		
 	}
 	
-}).controller('AtividadeController', function(ValorHoraService, FaseService, PessoaService, share){
+}).controller('AtividadeController', function(ValorHoraService, FaseService, CommonsService, PessoaService, share){
 	var $ctrl = this;
 	$ctrl.share = share;
 	
 	$ctrl.listafases = FaseService.buscarfases();
-	$ctrl.profissionais = PessoaService.buscarprofissionais();
+	var atividadeprofissional = {}
+	
+	$ctrl.remover = function (i, callback){
+		i.remover = true;		
+		if (callback){
+			callback();
+		}
+	}
 	
 	$ctrl.share.demanda.atividades=[{
-		atividadeprofissionais: [{}]
+		atividadeprofissionais: [atividadeprofissional]
 	}];
 	
-	$ctrl.buscarprofissional = function (texto){
-		return $ctrl.profissionais;
+	$ctrl.atividadeprofissionalmap = {};
+	$ctrl.atividadeprofissionalmap = {
+		atividadeprofissional:[]
+	}
+	
+	$ctrl.buscarprofissional = function (texto, atividadeprofissional){
+		if (texto){
+			PessoaService.buscarprofissional(texto, function (data){
+				$ctrl.atividadeprofissionalmap[atividadeprofissional]=data;
+			}); 
+		}
 	}
 	
 	$ctrl.adicionar = function () {
+		var atividadeprofissional = {};
 		$ctrl.share.demanda.atividades.push({
-			atividadeprofissionais: [{}]
+			atividadeprofissionais: [atividadeprofissional]
 		});	
+		
+		$ctrl.atividadeprofissionalmap[atividadeprofissional] = [];
 	}
 	
 	
 	$ctrl.adicionarprofissional = function (atividade) {
+		var atividadeprofissional = {};
 		if (!atividade.atividadeprofissionais) {
 			atividade.atividadeprofissionais = [];
 		}
-		atividade.atividadeprofissionais.push({});
+		atividade.atividadeprofissionais.push(atividadeprofissional);
+		$ctrl.atividadeprofissionalmap[atividadeprofissional] = [];
 	}
 	
 });

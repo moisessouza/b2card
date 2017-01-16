@@ -6,11 +6,12 @@ Created on 14 de set de 2016
 from rest_framework import serializers
 from demandas.models import Demanda, FaturamentoDemanda, Proposta, Tarefa, Observacao, Ocorrencia,\
     Orcamento, Fase, ItemFase, Atividade, ValorHoraFaturamento, OrcamentoFase,\
-    OrcamentoAtividade, PerfilAtividade
+    OrcamentoAtividade, PerfilAtividade, AtividadeProfissional
 from clientes.serializers import ClienteSerializer
 from recursos.serializers import FuncionarioSerializer
 from cadastros.serializers import CentroCustoSerializer, ValorHoraSerializer, CentroResultadoSerializer,\
     UnidadeAdministrativaSerializer, FaseSerializer
+from cadastros.serializers_pessoa import PessoaFisicaComPessoaSerializer
     
 class DemandaSerializer (serializers.ModelSerializer):
     cliente = ClienteSerializer()
@@ -70,12 +71,17 @@ class ItemFaseSerializer(serializers.ModelSerializer):
         fields = ('id', 'valor_hora', 'valor_selecionado', 'quantidade_horas', 'valor_total')
         
 class AtividadeSerializer(serializers.ModelSerializer):
-    responsavel = FuncionarioSerializer()
-    centro_resultado = CentroResultadoSerializer()
+    fase = FaseSerializer()
     class Meta:
         model = Atividade
-        fields = ('id', 'titulo', 'responsavel', 'centro_resultado', 'horas_previstas')
-        
+        fields = ('id', 'fase', 'descricao', 'data_inicio', 'data_fim')
+
+class AtividadeProfissionalSerializer(serializers.ModelSerializer):
+    pessoa_fisica = PessoaFisicaComPessoaSerializer()
+    class Meta:
+        model = AtividadeProfissional
+        fields = ('id', 'pessoa_fisica', 'quantidade_horas')
+
 class OrcamentoAtividadeSerializer(serializers.ModelSerializer):
     fase = FaseSerializer()
     class Meta:

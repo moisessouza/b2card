@@ -14,10 +14,11 @@ from cadastros.serializers_pessoa import PessoaSerializer, \
     DadosBancariosPessoaSerializer, PessoaFisicaSerializer, PrestadorSerializer, \
     PessoaJuridicaSerializer, ContatoSerializer, TelefoneContatoSerializer, \
     ApropriacaoSerializer, CustoPrestadorSerializer,\
-    PessoaJuridicaComPessoaSerializer, PessoaFisicaComSerializer
+    PessoaJuridicaComPessoaSerializer, PessoaFisicaComPessoaSerializer
 from recursos.models import Cargo
 from utils.utils import converter_string_para_data, formatar_data, \
     converter_string_para_float
+from rest_framework.decorators import api_view
 
 
 def index(request):
@@ -48,7 +49,7 @@ class PessoaJuridicaList(APIView):
 class PessoaFisicaList(APIView):
     def get(self, request, format=None):
         pessoas = PessoaFisica.objects.filter(pessoa__tipo='F')
-        data = PessoaFisicaComSerializer(pessoas, many=True).data
+        data = PessoaFisicaComPessoaSerializer(pessoas, many=True).data
         return Response(data)
     
 class PessoaDetail(APIView):
@@ -460,3 +461,11 @@ class PessoaDetail(APIView):
         pessoa.delete()
         data = self.serializar_pessoa(pessoa)
         return Response(data)
+    
+    
+@api_view(['GET'])
+def buscar_pessoas_por_nome(request, texto, format=None):
+    pessoas = PessoaFisica.objects.filter(pessoa__nome_razao_social__icontains=texto)
+    data = PessoaFisicaComPessoaSerializer(pessoas, many=True).data
+    return Response(data)
+    

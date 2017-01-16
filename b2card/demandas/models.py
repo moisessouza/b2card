@@ -4,7 +4,7 @@ from recursos.models import Funcionario
 from clientes.models import Cliente
 from datetime import datetime
 from cadastros.models import CentroCusto, ValorHora, CentroResultado, UnidadeAdministrativa,\
-    Fase
+    Fase, PessoaFisica
 import faturamento
 import cadastros
 
@@ -47,12 +47,17 @@ class Demanda(models.Model):
     unidade_administrativa = models.ForeignKey(UnidadeAdministrativa, default=None, null=True)
     
 class Atividade(models.Model):
-    titulo = models.CharField(max_length=100)
-    responsavel = models.ForeignKey(Funcionario, default=None)
-    centro_resultado = models.ForeignKey(CentroResultado, default=None)
-    horas_previstas = models.IntegerField()
-    demanda = models.ForeignKey(Demanda)
+    demanda = models.ForeignKey(Demanda, default = None)
+    fase = models.ForeignKey(Fase, default = None)
+    descricao = models.CharField(max_length=100, default = None)
+    data_inicio = models.DateField(default = None)
+    data_fim = models.DateField(default = None)
     
+class AtividadeProfissional(models.Model):
+    atividade = models.ForeignKey(Atividade, default = None)
+    pessoa_fisica = models.ForeignKey(PessoaFisica, default = None)
+    quantidade_horas = models.IntegerField(default = None);
+        
 class FaturamentoDemanda(models.Model):
     descricao = models.CharField(max_length = 200)
     numero_nota = models.CharField(max_length = 30, default=None)

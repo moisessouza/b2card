@@ -3,15 +3,17 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from demandas.models import Demanda, FaturamentoDemanda, Proposta, Tarefa, Observacao, Ocorrencia,\
     Orcamento, ItemFase, Fase, Atividade, ValorHoraFaturamento, OrcamentoFase,\
-    OrcamentoAtividade, PerfilAtividade
+    OrcamentoAtividade, PerfilAtividade, AtividadeProfissional
 from clientes.models import Cliente
 from demandas.serializers import DemandaSerializer, FaturamentoDemandaSerializer, PropostaSerializer, TarefasSerializer,\
     ObservacaoSerializer, OcorrenciaSerializer, OrcamentoSerializer,\
     ItemFaseSerializer, AtividadeSerializer, ValorHoraFaturamentoSerializer,\
-    OrcamentoFaseSerializer, OrcamentoAtividadeSerializer
+    OrcamentoFaseSerializer, OrcamentoAtividadeSerializer,\
+    AtividadeProfissionalSerializer
 from utils.utils import converter_string_para_data, formatar_data, converter_string_para_float
 from recursos.models import Funcionario
-from cadastros.models import CentroCusto, ValorHora, CentroResultado, UnidadeAdministrativa
+from cadastros.models import CentroCusto, ValorHora, CentroResultado, UnidadeAdministrativa,\
+    PessoaFisica
 from rest_framework.decorators import api_view
 from django.db.models.aggregates import Sum
 from faturamento.models import Parcela, Medicao, ParcelaFase
@@ -114,7 +116,20 @@ class DemandaDetail(APIView):
         
         atividade_list = []
         if atividades:
-            atividade_list = AtividadeSerializer(atividades, many=True).data    
+            
+            for i in atividades:
+                
+                atividade = AtividadeSerializer(i).data
+                
+                atividade['data_inicio'] = formatar_data(i.data_inicio)
+                atividade['data_fim'] = formatar_data(i.data_fim)
+                
+                atividade_profissionais = AtividadeProfissional.objects.filter(atividade = i)
+                
+                if atividade_profissionais:
+                    atividade['atividadeprofissionais'] = AtividadeProfissionalSerializer(atividade_profissionais, many=True).data
+            
+                atividade_list.append(atividade)
             
         parcelas_list = []
         for i in parcelas:
@@ -491,29 +506,48 @@ class DemandaDetail(APIView):
     def salvar_atividade(self, atividade_list, demanda):
         
         for i in atividade_list:
-            if 'remover' not in i or i['remover'] is False:
-                if 'titulo' in i:
-                    responsavel = None
-                    if 'responsavel' in i:
-                        responsavel = Funcionario.objects.get(pk=i['responsavel']['id'])
-                        del i['responsavel']
-                    
-                    centro_resultado = None
-                    if 'centro_resultado' in i:
-                        centro_resultado = CentroResultado.objects.get(pk=i['centro_resultado']['id'])
-                        del i['centro_resultado']
-                    
-                    atividade = Atividade(**i)
-                    atividade.responsavel = responsavel
-                    atividade.centro_resultado = centro_resultado
-                    atividade.demanda = demanda
-                    
-                    atividade.save()
+            if 'descricao' in i and 'fase' in i and i['fase'] and 'data_inicio' in i and 'data_fim' in i and ('remover' not in i or i['remover'] is False):
+
+                fase = None
+                if 'fase' in i:
+                    if 'id' in i['fase']:
+                        fase = Fase.objects.get(pk=i['fase']['id'])
+                    del i['fase']
+                
+                atividade_profissionais = None
+                if 'atividadeprofissionais' in i:
+                    atividade_profissionais = i['atividadeprofissionais']
+                    del i['atividadeprofissionais']
+                
+                atividade = Atividade(**i)
+                atividade.demanda = demanda
+                atividade.fase = fase
+                atividade.data_inicio = converter_string_para_data(atividade.data_inicio)
+                atividade.data_fim = converter_string_para_data(atividade.data_fim)
+                atividade.save()
+                
+                self.salvar_atividade_profissionais(atividade_profissionais, atividade)
                 
             elif 'id' in i:
                 atividade = Atividade.objects.get(pk=i['id'])
                 atividade.delete();
-                
+    def salvar_atividade_profissionais(self, atividade_profissionais, atividade):
+        if atividade_profissionais:
+            for i in atividade_profissionais:
+                if 'pessoa_fisica' in i and i['pessoa_fisica'] and 'id' in i['pessoa_fisica'] and 'quantidade_horas' in i:
+                    
+                    pessoa_fisica = PessoaFisica.objects.get(pk=i['pessoa_fisica']['id'])
+                    del i['pessoa_fisica']
+                    
+                    atividade_profissional = AtividadeProfissional(**i)
+                    atividade_profissional.atividade = atividade
+                    atividade_profissional.pessoa_fisica = pessoa_fisica
+                    atividade_profissional.save()
+                    
+                elif 'id' in i:
+                    atividade_profissional = AtividadeProfissional.objects.get(pk=i['id'])
+                    atividade_profissional.delete()
+    
     def salvar_parcelas(self, parcela_list, demanda):
         
         if parcela_list:
