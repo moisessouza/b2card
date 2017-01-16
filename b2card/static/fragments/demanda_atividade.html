@@ -9,6 +9,25 @@
 		Importar
 	</button>
 	
+	<style type="text/css">
+		
+		md-autocomplete md-autocomplete-wrap {
+			height: 26px;
+			border-radius: 5px
+		}
+		
+		md-autocomplete input:not(.md-input) {
+			height: 26px
+		}
+		
+		md-autocomplete {
+			height: 26px;
+			margin-top: 3px;
+			border-radius: 5px
+		}
+		
+	</style>
+	
 	<table class="table table-sm table-bordered table-striped table-highlight" ng-repeat="atividade in $ctrl.share.demanda.atividades">
 		<thead>
 			<tr class="active">
@@ -54,14 +73,16 @@
 					<input type="text" class="form-control" ng-model="atividade.data_fim" ui-mask="99/99/9999" model-view-value="true"/>
 				</td>
 				<td>
-					<span ng-repeat="profissional in atividade.profissionais">
-						<select class="form-control" ng-model="profissional.pessoa.id" ng-options="p.id as p.pessoa.nome_razao_social for p in $ctrl.profissionais">
-				    		<option value="">Selecione um profissional...</option>
-				    	</select>
+					<span ng-repeat="atividadeprofissional in atividade.atividadeprofissionais" ayout-gt-sm="row">
+				    	<md-autocomplete md-selected-item="atividadeprofissional.pessoafisica" md-input-classes="teste" md-search-text="searchText" md-items="p in $ctrl.buscarprofissional(searchText)"  md-item-text="p.pessoa.nome_razao_social">
+				    		<md-item-template>
+						    	<span md-highlight-text="searchText">{{p.pessoa.nome_razao_social}}</span>
+						  	</md-item-template>
+						</md-autocomplete>
 			    	</span>
 				</td>
 				<td>
-					<span ng-repeat="profissional in atividade.profissionais">
+					<span ng-repeat="profissional in atividade.atividadeprofissionais">
 						<input type="number" class="form-control"/>
 					</span>
 				</td>
