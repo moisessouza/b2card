@@ -1,7 +1,7 @@
 "use strict";
 
 var demandas = angular.module('demandas', ['demandas-services', 'pessoa-services', 'centrocusto-services', 'fase-services', 'valorhora-services', 'parcela', 'parcela-services',
-                                           'centroresultado-services', 'unidadeadministrativa-services', 'ui.bootstrap', 'commons', 'ui.mask']);
+                                           'centroresultado-services', 'unidadeadministrativa-services', 'ui.bootstrap', 'commons', 'ui.mask',  'ngMaterial']);
 
 demandas.factory('share', function(){
 	  return {};
@@ -28,8 +28,6 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			i.show = true;
 		}
 	};
-	
-	
 	
 	var configuraritensfaturamento = function (data) {
 		if (data.itens_faturamento) {
@@ -426,7 +424,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	}
 	
 	$ctrl.retornarurl = function(url) {
-		return BASE_URL + url +"?i=105";
+		return BASE_URL + url +"?i=108";
 	}
 	
 }).controller('OrcamentoController', function(ValorHoraService, FaseService, share){
@@ -601,25 +599,26 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	$ctrl.profissionais = PessoaService.buscarprofissionais();
 	
 	$ctrl.share.demanda.atividades=[{
-		profissionais: [{}]
+		atividadeprofissionais: [{}]
 	}];
+	
+	$ctrl.buscarprofissional = function (texto){
+		return $ctrl.profissionais;
+	}
 	
 	$ctrl.adicionar = function () {
 		$ctrl.share.demanda.atividades.push({
-			profissionais: [{}]
+			atividadeprofissionais: [{}]
 		});	
 	}
 	
 	
 	$ctrl.adicionarprofissional = function (atividade) {
-		if (!atividade.profissionais) {
-			atividade.profissionais = [];
+		if (!atividade.atividadeprofissionais) {
+			atividade.atividadeprofissionais = [];
 		}
-		
-		atividade.profissionais.push({});
-		
+		atividade.atividadeprofissionais.push({});
 	}
-	
 	
 });
 
