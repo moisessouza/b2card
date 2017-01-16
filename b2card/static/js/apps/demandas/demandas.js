@@ -641,6 +641,30 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		$ctrl.atividadeprofissionalmap[atividadeprofissional] = [];
 	}
 	
+	$ctrl.importaratividadesorcamento = function () {
+		if ($ctrl.share.demanda.orcamento && 
+				$ctrl.share.demanda.orcamento.orcamento_atividades){
+			
+			for (let orcamento_atividade of $ctrl.share.demanda.orcamento.orcamento_atividades) {
+				var atividadeprofissional = {
+					quantidade_horas: orcamento_atividade.total_horas
+				}
+				$ctrl.atividadeprofissionalmap[atividadeprofissional] = [];
+				var atividade = {
+					fase: orcamento_atividade.fase,
+					descricao: 	orcamento_atividade.descricao,
+					atividadeprofissionais: [atividadeprofissional]
+				}
+				
+				$ctrl.share.demanda.atividades.push(atividade);
+				
+			}
+			
+		}
+		
+		
+	}
+	
 });
 
 $(function(){
