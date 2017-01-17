@@ -389,8 +389,8 @@ class DemandaDetail(APIView):
         if orcamento_atividades:
             for i in orcamento_atividades:
                 
-                if ('total_horas' in i and 'fase' in i and i['fase'] and 
-                    'descricao' in i and i['descricao'] and i['total_horas'] and 
+                if ('fase' in i and i['fase'] and 
+                    'descricao' in i and i['descricao'] and 
                     ('remover' not in i or i['remover'] is False)):
                 
                     fase = None
@@ -414,14 +414,14 @@ class DemandaDetail(APIView):
                     if perfil_atividades:
                         for perfil_atividade in perfil_atividades:
                             perfil_atividade.delete()
-                    
-                    for id_valorhora, horas in colunas.iteritems():
-                        perfil_atividade = PerfilAtividade()
-                        perfil_atividade.orcamento_atividade = orcamento_atividade
-                        perfil_atividade.horas = horas['horas']
-                        valor_hora = ValorHora.objects.get(pk=id_valorhora)
-                        perfil_atividade.perfil = valor_hora
-                        perfil_atividade.save()
+                    if colunas:
+                        for id_valorhora, horas in colunas.iteritems():
+                            perfil_atividade = PerfilAtividade()
+                            perfil_atividade.orcamento_atividade = orcamento_atividade
+                            perfil_atividade.horas = horas['horas']
+                            valor_hora = ValorHora.objects.get(pk=id_valorhora)
+                            perfil_atividade.perfil = valor_hora
+                            perfil_atividade.save()
         
                 elif 'id' in i:
                     orcamento_atividade = OrcamentoAtividade.objects.get(pk=i['id'])

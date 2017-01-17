@@ -142,7 +142,7 @@ class OrcamentoAtividade(models.Model):
     fase = models.ForeignKey(Fase)
     orcamento = models.ForeignKey(Orcamento, default = None)
     descricao = models.CharField(max_length=100, default = None)
-    total_horas = models.IntegerField(default = None)
+    total_horas = models.IntegerField(null=True, default = None)
     
 class PerfilAtividade(models.Model):
     orcamento_atividade = models.ForeignKey(OrcamentoAtividade, default = None)
