@@ -131,6 +131,10 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		
 	$ctrl.listaclientes= PessoaService.buscarpessoasjuridicas();
 	$ctrl.listafuncionarios = PessoaService.buscarprofissionais();
+	
+	// TODO mudar isso depois... 
+	share.listafuncionarios = $ctrl.listafuncionarios;
+	
 	$ctrl.listacentroresultados = CentroResultadoService.buscarcentroresultados();
 	$ctrl.listaunidadeadministrativas = UnidadeAdministrativaService.buscarunidadeadministrativas();
 	
@@ -177,7 +181,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 	}
 	
 	$ctrl.retornarurl = function(url) {
-		return BASE_URL + url +"?i=111";
+		return BASE_URL + url +"?i=112";
 	}
 	
 }).controller('OrcamentoController', function($rootScope, ValorHoraService, FaseService, CommonsService, share){

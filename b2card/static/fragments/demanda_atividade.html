@@ -28,6 +28,16 @@
 			border-radius: 5px
 		}
 		
+		div.modal-funcionario {
+			position: absolute;
+    		z-index: 1;
+    		background-color: beige;
+    		border-color: black;
+    		border: 1px solid #ccc;
+    		padding: 5px;
+    		right: 3%
+    	}
+		
 	</style>
 	
 	<form name="atividades">
@@ -49,6 +59,14 @@
 							<button class="btn btn-primary button-heading" ng-click="$ctrl.adicionarprofissional(atividade)" style="float:right;">
 								<span class="glyphicon glyphicon-plus"></span>
 							</button>
+							<button class="btn btn-primary button-heading" ng-click="$ctrl.adicionarprofissional(atividade)" style="margin-right:2px; float:right;">
+								<span class="glyphicon glyphicon-collapse-down"></span>
+							</button>
+							<div class="modal-funcionario">
+								<div ng-repeat="f in $ctrl.share.listafuncionarios">
+									<input type="checkbox""> {{f.pessoa.nome_razao_social}}
+								</div>
+							</div>
 						</div>
 					</td>
 					<td style="width: 1%;">
