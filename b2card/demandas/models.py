@@ -147,4 +147,4 @@ class OrcamentoAtividade(models.Model):
 class PerfilAtividade(models.Model):
     orcamento_atividade = models.ForeignKey(OrcamentoAtividade, default = None)
     perfil = models.ForeignKey(ValorHora, default = None)
-    horas = models.IntegerField(default = None)
+    horas = models.IntegerField(null=True, default = None)
