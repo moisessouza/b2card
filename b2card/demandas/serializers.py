@@ -7,13 +7,13 @@ from rest_framework import serializers
 from demandas.models import Demanda, Proposta, Tarefa, Observacao, Ocorrencia,\
     Orcamento, Fase, ItemFase, Atividade, OrcamentoFase,\
     OrcamentoAtividade, PerfilAtividade, AtividadeProfissional
-from clientes.serializers import ClienteSerializer
 from cadastros.serializers import CentroCustoSerializer, ValorHoraSerializer, CentroResultadoSerializer,\
     UnidadeAdministrativaSerializer, FaseSerializer
-from cadastros.serializers_pessoa import PessoaFisicaComPessoaSerializer
+from cadastros.serializers_pessoa import PessoaFisicaComPessoaSerializer,\
+    PessoaJuridicaComPessoaSerializer
     
 class DemandaSerializer (serializers.ModelSerializer):
-    cliente = ClienteSerializer()
+    cliente = PessoaJuridicaComPessoaSerializer()
     unidade_administrativa = UnidadeAdministrativaSerializer()
     class Meta:
         model = Demanda

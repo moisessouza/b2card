@@ -24,7 +24,7 @@ table tr {
     <tbody>
       {% for demanda in demandas %}
       <tr href="{% url 'demandas:editar' demanda.id %}">
-        <td>{{demanda.cliente.razao_social}}</td>
+        <td>{{demanda.cliente.pessoa.nome_razao_social}}</td>
         <td>{{demanda.numero_proposta}}</td>
         <td>{{demanda.identificacao}}</td>
       </tr>

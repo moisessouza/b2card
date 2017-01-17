@@ -79,13 +79,6 @@
           		</ul>
           	</li>
 			<li>
-				{% check_permittion 'clientes:inicial' %}
-				<a href="{% url 'clientes:inicial' %}">
-					Clientes
-				</a>
-				{%endcheck_permittion%}
-			</li>
-			<li>
 				{% check_permittion 'demandas:inicial' %}
 				<a href="{% url 'demandas:inicial' %}">
 					Demandas

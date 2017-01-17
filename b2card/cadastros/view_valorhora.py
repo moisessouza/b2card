@@ -116,7 +116,7 @@ class ValorHoraDetail(APIView):
     
 @api_view(['GET'])
 def buscar_valor_hora_por_cliente(request, cliente_id):
-    valor_horas = ValorHora.objects.filter(centro_custo__cliente__id = cliente_id);
+    valor_horas = ValorHora.objects.filter(centro_custo__apropriacao__pessoa__pessoajuridica__id = cliente_id);
     
     valor_hora_list = []
     for i in valor_horas:

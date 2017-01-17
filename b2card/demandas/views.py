@@ -5,8 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from cadastros.models import CentroCusto, ValorHora, CentroResultado, UnidadeAdministrativa, \
-    PessoaFisica
-from clientes.models import Cliente
+    PessoaFisica, PessoaJuridica
 from demandas.models import Demanda, Proposta, Tarefa, Observacao, Ocorrencia, \
     Orcamento, ItemFase, Fase, Atividade, OrcamentoFase, \
     OrcamentoAtividade, PerfilAtividade, AtividadeProfissional
@@ -541,7 +540,7 @@ class DemandaDetail(APIView):
         data = request.data
         
         cliente = data['cliente']
-        cliente = Cliente.objects.get(pk=cliente['id'])
+        cliente = PessoaJuridica.objects.get(pk=cliente['id'])
         
         unidade_administrativa = data['unidade_administrativa']
         unidade_administrativa = UnidadeAdministrativa.objects.get(pk=unidade_administrativa['id'])

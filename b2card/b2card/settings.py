@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'autenticacao.apps.AutenticacaoConfig',
     'inicial.apps.InicialConfig',
     'recursos.apps.RecursosConfig',
-    'clientes.apps.ClientesConfig',
     'demandas.apps.DemandasConfig',
     'cadastros.apps.CadastrosConfig',
     'faturamento.apps.FaturamentoConfig',

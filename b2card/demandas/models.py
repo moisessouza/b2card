@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from clientes.models import Cliente
 from datetime import datetime
 from cadastros.models import CentroCusto, ValorHora, CentroResultado, UnidadeAdministrativa,\
-    Fase, PessoaFisica
+    Fase, PessoaFisica, PessoaJuridica
 import faturamento
 import cadastros
 
@@ -38,7 +37,7 @@ TIPO_PARCELA = (
 )
 
 class Demanda(models.Model):
-    cliente = models.ForeignKey(Cliente, blank=False)
+    cliente = models.ForeignKey(PessoaJuridica, default=None)
     nome_demanda = models.CharField(max_length=30,default=None)
     descricao = models.TextField(default=None, null=True)
     status_demanda = models.CharField(max_length=1, choices=STATUS_DEMANDA, null=True)

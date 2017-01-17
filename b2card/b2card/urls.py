@@ -21,7 +21,6 @@ urlpatterns = [
     url(r'^cadastros/', include('cadastros.urls')),
     url(r'^autenticacao/', include('autenticacao.urls')),
     url(r'^inicial/', include('inicial.urls')),
-    url(r'^clientes/', include('clientes.urls')),
     url(r'^recursos/', include('recursos.urls')),
     url(r'^demandas/', include('demandas.urls')),
     url(r'^faturamento/', include('faturamento.urls'))

@@ -132,7 +132,7 @@
 							<div class="col-md-3">
 								<div class="form-group">
 									<label for="cliente">Cliente</label> 
-								    <select id="cliente" name="cliente" class="form-control" ng-change="$ctrl.changecliente()" ng-model="$ctrl.demanda.cliente.id" ng-options="c.id as c.razao_social for c in $ctrl.listaclientes" required>
+								    <select id="cliente" name="cliente" class="form-control" ng-change="$ctrl.changecliente()" ng-model="$ctrl.demanda.cliente.id" ng-options="c.id as c.pessoa.nome_razao_social for c in $ctrl.listaclientes" required>
 								    	<option value="">Selecione um cliente...</option>
 								    </select>
 									<span class="red" ng-show="demanda.cliente.$invalid">Cliente é obrigatório.</span>

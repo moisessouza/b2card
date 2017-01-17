@@ -11,7 +11,6 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('clientes', '0001_initial'),
         ('cadastros', '0001_initial'),
         ('recursos', '__first__'),
     ]

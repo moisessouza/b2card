@@ -29,38 +29,9 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		}
 	};
 	
-	var configurarorcamento = function (data) {
-		
-		if (data.cliente){
-			$ctrl.listavalorhora = ValorHoraService.buscarvalorhoraporcliente(data.cliente.id);
-		}
-		
-		if (data.orcamento){
-			
-			data.orcamento.total_orcamento = CommonsService.formatarnumero(data.orcamento.total_orcamento);
-			
-			if (data.orcamento.fases) {
-				
-				for (var i in data.orcamento.fases){
-					
-					var fase =  data.orcamento.fases[i]
-					fase.valor_total = CommonsService.formatarnumero(fase.valor_total);
-					
-					if (fase.itensfase) {
-						for (var j in fase.itensfase) {
-							var itemfase = fase.itensfase[j]
-							itemfase.valor_selecionado = CommonsService.formatarnumero(itemfase.valor_selecionado);
-							itemfase.valor_total = CommonsService.formatarnumero(itemfase.valor_total);
-						}
-					}
-				}
-			}				
-		}
-	}
-	
 	$ctrl.changecliente = function () {
 		if ($ctrl.demanda.cliente){
-			$ctrl.listavalorhora = ValorHoraService.buscarvalorhoraporcliente($ctrl.demanda.cliente.id);
+			share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente($ctrl.demanda.cliente.id);
 		}
 	}
 	
@@ -79,7 +50,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 					return $ctrl.demanda;
 				},
 				listavalorhora: function () {
-					return $ctrl.listavalorhora;
+					return share.listavalorhora;
 				}
 				
 			}
@@ -108,8 +79,6 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 				for ( var i in tarefas ){
 					tarefas[i].show = false;
 				}
-				
-				configurarorcamento(data);
 				
 				$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(demanda_id);
 				
@@ -153,61 +122,6 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		$ctrl.demanda.ocorrencias.unshift(ocorrencia);
 	}
 	
-	$ctrl.novafase = function () {
-		$ctrl.fase = {
-			itensfase: [{}]
-		};
-	}
-	
-	$ctrl.cancelarfase = function () {
-		$ctrl.fase = null;
-	}
-	
-	$ctrl.editarfase = function (fase) {
-		$ctrl.fase = fase;
-	}
-	
-	$ctrl.salvarfase = function () {
-		if (!$ctrl.demanda.orcamento){
-			$ctrl.demanda.orcamento = {};
-		}
-		if (!$ctrl.demanda.orcamento.fases){
-			$ctrl.demanda.orcamento.fases = [];
-		}
-		
-		if ($ctrl.fase.descricao){
-			
-			if ( $ctrl.fase.itensfase){
-				for (var i in $ctrl.fase.itensfase){
-					var itemfase = $ctrl.fase.itensfase[i];
-					for (var j in $ctrl.listavalorhora){
-				
-						var valorhora = $ctrl.listavalorhora[j];
-						if (itemfase.valor_hora && valorhora.id == itemfase.valor_hora.id){
-							itemfase.valor_hora.descricao = valorhora.descricao;
-							break;
-						}
-					}
-					
-				}
-			}
-			
-			if ($ctrl.demanda.orcamento.fases.indexOf($ctrl.fase) < 0){
-				$ctrl.demanda.orcamento.fases.push($ctrl.fase);	
-			}
-		}
-		
-		$ctrl.fase = null;
-		
-		$ctrl.calcularvalortotalorcamento();
-	}
-	
-	$ctrl.adicionaritemfase = function (){
-		if (!$ctrl.fase.itensfase){
-			$ctrl.fase.itensfase = [];
-		}
-		$ctrl.fase.itensfase.push({});
-	}
 	
 	
 	
@@ -218,7 +132,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		}
 	}
 		
-	$ctrl.listaclientes= DemandaService.buscarclientes();
+	$ctrl.listaclientes= PessoaService.buscarpessoasjuridicas();
 	$ctrl.listafuncionarios = PessoaService.buscarprofissionais();
 	$ctrl.listacentroresultados = CentroResultadoService.buscarcentroresultados();
 	$ctrl.listaunidadeadministrativas = UnidadeAdministrativaService.buscarunidadeadministrativas();
@@ -227,137 +141,6 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		'#proposta', '#tarefas', '#observacoes', '#ocorrencias']
 	
 	$ctrl.listaabasautorizadas = AutenticationService.buscarabasautorizadas(abas);
-	
-	$ctrl.changevalorhora = function (itemfase) {
-		itemfase.valor_selecionado = CommonsService.formatarnumero(0);
-		for (var i in $ctrl.listavalorhora){
-			var valorhora = $ctrl.listavalorhora[i]
-			if (valorhora && valorhora.vigencia){
-				if (valorhora.id == itemfase.valor_hora.id){
-					itemfase.valor_selecionado = CommonsService.formatarnumero(valorhora.vigencia && valorhora.vigencia.valor ? valorhora.vigencia.valor : 0);
-					break;
-				}
-			}
-		}
-		$ctrl.changefasequantidadehoras(itemfase);
-	}
-	
-	$ctrl.calcularvalortotalorcamento = function (){
-		
-		var fases = $ctrl.demanda.orcamento.fases;
-		var totalorcamento = 0;
-		
-		for (var i in fases) {
-			var fase = fases[i];
-			if (!fase.remover) {
-				var itensfase = fase.itensfase;
-				
-				var valorfase = 0
-				for (i in itensfase){
-					var itemfase = itensfase[i];
-					if (!itemfase.remover && itemfase.valor_total) {
-						var valoritem = CommonsService.stringparafloat(itemfase.valor_total);
-						valorfase+=valoritem;
-					}
-				}
-				
-				fase.valor_total = CommonsService.formatarnumero(valorfase);
-				totalorcamento+= valorfase;
-			}
-		}
-		
-		$ctrl.demanda.orcamento.total_orcamento =  CommonsService.formatarnumero(totalorcamento);
-	}
-	
-	$ctrl.changefasequantidadehoras = function (itemfase) {
-		for (var i in $ctrl.listavalorhora){
-			var valorhora = $ctrl.listavalorhora[i]
-			if (valorhora.id == itemfase.valor_hora.id){
-				itemfase.valor_total  = CommonsService.formatarnumero((valorhora.vigencia ? valorhora.vigencia.valor : 0) * ( itemfase.quantidade_horas ? itemfase.quantidade_horas : 0));
-			}
-		}
-		
-		var itensfase = $ctrl.fase.itensfase;
-		
-		var valorfase = 0
-		for (i in itensfase){
-			var itemfase = itensfase[i];
-			if (!itemfase.remover && itemfase.valor_total) {
-				var valoritem = CommonsService.stringparafloat(itemfase.valor_total);
-				valorfase+=valoritem;
-			}
-		}
-		
-		$ctrl.fase.valor_total = CommonsService.formatarnumero(valorfase);
-		
-		$ctrl.calcularvalortotalorcamento();
-		
-	}
-	
-	$ctrl.changedataenvioaprovacao = function (item_faturamento) {
-		if (item_faturamento.data_envio_aprovacao && item_faturamento.data_envio_aprovacao.length == 10 ) {
-			for (var i in $ctrl.listaclientes) {
-				var cliente = $ctrl.listaclientes[i];
-				if (cliente.id == $ctrl.demanda.cliente.id) {
-					var dias_faturamento = cliente.dias_faturamento;
-					var dias_pagamento = cliente.dias_pagamento;
-					var data = CommonsService.stringparadata(item_faturamento.data_envio_aprovacao);
-					data.setDate(data.getDate() + dias_faturamento);
-					item_faturamento.data_previsto_faturamento  = CommonsService.dataparastring(data);
-					data.setDate(data.getDate() + dias_pagamento);
-					item_faturamento.data_previsto_pagamento = CommonsService.dataparastring(data);
-					break;
-				}
-			}
-		}
-	}
-	
-	$ctrl.changedataprevistofaturamento = function (item_faturamento){
-		for (var i in $ctrl.listaclientes) {
-			var cliente = $ctrl.listaclientes[i];
-			if (cliente.id == $ctrl.demanda.cliente.id) {
-				var dias_pagamento = cliente.dias_pagamento;
-				var data = CommonsService.stringparadata(item_faturamento.data_previsto_faturamento);
-				data.setDate(data.getDate() + dias_pagamento);
-				item_faturamento.data_previsto_pagamento = CommonsService.dataparastring(data);
-				break;
-			}
-		}
-	}
-	
-	$ctrl.recalcularfaturamentototal = function (item_faturamento) {
-		if (item_faturamento.valorhoras) {			
-			var valortotal = 0;
-			for (var i in item_faturamento.valorhoras) {
-				var valorhora = item_faturamento.valorhoras[i]
-				if (!valorhora.remover){
-					var valor = valorhora.valor_faturamento ? CommonsService.stringparafloat(valorhora.valor_faturamento) : 0;
-					valortotal += valor;
-				}
-			}
-			item_faturamento.valor_total_faturamento =  CommonsService.formatarnumero(valortotal);
-		}
-	}
-	
-	$ctrl.changevalorhoraitem = function (valorhora, item_faturamento) {
-		if (valorhora.valor_hora && valorhora.valor_hora.id){
-			for (var i in $ctrl.listavalorhora){
-				
-				var valor = $ctrl.listavalorhora[i]
-				
-				if (valor.id == valorhora.valor_hora.id){
-					var valor_hora = valor.vigencia.valor;
-					valorhora.valor = CommonsService.formatarnumero(valor_hora);
-					var valor_faturamento = valor_hora * (valorhora.quantidade_horas ? valorhora.quantidade_horas : 0);
-					valorhora.valor_faturamento = CommonsService.formatarnumero(valor_faturamento);
-					break;
-				}
-			}
-		}
-		
-		$ctrl.recalcularfaturamentototal(item_faturamento);
-	}
-	
 	
 	$ctrl.salvardemanda = function (){
 		MessageService.clear();
@@ -394,10 +177,10 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	}
 	
 	$ctrl.retornarurl = function(url) {
-		return BASE_URL + url +"?i=108";
+		return BASE_URL + url +"?i=109";
 	}
 	
-}).controller('OrcamentoController', function(ValorHoraService, FaseService, share){
+}).controller('OrcamentoController', function(ValorHoraService, FaseService, CommonsService, share){
 	var $ctrl = this;
 	$ctrl.share = share;
 
@@ -407,8 +190,40 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	$ctrl.colunas = [];
 		
 	if ($ctrl.share.demanda.$promise) {
-		$ctrl.share.demanda.$promise.then(function (data){
 		
+		var configurarorcamento = function (data) {
+			
+			if (data.cliente){
+				$ctrl.share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente(data.cliente.id);
+			}
+			
+			if (data.orcamento){
+				
+				data.orcamento.total_orcamento = CommonsService.formatarnumero(data.orcamento.total_orcamento);
+				
+				if (data.orcamento.fases) {
+					
+					for (var i in data.orcamento.fases){
+						
+						var fase =  data.orcamento.fases[i]
+						fase.valor_total = CommonsService.formatarnumero(fase.valor_total);
+						
+						if (fase.itensfase) {
+							for (var j in fase.itensfase) {
+								var itemfase = fase.itensfase[j]
+								itemfase.valor_selecionado = CommonsService.formatarnumero(itemfase.valor_selecionado);
+								itemfase.valor_total = CommonsService.formatarnumero(itemfase.valor_total);
+							}
+						}
+					}
+				}				
+			}
+		}
+		
+		$ctrl.share.demanda.$promise.then(function (data){
+			
+			configurarorcamento(data);
+			
 			if ($ctrl.share.demanda.orcamento.orcamento_atividades &&
 					$ctrl.share.demanda.orcamento.orcamento_atividades.length > 0) {
 				
@@ -447,6 +262,128 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 				colunas : {}
 			});
 		}
+	}
+	
+	$ctrl.novafase = function () {
+		$ctrl.fase = {
+			itensfase: [{}]
+		};
+	}
+	
+	$ctrl.cancelarfase = function () {
+		$ctrl.fase = null;
+	}
+	
+	$ctrl.editarfase = function (fase) {
+		$ctrl.fase = fase;
+	}
+	
+	$ctrl.salvarfase = function () {
+		if (!$ctrl.share.demanda.orcamento){
+			$ctrl.share.demanda.orcamento = {};
+		}
+		if (!$ctrl.share.demanda.orcamento.fases){
+			$ctrl.share.demanda.orcamento.fases = [];
+		}
+		
+		if ($ctrl.fase.descricao){
+			
+			if ( $ctrl.fase.itensfase){
+				for (var i in $ctrl.fase.itensfase){
+					var itemfase = $ctrl.fase.itensfase[i];
+					for (var j in $ctrl.share.listavalorhora){
+				
+						var valorhora = $ctrl.share.listavalorhora[j];
+						if (itemfase.valor_hora && valorhora.id == itemfase.valor_hora.id){
+							itemfase.valor_hora.descricao = valorhora.descricao;
+							break;
+						}
+					}
+					
+				}
+			}
+			
+			if ($ctrl.share.demanda.orcamento.fases.indexOf($ctrl.fase) < 0){
+				$ctrl.share.demanda.orcamento.fases.push($ctrl.fase);	
+			}
+		}
+		
+		$ctrl.fase = null;
+		
+		$ctrl.calcularvalortotalorcamento();
+	}
+	
+	$ctrl.adicionaritemfase = function (){
+		if (!$ctrl.fase.itensfase){
+			$ctrl.fase.itensfase = [];
+		}
+		$ctrl.fase.itensfase.push({});
+	}
+	
+	$ctrl.calcularvalortotalorcamento = function (){
+		
+		var fases = $ctrl.share.demanda.orcamento.fases;
+		var totalorcamento = 0;
+		
+		for (var i in fases) {
+			var fase = fases[i];
+			if (!fase.remover) {
+				var itensfase = fase.itensfase;
+				
+				var valorfase = 0
+				for (i in itensfase){
+					var itemfase = itensfase[i];
+					if (!itemfase.remover && itemfase.valor_total) {
+						var valoritem = CommonsService.stringparafloat(itemfase.valor_total);
+						valorfase+=valoritem;
+					}
+				}
+				
+				fase.valor_total = CommonsService.formatarnumero(valorfase);
+				totalorcamento+= valorfase;
+			}
+		}
+		
+		$ctrl.share.demanda.orcamento.total_orcamento =  CommonsService.formatarnumero(totalorcamento);
+	}
+	
+	$ctrl.changefasequantidadehoras = function (itemfase) {
+		for (var i in $ctrl.share.listavalorhora){
+			var valorhora = $ctrl.share.listavalorhora[i]
+			if (valorhora.id == itemfase.valor_hora.id){
+				itemfase.valor_total  = CommonsService.formatarnumero((valorhora.vigencia ? valorhora.vigencia.valor : 0) * ( itemfase.quantidade_horas ? itemfase.quantidade_horas : 0));
+			}
+		}
+		
+		var itensfase = $ctrl.fase.itensfase;
+		
+		var valorfase = 0
+		for (i in itensfase){
+			var itemfase = itensfase[i];
+			if (!itemfase.remover && itemfase.valor_total) {
+				var valoritem = CommonsService.stringparafloat(itemfase.valor_total);
+				valorfase+=valoritem;
+			}
+		}
+		
+		$ctrl.fase.valor_total = CommonsService.formatarnumero(valorfase);
+		
+		$ctrl.calcularvalortotalorcamento();
+		
+	}
+	
+	$ctrl.changevalorhora = function (itemfase) {
+		itemfase.valor_selecionado = CommonsService.formatarnumero(0);
+		for (var i in $ctrl.share.listavalorhora){
+			var valorhora = $ctrl.share.listavalorhora[i]
+			if (valorhora && valorhora.vigencia){
+				if (valorhora.id == itemfase.valor_hora.id){
+					itemfase.valor_selecionado = CommonsService.formatarnumero(valorhora.vigencia && valorhora.vigencia.valor ? valorhora.vigencia.valor : 0);
+					break;
+				}
+			}
+		}
+		$ctrl.changefasequantidadehoras(itemfase);
 	}
 	
 	$ctrl.calculartotaiscolunas = function () {
