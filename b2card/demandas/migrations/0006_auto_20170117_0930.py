@@ -40,10 +40,4 @@ class Migration(migrations.Migration):
             name='responsavel',
             field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='cadastros.PessoaFisica'),
         ),
-        migrations.DeleteModel(
-            name='FaturamentoDemanda',
-        ),
-        migrations.DeleteModel(
-            name='ValorHoraFaturamento',
-        ),
     ]
