@@ -7,7 +7,7 @@ demandas.factory('share', function(){
 	  return {};
 });
 
-demandas.controller('DemandaController', function ($scope, $window, $uibModal, $log, DemandaService, ParcelaService, PessoaService,
+demandas.controller('DemandaController', function ($rootScope, $scope, $window, $uibModal, $log, DemandaService, ParcelaService, PessoaService,
 		CentroCustoService, ValorHoraService, CommonsService, AutenticationService, CentroResultadoService, UnidadeAdministrativaService, share, MessageService){
 	var $ctrl = this; 
 	
@@ -150,28 +150,8 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		});
 		
 		share.demanda.$promise.then(function (data) {
-			
-			if (data.orcamento){
-				
-				data.orcamento.total_orcamento = CommonsService.formatarnumero(data.orcamento.total_orcamento);
-				
-				if (data.orcamento.fases) {
-					
-					for (var i in data.orcamento.fases){
-						
-						var fase =  data.orcamento.fases[i]
-						fase.valor_total = CommonsService.formatarnumero(fase.valor_total);
-						
-						if (fase.itensfase) {
-							for (var j in fase.itensfase) {
-								var itemfase = fase.itensfase[j]
-								itemfase.valor_selecionado = CommonsService.formatarnumero(itemfase.valor_selecionado);
-								itemfase.valor_total = CommonsService.formatarnumero(itemfase.valor_total);
-							}
-						}
-					}
-				}				
-			}
+			$rootScope.$emit('orcamento', data);
+			$rootScope.$emit('atividades', data);
 		});
 	}
 	
@@ -200,80 +180,82 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		return BASE_URL + url +"?i=110";
 	}
 	
-}).controller('OrcamentoController', function(ValorHoraService, FaseService, CommonsService, share){
+}).controller('OrcamentoController', function($rootScope, ValorHoraService, FaseService, CommonsService, share){
 	var $ctrl = this;
 	$ctrl.share = share;
 
 	$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card();
 	$ctrl.listafases = FaseService.buscarfases();
+		
+	$rootScope.$on('orcamento', function(event, data) {
+		if (data.orcamento){
+			
+			data.orcamento.total_orcamento = CommonsService.formatarnumero(data.orcamento.total_orcamento);
+			
+			if (data.orcamento.fases) {
+				
+				for (var i in data.orcamento.fases){
+					
+					var fase =  data.orcamento.fases[i]
+					fase.valor_total = CommonsService.formatarnumero(fase.valor_total);
+					
+					if (fase.itensfase) {
+						for (var j in fase.itensfase) {
+							var itemfase = fase.itensfase[j]
+							itemfase.valor_selecionado = CommonsService.formatarnumero(itemfase.valor_selecionado);
+							itemfase.valor_total = CommonsService.formatarnumero(itemfase.valor_total);
+						}
+					}
+				}
+			}				
+		}
+	});
 	
-	$ctrl.colunas = [];
+	$rootScope.$on('atividades', function(event, data) {
+		if (data.cliente){
+			share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente(data.cliente.id);
+		}
 		
-	if ($ctrl.share.demanda.$promise) {
-		
-		$ctrl.share.demanda.$promise.then(function (data) {
+		if (share.demanda.orcamento.orcamento_atividades &&
+				share.demanda.orcamento.orcamento_atividades.length > 0) {
 			
-			if (data.orcamento){
+			$ctrl.colunas = [];
+			var lista_colunas = [];
+			for (let orcamento_atividade of share.demanda.orcamento.orcamento_atividades){
 				
-				data.orcamento.total_orcamento = CommonsService.formatarnumero(data.orcamento.total_orcamento);
-				
-				if (data.orcamento.fases) {
-					
-					for (var i in data.orcamento.fases){
-						
-						var fase =  data.orcamento.fases[i]
-						fase.valor_total = CommonsService.formatarnumero(fase.valor_total);
-						
-						if (fase.itensfase) {
-							for (var j in fase.itensfase) {
-								var itemfase = fase.itensfase[j]
-								itemfase.valor_selecionado = CommonsService.formatarnumero(itemfase.valor_selecionado);
-								itemfase.valor_total = CommonsService.formatarnumero(itemfase.valor_total);
+				for (var valor_hora_id in orcamento_atividade.colunas){
+					if(lista_colunas.indexOf(valor_hora_id) < 0){
+						lista_colunas.push(valor_hora_id)
+						$ctrl.colunas.push({
+							valor_hora: {
+								id:parseInt(valor_hora_id)
 							}
-						}
+						});
 					}
-				}				
-			}
-		});
-		
-		$ctrl.share.demanda.$promise.then(function (data){
-			
-			if (data.cliente){
-				share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente(data.cliente.id);
-			}
-			
-			if (share.demanda.orcamento.orcamento_atividades &&
-					share.demanda.orcamento.orcamento_atividades.length > 0) {
-				
-				var lista_colunas = [];
-				for (let orcamento_atividade of share.demanda.orcamento.orcamento_atividades){
-					
-					for (var valor_hora_id in orcamento_atividade.colunas){
-						if(lista_colunas.indexOf(valor_hora_id) < 0){
-							lista_colunas.push(valor_hora_id)
-							$ctrl.colunas.push({
-								valor_hora: {
-									id:parseInt(valor_hora_id)
-								}
-							});
-						}
-					}
-					
 				}
 				
-				$ctrl.calculartotaiscolunas();
-				
-			} else {
-				$ctrl.colunas = [{},{}];
-				share.demanda.orcamento.orcamento_atividades = [];
-				for (var int = 0; int < 20; int++) {
-					share.demanda.orcamento.orcamento_atividades.push({
-						colunas : {}
-					});
-				}
 			}
+			
+			$ctrl.calculartotaiscolunas();
+			
+		} else {
+			$ctrl.colunas = [{},{}];
+			share.demanda.orcamento.orcamento_atividades = [];
+			for (var int = 0; int < 20; int++) {
+				share.demanda.orcamento.orcamento_atividades.push({
+					colunas : {}
+				});
+			}
+		}
+	});
+
+	if ($ctrl.share.demanda.$promise) {
+		$ctrl.share.demanda.$promise.then(function (data) {
+			$rootScope.$emit('orcamento', data);
+			$rootScope.$emit('atividades', data);
 		});
 	} else {
+		$ctrl.colunas = [{}, {}];
 		share.demanda.orcamento.orcamento_atividades = [];
 		for (var int = 0; int < 20; int++) {
 			share.demanda.orcamento.orcamento_atividades.push({
