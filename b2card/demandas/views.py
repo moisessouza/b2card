@@ -17,7 +17,6 @@ from demandas.serializers import DemandaSerializer, PropostaSerializer, TarefasS
     AtividadeProfissionalSerializer
 from faturamento.models import Parcela, Medicao, ParcelaFase
 from faturamento.serializers import ParcelaSerializer, MedicaoSerializer, ParcelaFaseSerializer
-from recursos.models import Funcionario
 from utils.utils import converter_string_para_data, formatar_data, converter_string_para_float
 
 
@@ -220,14 +219,14 @@ class DemandaDetail(APIView):
                     if 'analista_tecnico_responsavel' in i:
                         if i['analista_tecnico_responsavel'] is not None and 'id' in i['analista_tecnico_responsavel']:
                             analista_tecnico_responsavel = i['analista_tecnico_responsavel']
-                            analista_tecnico_responsavel = Funcionario.objects.get(pk=analista_tecnico_responsavel['id'])
+                            analista_tecnico_responsavel = PessoaFisica.objects.get(pk=analista_tecnico_responsavel['id'])
                         del i['analista_tecnico_responsavel']
                         
                     responsavel = None
                     if 'responsavel' in i:
                         if i['responsavel'] is not None and 'id' in i['responsavel']:
                             responsavel = i['responsavel']
-                            responsavel = Funcionario.objects.get(pk=responsavel['id'])
+                            responsavel = PessoaFisica.objects.get(pk=responsavel['id'])
                         del i['responsavel']
                     
                     tarefa = Tarefa(**i)
@@ -300,7 +299,7 @@ class DemandaDetail(APIView):
                     if 'responsavel' in i:
                         if i['responsavel'] is not None and 'id' in i['responsavel']:
                             responsavel = i['responsavel']
-                            responsavel = Funcionario.objects.get(pk=responsavel['id'])
+                            responsavel = PessoaFisica.objects.get(pk=responsavel['id'])
                         del i['responsavel']
                     ocorrencia = Ocorrencia(**i)
                     ocorrencia.demanda = demanda

@@ -8,7 +8,6 @@ from demandas.models import Demanda, Proposta, Tarefa, Observacao, Ocorrencia,\
     Orcamento, Fase, ItemFase, Atividade, OrcamentoFase,\
     OrcamentoAtividade, PerfilAtividade, AtividadeProfissional
 from clientes.serializers import ClienteSerializer
-from recursos.serializers import FuncionarioSerializer
 from cadastros.serializers import CentroCustoSerializer, ValorHoraSerializer, CentroResultadoSerializer,\
     UnidadeAdministrativaSerializer, FaseSerializer
 from cadastros.serializers_pessoa import PessoaFisicaComPessoaSerializer
@@ -26,8 +25,8 @@ class PropostaSerializer(serializers.ModelSerializer):
         fields = ('id', 'data_recimento_solicitacao', 'data_limite_entrega', 'data_real_entrega', 'numerdo_proposta', 'data_aprovacao', 'empresa_ganhadora', 'total_horas_ganhadora')
         
 class TarefasSerializer(serializers.ModelSerializer):
-    analista_tecnico_responsavel = FuncionarioSerializer()
-    responsavel = FuncionarioSerializer()
+    analista_tecnico_responsavel = PessoaFisicaComPessoaSerializer()
+    responsavel = PessoaFisicaComPessoaSerializer()
     class Meta:
         model = Tarefa
         fields = ('id', 'descricao','analista_tecnico_responsavel','responsavel','analise_inicio','analise_fim','analise_fim_real','densenvolvimento_inicio','desenvolvimento_fim','desenvolvimento_fim_real','homologacao_possui_sit','homologacao_inicio','homologacao_fim','homologacao_fim_real','forecast','aceite','evidencias','implantacao_producao','implantacao_in_loco')
@@ -38,7 +37,7 @@ class ObservacaoSerializer(serializers.ModelSerializer):
         fields = ('id','observacao', 'data_observacao')
         
 class OcorrenciaSerializer(serializers.ModelSerializer):
-    responsavel = FuncionarioSerializer()
+    responsavel = PessoaFisicaComPessoaSerializer()
     class Meta:
         model = Ocorrencia
         fields = ('id', 'tipo_ocorrencia', 'descricao', 'nome_solicitante', 'data_solicitacao', 'data_prevista_conclusao', 'etapa', 'responsavel', 'descricao_motivo', 'observacao')

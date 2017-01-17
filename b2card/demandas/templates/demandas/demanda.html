@@ -295,7 +295,7 @@
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label for="analista_tecnico_responsavel">Analista técnico responsável</label> 
-								    <select id=analista_tecnico_responsavel name="analista_tecnico_responsavel" class="form-control" ng-model="tarefa.analista_tecnico_responsavel.id" ng-options="f.id as f.nome for f in $ctrl.listafuncionarios" required>
+								    <select id=analista_tecnico_responsavel name="analista_tecnico_responsavel" class="form-control" ng-model="tarefa.analista_tecnico_responsavel.id" ng-options="f.id as f.pessoa.nome_razao_social for f in $ctrl.listafuncionarios" required>
 									   	<option value="">Selecione um analista...</option>
 									</select>
 								    <span class="red" ng-show="tarefaform.analista_tecnico_responsavel.$invalid">Analista técnico responsável é obrigatório.</span>
@@ -304,7 +304,7 @@
 							<div class="col-sm-2">
 								<div class="form-group">
 									<label for="descricao">Responsável</label> 
-								    <select id=responsavel name="responsavel" class="form-control" ng-model="tarefa.responsavel.id" ng-options="f.id as f.nome for f in $ctrl.listafuncionarios" required>
+								    <select id=responsavel name="responsavel" class="form-control" ng-model="tarefa.responsavel.id" ng-options="f.id as f.pessoa.nome_razao_social for f in $ctrl.listafuncionarios" required>
 									   	<option value="">Selecione um analista...</option>
 									</select>
 								    <span class="red" ng-show="tarefaform.responsavel.$invalid">Responsável é obrigatório.</span>
@@ -569,7 +569,7 @@
 							<div class="col-sm-2">
 								<div class="form-group">
 									<label for="responsavel">Responsável B2Card</label> 
-								    <select id=responsavel name="responsavel" class="form-control" ng-model="ocorrencia.responsavel.id" ng-options="f.id as f.nome for f in $ctrl.listafuncionarios" required>
+								    <select id=responsavel name="responsavel" class="form-control" ng-model="ocorrencia.responsavel.id" ng-options="f.id as f.pessoa.nome_razao_social for f in $ctrl.listafuncionarios" required>
 									   	<option value="">Selecione um responsável...</option>
 									</select>
 								</div>

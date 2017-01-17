@@ -7,7 +7,7 @@ demandas.factory('share', function(){
 	  return {};
 });
 
-demandas.controller('DemandaController', function ($scope, $window, $uibModal, $log, DemandaService, ParcelaService,
+demandas.controller('DemandaController', function ($scope, $window, $uibModal, $log, DemandaService, ParcelaService, PessoaService,
 		CentroCustoService, ValorHoraService, CommonsService, AutenticationService, CentroResultadoService, UnidadeAdministrativaService, share, MessageService){
 	var $ctrl = this; 
 	
@@ -219,7 +219,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	}
 		
 	$ctrl.listaclientes= DemandaService.buscarclientes();
-	$ctrl.listafuncionarios = DemandaService.buscarfuncionarios();
+	$ctrl.listafuncionarios = PessoaService.buscarprofissionais();
 	$ctrl.listacentroresultados = CentroResultadoService.buscarcentroresultados();
 	$ctrl.listaunidadeadministrativas = UnidadeAdministrativaService.buscarunidadeadministrativas();
 	

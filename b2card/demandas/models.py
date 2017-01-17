@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from recursos.models import Funcionario
 from clientes.models import Cliente
 from datetime import datetime
 from cadastros.models import CentroCusto, ValorHora, CentroResultado, UnidadeAdministrativa,\
@@ -75,8 +74,8 @@ SIM_NAO = (
 
 class Tarefa(models.Model):
     descricao = models.TextField()
-    analista_tecnico_responsavel = models.ForeignKey(Funcionario, null=True, related_name="%(app_label)s_%(class)s_related", related_query_name="%(app_label)s_%(class)ss")
-    responsavel = models.ForeignKey(Funcionario, null = True)
+    analista_tecnico_responsavel = models.ForeignKey(PessoaFisica, null=True, related_name="%(app_label)s_%(class)s_related", related_query_name="%(app_label)s_%(class)ss")
+    responsavel = models.ForeignKey(PessoaFisica, null = True)
     analise_inicio = models.DateField(null = True)
     analise_fim = models.DateField(null = True)
     analise_fim_real = models.DateField(null = True)
@@ -118,7 +117,7 @@ class Ocorrencia(models.Model):
     data_solicitacao = models.DateField(null=True)
     data_prevista_conclusao = models.DateField(null=True)
     etapa = models.CharField(max_length=1, choices = ETAPA)
-    responsavel = models.ForeignKey(Funcionario, null=True)
+    responsavel = models.ForeignKey(PessoaFisica, null=True)
     descricao_motivo = models.TextField()
     observacao = models.TextField()
     demanda = models.ForeignKey(Demanda, null=True)
