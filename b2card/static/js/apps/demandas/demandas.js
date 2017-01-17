@@ -29,20 +29,6 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		}
 	};
 	
-	var configuraritensfaturamento = function (data) {
-		if (data.itens_faturamento) {
-			for (var i in data.itens_faturamento) {
-				var valorhoras = data.itens_faturamento[i].valorhoras
-				if (valorhoras){
-					for (var v in valorhoras) {
-						var valorhora = valorhoras[v]
-						valorhora.valor = CommonsService.formatarnumero(valorhora.valor);
-					}
-				}
-			}
-		}
-	}
-	
 	var configurarorcamento = function (data) {
 		
 		if (data.cliente){
@@ -124,7 +110,6 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 				}
 				
 				configurarorcamento(data);
-				configuraritensfaturamento(data);
 				
 				$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(demanda_id);
 				
@@ -134,7 +119,6 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 			
 		} else {
 			$ctrl.demanda = {
-				'itens_faturamento': [{}],
 				'propostas':[{}],
 				'tarefas':[{}],
 				'observacoes':[{}],
@@ -150,19 +134,6 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	}
 	
 	configurardemanda(demanda_id);
-	
-	$ctrl.adicionaritem = function () {
-		$ctrl.demanda.itens_faturamento.unshift({
-			'valorhoras':[]
-		});
-	}
-		
-	$ctrl.adicionarvalorhora = function (itemfaturamento) {
-		if (!itemfaturamento.valorhoras){
-			itemfaturamento.valorhoras = [];
-		}
-		itemfaturamento.valorhoras.push({});
-	}
 	
 	$ctrl.adicionarproposta = function () {
 		$ctrl.demanda.propostas.unshift({});
@@ -252,7 +223,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	$ctrl.listacentroresultados = CentroResultadoService.buscarcentroresultados();
 	$ctrl.listaunidadeadministrativas = UnidadeAdministrativaService.buscarunidadeadministrativas();
 	
-	var abas = ['#dadosdemanda', '#orcamento', '#atividades', '#itens_faturamento', 
+	var abas = ['#dadosdemanda', '#orcamento', '#atividades', 
 		'#proposta', '#tarefas', '#observacoes', '#ocorrencias']
 	
 	$ctrl.listaabasautorizadas = AutenticationService.buscarabasautorizadas(abas);
@@ -394,7 +365,6 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		DemandaService.salvardemanda($ctrl.demanda, function(data){
 			share.demanda = data;
 			$ctrl.demanda = data;
-			configuraritensfaturamento(data);
 			configurarorcamento(data);
 			$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(data.id);
 			MessageService.messagesuccess('Salvo com sucesso!')
