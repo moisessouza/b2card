@@ -122,9 +122,6 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		$ctrl.demanda.ocorrencias.unshift(ocorrencia);
 	}
 	
-	
-	
-	
 	$ctrl.remover = function (i, callback){
 		i.remover = true;		
 		if (callback){
@@ -145,13 +142,36 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	$ctrl.salvardemanda = function (){
 		MessageService.clear();
 		$ctrl.bloquearsalvar = true;
-		DemandaService.salvardemanda($ctrl.demanda, function(data){
-			share.demanda = data;
+		share.demanda = DemandaService.salvardemanda($ctrl.demanda, function(data){
 			$ctrl.demanda = data;
-			configurarorcamento(data);
 			$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(data.id);
 			MessageService.messagesuccess('Salvo com sucesso!')
 			$ctrl.bloquearsalvar = false;
+		});
+		
+		share.demanda.$promise.then(function (data) {
+			
+			if (data.orcamento){
+				
+				data.orcamento.total_orcamento = CommonsService.formatarnumero(data.orcamento.total_orcamento);
+				
+				if (data.orcamento.fases) {
+					
+					for (var i in data.orcamento.fases){
+						
+						var fase =  data.orcamento.fases[i]
+						fase.valor_total = CommonsService.formatarnumero(fase.valor_total);
+						
+						if (fase.itensfase) {
+							for (var j in fase.itensfase) {
+								var itemfase = fase.itensfase[j]
+								itemfase.valor_selecionado = CommonsService.formatarnumero(itemfase.valor_selecionado);
+								itemfase.valor_total = CommonsService.formatarnumero(itemfase.valor_total);
+							}
+						}
+					}
+				}				
+			}
 		});
 	}
 	
@@ -177,7 +197,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 	}
 	
 	$ctrl.retornarurl = function(url) {
-		return BASE_URL + url +"?i=109";
+		return BASE_URL + url +"?i=110";
 	}
 	
 }).controller('OrcamentoController', function(ValorHoraService, FaseService, CommonsService, share){
@@ -191,11 +211,7 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 		
 	if ($ctrl.share.demanda.$promise) {
 		
-		var configurarorcamento = function (data) {
-			
-			if (data.cliente){
-				$ctrl.share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente(data.cliente.id);
-			}
+		$ctrl.share.demanda.$promise.then(function (data) {
 			
 			if (data.orcamento){
 				
@@ -218,17 +234,19 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 					}
 				}				
 			}
-		}
+		});
 		
 		$ctrl.share.demanda.$promise.then(function (data){
 			
-			configurarorcamento(data);
+			if (data.cliente){
+				share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente(data.cliente.id);
+			}
 			
-			if ($ctrl.share.demanda.orcamento.orcamento_atividades &&
-					$ctrl.share.demanda.orcamento.orcamento_atividades.length > 0) {
+			if (share.demanda.orcamento.orcamento_atividades &&
+					share.demanda.orcamento.orcamento_atividades.length > 0) {
 				
 				var lista_colunas = [];
-				for (let orcamento_atividade of $ctrl.share.demanda.orcamento.orcamento_atividades){
+				for (let orcamento_atividade of share.demanda.orcamento.orcamento_atividades){
 					
 					for (var valor_hora_id in orcamento_atividade.colunas){
 						if(lista_colunas.indexOf(valor_hora_id) < 0){
@@ -247,18 +265,18 @@ demandas.controller('DemandaController', function ($scope, $window, $uibModal, $
 				
 			} else {
 				$ctrl.colunas = [{},{}];
-				$ctrl.share.demanda.orcamento.orcamento_atividades = [];
+				share.demanda.orcamento.orcamento_atividades = [];
 				for (var int = 0; int < 20; int++) {
-					$ctrl.share.demanda.orcamento.orcamento_atividades.push({
+					share.demanda.orcamento.orcamento_atividades.push({
 						colunas : {}
 					});
 				}
 			}
 		});
 	} else {
-		$ctrl.share.demanda.orcamento.orcamento_atividades = [];
+		share.demanda.orcamento.orcamento_atividades = [];
 		for (var int = 0; int < 20; int++) {
-			$ctrl.share.demanda.orcamento.orcamento_atividades.push({
+			share.demanda.orcamento.orcamento_atividades.push({
 				colunas : {}
 			});
 		}
