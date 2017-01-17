@@ -587,6 +587,7 @@ class DemandaDetail(APIView):
     
     def delete(self, request, demanda_id, format=None):
         demanda = Demanda.objects.get(pk=demanda_id)
+        demanda.delete()
         data = DemandaSerializer(demanda).data
         return Response(data)
 
