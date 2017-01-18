@@ -7,7 +7,7 @@ demandas.factory('share', function(){
 	  return {};
 });
 
-demandas.controller('DemandaController', function ($rootScope, $scope, $window, $uibModal, $log, DemandaService, ParcelaService, PessoaService,
+demandas.controller('DemandaController', function ($rootScope, $scope,$templateCache, $window, $uibModal, $log, DemandaService, ParcelaService, PessoaService,
 		CentroCustoService, ValorHoraService, CommonsService, AutenticationService, CentroResultadoService, UnidadeAdministrativaService, share, MessageService){
 	var $ctrl = this; 
 	
@@ -180,8 +180,10 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		
 	}
 	
+	$templateCache.removeAll()
+	
 	$ctrl.retornarurl = function(url) {
-		return BASE_URL + url +"?i=112";
+		return BASE_URL + url;
 	}
 	
 }).controller('OrcamentoController', function($rootScope, ValorHoraService, FaseService, CommonsService, share){
@@ -557,23 +559,98 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 				$ctrl.share.demanda.orcamento.orcamento_atividades){
 			
 			for (let orcamento_atividade of $ctrl.share.demanda.orcamento.orcamento_atividades) {
-				var atividadeprofissional = {
-					quantidade_horas: orcamento_atividade.total_horas
+				if (orcamento_atividade.descricao && orcamento_atividade.fase){
+					var atividadeprofissional = {
+						quantidade_horas: orcamento_atividade.total_horas
+					}
+					$ctrl.atividadeprofissionalmap[atividadeprofissional] = [];
+					var atividade = {
+						fase: orcamento_atividade.fase,
+						descricao: 	orcamento_atividade.descricao,
+						atividadeprofissionais: [atividadeprofissional]
+					}
+					
+					$ctrl.share.demanda.atividades.push(atividade);
 				}
-				$ctrl.atividadeprofissionalmap[atividadeprofissional] = [];
-				var atividade = {
-					fase: orcamento_atividade.fase,
-					descricao: 	orcamento_atividade.descricao,
-					atividadeprofissionais: [atividadeprofissional]
-				}
-				
-				$ctrl.share.demanda.atividades.push(atividade);
 				
 			}
 			
 		}
 		
 		
+	}
+	
+	$ctrl.modalatividademap = {};
+	
+	$ctrl.abrirmodalfuncionarios = atividade => {
+		for(let key in $ctrl.modalatividademap){
+			if (atividade.$$hashKey != key){
+				$ctrl.modalatividademap[key] = {
+					ativo: false
+				};
+			}
+		}
+		
+		if (!$ctrl.modalatividademap[atividade.$$hashKey]) {
+			$ctrl.modalatividademap[atividade.$$hashKey] = {
+				ativo: false
+			}
+		}
+		
+		if (atividade.atividadeprofissionais){
+			for (let atividadeprofissional of atividade.atividadeprofissionais) {
+				if (!atividadeprofissional.remover){
+					if (atividadeprofissional.pessoa_fisica) {
+						$ctrl.modalatividademap[atividade.$$hashKey][atividadeprofissional.pessoa_fisica.id] = true;
+					}
+				}
+			}
+		}
+		
+		$ctrl.modalatividademap[atividade.$$hashKey].ativo = !$ctrl.modalatividademap[atividade.$$hashKey].ativo;
+	}
+	
+	$ctrl.adicionarremoverprofissional = (atividade, profissional) => {
+		
+		if (atividade.atividadeprofissionais && atividade.atividadeprofissionais.length > 0 && !atividade.atividadeprofissionais[0].pessoa_fisica){
+			atividade.atividadeprofissionais.splice(0,1);
+		}
+		
+		if ($ctrl.modalatividademap[atividade.$$hashKey][profissional.id]) {
+			
+			if (!atividade.atividadeprofissionais){
+				atividade.atividadeprofissionais = [];
+			}
+			
+			atividade.atividadeprofissionais.push({
+				pessoa_fisica: profissional
+			});
+			
+		} else {
+			if (!atividade.atividadeprofissionais){
+				atividade.atividadeprofissionais = [];
+			}
+			
+			var atividadeprofissional = null;
+			for(let ap of atividade.atividadeprofissionais){
+				if (!ap.remover){
+					if (ap.pessoa_fisica.id == profissional.id){
+						atividadeprofissional = ap;
+						break;
+					}
+				}
+			}
+			
+			if (atividadeprofissional){
+				atividadeprofissional.remover=true
+			}
+			
+		}
+		
+	}
+	
+	$ctrl.fecharmodalfuncionario = atividade => {
+		$ctrl.modalatividademap[atividade.$$hashKey].ativo = false;
 	}
 	
 });

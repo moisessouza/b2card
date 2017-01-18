@@ -458,7 +458,7 @@ class DemandaDetail(APIView):
     def salvar_atividade_profissionais(self, atividade_profissionais, atividade):
         if atividade_profissionais:
             for i in atividade_profissionais:
-                if 'pessoa_fisica' in i and i['pessoa_fisica'] and 'id' in i['pessoa_fisica'] and 'quantidade_horas' in i:
+                if 'pessoa_fisica' in i and i['pessoa_fisica'] and 'id' in i['pessoa_fisica'] and 'quantidade_horas' in i and ('remover' not in i or i['remover'] is False):
                     
                     pessoa_fisica = PessoaFisica.objects.get(pk=i['pessoa_fisica']['id'])
                     del i['pessoa_fisica']
