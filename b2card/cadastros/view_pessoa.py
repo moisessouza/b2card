@@ -74,11 +74,10 @@ class PessoaDetail(APIView):
         if 'data_rescisao' in data:
             data['data_rescisao'] = converter_string_para_data(data['data_rescisao'])
             
-        if 'data_fim_aditivo' in data and data['data_fim_aditivo']:
-            data['data_fim_aditivo'] = converter_string_para_data(data['data_fim_aditivo'])
-            
         if 'data_renegociacao_valor' in data and data['data_renegociacao_valor']:
             data['data_renegociacao_valor'] = converter_string_para_data(data['data_renegociacao_valor'])
+        else:
+            data['data_renegociacao_valor'] = None
         
         telefones = None 
         if 'telefones' in data:

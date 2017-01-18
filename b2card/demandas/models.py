@@ -43,10 +43,16 @@ class Demanda(models.Model):
     status_demanda = models.CharField(max_length=1, choices=STATUS_DEMANDA, null=True)
     codigo_demanda = models.CharField(max_length=12, null=True)
     unidade_administrativa = models.ForeignKey(UnidadeAdministrativa, default=None, null=True)
-    
-class Atividade(models.Model):
+
+class FaseAtividade(models.Model):
     demanda = models.ForeignKey(Demanda, default = None)
     fase = models.ForeignKey(Fase, default = None)
+    responsavel = models.ForeignKey(PessoaFisica, default = None, null=True)
+    data_inicio = models.DateField()
+    data_fim = models.DateField()    
+
+class Atividade(models.Model):
+    fase_atividade = models.ForeignKey(FaseAtividade, default = None)
     descricao = models.CharField(max_length=100, default = None)
     data_inicio = models.DateField(default = None)
     data_fim = models.DateField(default = None)

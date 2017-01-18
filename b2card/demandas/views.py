@@ -8,12 +8,12 @@ from cadastros.models import CentroCusto, ValorHora, CentroResultado, UnidadeAdm
     PessoaFisica, PessoaJuridica
 from demandas.models import Demanda, Proposta, Tarefa, Observacao, Ocorrencia, \
     Orcamento, ItemFase, Fase, Atividade, OrcamentoFase, \
-    OrcamentoAtividade, PerfilAtividade, AtividadeProfissional
+    OrcamentoAtividade, PerfilAtividade, AtividadeProfissional, FaseAtividade
 from demandas.serializers import DemandaSerializer, PropostaSerializer, TarefasSerializer, \
     ObservacaoSerializer, OcorrenciaSerializer, OrcamentoSerializer, \
     ItemFaseSerializer, AtividadeSerializer, \
     OrcamentoFaseSerializer, OrcamentoAtividadeSerializer, \
-    AtividadeProfissionalSerializer
+    AtividadeProfissionalSerializer, FaseAtividadeSerializer
 from faturamento.models import Parcela, Medicao, ParcelaFase
 from faturamento.serializers import ParcelaSerializer, MedicaoSerializer, ParcelaFaseSerializer
 from utils.utils import converter_string_para_data, formatar_data, converter_string_para_float
@@ -53,7 +53,7 @@ class DemandaDetail(APIView):
         observacoes = Observacao.objects.filter(demanda__id=demanda_id)
         ocorrencias = Ocorrencia.objects.filter(demanda__id=demanda_id)
         orcamentos = Orcamento.objects.filter(demanda__id=demanda_id)
-        atividades = Atividade.objects.filter(demanda__id=demanda_id)
+        fase_atividades = FaseAtividade.objects.filter(demanda__id=demanda_id)
         parcelas = Parcela.objects.filter(demanda__id=demanda_id)
         
         data = DemandaSerializer(demanda).data
@@ -97,22 +97,36 @@ class DemandaDetail(APIView):
             
         orcamento_dict = self.serializar_orcamento(orcamentos)
         
-        atividade_list = []
-        if atividades:
+        fase_atividade_list = []
+        if fase_atividades:
             
-            for i in atividades:
+            for i in fase_atividades:
                 
-                atividade = AtividadeSerializer(i).data
+                fase_atividade = FaseAtividadeSerializer(i).data
+                fase_atividade.data_inicio = converter_string_para_data(fase_atividade.data_inicio)
+                fase_atividade.data_fim = converter_string_para_data(fase_atividade.data_fim)
                 
-                atividade['data_inicio'] = formatar_data(i.data_inicio)
-                atividade['data_fim'] = formatar_data(i.data_fim)
+                atividades = Atividade.objects.filter(fase_atividade = i)
                 
-                atividade_profissionais = AtividadeProfissional.objects.filter(atividade = i)
+                atividade_list = []
                 
-                if atividade_profissionais:
-                    atividade['atividadeprofissionais'] = AtividadeProfissionalSerializer(atividade_profissionais, many=True).data
-            
-                atividade_list.append(atividade)
+                if atividades:
+                    for i in atividades:
+                        
+                        atividade = AtividadeSerializer(i).data
+                        
+                        atividade['data_inicio'] = formatar_data(i.data_inicio)
+                        atividade['data_fim'] = formatar_data(i.data_fim)
+                        
+                        atividade_profissionais = AtividadeProfissional.objects.filter(atividade = i)
+                        
+                        if atividade_profissionais:
+                            atividade['atividadeprofissionais'] = AtividadeProfissionalSerializer(atividade_profissionais, many=True).data
+                    
+                        atividade_list.append(atividade)
+                        
+                fase_atividade['atividades'] = atividade_list
+                fase_atividade_list.append(fase_atividade)
             
         parcelas_list = []
         for i in parcelas:
@@ -138,7 +152,7 @@ class DemandaDetail(APIView):
         data['observacoes'] = observacoes_list
         data['ocorrencias'] = ocorrencias_list
         data['orcamento'] = orcamento_dict
-        data['atividades'] = atividade_list
+        data['fase_atividades'] = fase_atividade_list
         data['parcelas'] = parcelas_list
         
         return data
@@ -427,25 +441,54 @@ class DemandaDetail(APIView):
                     orcamento_atividade = OrcamentoAtividade.objects.get(pk=i['id'])
                     orcamento_atividade.delete();
     
-    def salvar_atividade(self, atividade_list, demanda):
+    def salvar_fase_atividades(self, fase_atividades, demanda):
+        
+        if fase_atividades:
+            for i in fase_atividades:
+                if 'fase' in i and i['fase'] and 'data_inicio' in i and 'data_fim' in i and ('remover' not in i or i['remover'] is False):
+                    
+                    atividades = None
+                    if 'atividades' in i:
+                        atividades = i['atividades']
+                    
+                    fase = None
+                    if 'fase' in i:
+                        if 'id' in i['fase']:
+                            fase = Fase.objects.get(pk=i['fase']['id'])
+                        del i['fase']
+                    
+                    responsavel = None
+                    if 'responsavel' in i:
+                        if 'id' in i['responsavel']:
+                            responsavel = PessoaFisica.objects.get(pk=i['responsavel']['id'])
+                            
+                    fase_atividade = FaseAtividade(**i)
+                    fase_atividade.data_inicio = converter_string_para_data(fase_atividade.data_inicio)
+                    fase_atividade.data_fim = converter_string_para_data(fase_atividade.data_fim)
+                    fase_atividade.fase = fase
+                    fase_atividade.responsavel = responsavel
+                    fase_atividade.save()
+                    
+                    self.salvar_atividade(atividades, fase_atividade)
+                    
+                elif 'id' in i:
+                    fase_atividade = FaseAtividade.objects.get(pk=i['id'])
+                    fase_atividade.delete();
+        
+        pass
+    
+    def salvar_atividade(self, atividade_list, fase_atividade):
         
         for i in atividade_list:
             if 'descricao' in i and 'fase' in i and i['fase'] and 'data_inicio' in i and 'data_fim' in i and ('remover' not in i or i['remover'] is False):
 
-                fase = None
-                if 'fase' in i:
-                    if 'id' in i['fase']:
-                        fase = Fase.objects.get(pk=i['fase']['id'])
-                    del i['fase']
-                
                 atividade_profissionais = None
                 if 'atividadeprofissionais' in i:
                     atividade_profissionais = i['atividadeprofissionais']
                     del i['atividadeprofissionais']
                 
                 atividade = Atividade(**i)
-                atividade.demanda = demanda
-                atividade.fase = fase
+                atividade.fase_atividade = fase_atividade
                 atividade.data_inicio = converter_string_para_data(atividade.data_inicio)
                 atividade.data_fim = converter_string_para_data(atividade.data_fim)
                 atividade.save()
@@ -455,6 +498,7 @@ class DemandaDetail(APIView):
             elif 'id' in i:
                 atividade = Atividade.objects.get(pk=i['id'])
                 atividade.delete();
+                
     def salvar_atividade_profissionais(self, atividade_profissionais, atividade):
         if atividade_profissionais:
             for i in atividade_profissionais:
@@ -550,7 +594,7 @@ class DemandaDetail(APIView):
         observacoes = data['observacoes']
         ocorrencias = data['ocorrencias']
         orcamento = data['orcamento']
-        atividades = data['atividades']
+        fase_atividades = data['fase_atividades']
         
         parcelas = None
         if 'parcelas' in data:
@@ -563,8 +607,8 @@ class DemandaDetail(APIView):
         del data['observacoes']
         del data['ocorrencias']
         del data['orcamento']
-        del data['atividades']
         del data['unidade_administrativa']
+        del data['fase_atividades']
 
         demanda = Demanda(**data)
         demanda.cliente = cliente
@@ -581,7 +625,7 @@ class DemandaDetail(APIView):
         self.salvar_observacoes(observacoes, demanda)
         self.salvar_ocorrencias(ocorrencias, demanda)
         self.salvar_orcamento(orcamento, demanda)
-        self.salvar_atividade(atividades, demanda)
+        self.salvar_fase_atividades(fase_atividades, demanda)
         
         return Response(self.serializarDemanda(demanda.id))
     

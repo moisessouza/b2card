@@ -6,7 +6,8 @@ Created on 14 de set de 2016
 from rest_framework import serializers
 from demandas.models import Demanda, Proposta, Tarefa, Observacao, Ocorrencia,\
     Orcamento, Fase, ItemFase, Atividade, OrcamentoFase,\
-    OrcamentoAtividade, PerfilAtividade, AtividadeProfissional
+    OrcamentoAtividade, PerfilAtividade, AtividadeProfissional,\
+    FaseAtividade
 from cadastros.serializers import CentroCustoSerializer, ValorHoraSerializer, CentroResultadoSerializer,\
     UnidadeAdministrativaSerializer, FaseSerializer
 from cadastros.serializers_pessoa import PessoaFisicaComPessoaSerializer,\
@@ -57,12 +58,6 @@ class ItemFaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = ItemFase
         fields = ('id', 'valor_hora', 'valor_selecionado', 'quantidade_horas', 'valor_total')
-        
-class AtividadeSerializer(serializers.ModelSerializer):
-    fase = FaseSerializer()
-    class Meta:
-        model = Atividade
-        fields = ('id', 'fase', 'descricao', 'data_inicio', 'data_fim')
 
 class AtividadeProfissionalSerializer(serializers.ModelSerializer):
     pessoa_fisica = PessoaFisicaComPessoaSerializer()
@@ -80,3 +75,16 @@ class PerfilAtividadeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PerfilAtividade
         fields = ('id', 'perfil', 'horas')
+        
+class FaseAtividadeSerializer(serializers.ModelSerializer):
+    fase = FaseSerializer()
+    responsavel = PessoaFisicaComPessoaSerializer()
+    class Meta:
+        model = FaseAtividade
+        fields = ('id', 'fase', 'responsavel', 'data_inicio', 'data_fim')
+        
+class AtividadeSerializer(serializers.ModelSerializer):
+    fase_atividade = FaseAtividadeSerializer()
+    class Meta:
+        model = Atividade
+        fields = ('id', 'fase_atividade', 'descricao', 'data_inicio', 'data_fim')

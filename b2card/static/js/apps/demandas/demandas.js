@@ -93,7 +93,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope,$templateC
 				'observacoes':[{}],
 				'ocorrencias':[{}],
 				'orcamento': {},
-				'atividades': [{}]
+				'fase_atividades':[]
 			}
 			$ctrl.show=true;
 			$ctrl.listacentroresultadoshoras = []
@@ -156,6 +156,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope,$templateC
 		share.demanda.$promise.then(function (data) {
 			$rootScope.$emit('orcamento', data);
 			$rootScope.$emit('atividades', data);
+			$rootScope.$emit('atualizartabelafaseresponsaveis', data);
 		});
 	}
 	
@@ -183,7 +184,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope,$templateC
 	$templateCache.removeAll()
 	
 	$ctrl.retornarurl = function(url) {
-		return BASE_URL + url;
+		return BASE_URL + url + '?bust=4' ;
 	}
 	
 }).controller('OrcamentoController', function($rootScope, ValorHoraService, FaseService, CommonsService, share){
@@ -504,7 +505,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope,$templateC
 		
 	}
 	
-}).controller('AtividadeController', function(ValorHoraService, FaseService, CommonsService, PessoaService, share){
+}).controller('AtividadeController', function($rootScope, ValorHoraService, FaseService, CommonsService, PessoaService, share){
 	var $ctrl = this;
 	$ctrl.share = share;
 	
@@ -518,9 +519,15 @@ demandas.controller('DemandaController', function ($rootScope, $scope,$templateC
 		}
 	}
 	
-	$ctrl.share.demanda.atividades=[{
-		atividadeprofissionais: [atividadeprofissional]
-	}];
+	$ctrl.adicionarfase = function (){
+		
+		if (!$ctrl.share.demanda.fase_atividades){
+			$ctrl.share.demanda.fase_atividades = [];
+		}
+		
+		$ctrl.share.demanda.fase_atividades.push({});
+		
+	}
 	
 	$ctrl.atividadeprofissionalmap = {};
 	$ctrl.atividadeprofissionalmap = {
@@ -535,15 +542,57 @@ demandas.controller('DemandaController', function ($rootScope, $scope,$templateC
 		}
 	}
 	
-	$ctrl.adicionar = function () {
+	$ctrl.adicionaratividade = function (fase_atividade) {
+		if (!fase_atividade.atividades){
+			fase_atividade.atividades = [];
+		}
+		
 		var atividadeprofissional = {};
-		$ctrl.share.demanda.atividades.push({
+		fase_atividade.atividades.push({
 			atividadeprofissionais: [atividadeprofissional]
 		});	
-		
 		$ctrl.atividadeprofissionalmap[atividadeprofissional] = [];
 	}
-	
+
+	$ctrl.alteracaodataatividade = (fase_atividade) => {
+		
+		var data_inicio_fase;
+		var data_fim_fase;
+		
+		if (fase_atividade.atividades) {
+			for(let atividade of fase_atividade.atividades) {
+				if (atividade.data_inicio){
+					if (data_inicio_fase) {
+						let data_inicio = CommonsService.stringparadata(atividade.data_inicio);
+						if (data_inicio_fase > data_inicio) {
+							data_inicio_fase = data_inicio;
+						}
+					} else {
+						data_inicio_fase = CommonsService.stringparadata(atividade.data_inicio);
+					}
+				}
+				if (atividade.data_fim){
+					if (data_fim_fase) {
+						let data_fim = CommonsService.stringparadata(atividade.data_fim);
+						if (data_fim_fase < data_fim) {
+							data_fim_fase = data_fim;
+						}
+					} else {
+						data_fim_fase = CommonsService.stringparadata(atividade.data_fim);
+					}
+				}
+			}
+		}
+		
+		if (data_inicio_fase) {
+			fase_atividade.data_inicio = CommonsService.dataparastring(data_inicio_fase);
+		}
+		
+		if (data_fim_fase){
+			fase_atividade.data_fim = CommonsService.dataparastring(data_fim_fase)
+		}
+		
+	}
 	
 	$ctrl.adicionarprofissional = function (atividade) {
 		var atividadeprofissional = {};
@@ -608,6 +657,12 @@ demandas.controller('DemandaController', function ($rootScope, $scope,$templateC
 		}
 		
 		$ctrl.modalatividademap[atividade.$$hashKey].ativo = !$ctrl.modalatividademap[atividade.$$hashKey].ativo;
+	}
+	
+	if ($ctrl.share.demanda.$promise) {
+		$ctrl.share.demanda.$promise.then(function (data) {
+			$rootScope.$emit('atualizartabelafaseresponsaveis', data);
+		});
 	}
 	
 	$ctrl.adicionarremoverprofissional = (atividade, profissional) => {

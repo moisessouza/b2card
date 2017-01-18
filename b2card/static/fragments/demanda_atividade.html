@@ -1,10 +1,6 @@
 <meta charset="utf-8">
 <div class="col-sm-12" ng-controller="AtividadeController as $ctrl">
 
-	<button class="btn btn-sm btn-primary margin" ng-click="$ctrl.adicionar()">
-		Adicionar
-	</button>
-	
 	<button class="btn btn-sm btn-primary margin" ng-click="$ctrl.importaratividadesorcamento()">
 		Importar
 	</button>
@@ -41,85 +37,119 @@
 	</style>
 	
 	<form name="atividades">
-	
-		<table class="table table-sm table-bordered table-striped table-highlight" ng-repeat="atividade in $ctrl.share.demanda.atividades" ng-show="!atividade.remover">
-			<thead>
-				<tr class="active">
-					<td style="width: 1%;">
-						<div style="width: 140px">
-							Fase
-						</div>
+		<table class="table table-sm table-bordered table-striped table-highlight">
+			<thead>	
+				<tr>
+					<td>
+						Fase
+						<a href="#" class="btn btn-primary button-heading" ng-click="$ctrl.adicionarfase()" style="float:right;">
+							<span class="glyphicon glyphicon-plus"></span>
+						</a>
 					</td>
-					<td>Atividade</td>
-					<td style="width: 1%;">Data inicio</td>
-					<td style="width: 1%;">Data fim</td>
-					<td style="width: 1%;">
-						<div style="width: 180px">
-							Profissional
-							<a href="#" class="btn btn-primary button-heading" ng-click="$ctrl.adicionarprofissional(atividade)" style="float:right;">
-								<span class="glyphicon glyphicon-plus"></span>
-							</a>
-							<a href="#" class="btn btn-primary button-heading" ng-click="$ctrl.abrirmodalfuncionarios(atividade)" style="margin-right:2px; float:right;">
-								<span class="glyphicon glyphicon-collapse-down"></span>
-							</a>
-							<div class="modal-funcionario" ng-show="$ctrl.modalatividademap[atividade.$$hashKey].ativo">
-								<div>
-									<button class="btn btn-primary button-heading" ng-click="$ctrl.fecharmodalfuncionario(atividade)" style="margin-right:2px; float:right;">
-										<span class="glyphicon glyphicon-remove"></span>
-									</button>
-								</div>
-								<div ng-repeat="f in $ctrl.share.listafuncionarios">
-									<input type="checkbox" ng-model="$ctrl.modalatividademap[atividade.$$hashKey][f.id]" ng-change="$ctrl.adicionarremoverprofissional(atividade, f)"> {{f.pessoa.nome_razao_social}}
-								</div>
-							</div>
-						</div>
-					</td>
-					<td style="width: 1%;">
-						<div style="width: 86px">
-							Horas alocadas
-						</div>
-					</td>
-					<td style="width: 1%;">
+					<td>
+						Atividades
 					</td>
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
+				<tr ng-repeat="fase_atividade in $ctrl.share.demanda.fase_atividades">
 					<td>
-						<select class="form-control" ng-model="atividade.fase.id" ng-options="f.id as f.descricao for f in $ctrl.listafases" required>
+						<select class="form-control" ng-model="fase_atividade.fase.id" ng-options="f.id as f.descricao for f in $ctrl.listafases" required>
 				    		<option value="">Selecione uma fase...</option>
 				    	</select>
+						<div>
+						Responsável 
+						<md-autocomplete required md-selected-item="fase_atividade.responsavel" md-search-text="searchText" md-search-text-change="$ctrl.buscarprofissional(searchText, atividadeprofissional)" md-items="p in $ctrl.atividadeprofissionalmap[atividadeprofissional]"  md-item-text="p.pessoa.nome_razao_social">
+				    		<md-item-template>
+						    	<span md-highlight-text="searchText">{{p.pessoa.nome_razao_social}}</span>
+						  	</md-item-template>
+						</md-autocomplete>
+						</div>
+						<div>
+						Data inicio 
+						<input type="text" class="form-control" ng-model="fase_atividade.data_inicio" ui-mask="99/99/9999" model-view-value="true" required  disabled/>
+						</div>
+						<div>
+						Data fim
+						<input type="text" class="form-control" ng-model="fase_atividade.data_fim" ui-mask="99/99/9999" model-view-value="true" required  disabled/>
+						</div>
 					</td>
 					<td>
-						<input type="text" class="form-control" ng-model="atividade.descricao" required/>
-					</td>
-					<td>
-						<input type="text" class="form-control" ng-model="atividade.data_inicio" ui-mask="99/99/9999" model-view-value="true" required/>
-					</td>
-					<td>
-						<input type="text" class="form-control" ng-model="atividade.data_fim" ui-mask="99/99/9999" model-view-value="true" required/>
-					</td>
-					<td>
-						<span ng-repeat="atividadeprofissional in atividade.atividadeprofissionais" ng-show="!atividadeprofissional.remover">
-					    	<md-autocomplete required md-selected-item="atividadeprofissional.pessoa_fisica" md-search-text="searchText" md-search-text-change="$ctrl.buscarprofissional(searchText, atividadeprofissional)" md-items="p in $ctrl.atividadeprofissionalmap[atividadeprofissional]"  md-item-text="p.pessoa.nome_razao_social">
-					    		<md-item-template>
-							    	<span md-highlight-text="searchText">{{p.pessoa.nome_razao_social}}</span>
-							  	</md-item-template>
-							</md-autocomplete>
-				    	</span>
-					</td>
-					<td>
-						<span ng-repeat="atividadeprofissional in atividade.atividadeprofissionais" ng-show="!atividadeprofissional.remover">
-							<input type="number" ng-model="atividadeprofissional.quantidade_horas" class="form-control" style="margin-top: 1px" required/>
-						</span>
-					</td>
-					<td>
-						<button type="button" class="btn btn-default" ng-click="$ctrl.remover(atividade)">
-							<span class="glyphicon glyphicon-trash"></span>
-						</button>
+						<a href="#" class="btn btn-primary button-heading" ng-click="$ctrl.adicionaratividade(fase_atividade)" style="float:right;">
+							<span class="glyphicon glyphicon-plus"></span>
+						</a>
+						<table class="table table-sm table-bordered table-striped table-highlight" ng-repeat="atividade in fase_atividade.atividades" ng-show="!atividade.remover">
+							<thead>
+								<tr class="active">
+									<td>Atividade</td>
+									<td style="width: 1%;">Data inicio</td>
+									<td style="width: 1%;">Data fim</td>
+									<td style="width: 1%;">
+										<div style="width: 180px">
+											Profissional
+											<a href="#" class="btn btn-primary button-heading" ng-click="$ctrl.adicionarprofissional(atividade)" style="float:right;">
+												<span class="glyphicon glyphicon-plus"></span>
+											</a>
+											<a href="#" class="btn btn-primary button-heading" ng-click="$ctrl.abrirmodalfuncionarios(atividade)" style="margin-right:2px; float:right;">
+												<span class="glyphicon glyphicon-collapse-down"></span>
+											</a>
+											<div class="modal-funcionario" ng-show="$ctrl.modalatividademap[atividade.$$hashKey].ativo">
+												<div>
+													<button class="btn btn-primary button-heading" ng-click="$ctrl.fecharmodalfuncionario(atividade)" style="margin-right:2px; float:right;">
+														<span class="glyphicon glyphicon-remove"></span>
+													</button>
+												</div>
+												<div ng-repeat="f in $ctrl.share.listafuncionarios">
+													<input type="checkbox" ng-model="$ctrl.modalatividademap[atividade.$$hashKey][f.id]" ng-change="$ctrl.adicionarremoverprofissional(atividade, f)"> {{f.pessoa.nome_razao_social}}
+												</div>
+											</div>
+										</div>
+									</td>
+									<td style="width: 1%;">
+										<div style="width: 86px">
+											Horas alocadas
+										</div>
+									</td>
+									<td style="width: 1%;">
+									</td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<input type="text" class="form-control" ng-model="atividade.descricao" required/>
+									</td>
+									<td>
+										<input type="text" class="form-control" ng-model="atividade.data_inicio" ng-change="$ctrl.alteracaodataatividade(fase_atividade)" ui-mask="99/99/9999" model-view-value="true" required/>
+									</td>
+									<td>
+										<input type="text" class="form-control" ng-model="atividade.data_fim" ng-change="$ctrl.alteracaodataatividade(fase_atividade)" ui-mask="99/99/9999" model-view-value="true" required/>
+									</td>
+									<td>
+										<span ng-repeat="atividadeprofissional in atividade.atividadeprofissionais" ng-show="!atividadeprofissional.remover">
+									    	<md-autocomplete required md-selected-item="atividadeprofissional.pessoa_fisica" md-search-text="searchText" md-search-text-change="$ctrl.buscarprofissional(searchText, atividadeprofissional)" md-items="p in $ctrl.atividadeprofissionalmap[atividadeprofissional]"  md-item-text="p.pessoa.nome_razao_social">
+									    		<md-item-template>
+											    	<span md-highlight-text="searchText">{{p.pessoa.nome_razao_social}}</span>
+											  	</md-item-template>
+											</md-autocomplete>
+								    	</span>
+									</td>
+									<td>
+										<span ng-repeat="atividadeprofissional in atividade.atividadeprofissionais" ng-show="!atividadeprofissional.remover">
+											<input type="number" ng-model="atividadeprofissional.quantidade_horas" class="form-control" style="margin-top: 1px" required/>
+										</span>
+									</td>
+									<td>
+										<button type="button" class="btn btn-default" ng-click="$ctrl.remover(atividade)">
+											<span class="glyphicon glyphicon-trash"></span>
+										</button>
+									</td>
+								</tr>
+							</tbody>		
+						</table>
 					</td>
 				</tr>
-			</tbody>		
+			</tbody>
 		</table>
 	</form>
 </div>
