@@ -153,11 +153,12 @@ demandas.controller('DemandaController', function ($rootScope, $scope,$templateC
 			$ctrl.bloquearsalvar = false;
 		});
 		
-		share.demanda.$promise.then(function (data) {
-			$rootScope.$emit('orcamento', data);
-			$rootScope.$emit('atividades', data);
-			$rootScope.$emit('atualizartabelafaseresponsaveis', data);
-		});
+		if (share.demanda.$promise){
+			share.demanda.$promise.then(function (data) {
+				$rootScope.$emit('orcamento', data);
+				$rootScope.$emit('atividades', data);
+			});
+		}
 	}
 	
 	$ctrl.deletar = function () {
@@ -529,15 +530,22 @@ demandas.controller('DemandaController', function ($rootScope, $scope,$templateC
 		
 	}
 	
+	$ctrl.listaresponsavelfase = [];
+	$ctrl.buscarresponsavelfase = texto => {
+		if (texto){
+			PessoaService.buscarprofissional(texto, function (data){
+				$ctrl.listaresponsavelfase=data;
+			}); 
+		}
+	} 
+	
 	$ctrl.atividadeprofissionalmap = {};
-	$ctrl.atividadeprofissionalmap = {
-		atividadeprofissional:[]
-	}
+	$ctrl.atividadeprofissionallist = [];
 	
 	$ctrl.buscarprofissional = function (texto, atividadeprofissional){
 		if (texto){
 			PessoaService.buscarprofissional(texto, function (data){
-				$ctrl.atividadeprofissionalmap[atividadeprofissional]=data;
+				$ctrl.atividadeprofissionallist = data;
 			}); 
 		}
 	}
@@ -551,7 +559,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope,$templateC
 		fase_atividade.atividades.push({
 			atividadeprofissionais: [atividadeprofissional]
 		});	
-		$ctrl.atividadeprofissionalmap[atividadeprofissional] = [];
+		
 	}
 
 	$ctrl.alteracaodataatividade = (fase_atividade) => {
@@ -600,33 +608,76 @@ demandas.controller('DemandaController', function ($rootScope, $scope,$templateC
 			atividade.atividadeprofissionais = [];
 		}
 		atividade.atividadeprofissionais.push(atividadeprofissional);
-		$ctrl.atividadeprofissionalmap[atividadeprofissional] = [];
+		
 	}
 	
 	$ctrl.importaratividadesorcamento = function () {
 		if ($ctrl.share.demanda.orcamento && 
 				$ctrl.share.demanda.orcamento.orcamento_atividades){
 			
-			for (let orcamento_atividade of $ctrl.share.demanda.orcamento.orcamento_atividades) {
-				if (orcamento_atividade.descricao && orcamento_atividade.fase){
-					var atividadeprofissional = {
-						quantidade_horas: orcamento_atividade.total_horas
-					}
-					$ctrl.atividadeprofissionalmap[atividadeprofissional] = [];
-					var atividade = {
-						fase: orcamento_atividade.fase,
-						descricao: 	orcamento_atividade.descricao,
-						atividadeprofissionais: [atividadeprofissional]
-					}
-					
-					$ctrl.share.demanda.atividades.push(atividade);
-				}
-				
+			var fase_list = [];
+			var fase_id_list = []
+			
+			if (!$ctrl.share.demanda.fase_atividades){
+				$ctrl.share.demanda.fase_atividades = [];
 			}
 			
+			
+			for (let fase_atividade of $ctrl.share.demanda.fase_atividades) {
+				if (fase_atividade.fase && fase_id_list.indexOf(fase_atividade.fase.id) < 0) {
+					fase_list.push(fase_atividade.fase);
+					fase_id_list.push(fase_atividade.fase.id);
+				}
+			}
+			
+			for (let orcamento_atividade of $ctrl.share.demanda.orcamento.orcamento_atividades) {
+				if (orcamento_atividade.fase && fase_id_list.indexOf(orcamento_atividade.fase.id) < 0){
+					fase_list.push(orcamento_atividade.fase);
+					fase_id_list.push(orcamento_atividade.fase.id);
+				}
+			}
+			
+			var fase_atividades_list = [];
+			
+			for (let fase of fase_list) {
+				var fase_atividade = {};
+
+				var existe = false;
+				for (let fa of $ctrl.share.demanda.fase_atividades){
+					if (fa.fase.id == fase.id){
+						fase_atividade = fa;
+						existe = true;
+					}
+				}
+				
+				if (!existe){
+					fase_atividades_list.push(fase_atividade);
+					fase_atividade.fase = fase;
+					
+				}
+				
+				if (!fase_atividade.atividades){
+					fase_atividade.atividades = [];
+				}
+
+				for (let orcamento_atividade of $ctrl.share.demanda.orcamento.orcamento_atividades) {
+					if (orcamento_atividade.descricao && orcamento_atividade.fase){
+						if (orcamento_atividade.fase.id == fase.id){
+								var atividadeprofissional = {
+									quantidade_horas: orcamento_atividade.total_horas
+								}
+								var atividade = {
+									descricao: 	orcamento_atividade.descricao,
+									atividadeprofissionais: [atividadeprofissional]
+								}	
+								fase_atividade.atividades.push(atividade);
+						}
+					}
+				}
+			}	
+			
+			$ctrl.share.demanda.fase_atividades = $ctrl.share.demanda.fase_atividades.concat(fase_atividades_list);
 		}
-		
-		
 	}
 	
 	$ctrl.modalatividademap = {};
@@ -657,12 +708,6 @@ demandas.controller('DemandaController', function ($rootScope, $scope,$templateC
 		}
 		
 		$ctrl.modalatividademap[atividade.$$hashKey].ativo = !$ctrl.modalatividademap[atividade.$$hashKey].ativo;
-	}
-	
-	if ($ctrl.share.demanda.$promise) {
-		$ctrl.share.demanda.$promise.then(function (data) {
-			$rootScope.$emit('atualizartabelafaseresponsaveis', data);
-		});
 	}
 	
 	$ctrl.adicionarremoverprofissional = (atividade, profissional) => {

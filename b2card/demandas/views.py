@@ -103,22 +103,22 @@ class DemandaDetail(APIView):
             for i in fase_atividades:
                 
                 fase_atividade = FaseAtividadeSerializer(i).data
-                fase_atividade.data_inicio = converter_string_para_data(fase_atividade.data_inicio)
-                fase_atividade.data_fim = converter_string_para_data(fase_atividade.data_fim)
+                fase_atividade['data_inicio'] = formatar_data(i.data_inicio)
+                fase_atividade['data_fim'] = formatar_data(i.data_fim)
                 
                 atividades = Atividade.objects.filter(fase_atividade = i)
                 
                 atividade_list = []
                 
                 if atividades:
-                    for i in atividades:
+                    for a in atividades:
                         
-                        atividade = AtividadeSerializer(i).data
+                        atividade = AtividadeSerializer(a).data
                         
-                        atividade['data_inicio'] = formatar_data(i.data_inicio)
-                        atividade['data_fim'] = formatar_data(i.data_fim)
+                        atividade['data_inicio'] = formatar_data(a.data_inicio)
+                        atividade['data_fim'] = formatar_data(a.data_fim)
                         
-                        atividade_profissionais = AtividadeProfissional.objects.filter(atividade = i)
+                        atividade_profissionais = AtividadeProfissional.objects.filter(atividade = a)
                         
                         if atividade_profissionais:
                             atividade['atividadeprofissionais'] = AtividadeProfissionalSerializer(atividade_profissionais, many=True).data
@@ -449,24 +449,28 @@ class DemandaDetail(APIView):
                     
                     atividades = None
                     if 'atividades' in i:
-                        atividades = i['atividades']
+                        if i['atividades']:
+                            atividades = i['atividades']
+                        del i['atividades']
                     
                     fase = None
                     if 'fase' in i:
-                        if 'id' in i['fase']:
+                        if i['fase'] and 'id' in i['fase']:
                             fase = Fase.objects.get(pk=i['fase']['id'])
                         del i['fase']
                     
                     responsavel = None
                     if 'responsavel' in i:
-                        if 'id' in i['responsavel']:
+                        if i['responsavel'] and 'id' in i['responsavel']:
                             responsavel = PessoaFisica.objects.get(pk=i['responsavel']['id'])
+                        del i['responsavel']
                             
                     fase_atividade = FaseAtividade(**i)
                     fase_atividade.data_inicio = converter_string_para_data(fase_atividade.data_inicio)
                     fase_atividade.data_fim = converter_string_para_data(fase_atividade.data_fim)
                     fase_atividade.fase = fase
                     fase_atividade.responsavel = responsavel
+                    fase_atividade.demanda = demanda
                     fase_atividade.save()
                     
                     self.salvar_atividade(atividades, fase_atividade)
@@ -478,26 +482,26 @@ class DemandaDetail(APIView):
         pass
     
     def salvar_atividade(self, atividade_list, fase_atividade):
-        
-        for i in atividade_list:
-            if 'descricao' in i and 'fase' in i and i['fase'] and 'data_inicio' in i and 'data_fim' in i and ('remover' not in i or i['remover'] is False):
-
-                atividade_profissionais = None
-                if 'atividadeprofissionais' in i:
-                    atividade_profissionais = i['atividadeprofissionais']
-                    del i['atividadeprofissionais']
-                
-                atividade = Atividade(**i)
-                atividade.fase_atividade = fase_atividade
-                atividade.data_inicio = converter_string_para_data(atividade.data_inicio)
-                atividade.data_fim = converter_string_para_data(atividade.data_fim)
-                atividade.save()
-                
-                self.salvar_atividade_profissionais(atividade_profissionais, atividade)
-                
-            elif 'id' in i:
-                atividade = Atividade.objects.get(pk=i['id'])
-                atividade.delete();
+        if atividade_list:
+            for i in atividade_list:
+                if 'descricao' in i and 'data_inicio' in i and 'data_fim' in i and ('remover' not in i or i['remover'] is False):
+    
+                    atividade_profissionais = None
+                    if 'atividadeprofissionais' in i:
+                        atividade_profissionais = i['atividadeprofissionais']
+                        del i['atividadeprofissionais']
+                    
+                    atividade = Atividade(**i)
+                    atividade.fase_atividade = fase_atividade
+                    atividade.data_inicio = converter_string_para_data(atividade.data_inicio)
+                    atividade.data_fim = converter_string_para_data(atividade.data_fim)
+                    atividade.save()
+                    
+                    self.salvar_atividade_profissionais(atividade_profissionais, atividade)
+                    
+                elif 'id' in i:
+                    atividade = Atividade.objects.get(pk=i['id'])
+                    atividade.delete();
                 
     def salvar_atividade_profissionais(self, atividade_profissionais, atividade):
         if atividade_profissionais:

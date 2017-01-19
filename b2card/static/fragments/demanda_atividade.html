@@ -40,26 +40,30 @@
 		<table class="table table-sm table-bordered table-striped table-highlight">
 			<thead>	
 				<tr>
-					<td>
-						Fase
-						<a href="#" class="btn btn-primary button-heading" ng-click="$ctrl.adicionarfase()" style="float:right;">
-							<span class="glyphicon glyphicon-plus"></span>
-						</a>
+					<td style="width: 1%">
+						<div style="width: 200px">
+							Fase
+							<a href="#" class="btn btn-primary button-heading" ng-click="$ctrl.adicionarfase()" style="float:right;">
+								<span class="glyphicon glyphicon-plus"></span>
+							</a>
+						</div>
 					</td>
 					<td>
 						Atividades
 					</td>
+					<td style="width: 1%">
+					</td>
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="fase_atividade in $ctrl.share.demanda.fase_atividades">
+				<tr ng-repeat="fase_atividade in $ctrl.share.demanda.fase_atividades" ng-show="!fase_atividade.remover">
 					<td>
 						<select class="form-control" ng-model="fase_atividade.fase.id" ng-options="f.id as f.descricao for f in $ctrl.listafases" required>
 				    		<option value="">Selecione uma fase...</option>
 				    	</select>
 						<div>
 						Responsável 
-						<md-autocomplete required md-selected-item="fase_atividade.responsavel" md-search-text="searchText" md-search-text-change="$ctrl.buscarprofissional(searchText, atividadeprofissional)" md-items="p in $ctrl.atividadeprofissionalmap[atividadeprofissional]"  md-item-text="p.pessoa.nome_razao_social">
+						<md-autocomplete required md-selected-item="fase_atividade.responsavel" md-search-text="searchText" md-search-text-change="$ctrl.buscarresponsavelfase(searchText)" md-items="p in $ctrl.listaresponsavelfase"  md-item-text="p.pessoa.nome_razao_social">
 				    		<md-item-template>
 						    	<span md-highlight-text="searchText">{{p.pessoa.nome_razao_social}}</span>
 						  	</md-item-template>
@@ -127,7 +131,7 @@
 									</td>
 									<td>
 										<span ng-repeat="atividadeprofissional in atividade.atividadeprofissionais" ng-show="!atividadeprofissional.remover">
-									    	<md-autocomplete required md-selected-item="atividadeprofissional.pessoa_fisica" md-search-text="searchText" md-search-text-change="$ctrl.buscarprofissional(searchText, atividadeprofissional)" md-items="p in $ctrl.atividadeprofissionalmap[atividadeprofissional]"  md-item-text="p.pessoa.nome_razao_social">
+									    	<md-autocomplete required md-selected-item="atividadeprofissional.pessoa_fisica" md-search-text="$ctrl.atividadeprofissionalmap[atividadeprofissional.$$hashKey].text" md-search-text-change="$ctrl.buscarprofissional($ctrl.atividadeprofissionalmap[atividadeprofissional.$$hashKey].text, atividadeprofissional)" md-items="p in $ctrl.atividadeprofissionallist"  md-item-text="p.pessoa.nome_razao_social">
 									    		<md-item-template>
 											    	<span md-highlight-text="searchText">{{p.pessoa.nome_razao_social}}</span>
 											  	</md-item-template>
@@ -147,6 +151,11 @@
 								</tr>
 							</tbody>		
 						</table>
+					</td>
+					<td>
+						<button type="button" class="btn btn-default" ng-click="$ctrl.remover(fase_atividade)">
+							<span class="glyphicon glyphicon-trash"></span>
+						</button>
 					</td>
 				</tr>
 			</tbody>
