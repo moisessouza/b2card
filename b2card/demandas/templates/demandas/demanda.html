@@ -191,10 +191,12 @@
 			</form>
 		</div>
 		<div id="orcamento" ng-if="$ctrl.verificardisponibilidadeaba('#orcamento')" class="tab-pane">
-			<div ng-include="'/static/fragments/demanda_orcamento.html'"></div>
+			{%endverbatim%}
+			{% include "fragments/demanda_orcamento.html" %}
 		</div>
 		<div id="atividades" ng-if="$ctrl.verificardisponibilidadeaba('#atividades')" class="tab-pane">
-			<div ng-include="'/static/fragments/demanda_atividade.html'"></div>
+			{% include "fragments/demanda_atividade.html" %}
+			{%verbatim%}
 		</div>
 		<div id="proposta" ng-if="$ctrl.verificardisponibilidadeaba('#proposta')" class="tab-pane">
 		   	
