@@ -154,10 +154,6 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		
 	}
 	
-	$ctrl.retornarurl = function(url) {
-		return BASE_URL + url + '?bust=4' ;
-	}
-	
 }).controller('OrcamentoController', function($rootScope, ValorHoraService, $uibModal, FaseService, CommonsService, share){
 	var $ctrl = this;
 	$ctrl.share = share;
