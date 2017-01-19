@@ -7,7 +7,7 @@ demandas.factory('share', function(){
 	  return {};
 });
 
-demandas.controller('DemandaController', function ($rootScope, $scope,$templateCache, $window, $uibModal, $log, DemandaService, ParcelaService, PessoaService,
+demandas.controller('DemandaController', function ($rootScope, $scope, $window, $uibModal, $log, DemandaService, ParcelaService, PessoaService,
 		CentroCustoService, ValorHoraService, CommonsService, AutenticationService, CentroResultadoService, UnidadeAdministrativaService, share, MessageService){
 	var $ctrl = this; 
 	
@@ -33,34 +33,6 @@ demandas.controller('DemandaController', function ($rootScope, $scope,$templateC
 		if ($ctrl.demanda.cliente){
 			share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente($ctrl.demanda.cliente.id);
 		}
-	}
-	
-	$ctrl.modalprevisaofaturamento = function (){
-		var modalInstance = $uibModal.open({
-			animation : $ctrl.animationsEnabled,
-			ariaLabelledBy : 'modal-title',
-			ariaDescribedBy : 'modal-body',
-			templateUrl : '/static/modal/modalContasReceber.html?bust=' + Math.random().toString(36).slice(2),
-			controller : 'ModalParcelasController',
-			controllerAs : '$ctrl',
-			//size : 'lg'
-			windowClass: 'app-modal-window',
-			resolve : {
-				demanda : function() {
-					return $ctrl.demanda;
-				},
-				listavalorhora: function () {
-					return share.listavalorhora;
-				}
-				
-			}
-		});
-			
-		modalInstance.result.then(function(data) {
-			configurardemanda($ctrl.demanda.id);
-		}, function() {
-			// $log.info('Modal dismissed at: ' + new Date());
-		});
 	}
 	
 	var configurardemanda = function (demanda_id) {
@@ -182,13 +154,11 @@ demandas.controller('DemandaController', function ($rootScope, $scope,$templateC
 		
 	}
 	
-	$templateCache.removeAll()
-	
 	$ctrl.retornarurl = function(url) {
 		return BASE_URL + url + '?bust=4' ;
 	}
 	
-}).controller('OrcamentoController', function($rootScope, ValorHoraService, FaseService, CommonsService, share){
+}).controller('OrcamentoController', function($rootScope, ValorHoraService, $uibModal, FaseService, CommonsService, share){
 	var $ctrl = this;
 	$ctrl.share = share;
 
@@ -256,6 +226,34 @@ demandas.controller('DemandaController', function ($rootScope, $scope,$templateC
 			}
 		}
 	});
+	
+	$ctrl.modalprevisaofaturamento = function (){
+		var modalInstance = $uibModal.open({
+			animation : $ctrl.animationsEnabled,
+			ariaLabelledBy : 'modal-title',
+			ariaDescribedBy : 'modal-body',
+			templateUrl : '/static/modal/modalContasReceber.html?bust=' + Math.random().toString(36).slice(2),
+			controller : 'ModalParcelasController',
+			controllerAs : '$ctrl',
+			//size : 'lg'
+			windowClass: 'app-modal-window',
+			resolve : {
+				demanda : function() {
+					return share.demanda;
+				},
+				listavalorhora: function () {
+					return share.listavalorhora;
+				}
+				
+			}
+		});
+			
+		modalInstance.result.then(function(data) {
+			configurardemanda(share.demanda.id);
+		}, function() {
+			// $log.info('Modal dismissed at: ' + new Date());
+		});
+	}
 
 	if ($ctrl.share.demanda.$promise) {
 		$ctrl.share.demanda.$promise.then(function (data) {

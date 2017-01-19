@@ -71,17 +71,17 @@ parcela.controller('ModalParcelasController', function ($scope, $window, $uibMod
 		
 		for (let o of data) {
 			
-			if (!$ctrl.objeto_horas_raw[o.fase__id]) {
-				$ctrl.objeto_horas_raw[o.fase__id] = {
-					fase_id: o.fase__id,
-					fase_descricao: o.fase__descricao
+			if (!$ctrl.objeto_horas_raw[o.orcamentofase__id]) {
+				$ctrl.objeto_horas_raw[o.orcamentofase__id] = {
+					fase_id: o.orcamentofase__id,
+					fase_descricao: o.orcamentofase__descricao
 				}
 			}
 			
-			if (!$ctrl.objeto_horas_raw[o.fase__id][o.fase__itemfase__valor_hora__id]){
-				$ctrl.objeto_horas_raw[o.fase__id][o.fase__itemfase__valor_hora__id] = {
-					valor_hora_id: o.fase__itemfase__valor_hora__id,
-					valor_hora_descricao: o.fase__itemfase__valor_hora__descricao,
+			if (!$ctrl.objeto_horas_raw[o.orcamentofase__id][o.orcamentofase__itemfase__valor_hora__id]){
+				$ctrl.objeto_horas_raw[o.orcamentofase__id][o.orcamentofase__itemfase__valor_hora__id] = {
+					valor_hora_id: o.orcamentofase__itemfase__valor_hora__id,
+					valor_hora_descricao: o.orcamentofase__itemfase__valor_hora__descricao,
 					total_horas: o.total_horas,
 					horas_restantes: o.total_horas
 				}
