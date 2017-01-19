@@ -539,6 +539,10 @@ demandas.controller('DemandaController', function ($rootScope, $scope,$templateC
 		}
 	} 
 	
+	$ctrl.limparlistaresponsavelfase = function () {
+		$ctrl.listaresponsavelfase = [];
+	}
+	
 	$ctrl.atividadeprofissionalmap = {};
 	$ctrl.atividadeprofissionallist = [];
 	
@@ -548,6 +552,10 @@ demandas.controller('DemandaController', function ($rootScope, $scope,$templateC
 				$ctrl.atividadeprofissionallist = data;
 			}); 
 		}
+	}
+	
+	$ctrl.limparlistaatividadeprofissionallist = function () {
+		$ctrl.atividadeprofissionallist = [];
 	}
 	
 	$ctrl.adicionaratividade = function (fase_atividade) {
