@@ -570,7 +570,18 @@ demandas.controller('DemandaController', function ($rootScope, $scope,$templateC
 		
 	}
 
-	$ctrl.alteracaodataatividade = (fase_atividade) => {
+	$ctrl.alteracaodataatividade = (fase_atividade, atividadeselecionada, propriedade, old_value) => {
+		
+		if (atividadeselecionada.data_inicio)
+			var data_inicio_selecionada = CommonsService.stringparadata(atividadeselecionada.data_inicio);
+		if (atividadeselecionada.data_fim)
+			var data_fim_selecionada = CommonsService.stringparadata(atividadeselecionada.data_fim);
+		
+		if (data_inicio_selecionada && data_fim_selecionada && data_inicio_selecionada > data_fim_selecionada) {
+			atividadeselecionada[propriedade] = old_value;
+			alert('Verificar se as datas estão corretas');
+			return;
+		}
 		
 		var data_inicio_fase;
 		var data_fim_fase;

@@ -124,10 +124,10 @@
 										<input type="text" class="form-control" ng-model="atividade.descricao" required/>
 									</td>
 									<td>
-										<input type="text" class="form-control" ng-model="atividade.data_inicio" ng-change="$ctrl.alteracaodataatividade(fase_atividade)" ui-mask="99/99/9999" model-view-value="true" required/>
+										<input type="text" class="form-control" ng-model="atividade.data_inicio" ng-change="$ctrl.alteracaodataatividade(fase_atividade, atividade, 'data_inicio', '{{atividade.data_inicio}}')" ui-mask="99/99/9999" model-view-value="true" required/>
 									</td>
 									<td>
-										<input type="text" class="form-control" ng-model="atividade.data_fim" ng-change="$ctrl.alteracaodataatividade(fase_atividade)" ui-mask="99/99/9999" model-view-value="true" required/>
+										<input type="text" class="form-control" ng-model="atividade.data_fim" ng-change="$ctrl.alteracaodataatividade(fase_atividade, atividade, 'data_fim', '{{atividade.data_fim}}')" ui-mask="99/99/9999" model-view-value="true" required/>
 									</td>
 									<td>
 										<span ng-repeat="atividadeprofissional in atividade.atividadeprofissionais" ng-show="!atividadeprofissional.remover">
