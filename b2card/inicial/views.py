@@ -6,7 +6,9 @@ from demandas.serializers import DemandaSerializer, AtividadeSerializer,\
     FaseAtividadeSerializer, AtividadeProfissionalSerializer
 from rest_framework.response import Response
 from cadastros.models import PessoaJuridica
-from cadastros.serializers_pessoa import PessoaJuridicaSerializer
+from cadastros.serializers_pessoa import PessoaJuridicaSerializer,\
+    PessoaJuridicaComPessoaSerializer
+from utils.utils import formatar_data
 
 # Create your views here.
 def index (request):
@@ -15,15 +17,15 @@ def index (request):
 @api_view(['GET'])
 def buscar_atividades_usuario(request, format=None):
 
-    clientes  = PessoaJuridica.objects.filter(demanda__faseatividade__atividade__atividadeprofissional__pessoa_fisica__prestador__usuario__id=request.user.id)
+    clientes  = PessoaJuridica.objects.filter(demanda__faseatividade__atividade__atividadeprofissional__pessoa_fisica__prestador__usuario__id=request.user.id).distinct()
 
     cliente_list = [];
 
     for c in clientes:
 
-        cliente_dict = PessoaJuridicaSerializer(c).data
+        cliente_dict = PessoaJuridicaComPessoaSerializer(c).data
 
-        demandas = Demanda.objects.filter(cliente = c, faseatividade__atividade__atividadeprofissional__pessoa_fisica__prestador__usuario__id=request.user.id);
+        demandas = Demanda.objects.filter(cliente = c, faseatividade__atividade__atividadeprofissional__pessoa_fisica__prestador__usuario__id=request.user.id).distinct();
         demanda_list = []
         
         for i in demandas:
@@ -32,7 +34,7 @@ def buscar_atividades_usuario(request, format=None):
             demanda_list.append(demanda_dict)
             
             fase_atividade_list = []
-            fase_atividades = FaseAtividade.objects.filter(demanda__in=demandas, atividade__atividadeprofissional__pessoa_fisica__prestador__usuario__id=request.user.id);
+            fase_atividades = FaseAtividade.objects.filter(demanda=i, atividade__atividadeprofissional__pessoa_fisica__prestador__usuario__id=request.user.id).distinct();
             
             for f in fase_atividades:
                 
@@ -45,6 +47,8 @@ def buscar_atividades_usuario(request, format=None):
                 for a in atividades:
                     
                     atividade_dict = AtividadeSerializer(a).data
+                    atividade_dict['data_inicio'] = formatar_data(a.data_inicio)
+                    atividade_dict['data_fim'] = formatar_data(a.data_fim)
                     atividade_list.append(atividade_dict)
                     atividade_profissional =  AtividadeProfissional.objects.filter(atividade = a, pessoa_fisica__prestador__usuario__id=request.user.id)[:1]
                     

@@ -2,43 +2,83 @@
 {% extends "base_page.html" %}
 
 
+{% block script %}
 
-
+	<script src="/static/js/apps/inicial/inicial.js"></script>
+	<script src="/static/js/apps/inicial/inicial-services.js"></script>
+	
+	<script type="text/javascript">
+	  	angular.bootstrap(document.getElementById('first_page'), ['inicial']);
+  	</script>
+{% endblock %}
 
 {% block content %}
 
+<style>
+	div.atividade {
+		border: 1px solid #ddd;
+		border-top-color: white;
+		height: 22px;
+		vertical-align: middle;
+		line-height: 20px;
+	}
 
+	.table>tbody>tr>td {
+		margin: 0;
+		padding: 0
+	}
+</style>
 
-<div>
+{%verbatim%}
 
-<fieldset>
-	<legend>Fidelity</legend>
-	<table class="table table-hover">
-		<thead>
-			<tr class="active">
-				<td>Fase</td>
-				<td>Atividade</td>
-				<td>Data inicio</td>
-				<td>Data fim</td>
-				<td>Horas previstas</td>
-				<td>Horas alocadas</td>
-				<td>%</td>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>Fase</td>
-				<td>Atividade</td>
-				<td>Data inicio</td>
-				<td>Data fim</td>
-				<td>Horas previstas</td>
-				<td>Horas alocadas</td>
-				<td>%</td>
-			</tr>
-		</tbody>
-	</table>
-</fieldset>
+<div id="first_page" ng-controller="InicialController as $ctrl">
+
+	<fieldset ng-repeat="cliente in $ctrl.clientes">
+		<legend>{{cliente.nome_fantasia}}</legend>
+		
+		<table class="table ">
+			<tbody>
+				<tr ng-repeat="demanda in cliente.demandas">
+					<td>
+					</td>
+					<td style="width: 1%">
+						<div style="width: 210px; padding: 0 7px">{{demanda.nome_demanda}} asfdasdf asdf asdasdf asd fasdf asdf asdfasdfasas asdf asdf</div>
+					<td>
+					<td>
+						<table class="table ">
+							<thead>
+								<tr class="active">
+									<td>Fase</td>
+									<td>Atividade</td>
+									<td>Data inicio</td>
+									<td>Data fim</td>
+									<td>Horas previstas</td>
+									<td>Horas alocadas</td>
+									<td>%</td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="fase_atividade in demanda.fase_atividades">
+									<td style="width: 1%"><div style="width: 150px">{{fase_atividade.fase.descricao}}</div></td>
+									<td><div class="atividade" ng-repeat="atividade in fase_atividade.atividades">{{atividade.descricao}}</div></td>
+									<td style="width: 1%"><div class="atividade" style="width: 69px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.data_inicio}}</div></td>
+									<td style="width: 1%"><div class="atividade" style="width: 69px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.data_fim}}</div></td>
+									<td style="width: 1%"><div class="atividade" style="width: 93px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.atividade_profissional.quantidade_horas}}</div></td>
+									<td style="width: 1%"><div class="atividade" style="width: 94px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">100</div></td>
+									<td style="width: 1%"><div class="atividade" style="width: 40px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">100</div></td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				<tr>
+			</tbody>
+		</table>
+		
+		
+	</fieldset>
 
 </div>
+
+{%endverbatim%}
 
 {% endblock %}
