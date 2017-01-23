@@ -44,9 +44,9 @@
 					<td style="width: 1%">
 						<div style="width: 200px">
 							Fase
-							<a href="#" class="btn btn-primary button-heading" ng-click="$ctrl.adicionarfase()" style="float:right;">
+							<button class="btn btn-primary button-heading" ng-click="$ctrl.adicionarfase()" style="float:right;">
 								<span class="glyphicon glyphicon-plus"></span>
-							</a>
+							</button>
 						</div>
 					</td>
 					<td>
@@ -80,9 +80,9 @@
 						</div>
 					</td>
 					<td>
-						<a href="#" class="btn btn-primary button-heading" ng-click="$ctrl.adicionaratividade(fase_atividade)" style="float:right;">
+						<button class="btn btn-primary button-heading" ng-click="$ctrl.adicionaratividade(fase_atividade)" style="float:right;">
 							<span class="glyphicon glyphicon-plus"></span>
-						</a>
+						</button>
 						<table class="table table-sm table-bordered table-striped table-highlight" ng-repeat="atividade in fase_atividade.atividades" ng-show="!atividade.remover">
 							<thead>
 								<tr class="active">
@@ -92,12 +92,12 @@
 									<td style="width: 1%;">
 										<div style="width: 180px">
 											Profissional
-											<a href="#" class="btn btn-primary button-heading" ng-click="$ctrl.adicionarprofissional(atividade)" style="float:right;">
+											<button class="btn btn-primary button-heading" ng-click="$ctrl.adicionarprofissional(atividade)" style="float:right;">
 												<span class="glyphicon glyphicon-plus"></span>
-											</a>
-											<a href="#" class="btn btn-primary button-heading" ng-click="$ctrl.abrirmodalfuncionarios(atividade)" style="margin-right:2px; float:right;">
+											</button>
+											<button class="btn btn-primary button-heading" ng-click="$ctrl.abrirmodalfuncionarios(atividade)" style="margin-right:2px; float:right;">
 												<span class="glyphicon glyphicon-collapse-down"></span>
-											</a>
+											</button>
 											<div class="modal-funcionario" ng-show="$ctrl.modalatividademap[atividade.$$hashKey].ativo">
 												<div>
 													<button class="btn btn-primary button-heading" ng-click="$ctrl.fecharmodalfuncionario(atividade)" style="margin-right:2px; float:right;">
