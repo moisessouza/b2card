@@ -467,4 +467,11 @@ def buscar_pessoas_por_nome(request, texto, format=None):
     pessoas = PessoaFisica.objects.filter(pessoa__nome_razao_social__icontains=texto)
     data = PessoaFisicaComPessoaSerializer(pessoas, many=True).data
     return Response(data)
+
+@api_view(['GET'])
+def buscar_gestores(request, format=None):
+    pessoas = PessoaFisica.objects.filter(prestador__cargo__gestor=True)
+    data = PessoaFisicaComPessoaSerializer(pessoas, many=True).data
+    return Response(data)
+    
     

@@ -12,5 +12,6 @@ urlpatterns = [
     url(r'^api/list/$', view_pessoa.PessoaList.as_view()),
     url(r'^api/pessoajuridica/list/$', view_pessoa.PessoaJuridicaList.as_view()),
     url(r'^api/pessoafisica/list/$', view_pessoa.PessoaFisicaList.as_view()),
-    url(r'^api/pessoafisica/(?P<texto>.*)/$', view_pessoa.buscar_pessoas_por_nome)
+    url(r'^api/pessoafisica/(?P<texto>.*)/$', view_pessoa.buscar_pessoas_por_nome),
+    url(r'^api/gestores/$', view_pessoa.buscar_gestores)
 ]

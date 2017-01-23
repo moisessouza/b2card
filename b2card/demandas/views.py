@@ -376,7 +376,7 @@ class DemandaDetail(APIView):
                     
                     responsavel = None
                     if 'responsavel' in i:
-                        if i['responsavel'] and 'id' in i['responsavel']:
+                        if i['responsavel'] and 'id' in i['responsavel'] and i['responsavel']['id'] is not None:
                             responsavel = PessoaFisica.objects.get(pk=i['responsavel']['id'])
                         del i['responsavel']
                             
