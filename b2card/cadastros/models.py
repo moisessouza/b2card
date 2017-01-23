@@ -220,3 +220,6 @@ class CustoPrestador(models.Model):
     
 class Fase(models.Model):
     descricao = models.CharField(max_length = 100, default = None)
+    
+class NaturezaDemanda(models.Model):
+    descricao = models.CharField(max_length=100)

@@ -2,7 +2,7 @@
 from django.db import models
 from datetime import datetime
 from cadastros.models import CentroCusto, ValorHora, CentroResultado, UnidadeAdministrativa,\
-    Fase, PessoaFisica, PessoaJuridica
+    Fase, PessoaFisica, PessoaJuridica, NaturezaDemanda
 import faturamento
 import cadastros
 
@@ -12,13 +12,6 @@ STATUS = (
     ('P', 'Pendente'),
     ('A', 'Aprovado'),
     ('R', 'Reprovado'),
-)
-
-TIPO_DEMANDA = (
-    ('D','Desenvolvimento'), 
-    ('H','Homologação'), 
-    ('C','Consultoria'), 
-    ('A','Alocação')
 )
 
 STATUS_DEMANDA = (
@@ -36,6 +29,10 @@ TIPO_PARCELA = (
     ('M', 'Medição')
 )
 
+TIPO_DEMANDA=(
+    ('E', 'Externo'),
+    ('I', 'Interno')
+)
 class Demanda(models.Model):
     cliente = models.ForeignKey(PessoaJuridica, default=None)
     nome_demanda = models.CharField(max_length=30,default=None)
@@ -43,6 +40,11 @@ class Demanda(models.Model):
     status_demanda = models.CharField(max_length=1, choices=STATUS_DEMANDA, null=True)
     codigo_demanda = models.CharField(max_length=12, null=True)
     unidade_administrativa = models.ForeignKey(UnidadeAdministrativa, default=None, null=True)
+    analista_tecnico_responsavel = models.ForeignKey(PessoaFisica, null=True, related_name="%(app_label)s_%(class)s_related", related_query_name="%(app_label)s_%(class)ss")
+    responsavel = models.ForeignKey(PessoaFisica, null = True)
+    tipo_demanda = models.CharField(max_length=1, choices=TIPO_DEMANDA, default = None)
+    natureza_demanda = models.ForeignKey(NaturezaDemanda, default = None, null = True)
+    responsavel_cliente = models.CharField(max_length=30, default = None, null = True)
 
 class FaseAtividade(models.Model):
     demanda = models.ForeignKey(Demanda, default = None)
@@ -70,32 +72,6 @@ class Proposta(models.Model):
     data_aprovacao = models.DateField(null=True)
     empresa_ganhadora = models.CharField(max_length = 30, null=True)
     total_horas_ganhadora = models.IntegerField(null=True)
-    demanda = models.ForeignKey(Demanda, null=True)
-
-SIM_NAO = (
-    ('S', 'Sim'),
-    ('N', 'Não')
-)
-
-class Tarefa(models.Model):
-    descricao = models.TextField()
-    analista_tecnico_responsavel = models.ForeignKey(PessoaFisica, null=True, related_name="%(app_label)s_%(class)s_related", related_query_name="%(app_label)s_%(class)ss")
-    responsavel = models.ForeignKey(PessoaFisica, null = True)
-    analise_inicio = models.DateField(null = True)
-    analise_fim = models.DateField(null = True)
-    analise_fim_real = models.DateField(null = True)
-    densenvolvimento_inicio = models.DateField(null = True)
-    desenvolvimento_fim = models.DateField(null = True)
-    desenvolvimento_fim_real= models.DateField(null = True)
-    homologacao_possui_sit = models.CharField(null = True, max_length=1, choices=SIM_NAO)
-    homologacao_inicio = models.DateField(null = True)
-    homologacao_fim = models.DateField(null = True)
-    homologacao_fim_real = models.DateField(null = True)
-    forecast = models.CharField(null = True, max_length=30)
-    aceite = models.CharField(null = True, max_length=1, choices=SIM_NAO)
-    evidencias = models.CharField(null = True, max_length=30)
-    implantacao_producao = models.DateField(null = True)
-    implantacao_in_loco = models.CharField(null = True, max_length=1, choices=SIM_NAO)
     demanda = models.ForeignKey(Demanda, null=True)
     
 class Observacao(models.Model):

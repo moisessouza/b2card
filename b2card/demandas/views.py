@@ -4,12 +4,12 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from cadastros.models import CentroCusto, ValorHora, CentroResultado, UnidadeAdministrativa, \
+from cadastros.models import CentroCusto, ValorHora, UnidadeAdministrativa, \
     PessoaFisica, PessoaJuridica
-from demandas.models import Demanda, Proposta, Tarefa, Observacao, Ocorrencia, \
+from demandas.models import Demanda, Proposta, Observacao, Ocorrencia, \
     Orcamento, ItemFase, Fase, Atividade, OrcamentoFase, \
     OrcamentoAtividade, PerfilAtividade, AtividadeProfissional, FaseAtividade
-from demandas.serializers import DemandaSerializer, PropostaSerializer, TarefasSerializer, \
+from demandas.serializers import DemandaSerializer, PropostaSerializer, \
     ObservacaoSerializer, OcorrenciaSerializer, OrcamentoSerializer, \
     ItemFaseSerializer, AtividadeSerializer, \
     OrcamentoFaseSerializer, OrcamentoAtividadeSerializer, \
@@ -49,7 +49,6 @@ class DemandaDetail(APIView):
         
         demanda = Demanda.objects.get(pk=demanda_id)
         propostas = Proposta.objects.filter(demanda__id=demanda_id)
-        tarefas = Tarefa.objects.filter(demanda__id=demanda_id)
         observacoes = Observacao.objects.filter(demanda__id=demanda_id)
         ocorrencias = Ocorrencia.objects.filter(demanda__id=demanda_id)
         orcamentos = Orcamento.objects.filter(demanda__id=demanda_id)
@@ -66,22 +65,7 @@ class DemandaDetail(APIView):
             proposta['data_real_entrega'] = formatar_data(i.data_real_entrega)
             proposta['data_aprovacao'] = formatar_data(i.data_aprovacao)
             propostas_list.append(proposta)
-            
-        tarefas_list = []
-        for i in tarefas:
-            tarefa = TarefasSerializer(i).data
-            tarefa['analise_inicio'] = formatar_data(i.analise_inicio)
-            tarefa['analise_fim'] = formatar_data(i.analise_fim)
-            tarefa['analise_fim_real'] = formatar_data(i.analise_fim_real)
-            tarefa['densenvolvimento_inicio'] = formatar_data(i.densenvolvimento_inicio)
-            tarefa['desenvolvimento_fim'] = formatar_data(i.desenvolvimento_fim)
-            tarefa['desenvolvimento_fim_real'] = formatar_data(i.desenvolvimento_fim_real)
-            tarefa['homologacao_inicio'] = formatar_data(i.homologacao_inicio)
-            tarefa['homologacao_fim'] = formatar_data(i.homologacao_fim)
-            tarefa['homologacao_fim_real'] = formatar_data(i.homologacao_fim_real)
-            tarefa['implantacao_producao'] = formatar_data(i.implantacao_producao)
-            tarefas_list.append(tarefa)
-            
+       
         observacoes_list = []
         for i in observacoes:
             observacao = ObservacaoSerializer(i).data
@@ -148,7 +132,6 @@ class DemandaDetail(APIView):
             parcelas_list.append(parcela)
         
         data['propostas'] = propostas_list
-        data['tarefas'] = tarefas_list
         data['observacoes'] = observacoes_list
         data['ocorrencias'] = ocorrencias_list
         data['orcamento'] = orcamento_dict
@@ -219,74 +202,6 @@ class DemandaDetail(APIView):
                     proposta = Proposta.objects.get(pk=i['id'])
                     proposta.delete()
     
-    def salvar_tarefa(self, tarefas, demanda):
-        for i in tarefas:
-            if 'remover' not in i or i['remover'] is False:
-                if ('descricao' in i and i['descricao'] is not None and 'analista_tecnico_responsavel' in i and i['analista_tecnico_responsavel'] is not None and 
-                    'responsavel' in i and i['responsavel'] is not None):
-                    
-                    if 'show' in i:
-                        del i['show']
-                    
-                    analista_tecnico_responsavel = None
-                    if 'analista_tecnico_responsavel' in i:
-                        if i['analista_tecnico_responsavel'] is not None and 'id' in i['analista_tecnico_responsavel']:
-                            analista_tecnico_responsavel = i['analista_tecnico_responsavel']
-                            analista_tecnico_responsavel = PessoaFisica.objects.get(pk=analista_tecnico_responsavel['id'])
-                        del i['analista_tecnico_responsavel']
-                        
-                    responsavel = None
-                    if 'responsavel' in i:
-                        if i['responsavel'] is not None and 'id' in i['responsavel']:
-                            responsavel = i['responsavel']
-                            responsavel = PessoaFisica.objects.get(pk=responsavel['id'])
-                        del i['responsavel']
-                    
-                    tarefa = Tarefa(**i)
-                    tarefa.demanda = demanda
-                    
-                    if analista_tecnico_responsavel is not None:
-                        tarefa.analista_tecnico_responsavel = analista_tecnico_responsavel
-                    
-                    if responsavel is not None:
-                        tarefa.responsavel = responsavel
-                    
-                    if 'analise_inicio' in i:
-                        data_string = i['analise_inicio']
-                        tarefa.analise_inicio = converter_string_para_data(data_string)
-                    if 'analise_fim' in i:
-                        data_string = i['analise_fim']
-                        tarefa.analise_fim = converter_string_para_data(data_string)
-                    if 'analise_fim_real' in i:
-                        data_string = i['analise_fim_real']
-                        tarefa.analise_fim_real = converter_string_para_data(data_string)
-                    if 'densenvolvimento_inicio' in i:
-                        data_string = i['densenvolvimento_inicio']
-                        tarefa.densenvolvimento_inicio = converter_string_para_data(data_string)
-                    if 'desenvolvimento_fim' in i:
-                        data_string = i['desenvolvimento_fim']
-                        tarefa.desenvolvimento_fim = converter_string_para_data(data_string)
-                    if 'desenvolvimento_fim_real' in i:
-                        data_string = i['desenvolvimento_fim_real']
-                        tarefa.desenvolvimento_fim_real = converter_string_para_data(data_string)
-                    if 'homologacao_inicio' in i:
-                        data_string = i['homologacao_inicio']
-                        tarefa.homologacao_inicio = converter_string_para_data(data_string)
-                    if 'homologacao_fim' in i:
-                        data_string = i['homologacao_fim']
-                        tarefa.homologacao_fim = converter_string_para_data(data_string)
-                    if 'homologacao_fim_real' in i:
-                        data_string = i['homologacao_fim_real']
-                        tarefa.homologacao_fim_real = converter_string_para_data(data_string)
-                    if 'implantacao_producao' in i:
-                        data_string = i['implantacao_producao']
-                        tarefa.implantacao_producao = converter_string_para_data(data_string)
-                    tarefa.save()
-            else:
-                if 'id' in i:
-                    tarefa = Tarefa.objects.get(pk=i['id'])
-                    tarefa.delete()
-
     def salvar_observacoes(self, observacoes, demanda):
         for i in observacoes:
             if 'remover' not in i or i['remover'] is False:
@@ -593,21 +508,31 @@ class DemandaDetail(APIView):
         unidade_administrativa = data['unidade_administrativa']
         unidade_administrativa = UnidadeAdministrativa.objects.get(pk=unidade_administrativa['id'])
         
+        analista_tecnico_responsavel = None
+        if 'analista_tecnico_responsavel' in data:
+            if data['analista_tecnico_responsavel'] is not None and 'id' in data['analista_tecnico_responsavel']:
+                analista_tecnico_responsavel = data['analista_tecnico_responsavel']
+                analista_tecnico_responsavel = PessoaFisica.objects.get(pk=analista_tecnico_responsavel['id'])
+            del data['analista_tecnico_responsavel']
+            
+        responsavel = None
+        if 'responsavel' in data:
+            if data['responsavel'] is not None and 'id' in data['responsavel']:
+                responsavel = data['responsavel']
+                responsavel = PessoaFisica.objects.get(pk=responsavel['id'])
+            del data['responsavel']
+        
         propostas = data['propostas']
-        tarefas = data['tarefas']
         observacoes = data['observacoes']
         ocorrencias = data['ocorrencias']
         orcamento = data['orcamento']
         fase_atividades = data['fase_atividades']
         
-        parcelas = None
         if 'parcelas' in data:
-            parcelas = data['parcelas']
             del data['parcelas']
         
         del data['cliente']
         del data['propostas']
-        del data['tarefas']
         del data['observacoes']
         del data['ocorrencias']
         del data['orcamento']
@@ -622,9 +547,14 @@ class DemandaDetail(APIView):
             data_string = data['data_aprovacao_demanda']
             demanda.data_aprovacao_demanda = converter_string_para_data(data_string)
             
+        if analista_tecnico_responsavel is not None:
+            demanda.analista_tecnico_responsavel = analista_tecnico_responsavel
+        
+        if responsavel is not None:
+            demanda.responsavel = responsavel
+            
         demanda.save();
         
-        self.salvar_tarefa(tarefas, demanda)
         self.salvar_proposta(propostas, demanda)
         self.salvar_observacoes(observacoes, demanda)
         self.salvar_ocorrencias(ocorrencias, demanda)
