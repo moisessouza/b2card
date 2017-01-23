@@ -9,7 +9,7 @@ from demandas.models import Demanda, Proposta, Observacao, Ocorrencia,\
     OrcamentoAtividade, PerfilAtividade, AtividadeProfissional,\
     FaseAtividade
 from cadastros.serializers import CentroCustoSerializer, ValorHoraSerializer, CentroResultadoSerializer,\
-    UnidadeAdministrativaSerializer, FaseSerializer
+    UnidadeAdministrativaSerializer, FaseSerializer, NaturezaDemandaSerializer
 from cadastros.serializers_pessoa import PessoaFisicaComPessoaSerializer,\
     PessoaJuridicaComPessoaSerializer
     
@@ -18,9 +18,10 @@ class DemandaSerializer (serializers.ModelSerializer):
     unidade_administrativa = UnidadeAdministrativaSerializer()
     analista_tecnico_responsavel = PessoaFisicaComPessoaSerializer()
     responsavel = PessoaFisicaComPessoaSerializer()
+    natureza_demanda = NaturezaDemandaSerializer()
     class Meta:
         model = Demanda
-        fields = ('id', 'cliente','nome_demanda','descricao','status_demanda','codigo_demanda', 'unidade_administrativa', 'analista_tecnico_responsavel', 'responsavel', 'responsavel_cliente')
+        fields = ('id', 'cliente','nome_demanda','descricao','status_demanda','codigo_demanda', 'unidade_administrativa', 'analista_tecnico_responsavel', 'responsavel', 'tipo_demanda', 'responsavel_cliente', 'natureza_demanda')
         
 class PropostaSerializer(serializers.ModelSerializer):
     class Meta:

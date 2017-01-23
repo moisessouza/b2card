@@ -1,6 +1,6 @@
 "use strict";
 
-var demandas = angular.module('demandas', ['demandas-services', 'pessoa-services', 'centrocusto-services', 'fase-services', 'valorhora-services', 'parcela', 'parcela-services',
+var demandas = angular.module('demandas', ['demandas-services', 'pessoa-services', 'centrocusto-services', 'naturezademanda-services', 'fase-services', 'valorhora-services', 'parcela', 'parcela-services',
                                            'centroresultado-services', 'unidadeadministrativa-services', 'ui.bootstrap', 'commons', 'ui.mask',  'ngMaterial']);
 
 demandas.factory('share', function(){
@@ -8,7 +8,7 @@ demandas.factory('share', function(){
 });
 
 demandas.controller('DemandaController', function ($rootScope, $scope, $window, $uibModal, $log, DemandaService, ParcelaService, PessoaService,
-		CentroCustoService, ValorHoraService, CommonsService, AutenticationService, CentroResultadoService, UnidadeAdministrativaService, share, MessageService){
+		CentroCustoService, ValorHoraService, CommonsService, AutenticationService, CentroResultadoService, UnidadeAdministrativaService, NaturezaDemandaService, share, MessageService){
 	var $ctrl = this; 
 	
 	var messageinfo = function (msg){
@@ -109,6 +109,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 	
 	$ctrl.listacentroresultados = CentroResultadoService.buscarcentroresultados();
 	$ctrl.listaunidadeadministrativas = UnidadeAdministrativaService.buscarunidadeadministrativas();
+	$ctrl.listanaturezademanda = NaturezaDemandaService.buscarnaturezademandas();
 	
 	var abas = ['#dadosdemanda', '#orcamento', '#atividades', 
 		'#proposta', '#tarefas', '#observacoes', '#ocorrencias']

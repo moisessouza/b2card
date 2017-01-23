@@ -63,6 +63,11 @@
 							Fases
 						</a>
 						{%endcheck_permittion%}
+						{% check_permittion 'cadastros:naturezademanda' %}
+						<a href="{% url 'cadastros:naturezademanda' %}">
+							Natureza da demanda
+						</a>
+						{%endcheck_permittion%}
 					</li>
         		</ul>
 			</li>

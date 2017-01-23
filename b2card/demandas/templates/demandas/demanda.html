@@ -10,6 +10,7 @@
 	<script src="/static/js/apps/cadastros/centrocusto/centrocusto-services.js"></script>
 	<script src="/static/js/apps/cadastros/centroresultado/centroresultado-services.js"></script>
 	<script src="/static/js/apps/cadastros/unidadeadministrativa/unidadeadministrativa-services.js"></script>
+	<script src="/static/js/apps/cadastros/naturezademanda/naturezademanda-services.js"></script>
 	<script src="/static/js/apps/cadastros/valorhora/valorhora-services.js"></script>
 	<script src="/static/js/apps/cadastros/fase/fase-services.js"></script>
 	<script src="/static/js/apps/cadastros/pessoa/pessoa-services.js"></script>
@@ -164,6 +165,24 @@
 									<label for="codigo_demanda">Código da demanda</label> 
 								    <input type="text" id="codigo_demanda" name="codigo_demanda" ng-model="$ctrl.demanda.codigo_demanda" class="form-control" maxlength="12" required/>
 								    <span class="red" ng-show="demanda.codigo_demanda.$invalid">Código da demanda é obrigatório.</span>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label>Tipo da demanda</label> 
+								    <select ng-model="$ctrl.demanda.tipo_demanda" class="form-control">
+								    	<option value="">Selecione...</option>
+								    	<option value="E">Externo</option>
+								    	<option value="I">Interno</option>	
+								    </select>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label>Natureza da demanda</label> 
+								    <select ng-model="$ctrl.demanda.natureza_demanda.id" class="form-control" ng-options="n.id as n.descricao for n in $ctrl.listanaturezademanda">
+								    	<option value="">Selecione...</option>	
+								    </select>
 								</div>
 							</div>
 							<div class="col-md-3">

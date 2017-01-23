@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from cadastros.models import CentroCusto, ValorHora, UnidadeAdministrativa, \
-    PessoaFisica, PessoaJuridica
+    PessoaFisica, PessoaJuridica, NaturezaDemanda
 from demandas.models import Demanda, Proposta, Observacao, Ocorrencia, \
     Orcamento, ItemFase, Fase, Atividade, OrcamentoFase, \
     OrcamentoAtividade, PerfilAtividade, AtividadeProfissional, FaseAtividade
@@ -522,6 +522,12 @@ class DemandaDetail(APIView):
                 responsavel = PessoaFisica.objects.get(pk=responsavel['id'])
             del data['responsavel']
         
+        natureza_demanda = None
+        if 'natureza_demanda' in data:
+            if data['natureza_demanda'] is not None and 'id' in data['natureza_demanda']:
+                natureza_demanda = NaturezaDemanda.objects.get(pk=data['natureza_demanda']['id'])
+            del data['natureza_demanda']
+        
         propostas = data['propostas']
         observacoes = data['observacoes']
         ocorrencias = data['ocorrencias']
@@ -547,11 +553,9 @@ class DemandaDetail(APIView):
             data_string = data['data_aprovacao_demanda']
             demanda.data_aprovacao_demanda = converter_string_para_data(data_string)
             
-        if analista_tecnico_responsavel is not None:
-            demanda.analista_tecnico_responsavel = analista_tecnico_responsavel
-        
-        if responsavel is not None:
-            demanda.responsavel = responsavel
+        demanda.analista_tecnico_responsavel = analista_tecnico_responsavel
+        demanda.responsavel = responsavel
+        demanda.natureza_demanda = natureza_demanda
             
         demanda.save();
         
