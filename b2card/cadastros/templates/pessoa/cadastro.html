@@ -724,8 +724,12 @@ button.exclude {
 		</div>
 		<div class="modal-body" id="modal-body">
 			<div class="form-group">
-				<label for="numero_proposta">Nome do cargo</label>
-				<input type="text" id="numero_proposta" class="form-control" ng-model="$ctrl.nome_cargo" placeholder="Nome do cargo"/>
+				<label>Nome do cargo</label>
+				<input type="text" class="form-control" ng-model="$ctrl.nome_cargo" placeholder="Nome do cargo"/>
+			</div>
+			<div class="form-group">
+				<label>Gestor</label>
+				<input type="checkbox" ng-model="$ctrl.gestor"/>
 			</div>
 			<button class="btn btn-primary" type="button" ng-click="$ctrl.salvar()">Salvar</button>
 			<button class="btn btn-danger" type="button" ng-show="$ctrl.cargo.id" ng-click="$ctrl.deletar()">Deletar</button>
@@ -733,11 +737,13 @@ button.exclude {
  				<thead>
  					<tr>
 	  					<th>Nome do cargo</th>
+						<th>Nome do cargo</th>
  					</tr>
  				</thead>
  				<tbody>
  					<tr ng-repeat="cargo in $ctrl.listacargos" ng-click="$ctrl.edit(cargo)">
  						<td ng-bind="cargo.nome_cargo"></td>
+						<td><input type="checkbox" ng-model="cargo.gestor" disabled/></td>
  					</tr>
  				</tbody>
  			</table>

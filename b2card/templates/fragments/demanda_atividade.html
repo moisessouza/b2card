@@ -63,20 +63,18 @@
 				    		<option value="">Selecione uma fase...</option>
 				    	</select>
 						<div>
-						Responsável 
-						<md-autocomplete required md-selected-item="fase_atividade.responsavel" md-search-text="searchText" md-selected-item-change="$ctrl.limparlistaresponsavelfase()" md-search-text-change="$ctrl.buscarresponsavelfase(searchText)" md-items="p in $ctrl.listaresponsavelfase"  md-item-text="p.pessoa.nome_razao_social">
-				    		<md-item-template>
-						    	<span md-highlight-text="searchText">{{p.pessoa.nome_razao_social}}</span>
-						  	</md-item-template>
-						</md-autocomplete>
+							Responsável
+							<select ng-model="fase_atividade.responsavel.id" ng-options="p.id as p.pessoa.nome_razao_social for p in $ctrl.gestores">
+								<option value="">Selecione...</option>
+							</select>
 						</div>
 						<div>
-						Data inicio 
-						<input type="text" class="form-control" ng-model="fase_atividade.data_inicio" ui-mask="99/99/9999" model-view-value="true" required  disabled/>
+							Data inicio 
+							<input type="text" class="form-control" ng-model="fase_atividade.data_inicio" ui-mask="99/99/9999" model-view-value="true" required  disabled/>
 						</div>
 						<div>
-						Data fim
-						<input type="text" class="form-control" ng-model="fase_atividade.data_fim" ui-mask="99/99/9999" model-view-value="true" required  disabled/>
+							Data fim
+							<input type="text" class="form-control" ng-model="fase_atividade.data_fim" ui-mask="99/99/9999" model-view-value="true" required  disabled/>
 						</div>
 					</td>
 					<td>
