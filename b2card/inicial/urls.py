@@ -21,7 +21,8 @@ from . import views
 app_name='inicial'
 
 urlpatterns = [
-    url(r'^$', views.index, name='inicial')
+    url(r'^$', views.index, name='inicial'),
+    url(r'^api/atividadesprofissional/$', views.buscar_atividades_usuario)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
