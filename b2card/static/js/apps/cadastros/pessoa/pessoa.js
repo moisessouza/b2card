@@ -305,12 +305,14 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 			$ctrl.cargo = {}
 		
 		$ctrl.cargo.nome_cargo = $ctrl.nome_cargo;
+		$ctrl.cargo.gestor = $ctrl.gestor;
 		RecursosService.salvarcargo($ctrl.cargo, function (data){
 			if (!$ctrl.cargo.edit){
 				$ctrl.listacargos.push(data);
 			}
 			$ctrl.cargo = {}
 			$ctrl.nome_cargo = "";
+			$ctrl.gestor = false;
 		});
 	}
 	
@@ -319,14 +321,7 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 			$ctrl.listacargos.splice($ctrl.listacargos.indexOf($ctrl.cargo), 1);
 			$ctrl.cargo = {}
 			$ctrl.nome_cargo = "";
-		});
-	}
-	
-	$ctrl.deletar = function () {
-		RecursosService.deletarcargo($ctrl.cargo, function (data){
-			$ctrl.listacargos.splice($ctrl.listacargos.indexOf($ctrl.cargo), 1);
-			$ctrl.cargo = {}
-			$ctrl.nome_cargo = "";
+			$ctrl.gestor = false;
 		});
 	}
 	
@@ -334,6 +329,7 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 		$ctrl.cargo = cargo;
 		$ctrl.cargo.edit=true;
 		$ctrl.nome_cargo = cargo.nome_cargo;
+		$ctrl.gestor = cargo.gestor;
 	}
 	
 	$ctrl.close = function () {

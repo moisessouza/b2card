@@ -80,6 +80,7 @@ recursos.controller('RecursosController', function ($scope, $uibModal, $window, 
 			$ctrl.cargo = {}
 		
 		$ctrl.cargo.nome_cargo = $ctrl.nome_cargo;
+		$ctrl.cargo.gestor = $ctrl.gestor;
 		RecursosService.salvarcargo($ctrl.cargo, function (data){
 			if (!$ctrl.cargo.edit){
 				$ctrl.listacargos.push(data);
@@ -94,14 +95,7 @@ recursos.controller('RecursosController', function ($scope, $uibModal, $window, 
 			$ctrl.listacargos.splice($ctrl.listacargos.indexOf($ctrl.cargo), 1);
 			$ctrl.cargo = {}
 			$ctrl.nome_cargo = "";
-		});
-	}
-	
-	$ctrl.deletar = function () {
-		RecursosService.deletarcargo($ctrl.cargo, function (data){
-			$ctrl.listacargos.splice($ctrl.listacargos.indexOf($ctrl.cargo), 1);
-			$ctrl.cargo = {}
-			$ctrl.nome_cargo = "";
+			$ctrl.gestor = false;
 		});
 	}
 	
@@ -109,6 +103,7 @@ recursos.controller('RecursosController', function ($scope, $uibModal, $window, 
 		$ctrl.cargo = cargo;
 		$ctrl.cargo.edit=true;
 		$ctrl.nome_cargo = cargo.nome_cargo;
+		$ctrl.gestor = cargo.gestor;
 	}
 	
 	$ctrl.close = function () {

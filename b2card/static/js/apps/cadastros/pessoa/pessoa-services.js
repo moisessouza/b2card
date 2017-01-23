@@ -41,6 +41,10 @@ pessoaservices.service('PessoaService', function($resource){
 		buscarprofissional: function(texto, callback){
 			var Pessoa = $resource(BASE_URL + 'cadastros/pessoa/api/pessoafisica/:texto/');
 			return Pessoa.query({'texto': texto}, {}, callback);
+		},
+		buscargestores: function(callback) {
+			var Pessoa = $resource(BASE_URL + 'cadastros/pessoa/api/gestores/');
+			return Pessoa.query(callback)
 		}
 	}
 });
