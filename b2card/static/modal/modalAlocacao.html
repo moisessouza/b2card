@@ -8,9 +8,9 @@
 			<div class="col-sm-4">
 				<label class="input-label">Data</label>
 				<div class="input-group">
-					<input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true" ng-model="dt" is-open="popup1.opened" ng-required="true" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+					<input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true" ng-model="dt" is-open="$ctrl.aberto" ng-required="true" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
 					<span class="input-group-btn">
-						<button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+						<button type="button" class="btn btn-default" ng-click="$ctrl.abrir()"><i class="glyphicon glyphicon-calendar"></i></button>
 					</span>
 				</div>
 			</div>
