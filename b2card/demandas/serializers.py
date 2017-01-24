@@ -59,7 +59,7 @@ class AtividadeProfissionalSerializer(serializers.ModelSerializer):
     pessoa_fisica = PessoaFisicaComPessoaSerializer()
     class Meta:
         model = AtividadeProfissional
-        fields = ('id', 'pessoa_fisica', 'quantidade_horas')
+        fields = ('id', 'pessoa_fisica', 'quantidade_horas', 'horas_alocadas_milisegundos', 'percentual_concluido')
 
 class OrcamentoAtividadeSerializer(serializers.ModelSerializer):
     fase = FaseSerializer()

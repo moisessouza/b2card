@@ -2,9 +2,24 @@
 
 var inicial = angular.module('inicial', ['inicial-services', 'commons', 'ui.bootstrap', 'ui.mask', 'ngMaterial', 'ngMessages']);
 
-inicial.controller('InicialController', function (InicialService, $scope, $window, $uibModal, $mdDialog){
+inicial.controller('InicialController', function (InicialService, CommonsService, $scope, $window, $uibModal, $mdDialog){
 	var $ctrl = this;
 	$ctrl.show=true;
+	
+	var configurarregistros = data => {
+	
+		for(let cliente of data) {
+			for (let demanda of cliente.demandas) {
+				for (let fase_atividade of demanda.fase_atividades) {
+					for (let atividade of fase_atividade.atividades) {
+						if (atividade.atividade_profissional.horas_alocadas_milisegundos){
+							atividade.atividade_profissional.horas_alocadas = CommonsService.milliparahoras(atividade.atividade_profissional.horas_alocadas_milisegundos);
+						}
+					}
+				}
+			}
+		}
+	}
 	
 	$ctrl.abrirmodalalocacao = (ev, atividade) => {
 		
@@ -23,14 +38,14 @@ inicial.controller('InicialController', function (InicialService, $scope, $windo
 		});
 			
 		modalInstance.result.then(function(data) {
-			$ctrl.clientes = InicialService.buscaratividadesprofissional();
+			$ctrl.clientes = InicialService.buscaratividadesprofissional(configurarregistros);
 		}, function() {
 			// $log.info('Modal dismissed at: ' + new Date());
 		});
 		
 	}
 	
-	$ctrl.clientes = InicialService.buscaratividadesprofissional();
+	$ctrl.clientes = InicialService.buscaratividadesprofissional(configurarregistros);
 	
 }).controller('ModalAlocacaoController', function (atividade, InicialService, CommonsService, $uibModalInstance, $scope, $window) {
 	var $ctrl = this;

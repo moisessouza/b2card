@@ -66,7 +66,7 @@ def buscar_atividades_usuario(request, format=None):
         
     return Response(cliente_list)
 
-
+@api_view(['POST'])
 def alocar_horas(request, format=None):
     
     atividade_profissional = None

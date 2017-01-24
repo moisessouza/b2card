@@ -63,7 +63,7 @@ class AtividadeProfissional(models.Model):
     atividade = models.ForeignKey(Atividade, default = None)
     pessoa_fisica = models.ForeignKey(PessoaFisica, default = None)
     quantidade_horas = models.IntegerField(default = None);
-    horas_alocadas_milisegundos = models.DateTimeField(default = None, null = True)
+    horas_alocadas_milisegundos = models.IntegerField(default = None, null = True)
     percentual_concluido = models.IntegerField(default = None, null = True)
     
 class AlocacaoHoras(models.Model):
