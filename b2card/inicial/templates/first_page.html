@@ -31,7 +31,7 @@
 
 {%verbatim%}
 
-<div id="first_page" ng-controller="InicialController as $ctrl">
+<div id="first_page" class="ng-hide" ng-controller="InicialController as $ctrl" ng-show="$ctrl.show">
 
 	<fieldset ng-repeat="cliente in $ctrl.clientes">
 		<legend>{{cliente.nome_fantasia}}</legend>
@@ -42,7 +42,7 @@
 					<td>
 					</td>
 					<td style="width: 1%">
-						<div style="width: 210px; padding: 0 7px">{{demanda.nome_demanda}} asfdasdf asdf asdasdf asd fasdf asdf asdfasdfasas asdf asdf</div>
+						<div style="width: 210px; padding: 0 7px">{{demanda.nome_demanda}}</div>
 					<td>
 					<td>
 						<table class="table ">
