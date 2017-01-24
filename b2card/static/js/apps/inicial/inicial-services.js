@@ -21,6 +21,10 @@ inicialservices.service('InicialService', function($resource){
 		salvaralocacao: function (data, callback) {
 			var AlocacaoHoras = $resource(BASE_URL + 'inicial/api/alocacao/');
 			return AlocacaoHoras.save({}, data, callback);
+		},
+		buscarultimaalocacao: function (alocacao_id, callback){
+			var AlocacaoHoras = $resource(BASE_URL + 'inicial/api/ultimaalocacao/:id/');
+			return AlocacaoHoras.get({id:alocacao_id}, callback);
 		}
 	}
 });

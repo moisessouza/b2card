@@ -3,12 +3,13 @@ from rest_framework.decorators import api_view
 from demandas.models import Atividade, Demanda, FaseAtividade,\
     AtividadeProfissional, AlocacaoHoras
 from demandas.serializers import DemandaSerializer, AtividadeSerializer,\
-    FaseAtividadeSerializer, AtividadeProfissionalSerializer
+    FaseAtividadeSerializer, AtividadeProfissionalSerializer,\
+    AlocacaoHorasSerializer
 from rest_framework.response import Response
 from cadastros.models import PessoaJuridica
 from cadastros.serializers_pessoa import PessoaJuridicaSerializer,\
     PessoaJuridicaComPessoaSerializer
-from utils.utils import formatar_data
+from utils.utils import formatar_data, converter_string_para_data
 import datetime
 
 # Create your views here.
@@ -76,6 +77,7 @@ def alocar_horas(request, format=None):
     
     alocacao_horas = AlocacaoHoras(**request.data)
     alocacao_horas.atividade_profissional = atividade_profissional
+    alocacao_horas.data_informada = converter_string_para_data(request.data['data_informada'])
     alocacao_horas.data_alocacao = datetime.datetime.now()
     alocacao_horas.save();
     
@@ -91,4 +93,13 @@ def alocar_horas(request, format=None):
     atividade_profissional.save();
     
     return Response(AtividadeProfissionalSerializer(atividade_profissional).data)
+
+@api_view(['GET'])
+def buscar_ultima_alocacao(request, atividade_profissional_id, format=None):
+    
+    alocacao_horas = AlocacaoHoras.objects.filter(atividade_profissional__id = atividade_profissional_id).order_by('-id')[:1]
+    if alocacao_horas:
+        return Response(AlocacaoHorasSerializer(alocacao_horas[0]).data)
+    else:
+        return Response({})
     

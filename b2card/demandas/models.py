@@ -71,6 +71,7 @@ class AlocacaoHoras(models.Model):
     horas_alocadas_milisegundos = models.IntegerField(default=None)
     percentual_concluido = models.IntegerField()
     observacao = models.TextField(default = None, null = True)
+    data_informada = models.DateField(default = None)
     data_alocacao = models.DateField(default = None)
 
 class Proposta(models.Model):

@@ -7,7 +7,6 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 	$ctrl.show=true;
 	
 	var configurarregistros = data => {
-	
 		for(let cliente of data) {
 			for (let demanda of cliente.demandas) {
 				for (let fase_atividade of demanda.fase_atividades) {
@@ -51,8 +50,12 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 	var $ctrl = this;
 	$ctrl.atividade = atividade;
 	
+	InicialService.buscarultimaalocacao(atividade.atividade_profissional.id, function (data){
+		$ctrl.percentual_conclusao = data.percentual_concluido;
+	});
+	
 	$scope.today = function() {
-		$scope.dt = new Date();
+		$ctrl.data =new Date();
 	};
 	$scope.today();
 
@@ -78,10 +81,16 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 		
 		var milisegundos = hora_fim - hora_inicio
 
+		if ($ctrl.data instanceof Date){
+			$ctrl.data = CommonsService.dataparastring($ctrl.data);
+		}
+		
 		var data = {
 			atividade_profissional: atividade.atividade_profissional,
 			horas_alocadas_milisegundos : milisegundos,
 			percentual_concluido : $ctrl.percentual_conclusao,
+			data_informada: $ctrl.data,
+			observacao: $ctrl.observacao
 		}
 
 		InicialService.salvaralocacao(data, function (){

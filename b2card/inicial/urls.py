@@ -23,7 +23,8 @@ app_name='inicial'
 urlpatterns = [
     url(r'^$', views.index, name='inicial'),
     url(r'^api/atividadesprofissional/$', views.buscar_atividades_usuario),
-    url(r'^api/alocacao/$', views.alocar_horas)
+    url(r'^api/alocacao/$', views.alocar_horas),
+    url(r'^api/ultimaalocacao/(?P<atividade_profissional_id>[0-9]+)/$', views.buscar_ultima_alocacao),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
