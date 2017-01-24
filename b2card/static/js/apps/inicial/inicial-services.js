@@ -17,6 +17,10 @@ inicialservices.service('InicialService', function($resource){
 		buscaratividadesprofissional: function (callback){
 			var Clientes = $resource(BASE_URL + 'inicial/api/atividadesprofissional/');
 			return Clientes.query(callback);
+		},
+		salvaralocacao: function (data, callback) {
+			var AlocacaoHoras = $resource(BASE_URL + 'inicial/api/alocacao/');
+			return AlocacaoHoras.save({}, data, callback);
 		}
 	}
 });

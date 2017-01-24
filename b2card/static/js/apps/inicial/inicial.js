@@ -23,7 +23,7 @@ inicial.controller('InicialController', function (InicialService, $scope, $windo
 		});
 			
 		modalInstance.result.then(function(data) {
-			configurardemanda(share.demanda.id);
+			$ctrl.clientes = InicialService.buscaratividadesprofissional();
 		}, function() {
 			// $log.info('Modal dismissed at: ' + new Date());
 		});
@@ -32,7 +32,7 @@ inicial.controller('InicialController', function (InicialService, $scope, $windo
 	
 	$ctrl.clientes = InicialService.buscaratividadesprofissional();
 	
-}).controller('ModalAlocacaoController', function (atividade, CommonsService, $scope, $window) {
+}).controller('ModalAlocacaoController', function (atividade, InicialService, CommonsService, $uibModalInstance, $scope, $window) {
 	var $ctrl = this;
 	$ctrl.atividade = atividade;
 	
@@ -49,21 +49,29 @@ inicial.controller('InicialController', function (InicialService, $scope, $windo
 		$ctrl.aberto = true;
 	};
 	
+	$ctrl.cancelar= function (){
+		$uibModalInstance.close();
+	}
+	
 	$ctrl.salvar = () => {
 		
 		var hora_inicio = $ctrl.hora_inicio.split(':');
 		var hora_fim = $ctrl.hora_fim.split(':');
 		
-		hora_inicio = moment(new Date(0, 0, 0, hora_inicio[0], hora_inicio[1], 0, 0).getTime());
-		console.log(hora_inicio);
+		hora_inicio = new Date(0, 0, 0, hora_inicio[0], hora_inicio[1], 0, 0);
+		hora_fim = new Date(0,0,0,hora_fim[0], hora_fim[1], 0,0).getTime();
 		
-		hora_fim = moment(new Date(0,0,0,hora_fim[0], hora_fim[1], 0,0).getTime());
-		console.log(hora_fim);
-		
-		var data = new Date();
-		data.setTime(hora_fim - hora_inicio)
-		
-		console.log(CommonsService.milliparahoras(hora_fim - hora_inicio))
+		var milisegundos = hora_fim - hora_inicio
+
+		var data = {
+			atividade_profissional: atividade.atividade_profissional,
+			horas_alocadas_milisegundos : milisegundos,
+			percentual_concluido : $ctrl.percentual_conclusao,
+		}
+
+		InicialService.salvaralocacao(data, function (){
+			$uibModalInstance.close();
+		});
 		
 	}
 	

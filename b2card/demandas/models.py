@@ -63,15 +63,15 @@ class AtividadeProfissional(models.Model):
     atividade = models.ForeignKey(Atividade, default = None)
     pessoa_fisica = models.ForeignKey(PessoaFisica, default = None)
     quantidade_horas = models.IntegerField(default = None);
-    horas_alocadas = models.DateTimeField(default = None, null = True)
+    horas_alocadas_milisegundos = models.DateTimeField(default = None, null = True)
     percentual_concluido = models.IntegerField(default = None, null = True)
     
 class AlocacaoHoras(models.Model):
     atividade_profissional = models.ForeignKey(AtividadeProfissional, default = None, on_delete=models.PROTECT)
-    horas_alocadas = models.DateTimeField(default=None)
+    horas_alocadas_milisegundos = models.IntegerField(default=None)
     percentual_concluido = models.IntegerField()
     observacao = models.TextField(default = None, null = True)
-    data_alocacao_milisegundos = models.IntegerField(default = None)
+    data_alocacao = models.DateField(default = None)
 
 class Proposta(models.Model):
     data_recimento_solicitacao = models.DateField()
