@@ -32,7 +32,7 @@ inicial.controller('InicialController', function (InicialService, $scope, $windo
 	
 	$ctrl.clientes = InicialService.buscaratividadesprofissional();
 	
-}).controller('ModalAlocacaoController', function (atividade, $scope, $window) {
+}).controller('ModalAlocacaoController', function (atividade, CommonsService, $scope, $window) {
 	var $ctrl = this;
 	$ctrl.atividade = atividade;
 	
@@ -48,5 +48,23 @@ inicial.controller('InicialController', function (InicialService, $scope, $windo
 	$ctrl.abrir = function() {
 		$ctrl.aberto = true;
 	};
+	
+	$ctrl.salvar = () => {
+		
+		var hora_inicio = $ctrl.hora_inicio.split(':');
+		var hora_fim = $ctrl.hora_fim.split(':');
+		
+		hora_inicio = moment(new Date(0, 0, 0, hora_inicio[0], hora_inicio[1], 0, 0).getTime());
+		console.log(hora_inicio);
+		
+		hora_fim = moment(new Date(0,0,0,hora_fim[0], hora_fim[1], 0,0).getTime());
+		console.log(hora_fim);
+		
+		var data = new Date();
+		data.setTime(hora_fim - hora_inicio)
+		
+		console.log(CommonsService.milliparahoras(hora_fim - hora_inicio))
+		
+	}
 	
 });

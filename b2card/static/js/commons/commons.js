@@ -100,6 +100,13 @@ commons.directive('gbMoney', function () {
 			} else {
 				return null;
 			}
+		},
+		milliparahoras: function (milisegundos){
+			var horas = parseInt(milisegundos/1000/60/60);
+			var minutos = moment(milisegundos).minutes();
+			horas = horas < 10 ? '0' + horas : horas;
+			minutos = minutos < 10 ? '0' + minutos: minutos;
+			return horas + ':' + minutos;
 		}
 	}
 }).controller('MessageController', function ($scope){
