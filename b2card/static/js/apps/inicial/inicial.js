@@ -35,4 +35,22 @@ inicial.controller('InicialController', function (InicialService, $scope, $windo
 }).controller('ModalAlocacaoController', function (atividade, $scope, $window) {
 	var $ctrl = this;
 	$ctrl.atividade = atividade;
+	
+	 $scope.today = function() {
+	    $scope.dt = new Date();
+	  };
+	  $scope.today();
+
+	  $scope.clear = function() {
+	    $scope.dt = null;
+	  };
+
+	  $scope.open1 = function() {
+	    $scope.popup1.opened = true;
+	  };
+
+	  $scope.popup1 = {
+	    opened: false
+	  };
+	
 });

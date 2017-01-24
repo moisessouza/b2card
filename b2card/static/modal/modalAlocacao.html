@@ -1,29 +1,46 @@
 <meta charset="utf-8">
 <div class="modal-body" id="modal-body">
-
-		<div class="panel panel-primary form-group-sm margin-top">
+	<div class="panel panel-primary form-group-sm margin-top">
+		<div class="panel-heading">
+			{{$ctrl.atividade.descricao}}
+		</div>
 		<div class="panel-body">
-		asdfasdf
-			<!-- <div class="form-group" style="width: 90px">
-				<input date-time="" ng-model="dates.minDate" id="pickerMinSelector" date-change="changeMinMax" max-date="maxDate" view="date" timezone="UTC" format="lll" class="ng-valid ng-scope ng-valid-max ng-dirty ng-touched">
+			<div class="col-sm-4">
+				<label class="input-label">Data</label>
+				<div class="input-group">
+					<input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true" ng-model="dt" is-open="popup1.opened" ng-required="true" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+				</div>
 			</div>
-			<div class="form-group" style="width: 90px">
-				<label class="control-label">Hora inicial</label>
-				<input class="form-control" type="text" ng-model="teste1" ui-mask="99:99" model-view-value="true" style="width: 60px;"/>
+			<div class="col-sm-2" style="width: 94px">
+				<div class="form-group">
+					<label class="control-label">Hora inicial</label>
+					<input class="form-control" type="text" ng-model="teste1" ui-mask="99:99" model-view-value="true" style="width: 60px;"/>
+				</div>
 			</div>
-			<div class="form-group" style="width: 90px">
-				<label class="control-label">Hora final</label>
-				<input class="form-control" ng-model="teste1" ui-mask="99:99" model-view-value="true" style="width: 60px;"/>
+			<div class="col-sm-2">
+				<div class="form-group">
+					<label class="control-label">Hora final</label>
+					<input class="form-control" ng-model="teste1" ui-mask="99:99" model-view-value="true" style="width: 60px;"/>
+				</div>
 			</div>
-			<div class="form-group" style="width: 90px">
-				<label class="control-label">% Concluído</label>
-				<input class="form-control" ng-model="teste1" mask="999" restrict="reject" style="width: 60px;"/>
+			<div class="col-sm-2" style="width: 101px">
+				<div class="form-group">
+					<label class="control-label">% Concluído</label>
+					<input class="form-control" ng-model="teste1" mask="999" restrict="reject" style="width: 60px;"/>
+				</div>
 			</div>
 			<div class="form-group col-sm-12">
-				<label class="control-label"></label>
+				<label class="control-label">Observação</label>
 				<textarea class="form-control"></textarea>
-			</div>  -->
+			</div>
 		</div>
-		</div>
+	</div>
 </div>
+ <div class="modal-footer">
+     <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Salvar</button>
+     <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancelar</button>
+ </div>
 	
