@@ -29,7 +29,15 @@
 			<div class="col-sm-2" style="width: 101px">
 				<div class="form-group">
 					<label class="control-label">% Concluído</label>
-					<input class="form-control" ng-model="$ctrl.percentual_conclusao" mask="999" restrict="reject" style="width: 60px;"/>
+					<input class="form-control" ng-model="$ctrl.percentual_conclusao" mask="999" restrict="reject" style="width: 60px;" ng-disabled="$ctrl.percentual_conclusao == 100"/>
+				</div>
+			</div>
+			<div class="col-sm-2" style="width: 179px" ng-show="$ctrl.percentual_conclusao == 100">
+				<div class="form-group">
+					<label class="control-label">Tipo de alocação</label>
+					<select class="form-control">
+						<option value="">Selecione...</option>
+					</select>
 				</div>
 			</div>
 			<div class="form-group col-sm-12">
