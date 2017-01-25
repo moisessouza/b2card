@@ -25,6 +25,10 @@ inicialservices.service('InicialService', function($resource){
 		buscarultimaalocacao: function (alocacao_id, callback){
 			var AlocacaoHoras = $resource(BASE_URL + 'inicial/api/ultimaalocacao/:id/');
 			return AlocacaoHoras.get({id:alocacao_id}, callback);
+		},
+		buscaratividadesprofissionalporatividade: function (atividade_id, callback){
+			var AtividadeProfissional = $resource(BASE_URL + 'inicial/api/atividadesprofissional/:id/');
+			return AtividadeProfissional.get({id:atividade_id}, callback);
 		}
 	}
 });

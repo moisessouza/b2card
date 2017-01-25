@@ -37,7 +37,10 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 		});
 			
 		modalInstance.result.then(function(data) {
-			$ctrl.clientes = InicialService.buscaratividadesprofissional(configurarregistros);
+			InicialService.buscaratividadesprofissionalporatividade(atividade.id, function (data){
+				atividade.atividade_profissional = data;
+				configurarregistros($ctrl.clientes);
+			});
 		}, function() {
 			// $log.info('Modal dismissed at: ' + new Date());
 		});
@@ -103,7 +106,7 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 		}
 
 		InicialService.salvaralocacao(data, function (){
-			$uibModalInstance.close();
+			$uibModalInstance.close(data);
 		});
 		
 	}

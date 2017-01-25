@@ -103,3 +103,10 @@ def buscar_ultima_alocacao(request, atividade_profissional_id, format=None):
     else:
         return Response({})
     
+@api_view(['GET'])
+def buscar_atividade_profissional_por_atividade(request, atividade_id, format=None):
+    
+    atividade_profissional =  AtividadeProfissional.objects.filter(atividade__id = atividade_id, pessoa_fisica__prestador__usuario__id=request.user.id)[:1]
+    atividade_profissional_dict = AtividadeProfissionalSerializer(atividade_profissional[0]).data
+    
+    return Response(atividade_profissional_dict)
