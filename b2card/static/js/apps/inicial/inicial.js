@@ -16,6 +16,7 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 						}
 					}
 				}
+				demanda.id = CommonsService.pad(demanda.id, 4);
 			}
 		}
 	}
@@ -61,9 +62,13 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 }).controller('ModalAlocacaoController', function (atividade, InicialService, CommonsService, TipoAlocacaoService, $uibModalInstance, $scope, $window) {
 	var $ctrl = this;
 	$ctrl.atividade = atividade;
+	$ctrl.atividade_fechada;
 	
 	InicialService.buscarultimaalocacao(atividade.atividade_profissional.id, function (data){
 		$ctrl.percentual_conclusao = data.percentual_concluido;
+		if (data.percentual_concluido == 100){
+			$ctrl.atividade_fechada = true;
+		}
 	});
 	
 	$ctrl.tipoalocacaolist = TipoAlocacaoService.buscartipoalocacoes();
@@ -104,6 +109,11 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 		
 		if(!$ctrl.hora_fim) {
 			alert('Informe hora fim.');
+			return;
+		}
+		
+		if($ctrl.atividade_fechada && (!$ctrl.tipo_alocacao || !$ctrl.tipo_alocacao.id)) {
+			alert('Informe tipo de alocação.');
 			return;
 		}
 		
