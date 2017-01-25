@@ -19,11 +19,11 @@ class FaseDetail(APIView):
         fase = Fase(**request.data)
         fase.save()
                 
-        serializer = serializers.TipoHoraSerializer(fase)
+        serializer = serializers.FaseSerializer(fase)
         return Response(serializer.data)
     
     def delete(self, request, tipohora_id, format=None):
         fase = Fase.objects.get(pk=tipohora_id)
         fase.delete()
-        serializer = serializers.TipoHoraSerializer(fase)
+        serializer = serializers.FaseSerializer(fase)
         return Response(serializer.data)    

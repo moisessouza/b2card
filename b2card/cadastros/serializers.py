@@ -5,7 +5,7 @@ Created on 14 de set de 2016
 '''
 from rest_framework import serializers
 from cadastros.models import TipoHora, CentroCusto, ContaGerencial, NaturezaOperacao, ValorHora, Vigencia,\
-    UnidadeAdministrativa, Fase, NaturezaDemanda
+    UnidadeAdministrativa, Fase, NaturezaDemanda, TipoAlocacao
         
 class TipoHoraSerializer(serializers.ModelSerializer):
     class Meta:
@@ -57,7 +57,11 @@ class FaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Fase
         fields = ('id', 'descricao')
-        
+
+class TipoAlocacaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TipoAlocacao
+        fields = ('id', 'descricao')
     
 class NaturezaDemandaSerializer(serializers.ModelSerializer):
     class Meta:

@@ -68,6 +68,11 @@
 							Natureza da demanda
 						</a>
 						{%endcheck_permittion%}
+						{% check_permittion 'cadastros:tipoalocacao' %}
+						<a href="{% url 'cadastros:tipoalocacao' %}">
+							Tipo de alocação
+						</a>
+						{%endcheck_permittion%}
 					</li>
         		</ul>
 			</li>

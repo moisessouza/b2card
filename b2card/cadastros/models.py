@@ -223,3 +223,6 @@ class Fase(models.Model):
     
 class NaturezaDemanda(models.Model):
     descricao = models.CharField(max_length=100)
+    
+class TipoAlocacao(models.Model):
+    descricao = models.CharField(max_length=100)

@@ -1,0 +1,63 @@
+<meta charset="utf-8">
+{% extends "base_page.html" %}
+
+{% block script %}
+	<script src="/static/js/apps/cadastros/tipoalocacao/tipoalocacao.js"></script>
+	<script src="/static/js/apps/cadastros/tipoalocacao/tipoalocacao-services.js"></script>
+	<script src="/static/js/commons/commons.js"></script>
+	<script src="/static/js/angular/ui-bootstrap-tpls-2.2.0.min.js"></script>
+	<script src="/static/js/jquery/priceformat/jquery.priceformat.min.js"></script>
+{% endblock %}
+
+{%block content%}
+
+{%verbatim%}
+
+<style>
+	table tr {
+    	cursor: pointer;
+	}
+	button.margin {
+		margin-bottom: 1em;
+	}
+	span.red { 
+   		color:red;
+  	}
+</style>
+
+<h1>Tipo de alocação</h1>
+
+<form  name="tipoalocacao" ng-app="tipoalocacao" ng-controller="TipoAlocacaoController as $ctrl" ng-show="$ctrl.show" class="ng-hide">
+  <div class="panel panel-default form-group-sm" >
+	  <div class="panel-body">
+		  <div class="form-group">
+		    <label for="descricao">Tipo de alocação</label>
+		    <input type="text" class="form-control" id="descricao" name="descricao" ng-model="$ctrl.tipoalocacao.descricao" maxlength="30" placeholder="Tipo de alocação" required>
+		    <span class="red" ng-show="tipoalocacao.descricao.$invalid">Tipo de alocação é obrigatório.</span>
+		  </div>
+		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.salvar()" ng-disabled="tipoalocacao.$invalid">Salvar</button>
+		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.novo()" ng-show="$ctrl.tipoalocacao.id">Novo</button>
+		  
+		  <table class="table table-responsive table-bordered table-striped table-highlight" ng-show="$ctrl.tipoalocacaolist">
+				<thead>
+				    <th>Tipo de alocação</th>
+				    <th></th>
+				</thead>
+				<tbody>
+				    <tr ng-repeat="tipoalocacao in $ctrl.tipoalocacaolist">
+				        <td class="col-sm-12" ng-click="$ctrl.editar(tipoalocacao);">{{tipoalocacao.descricao}}</td>
+				        <td>
+				       		<button type="button" class="btn btn-default" ng-click="$ctrl.deletar(tipoalocacao)">
+								<span class="glyphicon glyphicon-trash"></span>
+							</button>
+				        </td>
+				    </tr>
+				</tbody>
+		   </table>
+	 </div>
+  </div>
+</form>
+
+{%endverbatim%}
+
+{%endblock%}
