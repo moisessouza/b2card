@@ -44,6 +44,15 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 		
 	}
 	
+	$ctrl.demandamap = {} 
+	
+	$ctrl.expandir = demanda => {
+		if (!$ctrl.demandamap[demanda.$$hashKey]){
+			$ctrl.demandamap[demanda.$$hashKey] = {};
+		}
+		$ctrl.demandamap[demanda.$$hashKey].expandir = !$ctrl.demandamap[demanda.$$hashKey].expandir; 
+	}
+	
 	$ctrl.clientes = InicialService.buscaratividadesprofissional(configurarregistros);
 	
 }).controller('ModalAlocacaoController', function (atividade, InicialService, CommonsService, $uibModalInstance, $scope, $window) {

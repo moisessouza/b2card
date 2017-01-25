@@ -27,6 +27,15 @@
 		margin: 0;
 		padding: 0
 	}
+	
+	button.expandir {
+		width: 18px;
+	    padding: 0;
+	    margin: 0;
+	    height: 17px;
+	    line-height: 1.4
+	}
+	
 </style>
 
 {%verbatim%}
@@ -36,45 +45,42 @@
 	<fieldset ng-repeat="cliente in $ctrl.clientes">
 		<legend>{{cliente.nome_fantasia}}</legend>
 		
-		<table class="table ">
-			<tbody>
-				<tr ng-repeat="demanda in cliente.demandas">
-					<td>
-					</td>
-					<td style="width: 1%">
-						<div style="width: 210px; padding: 0 7px">{{demanda.nome_demanda}}</div>
-					<td>
-					<td>
-						<table class="table ">
-							<thead>
-								<tr class="active">
-									<td>Fase</td>
-									<td>Atividade</td>
-									<td>Data inicio</td>
-									<td>Data fim</td>
-									<td>Horas previstas</td>
-									<td>Horas alocadas</td>
-									<td style="text-align: center;">%</td>
-								</tr>
-							</thead>
-							<tbody>
-								<tr ng-repeat="fase_atividade in demanda.fase_atividades">
-									<td style="width: 1%"><div style="width: 150px">{{fase_atividade.fase.descricao}}</div></td>
-									<td><div class="atividade" ng-repeat="atividade in fase_atividade.atividades" ng-click="$ctrl.abrirmodalalocacao($event, atividade);">{{atividade.descricao}}</div></td>
-									<td style="width: 1%"><div class="atividade" style="width: 69px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.data_inicio}}</div></td>
-									<td style="width: 1%"><div class="atividade" style="width: 69px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.data_fim}}</div></td>
-									<td style="width: 1%"><div class="atividade" style="width: 93px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.atividade_profissional.quantidade_horas}}</div></td>
-									<td style="width: 1%"><div class="atividade" style="width: 94px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.atividade_profissional.horas_alocadas}}</div></td>
-									<td style="width: 1%"><div class="atividade" style="width: 40px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.atividade_profissional.percentual_concluido}}</div></td>
-								</tr>
-							</tbody>
-						</table>
-					</td>
-				<tr>
-			</tbody>
-		</table>
-		
-		
+		<div class="panel panel-default" style="margin-bottom: 0px; margin-top: 0px;" ng-repeat="demanda in cliente.demandas">
+				<div class="panel-heading" style="height: 22px; padding:2px">
+					<div class="col-sm-1" style="width: 1px;">
+						<button type="button" class="btn btn-sm btn-default expandir" ng-click="$ctrl.expandir(demanda);">{{!$ctrl.demandamap[demanda.$$hashKey].expandir ? '+' : '-'}}</button>
+					</div>
+					<div class="col-sm-2">{{demanda.id}} - {{demanda.nome_demanda}}</div>
+					<div class="col-sm-2">{{demanda.codigo_demanda}}</div>
+					<div class="col-sm-2">{{demanda.status_demanda}}</div>
+				</div>
+				<div class="panel-body" style="margin: 0 0 0 50px; padding: 0 0 0 0;" ng-show="$ctrl.demandamap[demanda.$$hashKey].expandir">
+					<table class="table ">
+						<thead>
+							<tr class="active">
+								<td>Fase</td>
+								<td>Atividade</td>
+								<td>Data inicio</td>
+								<td>Data fim</td>
+								<td>Horas previstas</td>
+								<td>Horas alocadas</td>
+								<td style="text-align: center;">%</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="fase_atividade in demanda.fase_atividades">
+								<td style="width: 1%"><div style="width: 150px">{{fase_atividade.fase.descricao}}</div></td>
+								<td><div class="atividade" ng-repeat="atividade in fase_atividade.atividades" ng-click="$ctrl.abrirmodalalocacao($event, atividade);">{{atividade.descricao}}</div></td>
+								<td style="width: 1%"><div class="atividade" style="width: 69px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.data_inicio}}</div></td>
+								<td style="width: 1%"><div class="atividade" style="width: 69px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.data_fim}}</div></td>
+								<td style="width: 1%"><div class="atividade" style="width: 93px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.atividade_profissional.quantidade_horas}}</div></td>
+								<td style="width: 1%"><div class="atividade" style="width: 94px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.atividade_profissional.horas_alocadas}}</div></td>
+								<td style="width: 1%"><div class="atividade" style="width: 40px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.atividade_profissional.percentual_concluido}}</div></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+		</div>
 	</fieldset>
 
 </div>
