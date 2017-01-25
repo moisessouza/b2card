@@ -109,6 +109,7 @@
 	
 	<ul class="nav nav-tabs">
 	  <li class="active" ng-show="$ctrl.verificardisponibilidadeaba('#dadosdemanda')"><a data-toggle="tab" href="#dadosdemanda">Dados da demanda</a></li>
+	  <li ng-show="$ctrl.verificardisponibilidadeaba('#resumo')"><a data-toggle="tab" href="#resumo">Resumo</a></li>
 	  <li ng-show="$ctrl.verificardisponibilidadeaba('#orcamento')"><a data-toggle="tab" href="#orcamento">Orçamento</a></li>
 	  <li ng-show="$ctrl.verificardisponibilidadeaba('#atividades')"><a data-toggle="tab" href="#atividades">Atividades</a></li>
 	  <li ng-show="$ctrl.verificardisponibilidadeaba('#proposta')"><a data-toggle="tab" href="#proposta">Proposta</a></li>
@@ -230,8 +231,11 @@
 				</div>
 			</form>
 		</div>
-		<div id="orcamento" ng-if="$ctrl.verificardisponibilidadeaba('#orcamento')" class="tab-pane">
+		<div id="resumo" ng-if="$ctrl.verificardisponibilidadeaba('#resumo')" class="tab-pane">
 			{%endverbatim%}
+			{% include "fragments/demanda_resumo.html" %}
+		</div>
+		<div id="orcamento" ng-if="$ctrl.verificardisponibilidadeaba('#orcamento')" class="tab-pane">
 			{% include "fragments/demanda_orcamento.html" %}
 		</div>
 		<div id="atividades" ng-if="$ctrl.verificardisponibilidadeaba('#atividades')" class="tab-pane">

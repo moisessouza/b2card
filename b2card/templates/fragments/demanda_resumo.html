@@ -1,0 +1,97 @@
+<meta charset="utf-8">
+{%verbatim%}
+
+<style>
+	div.fase_atividade {
+		border: 1px #ddd solid;
+		padding: 3px;
+	}
+	div.panel_body_atividades {
+		padding-top: 0;
+    	padding-bottom: 0;
+	}
+</style>
+
+<div class="margin-top" ng-controller="ResumoController as $ctrl">
+		
+		<div class="panel panel-default" style="margin-bottom: 5px; margin-top: 0px;">
+			<div class="panel-heading" style="height: 22px; padding:2px; font-style: italic;">
+				<div class="col-sm-12">
+					<div class="col-sm-2">Fase</div>
+					<div class="col-sm-8">Atividade</div>
+					<div class="col-sm-1">Data inicio</div>
+					<div class="col-sm-1">Data fim</div>
+				</div>
+			</div>
+		</div>
+		<div class="panel panel-default" style="margin-bottom: 5px; margin-top: 0px;">
+			<div class="panel-body panel_body_atividades">
+				<div ng-repeat="fase_atividade in demanda.fase_atividades">
+					<div class="row fase_atividade">
+						<div class="col-sm-2">{{fase_atividade.fase.descricao}}</div>
+						<div class="col-sm-10">
+							<div class="row" style="border-top: 1px #ddd solid;" ng-repeat="atividade in fase_atividade.atividades">
+								<div class="row">
+									<div class="col-sm-10" style="width: 79%"><div class="atividade">{{atividade.descricao}}</div></div>
+									<div class="col-sm-1" style="width: 9.6%"><div class="atividade">{{atividade.data_inicio}}</div></div>
+									<div class="col-sm-1"><div class="atividade">{{atividade.data_fim}}</div></div>
+								</div>
+								<div class="row" style="padding-left: 74px; padding-right:23px;">
+									<div class="panel panel-default" style="margin-bottom: 0">
+										<div class="panel-heading" style="height: 22px; padding:2px; font-style: italic;">
+											<div class="col-sm-8">
+												Profissional
+											</div>
+											<div class="col-sm-1" style="width: 12%; text-align: center;">
+												Horas previstas
+											</div>
+											<div class="col-sm-1" style="width: 12%; text-align: center;">
+												Horas alocadas
+											</div>
+											<div class="col-sm-1" style="text-align: center;">
+												%
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row" style="padding-left: 82px; padding-right:23px;" ng-repeat="atividade_profissional in atividade.atividadeprofissionais">
+									<div class="col-sm-8">
+										{{atividade_profissional.pessoa_fisica.pessoa.nome_razao_social}}
+									</div>
+									<div class="col-sm-1" style="width: 12%; text-align: center;">
+										{{atividade_profissional.quantidade_horas_formatada}}
+									</div>
+									<div class="col-sm-1" style="width: 12%; text-align: center;">
+										{{atividade_profissional.horas_alocadas}}
+									</div>
+									<div class="col-sm-1" style="text-align: center;">
+										{{atividade_profissional.percentual_concluido}}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- <table class="table" ng-repeat="atividade in fase_atividade.atividades">
+					<thead>
+						<tr class="active">
+							<td>Reposnsavel</td>
+							<td>Horas previstas</td>
+							<td>Horas alocadas</td>
+							<td style="text-align: center;">%</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="atividade_profissional in atividade.atividadeprofissionais">
+							<td><div>{{atividade_profissional.pessoa_fisica.pessoa.nome_razao_social}}</div></td>
+							<td style="width: 1%"><div class="atividade" style="width: 86px;">{{atividade_profissional.quantidade_horas}}</div></td>
+							<td style="width: 1%"><div class="atividade" style="width: 86px; text-align: center;">{{atividade_profissional.horas_alocadas_milisegundos}}</div></td>
+							<td style="width: 1%"><div class="atividade" style="width: 69px; text-align: center;">{{atividade_profissional.percentual_concluido}}</div></td>
+						</tr>
+					</tbody>
+				</table>-->
+</div>
+{%endverbatim%}
