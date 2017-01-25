@@ -46,12 +46,21 @@
 	<fieldset ng-repeat="cliente in $ctrl.clientes">
 		<legend>{{cliente.nome_fantasia}}</legend>
 		
+		<div class="panel panel-default" style="margin-bottom: 5px; margin-top: 0px;">
+			<div class="panel-heading" style="height: 22px; padding:2px">
+				<div class="col-sm-1" style="width: 1px;"></div>
+				<div class="col-sm-5"><strong>Demanda</strong></div>
+				<div class="col-sm-2"><strong>Código no cliente</strong></div>
+				<div class="col-sm-2"><strong>Status</strong></div>
+			</div>
+		</div>
+		
 		<div class="panel panel-default" style="margin-bottom: 0px; margin-top: 0px;" ng-repeat="demanda in cliente.demandas">
 				<div class="panel-heading" style="height: 22px; padding:2px">
 					<div class="col-sm-1" style="width: 1px;">
 						<button type="button" class="btn btn-sm btn-default expandir" ng-click="$ctrl.expandir(demanda);">{{!$ctrl.demandamap[demanda.$$hashKey].expandir ? '+' : '-'}}</button>
 					</div>
-					<div class="col-sm-2">{{demanda.id}} - {{demanda.nome_demanda}}</div>
+					<div class="col-sm-5">{{demanda.id}} - {{demanda.nome_demanda}}</div>
 					<div class="col-sm-2">{{demanda.codigo_demanda}}</div>
 					<div class="col-sm-2">
 						{{demanda.status_demanda == 'O' ? 'Em orçamentação' : ''}}
