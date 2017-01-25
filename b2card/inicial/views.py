@@ -6,7 +6,7 @@ from demandas.serializers import DemandaSerializer, AtividadeSerializer,\
     FaseAtividadeSerializer, AtividadeProfissionalSerializer,\
     AlocacaoHorasSerializer
 from rest_framework.response import Response
-from cadastros.models import PessoaJuridica
+from cadastros.models import PessoaJuridica, TipoAlocacao
 from cadastros.serializers_pessoa import PessoaJuridicaSerializer,\
     PessoaJuridicaComPessoaSerializer
 from utils.utils import formatar_data, converter_string_para_data
@@ -75,10 +75,16 @@ def alocar_horas(request, format=None):
         atividade_profissional = AtividadeProfissional.objects.get(pk=request.data['atividade_profissional']['id'])
         del request.data['atividade_profissional']
     
+    tipo_alocacao = None
+    if 'tipo_alocacao' in request.data:
+        tipo_alocacao = TipoAlocacao.objects.get(pk=request.data['tipo_alocacao']['id'])
+        del request.data['tipo_alocacao']
+    
     alocacao_horas = AlocacaoHoras(**request.data)
     alocacao_horas.atividade_profissional = atividade_profissional
     alocacao_horas.data_informada = converter_string_para_data(request.data['data_informada'])
     alocacao_horas.data_alocacao = datetime.datetime.now()
+    alocacao_horas.tipo_alocacao = tipo_alocacao
     alocacao_horas.save();
     
     horas_alocadas_milisegundos = request.data['horas_alocadas_milisegundos']

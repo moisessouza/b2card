@@ -9,7 +9,8 @@ from demandas.models import Demanda, Proposta, Observacao, Ocorrencia,\
     OrcamentoAtividade, PerfilAtividade, AtividadeProfissional,\
     FaseAtividade, AlocacaoHoras
 from cadastros.serializers import CentroCustoSerializer, ValorHoraSerializer, CentroResultadoSerializer,\
-    UnidadeAdministrativaSerializer, FaseSerializer, NaturezaDemandaSerializer
+    UnidadeAdministrativaSerializer, FaseSerializer, NaturezaDemandaSerializer,\
+    TipoAlocacaoSerializer
 from cadastros.serializers_pessoa import PessoaFisicaComPessoaSerializer,\
     PessoaJuridicaComPessoaSerializer
     
@@ -62,9 +63,10 @@ class AtividadeProfissionalSerializer(serializers.ModelSerializer):
         fields = ('id', 'pessoa_fisica', 'quantidade_horas', 'horas_alocadas_milisegundos', 'percentual_concluido')
 
 class AlocacaoHorasSerializer(serializers.ModelSerializer):
+    tipo_alocacao = TipoAlocacaoSerializer()
     class Meta:
         model = AlocacaoHoras
-        fields = ('id', 'horas_alocadas_milisegundos', 'percentual_concluido', 'observacao', 'data_alocacao')
+        fields = ('id', 'horas_alocadas_milisegundos', 'percentual_concluido', 'observacao', 'data_alocacao', 'tipo_alocacao')
 
 class OrcamentoAtividadeSerializer(serializers.ModelSerializer):
     fase = FaseSerializer()

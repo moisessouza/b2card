@@ -1,6 +1,6 @@
 "use strict";
 
-var inicial = angular.module('inicial', ['inicial-services', 'commons', 'ui.bootstrap', 'ui.mask', 'ngMaterial', 'ngMessages']);
+var inicial = angular.module('inicial', ['inicial-services', 'tipoalocacao-services', 'commons', 'ui.bootstrap', 'ui.mask', 'ngMaterial', 'ngMessages']);
 
 inicial.controller('InicialController', function (InicialService, CommonsService, $scope, $window, $uibModal, $mdDialog){
 	var $ctrl = this;
@@ -58,13 +58,15 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 	
 	$ctrl.clientes = InicialService.buscaratividadesprofissional(configurarregistros);
 	
-}).controller('ModalAlocacaoController', function (atividade, InicialService, CommonsService, $uibModalInstance, $scope, $window) {
+}).controller('ModalAlocacaoController', function (atividade, InicialService, CommonsService, TipoAlocacaoService, $uibModalInstance, $scope, $window) {
 	var $ctrl = this;
 	$ctrl.atividade = atividade;
 	
 	InicialService.buscarultimaalocacao(atividade.atividade_profissional.id, function (data){
 		$ctrl.percentual_conclusao = data.percentual_concluido;
 	});
+	
+	$ctrl.tipoalocacaolist = TipoAlocacaoService.buscartipoalocacoes();
 	
 	$scope.today = function() {
 		$ctrl.data =new Date();
@@ -127,7 +129,8 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 			horas_alocadas_milisegundos : milisegundos,
 			percentual_concluido : $ctrl.percentual_conclusao,
 			data_informada: $ctrl.data,
-			observacao: $ctrl.observacao
+			observacao: $ctrl.observacao,
+			tipo_alocacao: $ctrl.tipo_alocacao
 		}
 
 		InicialService.salvaralocacao(data, function (){

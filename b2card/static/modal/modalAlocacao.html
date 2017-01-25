@@ -35,7 +35,7 @@
 			<div class="col-sm-2" style="width: 179px" ng-show="$ctrl.percentual_conclusao == 100">
 				<div class="form-group">
 					<label class="control-label">Tipo de alocação</label>
-					<select class="form-control">
+					<select class="form-control" ng-model="$ctrl.tipo_alocacao.id" ng-options="t.id as t.descricao for t in $ctrl.tipoalocacaolist">
 						<option value="">Selecione...</option>
 					</select>
 				</div>

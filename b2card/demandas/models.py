@@ -2,7 +2,7 @@
 from django.db import models
 from datetime import datetime
 from cadastros.models import CentroCusto, ValorHora, CentroResultado, UnidadeAdministrativa,\
-    Fase, PessoaFisica, PessoaJuridica, NaturezaDemanda
+    Fase, PessoaFisica, PessoaJuridica, NaturezaDemanda, TipoAlocacao
 import faturamento
 import cadastros
 
@@ -73,6 +73,7 @@ class AlocacaoHoras(models.Model):
     observacao = models.TextField(default = None, null = True)
     data_informada = models.DateField(default = None)
     data_alocacao = models.DateField(default = None)
+    tipo_alocacao = models.ForeignKey(TipoAlocacao, default = None, null = True)
 
 class Proposta(models.Model):
     data_recimento_solicitacao = models.DateField()
