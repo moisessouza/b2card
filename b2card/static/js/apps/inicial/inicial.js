@@ -85,11 +85,36 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 	
 	$ctrl.salvar = () => {
 		
+		if (!$ctrl.data) {
+			alert('Informe data.')
+			return;
+		}
+		
+		if (!$ctrl.percentual_conclusao) {
+			alert('Informe % conclusão.');
+			return;
+		}
+		
+		if (!$ctrl.hora_inicio){
+			alert('Informe hora inicio.');
+			return;
+		}
+		
+		if(!$ctrl.hora_fim) {
+			alert('Informe hora fim.');
+			return;
+		}
+		
 		var hora_inicio = $ctrl.hora_inicio.split(':');
 		var hora_fim = $ctrl.hora_fim.split(':');
 		
 		hora_inicio = new Date(0, 0, 0, hora_inicio[0], hora_inicio[1], 0, 0);
 		hora_fim = new Date(0,0,0,hora_fim[0], hora_fim[1], 0,0).getTime();
+		
+		if (hora_inicio >= hora_fim) {
+			alert('Hora inicio deve ser menor que hora fim.');
+			return;
+		}
 		
 		var milisegundos = hora_fim - hora_inicio
 
