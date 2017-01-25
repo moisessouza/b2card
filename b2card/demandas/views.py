@@ -426,6 +426,12 @@ class DemandaDetail(APIView):
                     pessoa_fisica = PessoaFisica.objects.get(pk=i['pessoa_fisica']['id'])
                     del i['pessoa_fisica']
                     
+                    if 'quantidade_horas_formatada' in i:
+                        del i['quantidade_horas_formatada']
+                        
+                    if 'horas_alocadas' in i:
+                        del i['horas_alocadas']
+                    
                     atividade_profissional = AtividadeProfissional(**i)
                     atividade_profissional.atividade = atividade
                     atividade_profissional.pessoa_fisica = pessoa_fisica

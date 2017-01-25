@@ -89,4 +89,4 @@ class FaseAtividadeSerializer(serializers.ModelSerializer):
 class AtividadeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Atividade
-        fields = ('id', 'descricao', 'data_inicio', 'data_fim')
+        fields = ('id', 'descricao', 'data_inicio', 'data_fim', 'percentual_concluido')

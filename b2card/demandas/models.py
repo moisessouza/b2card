@@ -51,13 +51,15 @@ class FaseAtividade(models.Model):
     fase = models.ForeignKey(Fase, default = None)
     responsavel = models.ForeignKey(PessoaFisica, default = None, null=True)
     data_inicio = models.DateField()
-    data_fim = models.DateField()    
+    data_fim = models.DateField()
+    percentual_concluido = models.IntegerField(default = None, null = True)    
 
 class Atividade(models.Model):
     fase_atividade = models.ForeignKey(FaseAtividade, default = None)
     descricao = models.CharField(max_length=100, default = None)
     data_inicio = models.DateField(default = None)
     data_fim = models.DateField(default = None)
+    percentual_concluido = models.IntegerField(default = None, null = True)
     
 class AtividadeProfissional(models.Model):
     atividade = models.ForeignKey(Atividade, default = None)
