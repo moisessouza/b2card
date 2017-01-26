@@ -35,6 +35,10 @@ gestor.controller('GestorController', function (GestorService, CommonsService, $
 		$ctrl.demandamap[demanda.$$hashKey].expandir = !$ctrl.demandamap[demanda.$$hashKey].expandir; 
 	}
 	
+	$ctrl.redirecionar = id => {
+		$window.location.href = BASE_URL + 'demandas/editar/' + id;
+	}
+	
 	$ctrl.clientes = GestorService.buscarclientesdemandas(configurarregistros);
 	
 });
