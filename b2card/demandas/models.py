@@ -45,6 +45,7 @@ class Demanda(models.Model):
     tipo_demanda = models.CharField(max_length=1, choices=TIPO_DEMANDA, default = None)
     natureza_demanda = models.ForeignKey(NaturezaDemanda, default = None, null = True)
     responsavel_cliente = models.CharField(max_length=30, default = None, null = True)
+    percentual_concluido = models.IntegerField(default = None, null = True)
 
 class FaseAtividade(models.Model):
     demanda = models.ForeignKey(Demanda, default = None)

@@ -106,6 +106,21 @@ def alocar_horas(request, format=None):
     atividade.percentual_concluido = percentual_concluido
     atividade.save();
     
+    #calcular percentual fase_atividade
+    fase_atividade = FaseAtividade.objects.filter(atividade = atividade)[0]
+    atividades = Atividade.objects.filter(fase_atividade = fase_atividade)
+    percentual_concluido = sum((a.percentual_concluido if a.percentual_concluido else 0) for a in atividades) / len(atividades);
+    
+    fase_atividade.percentual_concluido = percentual_concluido
+    fase_atividade.save()
+    
+    demanda = Demanda.objects.filter(faseatividade = fase_atividade)[0]
+    fase_atividades = FaseAtividade.objects.filter(demanda = demanda)
+    percentual_concluido = sum((a.percentual_concluido if a.percentual_concluido else 0) for a in fase_atividades) / len(fase_atividades);
+    
+    demanda.percentual_concluido = percentual_concluido
+    demanda.save()
+    
     return Response(AtividadeProfissionalSerializer(atividade_profissional).data)
 
 @api_view(['GET'])
