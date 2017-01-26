@@ -43,7 +43,7 @@ def buscar_atividades_usuario(request, format=None):
                 fase_atividade_dict = FaseAtividadeSerializer(f).data
                 fase_atividade_list.append(fase_atividade_dict)
                 
-                atividades = Atividade.objects.filter(fase_atividade=f,atividadeprofissional__pessoa_fisica__prestador__usuario__id=request.user.id)
+                atividades = Atividade.objects.filter(fase_atividade=f,atividadeprofissional__pessoa_fisica__prestador__usuario__id=request.user.id).distinct()
                 atividade_list = [];
                 
                 for a in atividades:
