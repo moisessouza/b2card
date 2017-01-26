@@ -66,9 +66,9 @@
 					<div class="col-sm-1" style="width: 1px;">
 						<button type="button" class="btn btn-sm btn-default expandir" ng-click="$ctrl.expandir(demanda);">{{!$ctrl.demandamap[demanda.$$hashKey].expandir ? '+' : '-'}}</button>
 					</div>
-					<div class="col-sm-5">{{demanda.id}} - {{demanda.nome_demanda}}</div>
-					<div class="col-sm-2">{{demanda.codigo_demanda}}</div>
-					<div class="col-sm-2">
+					<div class="col-sm-5" ng-click="$ctrl.redirecionar(demanda.id)">{{demanda.id}} - {{demanda.nome_demanda}}</div>
+					<div class="col-sm-2" ng-click="$ctrl.redirecionar(demanda.id)">{{demanda.codigo_demanda}}</div>
+					<div class="col-sm-2" ng-click="$ctrl.redirecionar(demanda.id)">
 						{{demanda.status_demanda == 'O' ? 'Em orçamentação' : ''}}
 						{{demanda.status_demanda == 'A' ? 'Aguardando aprovação' : ''}}
 						{{demanda.status_demanda == 'N' ? 'Não aprovada' : ''}}

@@ -15,10 +15,9 @@ def index(request):
 @api_view(['GET'])
 def buscar_clientes_demandas(request, format=None):
     
-    clientes = PessoaJuridica.objects.filter(Q(demanda__responsavel__prestador__usuario__id=request.user.id) | Q(demanda__analista_tecnico_responsavel__prestador__usuario__id=request.user.id)).distinct()
+    clientes = PessoaJuridica.objects.filter(Q(demanda__responsavel__prestador__usuario__id=request.user.id) | Q(demanda__analista_tecnico_responsavel__prestador__usuario__id=request.user.id) | Q(demanda__faseatividade__responsavel__prestador__usuario__id=request.user.id)).distinct()
     
     cliente_list = []
-    demanda_select = []
     
     for i in clientes:
         cliente = PessoaJuridicaSerializer(i).data
@@ -29,16 +28,11 @@ def buscar_clientes_demandas(request, format=None):
         for d in demandas:
             demanda = serializarDemandaObject(d)
             demanda_list.append(demanda)
-            demanda_select.append(d)
             
         cliente['demandas'] = demanda_list
         cliente_list.append(cliente)
         
-    # buscar responsavel fase
-    clientes = PessoaJuridica.objects.filter(demanda__faseatividade__responsavel__prestador__usuario__id=request.user.id).distinct()
-    for i in clientes:
-        cliente = PessoaJuridicaSerializer(i).data
-        demandas = Demanda.objects.filter(cliente = i, faseatividade__responsavel__prestador__usuario__id=request.user.id).exclude(id__in=[d.id for d in demanda_select])
+        demandas = Demanda.objects.filter(cliente = i, faseatividade__responsavel__prestador__usuario__id=request.user.id).exclude(id__in=[d.id for d in demandas]).distinct()
         
         demanda_list = []
         for d in demandas:
