@@ -120,13 +120,23 @@
 							<tbody>
 								<tr>
 									<td>
-										<input type="text" class="form-control" ng-model="atividade.descricao" required/>
+										<input type="text" class="form-control input-sm" ng-model="atividade.descricao" required/>
 									</td>
 									<td>
-										<input type="text" class="form-control" ng-model="atividade.data_inicio" ng-change="$ctrl.alteracaodataatividade(fase_atividade, atividade, 'data_inicio', '{{atividade.data_inicio}}')" ui-mask="99/99/9999" model-view-value="true" required/>
+										<div class="form-group" style="width: 119px; display: table;">
+											<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true" ng-model="atividade.data_inicio" is-open="$ctrl.modalatividademap[atividade.$$hashKey].data_inicio" ng-change="$ctrl.alteracaodataatividade(fase_atividade, atividade, 'data_inicio', '{{atividade.data_inicio}}')" ng-required="true" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+											<span class="input-group-btn">
+												<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodaldatainicio(atividade)"><i class="glyphicon glyphicon-calendar"></i></button>
+											</span>
+										</div>
 									</td>
 									<td>
-										<input type="text" class="form-control" ng-model="atividade.data_fim" ng-change="$ctrl.alteracaodataatividade(fase_atividade, atividade, 'data_fim', '{{atividade.data_fim}}')" ui-mask="99/99/9999" model-view-value="true" required/>
+										<div class="form-group" style="width: 119px; display: table;">
+											<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true" ng-model="atividade.data_fim" is-open="$ctrl.modalatividademap[atividade.$$hashKey].data_fim" ng-change="$ctrl.alteracaodataatividade(fase_atividade, atividade, 'data_inicio', '{{atividade.data_inicio}}')" ng-required="true" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+											<span class="input-group-btn">
+												<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodaldatafim(atividade)"><i class="glyphicon glyphicon-calendar"></i></button>
+											</span>
+										</div>
 									</td>
 									<td>
 										<span ng-repeat="atividadeprofissional in atividade.atividadeprofissionais" ng-show="!atividadeprofissional.remover">

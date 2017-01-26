@@ -3,6 +3,32 @@
 var demandas = angular.module('demandas', ['demandas-services', 'pessoa-services', 'centrocusto-services', 'naturezademanda-services', 'fase-services', 'valorhora-services', 'parcela', 'parcela-services',
                                            'centroresultado-services', 'unidadeadministrativa-services', 'ui.bootstrap', 'commons', 'ui.mask',  'ngMaterial']);
 
+demandas.config(['$httpProvider', 'CommonsServiceProvider', function($httpProvider, CommonsServiceProvider) {  
+    $httpProvider.interceptors.push(function () {
+    	return {
+    		response: function (config, CommonsService) {
+	        	var ajustardatas = demanda => {
+	        		if(demanda && demanda.fase_atividades){
+	        			for(let fase_atividade of demanda.fase_atividades){
+	        				if (fase_atividade.atividades){
+	        					for (let atividade of fase_atividade.atividades){
+	        						atividade.data_inicio_string = atividade.data_inicio;
+	        						atividade.data_fim_string = atividade.data_fim;
+	        						
+	        						atividade.data_inicio = CommonsServiceProvider.$get().stringparadata(atividade.data_inicio);
+	        						atividade.data_fim = CommonsServiceProvider.$get().stringparadata(atividade.data_fim);
+	        					}
+	        				}
+	        			}
+	        		}
+	        	}
+	        	ajustardatas(config.data);
+	        	return config;
+	        }
+    	}
+    });
+}]);
+
 demandas.factory('share', function(){
 	  return {};
 });
@@ -51,6 +77,8 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 				for ( var i in tarefas ){
 					tarefas[i].show = false;
 				}
+				
+				
 				
 				$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(demanda_id);
 				
@@ -121,6 +149,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		$ctrl.bloquearsalvar = true;
 		share.demanda = DemandaService.salvardemanda($ctrl.demanda, function(data){
 			$ctrl.demanda = data;
+			
 			$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(data.id);
 			MessageService.messagesuccess('Salvo com sucesso!')
 			$ctrl.bloquearsalvar = false;
@@ -723,6 +752,28 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		}
 		
 		$ctrl.modalatividademap[atividade.$$hashKey].ativo = !$ctrl.modalatividademap[atividade.$$hashKey].ativo;
+	}
+	
+	$ctrl.abrirmodaldatainicio = atividade => {
+		if (!$ctrl.modalatividademap[atividade.$$hashKey]) {
+			$ctrl.modalatividademap[atividade.$$hashKey] = {
+				ativo: false
+			}
+		}
+		
+		$ctrl.modalatividademap[atividade.$$hashKey].data_inicio = !$ctrl.modalatividademap[atividade.$$hashKey].data_inicio
+		
+	}
+	
+	$ctrl.abrirmodaldatafim = atividade => {
+		if (!$ctrl.modalatividademap[atividade.$$hashKey]) {
+			$ctrl.modalatividademap[atividade.$$hashKey] = {
+				ativo: false
+			}
+		}
+		
+		$ctrl.modalatividademap[atividade.$$hashKey].data_fim = !$ctrl.modalatividademap[atividade.$$hashKey].data_fim
+		
 	}
 	
 	$ctrl.adicionarremoverprofissional = (atividade, profissional) => {

@@ -276,6 +276,12 @@ class DemandaDetail(APIView):
                         atividade_profissionais = i['atividadeprofissionais']
                         del i['atividadeprofissionais']
                     
+                    if 'data_inicio_string' in i:
+                        del i['data_inicio_string']
+                        
+                    if 'data_fim_string' in i:
+                        del i['data_fim_string']
+                    
                     atividade = Atividade(**i)
                     atividade.fase_atividade = fase_atividade
                     atividade.data_inicio = converter_string_para_data(atividade.data_inicio)

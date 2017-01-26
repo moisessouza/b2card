@@ -53,8 +53,8 @@
 								<div class="row" style="border-top: 1px #ddd solid; margin-top: -1px;" ng-repeat="atividade in fase_atividade.atividades">
 									<div class="row">
 										<div class="col-sm-10" style="width: 73%"><div class="atividade">{{atividade.descricao}}</div></div>
-										<div class="col-sm-1" style="width: 9.6%"><div class="atividade">{{atividade.data_inicio}}</div></div>
-										<div class="col-sm-1" style="width: 9%"><div class="atividade" >{{atividade.data_fim}}</div></div>
+										<div class="col-sm-1" style="width: 9.6%"><div class="atividade">{{atividade.data_inicio_string}}</div></div>
+										<div class="col-sm-1" style="width: 9%"><div class="atividade" >{{atividade.data_fim_string}}</div></div>
 										<div class="col-sm-1"><div class="atividade" style="text-align: center;" ng-show="atividade.percentual_concluido">{{atividade.percentual_concluido}}%</div></div>
 									</div>
 									<div class="row" style="padding-left: 74px">

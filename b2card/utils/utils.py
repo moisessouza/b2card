@@ -10,6 +10,7 @@ from demandas.serializers import DemandaSerializer, PropostaSerializer,\
     ItemFaseSerializer, OrcamentoFaseSerializer, OrcamentoAtividadeSerializer
 from faturamento.serializers import ParcelaSerializer, ParcelaFaseSerializer,\
     MedicaoSerializer
+import re
 
 def formatar_data(data):
     if data is not None:
@@ -22,10 +23,16 @@ def formatar_data(data):
     
 def converter_string_para_data(data_string):
     if data_string is not None and data_string != '':
-        data = datetime.strptime(data_string, '%d/%m/%Y')
-        return data.date()
-    else:
-        return None
+        data_padrao = re.compile('\d\d/\d\d/\d\d\d\d')
+        if data_padrao.match(data_string):
+            data = datetime.strptime(data_string, '%d/%m/%Y')
+            return data.date()
+        else:
+            data_string = data_string[:data_string.index('T')]
+            data = datetime.strptime(data_string, '%Y-%m-%d')
+            return data.date()
+        
+    return None
     
 def converter_string_para_float(float_string):
     if float_string is not None and float_string != '':
