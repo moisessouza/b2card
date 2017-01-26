@@ -16,7 +16,8 @@ from demandas.serializers import DemandaSerializer, PropostaSerializer, \
     AtividadeProfissionalSerializer, FaseAtividadeSerializer
 from faturamento.models import Parcela, Medicao, ParcelaFase
 from faturamento.serializers import ParcelaSerializer, MedicaoSerializer, ParcelaFaseSerializer
-from utils.utils import converter_string_para_data, formatar_data, converter_string_para_float
+from utils.utils import converter_string_para_data, formatar_data, converter_string_para_float,\
+    serializarDemanda
 
 
 # Create your views here.
@@ -43,141 +44,10 @@ def editar(request, demanda_id):
     return render(request, 'demandas/demanda.html', context)
 
 class DemandaDetail(APIView):
-    
-
-    def serializarDemanda(self, demanda_id):
-        
-        demanda = Demanda.objects.get(pk=demanda_id)
-        propostas = Proposta.objects.filter(demanda__id=demanda_id)
-        observacoes = Observacao.objects.filter(demanda__id=demanda_id)
-        ocorrencias = Ocorrencia.objects.filter(demanda__id=demanda_id)
-        orcamentos = Orcamento.objects.filter(demanda__id=demanda_id)
-        fase_atividades = FaseAtividade.objects.filter(demanda__id=demanda_id)
-        parcelas = Parcela.objects.filter(demanda__id=demanda_id)
-        
-        data = DemandaSerializer(demanda).data
-        
-        propostas_list = []
-        for i in propostas:
-            proposta = PropostaSerializer(i).data
-            proposta['data_recimento_solicitacao'] = formatar_data(i.data_recimento_solicitacao)
-            proposta['data_limite_entrega'] = formatar_data(i.data_limite_entrega)
-            proposta['data_real_entrega'] = formatar_data(i.data_real_entrega)
-            proposta['data_aprovacao'] = formatar_data(i.data_aprovacao)
-            propostas_list.append(proposta)
-       
-        observacoes_list = []
-        for i in observacoes:
-            observacao = ObservacaoSerializer(i).data
-            observacao['data_observacao'] = formatar_data(i.data_observacao)
-            observacoes_list.append(observacao)
-            
-        ocorrencias_list = []
-        for i in ocorrencias:
-            ocorrencia = OcorrenciaSerializer(i).data
-            ocorrencia['data_solicitacao'] = formatar_data(i.data_solicitacao)
-            ocorrencia['data_prevista_conclusao'] = formatar_data(i.data_prevista_conclusao)
-            ocorrencias_list.append(ocorrencia)
-            
-        orcamento_dict = self.serializar_orcamento(orcamentos)
-        
-        fase_atividade_list = []
-        if fase_atividades:
-            
-            for i in fase_atividades:
-                
-                fase_atividade = FaseAtividadeSerializer(i).data
-                fase_atividade['data_inicio'] = formatar_data(i.data_inicio)
-                fase_atividade['data_fim'] = formatar_data(i.data_fim)
-                
-                atividades = Atividade.objects.filter(fase_atividade = i)
-                
-                atividade_list = []
-                
-                if atividades:
-                    for a in atividades:
-                        
-                        atividade = AtividadeSerializer(a).data
-                        
-                        atividade['data_inicio'] = formatar_data(a.data_inicio)
-                        atividade['data_fim'] = formatar_data(a.data_fim)
-                        
-                        atividade_profissionais = AtividadeProfissional.objects.filter(atividade = a)
-                        
-                        if atividade_profissionais:
-                            atividade['atividadeprofissionais'] = AtividadeProfissionalSerializer(atividade_profissionais, many=True).data
-                    
-                        atividade_list.append(atividade)
-                        
-                fase_atividade['atividades'] = atividade_list
-                fase_atividade_list.append(fase_atividade)
-            
-        parcelas_list = []
-        for i in parcelas:
-            
-            parcela = ParcelaSerializer(i).data
-            parcela['data_previsto_parcela'] = formatar_data(i.data_previsto_parcela)
-            
-            parcelafase_list = ParcelaFase.objects.filter(parcela = i)
-            parcelafaseserializer_list = []
-            for pf in parcelafase_list:
-                parcelafaseserializer = ParcelaFaseSerializer(pf).data
-                medicoes = Medicao.objects.filter(parcela_fase = pf)
-                medicao_list = MedicaoSerializer(medicoes, many=True).data
-                parcelafaseserializer['medicoes'] = medicao_list
-                
-                parcelafaseserializer_list.append(parcelafaseserializer)
-            parcela['parcelafases'] = parcelafaseserializer_list
-                
-            parcelas_list.append(parcela)
-        
-        data['propostas'] = propostas_list
-        data['observacoes'] = observacoes_list
-        data['ocorrencias'] = ocorrencias_list
-        data['orcamento'] = orcamento_dict
-        data['fase_atividades'] = fase_atividade_list
-        data['parcelas'] = parcelas_list
-        
-        return data
-
+   
     def get(self, request, demanda_id, format=None):
-        data = self.serializarDemanda(demanda_id)
+        data = serializarDemanda(demanda_id)
         return Response(data)
-    
-    def serializar_orcamento(self, orcamentos):
-        
-        orcamento_dict = {}
-        if  orcamentos:
-            orcamento = orcamentos[0]
-            orcamento_dict = OrcamentoSerializer(orcamento).data
-            fases = OrcamentoFase.objects.filter(orcamento = orcamento)
-            
-            fases_list = []
-            for i in fases:
-                itens_fase = ItemFase.objects.filter(fase = i)
-                intes_fase_list = ItemFaseSerializer(itens_fase, many=True).data
-                fase_dict = OrcamentoFaseSerializer(i).data
-                fase_dict['itensfase'] = intes_fase_list
-                fases_list.append(fase_dict)
-                
-            orcamento_dict['fases'] = fases_list
-            
-            orcamento_atividades = OrcamentoAtividade.objects.filter(orcamento = orcamento)
-            orcamento_atividades_list = []
-            
-            if orcamento_atividades:
-                for o in orcamento_atividades:
-                    orcamento_atividade_dict = OrcamentoAtividadeSerializer(o).data
-                    perfil_atividades = PerfilAtividade.objects.filter(orcamento_atividade = o)
-                    dict = {}
-                    for p in perfil_atividades:
-                        dict[p.perfil.id] = { 'horas': p.horas }
-                    orcamento_atividade_dict['colunas'] = dict
-                    orcamento_atividades_list.append(orcamento_atividade_dict)
-            orcamento_dict['orcamento_atividades'] = orcamento_atividades_list
-            
-        return orcamento_dict;
-        
         
     def salvar_proposta(self, propostas, demanda):
         for i in propostas:
@@ -571,7 +441,7 @@ class DemandaDetail(APIView):
         self.salvar_orcamento(orcamento, demanda)
         self.salvar_fase_atividades(fase_atividades, demanda)
         
-        return Response(self.serializarDemanda(demanda.id))
+        return Response(serializarDemanda(demanda.id))
     
     def delete(self, request, demanda_id, format=None):
         demanda = Demanda.objects.get(pk=demanda_id)
