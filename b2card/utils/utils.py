@@ -80,36 +80,7 @@ def serializarDemandaObject(demanda):
         
     orcamento_dict = serializar_orcamento(orcamentos)
     
-    fase_atividade_list = []
-    if fase_atividades:
-        
-        for i in fase_atividades:
-            
-            fase_atividade = FaseAtividadeSerializer(i).data
-            fase_atividade['data_inicio'] = formatar_data(i.data_inicio)
-            fase_atividade['data_fim'] = formatar_data(i.data_fim)
-            
-            atividades = Atividade.objects.filter(fase_atividade = i)
-            
-            atividade_list = []
-            
-            if atividades:
-                for a in atividades:
-                    
-                    atividade = AtividadeSerializer(a).data
-                    
-                    atividade['data_inicio'] = formatar_data(a.data_inicio)
-                    atividade['data_fim'] = formatar_data(a.data_fim)
-                    
-                    atividade_profissionais = AtividadeProfissional.objects.filter(atividade = a)
-                    
-                    if atividade_profissionais:
-                        atividade['atividadeprofissionais'] = AtividadeProfissionalSerializer(atividade_profissionais, many=True).data
-                
-                    atividade_list.append(atividade)
-                    
-            fase_atividade['atividades'] = atividade_list
-            fase_atividade_list.append(fase_atividade)
+    fase_atividade_list = serializar_fase_atividade(fase_atividades)
         
     parcelas_list = []
     for i in parcelas:
@@ -172,3 +143,37 @@ def serializar_orcamento(orcamentos):
             orcamento_dict['orcamento_atividades'] = orcamento_atividades_list
             
         return orcamento_dict;
+    
+def serializar_fase_atividade(fase_atividades):
+    fase_atividade_list = []
+    if fase_atividades:
+        
+        for i in fase_atividades:
+            
+            fase_atividade = FaseAtividadeSerializer(i).data
+            fase_atividade['data_inicio'] = formatar_data(i.data_inicio)
+            fase_atividade['data_fim'] = formatar_data(i.data_fim)
+            
+            atividades = Atividade.objects.filter(fase_atividade = i)
+            
+            atividade_list = []
+            
+            if atividades:
+                for a in atividades:
+                    
+                    atividade = AtividadeSerializer(a).data
+                    
+                    atividade['data_inicio'] = formatar_data(a.data_inicio)
+                    atividade['data_fim'] = formatar_data(a.data_fim)
+                    
+                    atividade_profissionais = AtividadeProfissional.objects.filter(atividade = a)
+                    
+                    if atividade_profissionais:
+                        atividade['atividadeprofissionais'] = AtividadeProfissionalSerializer(atividade_profissionais, many=True).data
+                
+                    atividade_list.append(atividade)
+                    
+            fase_atividade['atividades'] = atividade_list
+            fase_atividade_list.append(fase_atividade)
+            
+    return fase_atividade_list
