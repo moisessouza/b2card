@@ -772,9 +772,11 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 	
 	$ctrl.adicionarremoverprofissional = (atividade, profissional) => {
 		
+		var atividadeprofissional = {};
+		
 		if (atividade.atividadeprofissionais && atividade.atividadeprofissionais.length > 0 && !atividade.atividadeprofissionais[0].pessoa_fisica){
-			atividade.atividadeprofissionais.splice(0,1);
-		}
+			atividadeprofissional = atividade.atividadeprofissionais[0];
+		} 
 		
 		if ($ctrl.modalatividademap[atividade.$$hashKey][profissional.id]) {
 			
@@ -782,10 +784,12 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 				atividade.atividadeprofissionais = [];
 			}
 			
-			atividade.atividadeprofissionais.push({
-				pessoa_fisica: profissional
-			});
+			atividadeprofissional.pessoa_fisica = profissional
 			
+			if (atividade.atividadeprofissionais.indexOf(atividadeprofissional) < 0){
+				atividade.atividadeprofissionais.push(atividadeprofissional);
+			}
+			 
 		} else {
 			if (!atividade.atividadeprofissionais){
 				atividade.atividadeprofissionais = [];
