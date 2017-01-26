@@ -89,7 +89,6 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		} else {
 			$ctrl.demanda = {
 				'propostas':[{}],
-				'tarefas':[{}],
 				'observacoes':[{}],
 				'ocorrencias':[{}],
 				'orcamento': {},
@@ -106,11 +105,6 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 	
 	$ctrl.adicionarproposta = function () {
 		$ctrl.demanda.propostas.unshift({});
-	}
-	
-	$ctrl.adicionartarefa = function () {
-		var tarefa = {'show': true};
-		$ctrl.demanda.tarefas.unshift(tarefa);
 	}
 	
 	$ctrl.adicionarobservacao = function (){
@@ -840,9 +834,11 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		}
 	}
 	
-	$ctrl.share.demanda.$promise.then(function (data) {
-		configurarregistros(data);
-	});
+	if ($ctrl.share.demanda.$promise){
+		$ctrl.share.demanda.$promise.then(function (data) {
+			configurarregistros(data);
+		});
+	}
 	
 });
 
