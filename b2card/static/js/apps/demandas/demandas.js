@@ -840,9 +840,11 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		}
 	}
 	
-	$ctrl.share.demanda.$promise.then(function (data) {
-		configurarregistros(data);
-	});
+	if ($ctrl.share.demanda.$promise){
+		$ctrl.share.demanda.$promise.then(function (data) {
+			configurarregistros(data);
+		});
+	}
 	
 });
 
