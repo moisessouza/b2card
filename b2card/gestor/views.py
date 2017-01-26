@@ -29,7 +29,7 @@ def buscar_clientes_demandas(request, format=None):
             demanda = serializarDemandaObject(d)
             demanda_list.append(demanda)
         
-        demandas = Demanda.objects.filter(cliente = i, faseatividade__responsavel__prestador__usuario__id=request.user.id).exclude(id__in=[d.id for d in demandas]).distinct()
+        demandas = Demanda.objects.filter(cliente = i, faseatividade__responsavel__prestador__usuario__id=request.user.id).exclude(id__in=[d.id for d in demandas])
         
         for d in demandas:
             demanda_dict = DemandaSerializer(d).data
