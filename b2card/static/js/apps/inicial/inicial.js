@@ -142,6 +142,8 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 			atividade_profissional: atividade.atividade_profissional,
 			horas_alocadas_milisegundos : milisegundos,
 			percentual_concluido : $ctrl.percentual_conclusao,
+			hora_inicio: $ctrl.hora_inicio,
+			hora_fim: $ctrl.hora_fim,
 			data_informada: $ctrl.data,
 			observacao: $ctrl.observacao,
 			tipo_alocacao: $ctrl.tipo_alocacao

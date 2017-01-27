@@ -71,6 +71,8 @@ class AtividadeProfissional(models.Model):
     
 class AlocacaoHoras(models.Model):
     atividade_profissional = models.ForeignKey(AtividadeProfissional, default = None, on_delete=models.PROTECT)
+    hora_inicio = models.CharField(max_length=5, default = None)
+    hora_fim = models.CharField(max_length=5, default = None)
     horas_alocadas_milisegundos = models.IntegerField(default=None)
     percentual_concluido = models.IntegerField()
     observacao = models.TextField(default = None, null = True)
