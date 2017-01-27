@@ -3,6 +3,55 @@
 var pessoa = angular.module('pessoa', ['pessoa-services', 'centrocusto-services','centroresultado-services', 
     'contagerencial-services',	'naturezaoperacao-services', 'recursos-services', 'commons', 'ui.bootstrap', 'ui.mask']);
 
+pessoa.config(['$httpProvider', 'CommonsServiceProvider', function($httpProvider, CommonsServiceProvider) {  
+    $httpProvider.interceptors.push(function () {
+    	return {
+    		response: function (config, CommonsService) {
+    			
+    			CommonsService = CommonsServiceProvider.$get();
+    			
+	        	var ajustardatas = pessoa => {
+	        		if (pessoa) {
+	        			if (pessoa.data_renegociacao_valor)
+	        				pessoa.data_renegociacao_valor = CommonsService.stringparadata(pessoa.data_renegociacao_valor);
+	        			
+	        			if (pessoa.pessoa_fisica) {
+	        				pessoa.pessoa_fisica.data_expedicao = CommonsService.stringparadata(pessoa.pessoa_fisica.data_expedicao);
+	        				pessoa.pessoa_fisica.data_nascimento = CommonsService.stringparadata(pessoa.pessoa_fisica.data_nascimento);
+	        				pessoa.pessoa_fisica.data_emicao_pis = CommonsService.stringparadata(pessoa.pessoa_fisica.data_emicao_pis);
+	        				
+	        				if (pessoa.pessoa_fisica.prestadores) {
+	        					for (let prestador of pessoa.pessoa_fisica.prestadores){
+	        						prestador.data_inicio = CommonsService.stringparadata(prestador.data_inicio);
+	        						prestador.data_fim = CommonsService.stringparadata(prestador.data_fim);
+	        						prestador.data_contratacao = CommonsService.stringparadata(prestador.data_contratacao);
+	        						prestador.data_rescisao = CommonsService.stringparadata(prestador.data_rescisao);
+	        						prestador.data_fim_aditivo = CommonsService.stringparadata(prestador.data_fim_aditivo);
+	        						prestador.data_exame_admissional = CommonsService.stringparadata(prestador.data_exame_admissional);
+	        						prestador.data_exame_demissional = CommonsService.stringparadata(prestador.data_exame_demissional);
+	        						prestador.data_ultimo_exame_periodico = CommonsService.stringparadata(prestador.data_ultimo_exame_periodico);
+	        						prestador.data_ultima_avaliacao = CommonsService.stringparadata(prestador.data_ultima_avaliacao);
+	        						prestador.data_proxima_avaliacao = CommonsService.stringparadata(prestador.data_proxima_avaliacao);
+	        					}
+	        				}
+	        				
+	        				if (pessoa.pessoa_fisica.custos_prestador) {
+	        					for (let custo_prestador of pessoa.pessoa_fisica.custos_prestador) {
+	        						custo_prestador.data_inicio = CommonsService.stringparadata(custo_prestador.data_inicio);
+	        						custo_prestador.data_fim = CommonsService.stringparadata(custo_prestador.data_fim);
+	        					}
+	        				}
+	        			}
+	        			
+	        		}
+	        	}
+	        	ajustardatas(config.data);
+	        	return config;
+	        }
+    	}
+    });
+}]);
+
 pessoa.controller('PessoaController', function ($scope, $window, $uibModal, PessoaService, CentroCustoService, 
 		CentroResultadoService, ContaGerencialService, NaturezaOperacaoService, AutenticationService, MessageService, CommonsService, RecursosService){
 	var $ctrl = this;
@@ -174,8 +223,15 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 		MessageService.clear();
 		$ctrl.datasvalidas = true;
 		
-		var datainicio = CommonsService.stringparadata(prestador.data_inicio);
-		var datafim = prestador.data_fim ? CommonsService.stringparadata(prestador.data_fim) : null;
+		var datainicio = prestador.data_inicio
+		if (typeof datainicio == 'string'){
+			datainicio = CommonsService.stringparadata(prestador.data_inicio);	
+		}
+		
+		var datafim = prestador.data_fim ? prestador.data_fim : null;
+		if (typeof datafim == 'string'){
+			datafim = CommonsService.stringparadata(prestador.data_fim)
+		}
 		
 		if (datafim && datainicio >= datafim) {
 			$ctrl.datasvalidas = false;
@@ -225,8 +281,17 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 		MessageService.clear();
 		$ctrl.datascustovalidas = true;
 		
-		var datainicio = CommonsService.stringparadata(custo.data_inicio);
+		var datainicio = custo.data_inicio;
+		
+		if (typeof datainicio == 'string') {
+			datainicio = CommonsService.stringparadata(custo.data_inicio);
+		}
+		
 		var datafim = custo.data_fim ? CommonsService.stringparadata(custo.data_fim) : null;
+		
+		if (typeof datafim == 'string') {
+			datafim = CommonsService.stringparadata(custo.data_fim);
+		}
 		
 		if (datafim && datainicio >= datafim) {
 			$ctrl.datascustovalidas = false;
@@ -279,6 +344,23 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 		}
 		
 		return false;
+		
+	}
+	
+	$ctrl.modaldata = {};
+	
+	$ctrl.abrirmodaldata = (prop) => {
+		$ctrl.modaldata[prop] = !$ctrl.modaldata[prop];
+	}
+	
+	$ctrl.modallista = {};
+	
+	$ctrl.abrirmodallista = (key, prop) => {
+		if (!$ctrl.modallista[key]){
+			$ctrl.modallista[key] = {}
+		}
+		
+		$ctrl.modallista[key][prop] = !$ctrl.modallista[key][prop] 
 		
 	}
 	

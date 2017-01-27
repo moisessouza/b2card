@@ -88,6 +88,11 @@ commons.directive('gbMoney', function () {
 			return parseFloat(string.replace(/\./g, '').replace(',','.'));
 		},
 		stringparadata: function (string) {
+			
+			if(!string){
+				return null;
+			}
+			
 			if (string instanceof Date){
 				return string;
 			}

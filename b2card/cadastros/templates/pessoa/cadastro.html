@@ -89,10 +89,15 @@ button.exclude {
 										</select>
 									</div>
 								</div>
-								<div class="col-sm-2" style="width: 130px">
+								<div class="col-sm-2" style="width: 150px">
 									<div class="form-group">
 										<label class="control-label" for="id">Renegociação</label>
-										<input type="text" class="form-control" ng-model = "$ctrl.pessoa.data_renegociacao_valor" ui-mask="99/99/9999" model-view-value="true"/>
+										<p class="input-group">
+											<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true"  ng-model = "$ctrl.pessoa.data_renegociacao_valor" is-open="$ctrl.modaldata['data_renegociacao_valor']" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+											<span class="input-group-btn">
+												<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodaldata('data_renegociacao_valor')"><i class="glyphicon glyphicon-calendar"></i></button>
+											</span>
+										</p>
 									</div>
 								</div>
 								<div class="col-sm-2" style="width: 130px">
@@ -140,11 +145,14 @@ button.exclude {
 								<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.orgao_emissor" maxlength="6" style="width: 80px" ng-required="$ctrl.pessoa.tipo=='F'"/>
 							</div>
 						</div>
-						<div class="col-sm-1" style="width: 136px">
-							<div class="form-group">
+						<div class="col-sm-1" style="width: 145px;">
 								<label class="control-label" for="id">Data de expedição</label>
-								<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.data_expedicao" ui-mask="99/99/9999" model-view-value="true" ng-required="$ctrl.pessoa.tipo=='F'"/>
-							</div>
+								<p class="input-group">
+									<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true"  ng-model = "$ctrl.pessoa.pessoa_fisica.data_expedicao" is-open="$ctrl.modaldata['data_expedicao']" ng-required="$ctrl.pessoa.tipo=='F'" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+									<span class="input-group-btn">
+										<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodaldata('data_expedicao')"><i class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</p>
 						</div>
 						<div class="col-sm-1" style="width: 110px">
 							<div class="form-group">
@@ -161,7 +169,12 @@ button.exclude {
 						<div class="col-sm-1" style="width: 144px">
 							<div class="form-group">
 								<label class="control-label" for="id">Data de nascimento</label>
-								<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.data_nascimento" ui-mask="99/99/9999" model-view-value="true" ng-required="$ctrl.pessoa.tipo=='F'"/>
+								<p class="input-group">
+									<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true"  ng-model = "$ctrl.pessoa.pessoa_fisica.data_nascimento" is-open="$ctrl.modaldata['data_nascimento']" ng-required="$ctrl.pessoa.tipo=='F'" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+									<span class="input-group-btn">
+										<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodaldata('data_nascimento')"><i class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</p>
 							</div>
 						</div>
 						<div class="col-sm-1" style="width: 128px">
@@ -246,7 +259,12 @@ button.exclude {
 						<div class="col-sm-1" style="width: 144px">
 							<div class="form-group">
 								<label class="control-label" for="id">Data emição pis</label>
-								<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.data_emicao_pis" ui-mask="99/99/9999" model-view-value="true" ng-required="$ctrl.pessoa.tipo=='F'"/>
+								<p class="input-group">
+									<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true"  ng-model = "$ctrl.pessoa.pessoa_fisica.data_emicao_pis" is-open="$ctrl.modaldata['data_emicao_pis']" ng-required="$ctrl.pessoa.tipo=='F'" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+									<span class="input-group-btn">
+										<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodaldata('data_emicao_pis')"><i class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</p>
 							</div>
 						</div>
 						<div class="col-sm-2" style="width: 174px">
@@ -522,22 +540,32 @@ button.exclude {
 				</button>
 				<div class="panel panel-primary form-group-sm" style="margin-top: 15px" ng-repeat="prestador in $ctrl.pessoa.pessoa_fisica.prestadores">
 					<div class="panel-body">
-						<div class="panel panel-primary form-group-sm" style="width: 250px">
+						<div class="panel panel-primary form-group-sm" style="width: 290px;">
 							<div class="panel-heading">
 								Vigência
 							</div>
 							<div class="panel-body">
 								<div class="row">
-									<div class="col-sm-5">
+									<div class="col-sm-6">
 										<div class="form-group">
 											<label class="control-label" for="id">Data inicio</label>
-											<input type="text" class="form-control" ng-model = "prestador.data_inicio" ui-mask="99/99/9999" model-view-value="true" ng-change="$ctrl.validardataprestador(prestador)" ng-required="!prestador.remover"/>
+											<p class="input-group">
+												<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true"  ng-model = "prestador.data_inicio" is-open="$ctrl.modallista[prestador.$$hashKey]['data_inicio']" ng-change="$ctrl.validardataprestador(prestador)" ng-required="!prestador.remover" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+												<span class="input-group-btn">
+													<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodallista(prestador.$$hashKey, 'data_inicio')"><i class="glyphicon glyphicon-calendar"></i></button>
+												</span>
+											</p>
 										</div>
 									</div>
-									<div class="col-sm-5">
+									<div class="col-sm-6">
 										<div class="form-group">
 											<label class="control-label" for="id">Data fim</label>
-											<input type="text" class="form-control" ng-model = "prestador.data_fim" ui-mask="99/99/9999" model-view-value="true" ng-change="$ctrl.validardataprestador(prestador)"/>
+											<p class="input-group">
+												<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true"  ng-model = "prestador.data_fim" is-open="$ctrl.modallista[prestador.$$hashKey]['data_fim']" ng-change="$ctrl.validardataprestador(prestador)" ng-required="!prestador.remover" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+												<span class="input-group-btn">
+													<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodallista(prestador.$$hashKey, 'data_fim')"><i class="glyphicon glyphicon-calendar"></i></button>
+												</span>
+											</p>
 										</div>
 									</div>
 								</div>
@@ -556,52 +584,92 @@ button.exclude {
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-2" style="width: 130px">
+							<div class="col-sm-2" style="width: 145px">
 								<div class="form-group">
 									<label class="control-label" for="id">Data contratação</label>
-									<input type="text" class="form-control" ng-model = "prestador.data_contratacao" ui-mask="99/99/9999" model-view-value="true"/>
+									<p class="input-group">
+										<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true"  ng-model = "prestador.data_contratacao" is-open="$ctrl.modallista[prestador.$$hashKey]['data_contratacao']" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+										<span class="input-group-btn">
+											<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodallista(prestador.$$hashKey, 'data_contratacao')"><i class="glyphicon glyphicon-calendar"></i></button>
+										</span>
+									</p>
 								</div>
 							</div>
-							<div class="col-sm-2" style="width: 130px">
+							<div class="col-sm-2" style="width: 145px">
 								<div class="form-group">
 									<label class="control-label" for="id">Data da rescisão</label>
-									<input type="text" class="form-control" ng-model = "prestador.data_rescisao" ui-mask="99/99/9999" model-view-value="true"/>
+									<p class="input-group">
+										<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true"  ng-model = "prestador.data_rescisao" is-open="$ctrl.modallista[prestador.$$hashKey]['data_rescisao']" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+										<span class="input-group-btn">
+											<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodallista(prestador.$$hashKey, 'data_rescisao')"><i class="glyphicon glyphicon-calendar"></i></button>
+										</span>
+									</p>
 								</div>
 							</div>
-							<div class="col-sm-2" style="width: 130px" ng-show="prestador.tipo_prestador == 'A' || prestador.tipo_prestador == 'P'">
+							<div class="col-sm-2" style="width: 145px" ng-show="prestador.tipo_prestador == 'A' || prestador.tipo_prestador == 'P'">
 								<div class="form-group">
 									<label class="control-label" for="id">Data fim aditivo</label>
-									<input type="text" class="form-control" ng-model = "prestador.data_fim_aditivo" ui-mask="99/99/9999" model-view-value="true"/>
+									<p class="input-group">
+										<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true"  ng-model = "prestador.data_fim_aditivo" is-open="$ctrl.modallista[prestador.$$hashKey]['data_fim_aditivo']" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+										<span class="input-group-btn">
+											<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodallista(prestador.$$hashKey, 'data_fim_aditivo')"><i class="glyphicon glyphicon-calendar"></i></button>
+										</span>
+									</p>
 								</div>
 							</div>
 							<div class="col-sm-1" style="width: 164px" ng-show="prestador.tipo_prestador == 'F'">
 								<div class="form-group">
 									<label class="control-label">Data exame admicional</label>
-									<input class="form-control"  ng-model="prestador.data_exame_admissional" ui-mask="99/99/9999" model-view-value="true"> 
+									<p class="input-group">
+										<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true"  ng-model = "prestador.data_exame_admissional" is-open="$ctrl.modallista[prestador.$$hashKey]['data_exame_admissional']" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+										<span class="input-group-btn">
+											<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodallista(prestador.$$hashKey, 'data_exame_admissional')"><i class="glyphicon glyphicon-calendar"></i></button>
+										</span>
+									</p>
 								</div>
 							</div>
 							<div class="col-sm-1" style="width: 164px" ng-show="prestador.tipo_prestador == 'F'">
 								<div class="form-group">
 									<label class="control-label">Data exame demicional</label>
-									<input class="form-control" ng-model="prestador.data_exame_demissional" ui-mask="99/99/9999" model-view-value="true"> 
+									<p class="input-group">
+										<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true"  ng-model = "prestador.data_exame_demissional" is-open="$ctrl.modallista[prestador.$$hashKey]['data_exame_demissional']" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+										<span class="input-group-btn">
+											<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodallista(prestador.$$hashKey, 'data_exame_demissional')"><i class="glyphicon glyphicon-calendar"></i></button>
+										</span>
+									</p>
 								</div>
 							</div>
 							<div class="col-sm-1" style="width: 193px" ng-show="prestador.tipo_prestador == 'F'">
 								<div class="form-group">
 									<label class="control-label">Data último exame periódico</label>
-									<input class="form-control" ng-model="prestador.data_ultimo_exame_periodico" ui-mask="99/99/9999" model-view-value="true"> 
+									<p class="input-group">
+										<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true"  ng-model = "prestador.data_ultimo_exame_periodico" is-open="$ctrl.modallista[prestador.$$hashKey]['data_ultimo_exame_periodico']" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+										<span class="input-group-btn">
+											<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodallista(prestador.$$hashKey, 'data_ultimo_exame_periodico')"><i class="glyphicon glyphicon-calendar"></i></button>
+										</span>
+									</p>
 								</div>
 							</div>
 							<div class="col-sm-1" style="width: 164px" ng-show="prestador.tipo_prestador == 'F'">
 								<div class="form-group">
 									<label class="control-label">Data última avaliação</label>
-									<input class="form-control" ng-model="prestador.data_ultima_avaliacao" ui-mask="99/99/9999" model-view-value="true"> 
+									<p class="input-group">
+										<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true"  ng-model = "prestador.data_ultima_avaliacao" is-open="$ctrl.modallista[prestador.$$hashKey]['data_ultima_avaliacao']" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+										<span class="input-group-btn">
+											<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodallista(prestador.$$hashKey, 'data_ultima_avaliacao')"><i class="glyphicon glyphicon-calendar"></i></button>
+										</span>
+									</p> 
 								</div>
 							</div>
 							<div class="col-sm-1" style="width: 193px" ng-show="prestador.tipo_prestador == 'F'">
 								<div class="form-group">
 									<label class="control-label">Data próxima avaliação</label>
-									<input class="form-control" ng-model="prestador.data_proxima_avaliacao" ui-mask="99/99/9999" model-view-value="true"> 
+									<p class="input-group">
+										<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true"  ng-model = "prestador.data_proxima_avaliacao" is-open="$ctrl.modallista[prestador.$$hashKey]['data_proxima_avaliacao']" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+										<span class="input-group-btn">
+											<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodallista(prestador.$$hashKey, 'data_proxima_avaliacao')"><i class="glyphicon glyphicon-calendar"></i></button>
+										</span>
+									</p> 
 								</div>
 							</div>
 							<div class="col-sm-2">
@@ -698,10 +766,20 @@ button.exclude {
 						<tbody>
 							<tr ng-repeat="custo_prestador in $ctrl.pessoa.pessoa_fisica.custos_prestador" ng-show="!custo_prestador.remover">
 								<td>
-									<input class="form-control" ng-model="custo_prestador.data_inicio" ui-mask="99/99/9999" ng-change="$ctrl.validardatacusto(custo_prestador)" model-view-value="true" ng-required="!custo_prestador.remover">
+									<p class="input-group">
+										<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true"  ng-change="$ctrl.validardatacusto(custo_prestador)" ng-required="!custo_prestador.remover" ng-model="custo_prestador.data_inicio" is-open="$ctrl.modallista[custo_prestador.$$hashKey]['data_inicio']" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+										<span class="input-group-btn">
+											<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodallista(custo_prestador.$$hashKey, 'data_inicio')"><i class="glyphicon glyphicon-calendar"></i></button>
+										</span>
+									</p> 
 								</td>
 								<td>
-									<input class="form-control" ng-model="custo_prestador.data_fim" ui-mask="99/99/9999" ng-change="$ctrl.validardatacusto(custo_prestador)" model-view-value="true">
+									<p class="input-group">
+										<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true"  ng-change="$ctrl.validardatacusto(custo_prestador)" ng-model="custo_prestador.data_fim" is-open="$ctrl.modallista[custo_prestador.$$hashKey]['data_fim']" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+										<span class="input-group-btn">
+											<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodallista(custo_prestador.$$hashKey, 'data_fim')"><i class="glyphicon glyphicon-calendar"></i></button>
+										</span>
+									</p> 
 								</td>
 								<td>
 									<input class="form-control" ng-model="custo_prestador.valor" gb-money ng-required="!custo_prestador.remover">
