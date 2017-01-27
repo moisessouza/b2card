@@ -37,6 +37,15 @@
 	    line-height: 1.4
 	}
 	
+	.panel-default { 
+		border-color: transparent;
+	}
+	
+	.panel-default>.panel-heading { 
+		background-color: transparent;
+		border-color: transparent; 
+	}
+	
 </style>
 
 {%verbatim%}
@@ -75,14 +84,14 @@
 				<div class="panel-body" style="margin: 0 0 0 50px; padding: 0 0 0 0;" ng-show="$ctrl.demandamap[demanda.$$hashKey].expandir">
 					<table class="table ">
 						<thead>
-							<tr class="active">
-								<td>Fase</td>
-								<td>Atividade</td>
-								<td>Data inicio</td>
-								<td>Data fim</td>
-								<td>Horas previstas</td>
-								<td>Horas alocadas</td>
-								<td style="text-align: center;">%</td>
+							<tr style="font-style: italic;">
+								<td><b>Fase</b></td>
+								<td><b>Atividade</b></td>
+								<td><b>Data inicio</b></td>
+								<td><b>Data fim</b></td>
+								<td><b>Horas prev.</b></td>
+								<td><b>Horas aloc.</b></td>
+								<td style="text-align: center;"><b>%</b></td>
 							</tr>
 						</thead>
 						<tbody>
