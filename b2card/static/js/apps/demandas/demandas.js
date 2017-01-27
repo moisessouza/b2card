@@ -134,7 +134,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 	$ctrl.listanaturezademanda = NaturezaDemandaService.buscarnaturezademandas();
 	
 	var abas = ['#dadosdemanda', '#orcamento', '#atividades', 
-		'#proposta', '#tarefas', '#observacoes', '#ocorrencias']
+		'#proposta', '#tarefas', '#observacoes', '#ocorrencias', '#resumo']
 	
 	$ctrl.listaabasautorizadas = AutenticationService.buscarabasautorizadas(abas);
 	
