@@ -42,24 +42,29 @@ class Demanda(models.Model):
     unidade_administrativa = models.ForeignKey(UnidadeAdministrativa, default=None, null=True)
     analista_tecnico_responsavel = models.ForeignKey(PessoaFisica, null=True, related_name="%(app_label)s_%(class)s_related", related_query_name="%(app_label)s_%(class)ss")
     responsavel = models.ForeignKey(PessoaFisica, null = True)
-    tipo_demanda = models.CharField(max_length=1, choices=TIPO_DEMANDA, default = None)
+    tipo_demanda = models.CharField(max_length=1, choices=TIPO_DEMANDA, default = None, null=True)
     natureza_demanda = models.ForeignKey(NaturezaDemanda, default = None, null = True)
     responsavel_cliente = models.CharField(max_length=30, default = None, null = True)
+    data_inicio = models.DateField(default=None)
+    data_fim = models.DateField(default=None)
+    percentual_calculado = models.IntegerField(default = None, null = True)
     percentual_concluido = models.IntegerField(default = None, null = True)
 
 class FaseAtividade(models.Model):
     demanda = models.ForeignKey(Demanda, default = None)
     fase = models.ForeignKey(Fase, default = None)
     responsavel = models.ForeignKey(PessoaFisica, default = None, null=True)
-    data_inicio = models.DateField()
-    data_fim = models.DateField()
-    percentual_concluido = models.IntegerField(default = None, null = True)    
+    data_inicio = models.DateField(default=None)
+    data_fim = models.DateField(default=None)
+    percentual_calculado = models.IntegerField(default = None, null = True)
+    percentual_concluido = models.IntegerField(default = None, null = True)
 
 class Atividade(models.Model):
     fase_atividade = models.ForeignKey(FaseAtividade, default = None)
     descricao = models.CharField(max_length=100, default = None)
     data_inicio = models.DateField(default = None)
     data_fim = models.DateField(default = None)
+    percentual_calculado = models.IntegerField(default = None, null = True)
     percentual_concluido = models.IntegerField(default = None, null = True)
     
 class AtividadeProfissional(models.Model):
@@ -67,6 +72,7 @@ class AtividadeProfissional(models.Model):
     pessoa_fisica = models.ForeignKey(PessoaFisica, default = None)
     quantidade_horas = models.IntegerField(default = None);
     horas_alocadas_milisegundos = models.BigIntegerField(default = None, null = True)
+    percentual_calculado = models.IntegerField(default = None, null = True)
     percentual_concluido = models.IntegerField(default = None, null = True)
     
 class AlocacaoHoras(models.Model):

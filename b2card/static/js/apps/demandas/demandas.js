@@ -589,6 +589,48 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		
 	}
 
+	$ctrl.alteracaodatafaseatividade = () => {
+		
+		var data_inicio_demanda;
+		var data_fim_demanda;
+		
+		if ($ctrl.share.demanda.fase_atividades) {
+			for (let fase_atividade of $ctrl.share.demanda.fase_atividades) {
+				if (fase_atividade.data_inicio) {
+					if (data_inicio_demanda) {
+						let data_inicio = CommonsService.stringparadata(fase_atividade.data_inicio);
+						if (data_inicio_demanda > data_inicio) {
+							data_inicio_demanda = data_inicio;
+						}
+					} else {
+						data_inicio_demanda = CommonsService.stringparadata(fase_atividade.data_inicio);
+					}
+				}
+				
+				if (fase_atividade.data_fim) {
+					if (data_fim_demanda) {
+						let data_fim = CommonsService.stringparadata(fase_atividade.data_fim);
+						if (data_fim_demanda < data_fim){
+							data_fim_demanda = data_fim;
+						}
+					} else {
+						data_fim_demanda = CommonsService.stringparadata(fase_atividade.data_fim);
+					}
+				}
+				
+			}
+		}
+		
+		if (data_inicio_demanda) {
+			$ctrl.share.demanda.data_inicio = CommonsService.dataparastring(data_inicio_demanda);
+		}
+		
+		if (data_fim_demanda){
+			$ctrl.share.demanda.data_fim = CommonsService.dataparastring(data_fim_demanda)
+		}
+		
+	}
+	
 	$ctrl.alteracaodataatividade = (fase_atividade, atividadeselecionada, propriedade, old_value) => {
 		
 		if (atividadeselecionada.data_inicio)
@@ -607,7 +649,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		
 		if (fase_atividade.atividades) {
 			for(let atividade of fase_atividade.atividades) {
-				if (atividade.data_inicio){
+				if (atividade.data_inicio) {
 					if (data_inicio_fase) {
 						let data_inicio = CommonsService.stringparadata(atividade.data_inicio);
 						if (data_inicio_fase > data_inicio) {
@@ -617,7 +659,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 						data_inicio_fase = CommonsService.stringparadata(atividade.data_inicio);
 					}
 				}
-				if (atividade.data_fim){
+				if (atividade.data_fim) {
 					if (data_fim_fase) {
 						let data_fim = CommonsService.stringparadata(atividade.data_fim);
 						if (data_fim_fase < data_fim) {
@@ -637,6 +679,8 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		if (data_fim_fase){
 			fase_atividade.data_fim = CommonsService.dataparastring(data_fim_fase)
 		}
+		
+		$ctrl.alteracaodatafaseatividade();
 		
 	}
 	

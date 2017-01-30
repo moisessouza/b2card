@@ -22,7 +22,7 @@ class DemandaSerializer (serializers.ModelSerializer):
     natureza_demanda = NaturezaDemandaSerializer()
     class Meta:
         model = Demanda
-        fields = ('id', 'cliente','nome_demanda','descricao','status_demanda','codigo_demanda', 'unidade_administrativa', 'analista_tecnico_responsavel', 'responsavel', 'tipo_demanda', 'responsavel_cliente', 'natureza_demanda', 'percentual_concluido')
+        fields = ('id', 'cliente','nome_demanda','descricao','status_demanda','codigo_demanda', 'unidade_administrativa', 'analista_tecnico_responsavel', 'responsavel', 'tipo_demanda', 'responsavel_cliente', 'natureza_demanda', 'percentual_concluido', 'percentual_calculado', 'data_inicio', 'data_fim')
         
 class PropostaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -60,7 +60,7 @@ class AtividadeProfissionalSerializer(serializers.ModelSerializer):
     pessoa_fisica = PessoaFisicaComPessoaSerializer()
     class Meta:
         model = AtividadeProfissional
-        fields = ('id', 'pessoa_fisica', 'quantidade_horas', 'horas_alocadas_milisegundos', 'percentual_concluido')
+        fields = ('id', 'pessoa_fisica', 'quantidade_horas', 'horas_alocadas_milisegundos', 'percentual_concluido', 'percentual_calculado')
 
 class AlocacaoHorasSerializer(serializers.ModelSerializer):
     tipo_alocacao = TipoAlocacaoSerializer()
@@ -84,9 +84,9 @@ class FaseAtividadeSerializer(serializers.ModelSerializer):
     responsavel = PessoaFisicaComPessoaSerializer()
     class Meta:
         model = FaseAtividade
-        fields = ('id', 'fase', 'responsavel', 'data_inicio', 'data_fim', 'percentual_concluido')
+        fields = ('id', 'fase', 'responsavel', 'data_inicio', 'data_fim', 'percentual_concluido', 'percentual_calculado')
         
 class AtividadeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Atividade
-        fields = ('id', 'descricao', 'data_inicio', 'data_fim', 'percentual_concluido')
+        fields = ('id', 'descricao', 'data_inicio', 'data_fim', 'percentual_concluido', 'percentual_calculado')
