@@ -214,7 +214,7 @@ class DemandaDetail(APIView):
                         for perfil_atividade in perfil_atividades:
                             perfil_atividade.delete()
                     if colunas:
-                        for id_valorhora, horas in colunas.iteritems():
+                        for id_valorhora, horas in colunas.items():
                             perfil_atividade = PerfilAtividade()
                             perfil_atividade.orcamento_atividade = orcamento_atividade
                             perfil_atividade.horas = horas['horas']

@@ -561,7 +561,7 @@ button.exclude {
 										<div class="form-group">
 											<label class="control-label" for="id">Data fim</label>
 											<p class="input-group">
-												<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true"  ng-model = "prestador.data_fim" is-open="$ctrl.modallista[prestador.$$hashKey]['data_fim']" ng-change="$ctrl.validardataprestador(prestador)" ng-required="!prestador.remover" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+												<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true"  ng-model = "prestador.data_fim" is-open="$ctrl.modallista[prestador.$$hashKey]['data_fim']" ng-change="$ctrl.validardataprestador(prestador)" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
 												<span class="input-group-btn">
 													<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodallista(prestador.$$hashKey, 'data_fim')"><i class="glyphicon glyphicon-calendar"></i></button>
 												</span>

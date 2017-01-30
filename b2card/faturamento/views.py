@@ -5,7 +5,6 @@ from faturamento.serializers import ParcelaSerializer, MedicaoSerializer, Parcel
 from rest_framework.response import Response
 from utils.utils import converter_string_para_float, converter_string_para_data, formatar_data
 from demandas.models import Demanda, Orcamento, ItemFase, OrcamentoFase
-from exceptions import Exception
 from cadastros.models import ValorHora, TipoHora, Vigencia
 from rest_framework.decorators import api_view
 from demandas.serializers import OrcamentoFaseSerializer, OrcamentoSerializer,\
