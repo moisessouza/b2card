@@ -481,7 +481,26 @@ def buscar_total_horas_por_valor_hora(request, demanda_id, format=None):
 
 @api_view(['POST'])
 def buscar_lista_por_parametro(request, format=None):
-    demandas = Demanda.objects.all()
+    
+    if request.data:
+        arguments = {}
+        
+        if 'demanda_id' in request.data:
+            arguments['id'] = request.data['id']
+            
+        if 'nome_demanda' in request.data:
+            arguments['nome_demanda__contains'] = request.data['nome_demanda']
+        
+        if 'cliente_id' in request.data:
+            arguments['cliente__id'] = request.data['cliente_id']
+            
+        if 'status' in request.data:
+            arguments['status_demanda'] = request.data['status']
+            
+        demandas = Demanda.objects.filter(**arguments)
+    else:
+        demandas = Demanda.objects.all()
+        
     return Response(DemandaSerializer(demandas, many=True).data)
     
     

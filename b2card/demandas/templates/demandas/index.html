@@ -4,6 +4,7 @@
 {% block script %}
 	<script src="/static/js/apps/demandas/pesquisa.js"></script>
 	<script src="/static/js/apps/demandas/pesquisa-services.js"></script>
+	<script src="/static/js/apps/cadastros/pessoa/pessoa-services.js"></script>
 	<script src="/static/js/commons/commons.js"></script>
 	<script src="/static/js/angular/ui-bootstrap-tpls-2.2.0.min.js"></script>
 	<script src="/static/js/jquery/priceformat/jquery.priceformat.min.js"></script>
@@ -42,13 +43,13 @@ button.margin {
 				<div class="col-sm-5">
 					<div class="form-group">
 						<label for="total_orcamento">Descrição</label>
-						<input type="number" ng-model="$ctrl.arguments.descricao" class="form-control"/>
+						<input type="text" ng-model="$ctrl.arguments.nome_demanda" class="form-control"/>
 					</div>
 				</div>
 				<div class="col-sm-2">
 					<div class="form-group">
 						<label for="cliente">Cliente</label>
-						<select type="text" id="cliente" name="cliente" ng-model="$ctrl.arguments.cliente_id" class="form-control" ng-options="c.id as c.razao_social for c in $ctrl.listaclientes">
+						<select id="cliente" name="cliente" ng-model="$ctrl.arguments.cliente_id" class="form-control" ng-options="c.id as c.pessoa.nome_razao_social for c in $ctrl.listaclientes">
 							<option value="">Selecione...</option>
 						</select>
 					</div>
@@ -58,11 +59,13 @@ button.margin {
 						<label for="status">Status</label>
 						<select type="text" id="status" name="status" ng-model="$ctrl.arguments.status" class="form-control">
 							<option value="">Selecione...</option>
-							<option value="PE">Previsto</option>
-							<option value="PA">Pendente aprovação</option>
-							<option value="PF">Pendente faturamento</option>
-							<option value="FA">Faturado</option>
-							<option value="PA">Pago</option>
+							<option value="O">Em orçamentação</option>
+							<option value="A">Aguardando aprovação</option>
+							<option value="N">Não aprovada</option>
+							<option value="C">Cancelada</option>
+							<option value="H">Em homologação</option>
+							<option value="I">Implantada</option>
+							<option value="D">Em desenvolvimento</option>
 						</select>
 					</div>
 				</div>
@@ -76,15 +79,17 @@ button.margin {
 	    <thead>
 	      <tr>
 	        <th>Demanda</th>
-	        <th>Número demanda B2Card</th>
-	        <th>Coordenador</th>
+	        <th>Cliente</th>
+	        <th>Código da demanda</th>
+	        <th>Responsável</th>
 	      </tr>
 	    </thead>
 	    <tbody>
 	      <tr ng-click="$ctrl.abrirdemanda(demanda)" ng-repeat="demanda in $ctrl.demandas">
+	      	<td>{{demanda.nome_demanda}}
 	        <td>{{demanda.cliente.pessoa.nome_razao_social}}</td>
-	        <td>{{demanda.numero_proposta}}</td>
-	        <td>{{demanda.identificacao}}</td>
+	        <td>{{demanda.codigo_demanda}}</td>
+	        <td>{{demanda.responsavel.pessoa.nome_razao_social}}</td>
 	      </tr>
 	    </tbody>
 	</table>

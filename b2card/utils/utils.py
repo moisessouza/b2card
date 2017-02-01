@@ -28,7 +28,8 @@ def converter_string_para_data(data_string):
             data = datetime.strptime(data_string, '%d/%m/%Y')
             return data.date()
         else:
-            data_string = data_string[:data_string.index('T')]
+            if 'T' in data_string:
+                data_string = data_string[:data_string.index('T')]
             data = datetime.strptime(data_string, '%Y-%m-%d')
             return data.date()
         
