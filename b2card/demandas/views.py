@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 from cadastros.models import CentroCusto, ValorHora, UnidadeAdministrativa, \
     PessoaFisica, PessoaJuridica, NaturezaDemanda
@@ -494,9 +495,6 @@ def buscar_lista_por_parametro(request, format=None):
         
         if 'demanda_id' in request.data:
             arguments['id'] = request.data['id']
-            
-        if 'nome_demanda' in request.data:
-            arguments['nome_demanda__contains'] = request.data['nome_demanda']
         
         if 'cliente_id' in request.data:
             arguments['cliente__id'] = request.data['cliente_id']
@@ -504,18 +502,23 @@ def buscar_lista_por_parametro(request, format=None):
         if 'status' in request.data:
             arguments['status_demanda'] = request.data['status']
             
-        if 'pagina' in request.data:
-            pagina = request.data['pagina']
-            demandas = Demanda.objects.filter(**arguments)
-            paginator = Paginator(demandas, REGISTROS_POR_PAGINA)
-            demandas = paginator.page(pagina)
-            total_paginas = paginator.num_pages
-        else:
-            demandas = Demanda.objects.filter(**arguments)
-            paginator = Paginator(demandas, REGISTROS_POR_PAGINA)
-            demandas = paginator.page(1)
-            total_paginas = paginator.num_pages
+        demandas = Demanda.objects.filter(**arguments)
+        demandas = Demanda.objects.filter(**arguments)
+        if 'palavra_chave' in request.data:
+            palavra_chave = request.data['palavra_chave']
+            demandas = demandas.filter(Q(nome_demanda__contains=palavra_chave)
+                            | Q(faseatividade__atividade__descricao__contains=palavra_chave)
+                            | Q(descricao__contains=palavra_chave)).distinct()
+            
         
+        pagina = request.data['pagina']
+        paginator = Paginator(demandas, REGISTROS_POR_PAGINA)
+        if 'pagina' in request.data:
+            demandas = paginator.page(pagina)
+        else:
+            demandas = paginator.page(1)
+        total_paginas = paginator.num_pages
+            
     else:
         demandas = Demanda.objects.all()
         paginator = Paginator(demandas, REGISTROS_POR_PAGINA)
