@@ -5,11 +5,15 @@ var pesquisademanda = angular.module('pesquisademanda', ['pesquisademanda-servic
 pesquisademanda.controller('PesquisaDemandaController', function (CommonsService, MessageService, PesquisaDemandaService, PessoaService, $window){
 	var $ctrl = this;
 	
-	$ctrl.demandas = PesquisaDemandaService.buscarcentroresultadoshora();
+	$ctrl.resultado = PesquisaDemandaService.buscarcentroresultadoshora();
 	$ctrl.listaclientes = PessoaService.buscarpessoasjuridicas();
 	
+	$ctrl.arguments = {
+		pagina: '1'
+	}
+	
 	$ctrl.pesquisar = () => {
-		$ctrl.demandas = PesquisaDemandaService.buscarcentroresultadoshora($ctrl.arguments);
+		$ctrl.resultado = PesquisaDemandaService.buscarcentroresultadoshora($ctrl.arguments);
 	}
 	
 	$ctrl.abrirdemanda = demanda => {

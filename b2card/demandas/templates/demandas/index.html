@@ -85,7 +85,7 @@ button.margin {
 	      </tr>
 	    </thead>
 	    <tbody>
-	      <tr ng-click="$ctrl.abrirdemanda(demanda)" ng-repeat="demanda in $ctrl.demandas">
+	      <tr ng-click="$ctrl.abrirdemanda(demanda)" ng-repeat="demanda in $ctrl.resultado.demandas">
 	      	<td>{{demanda.nome_demanda}}
 	        <td>{{demanda.cliente.pessoa.nome_razao_social}}</td>
 	        <td>{{demanda.codigo_demanda}}</td>
@@ -93,6 +93,14 @@ button.margin {
 	      </tr>
 	    </tbody>
 	</table>
+	<div class="col-sm-1">
+		<div class="form-group">
+			<label>Página</label>
+			<select type="text" ng-model="$ctrl.arguments.pagina" ng-change="$ctrl.pesquisar()" class="form-control">
+				<option ng-repeat="i in [].constructor($ctrl.resultado.total_paginas) track by $index" value="{{$index + 1}}">{{$index + 1}}</option>
+			</select>
+		</div>
+	</div>
 </div>
  
  {%endverbatim%} 

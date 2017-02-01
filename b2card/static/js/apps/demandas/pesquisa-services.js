@@ -16,7 +16,7 @@ pesquisademandaservices.service('PesquisaDemandaService', function($resource){
 	return {
 		buscarcentroresultadoshora: function(argumentos, callback){
 			var Demandas = $resource(BASE_URL + 'demandas/api/query/', {}, {
-				'set': {method:'POST', isArray:true}
+				'set': {method:'POST'}
 			});
 			return Demandas.set({}, argumentos, callback);
 		}

@@ -3,6 +3,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.core.paginator import Paginator
 
 from cadastros.models import CentroCusto, ValorHora, UnidadeAdministrativa, \
     PessoaFisica, PessoaJuridica, NaturezaDemanda
@@ -479,6 +480,8 @@ def buscar_total_horas_por_valor_hora(request, demanda_id, format=None):
     resultado = Orcamento.objects.filter(demanda__id=demanda_id).values('orcamentofase__id', 'orcamentofase__descricao', 'orcamentofase__itemfase__valor_hora__id', 'orcamentofase__itemfase__valor_hora__descricao').annotate(total_horas = Sum('orcamentofase__itemfase__quantidade_horas'))
     return Response(resultado)
 
+REGISTROS_POR_PAGINA = 2
+
 @api_view(['POST'])
 def buscar_lista_por_parametro(request, format=None):
     
@@ -497,10 +500,29 @@ def buscar_lista_por_parametro(request, format=None):
         if 'status' in request.data:
             arguments['status_demanda'] = request.data['status']
             
-        demandas = Demanda.objects.filter(**arguments)
+        if 'pagina' in request.data:
+            pagina = request.data['pagina']
+            demandas = Demanda.objects.filter(**arguments)
+            paginator = Paginator(demandas, REGISTROS_POR_PAGINA)
+            demandas = paginator.page(pagina)
+            total_paginas = paginator.num_pages
+        else:
+            demandas = Demanda.objects.filter(**arguments)
+            paginator = Paginator(demandas, REGISTROS_POR_PAGINA)
+            demandas = paginator.page(1)
+            total_paginas = paginator.num_pages
+        
     else:
         demandas = Demanda.objects.all()
-        
-    return Response(DemandaSerializer(demandas, many=True).data)
+        paginator = Paginator(demandas, REGISTROS_POR_PAGINA)
+        demandas = paginator.page(1)
+        total_paginas = paginator.num_pages
     
+    demandas = DemandaSerializer(demandas, many=True).data
     
+    dict = {
+       'demandas': demandas,
+       'total_paginas': total_paginas 
+    }
+    
+    return Response(dict)
