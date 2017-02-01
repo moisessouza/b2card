@@ -217,6 +217,17 @@
 								    <input type="text" ng-model="$ctrl.demanda.responsavel_cliente" class="form-control" maxlength="30"/>
 								</div>
 							</div>
+							<div class="col-md-3" style="width: 150px">
+								<div class="form-group">
+									<label>Data</label> 
+									<p class="input-group">
+									<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true" ng-model="$ctrl.demanda.data_criacao" is-open="$ctrl.data_demanda" ng-required="true" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+									<span class="input-group-btn">
+										<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodaldatademanda()"><i class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+									</p>
+								</div>
+							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-12">

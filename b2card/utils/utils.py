@@ -57,6 +57,8 @@ def serializarDemandaObject(demanda):
     
     data = DemandaSerializer(demanda).data
     
+    data['data_criacao'] = formatar_data(demanda.data_criacao)
+    
     propostas_list = []
     for i in propostas:
         proposta = PropostaSerializer(i).data

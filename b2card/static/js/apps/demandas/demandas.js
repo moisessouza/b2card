@@ -8,18 +8,23 @@ demandas.config(['$httpProvider', 'CommonsServiceProvider', function($httpProvid
     	return {
     		response: function (config, CommonsService) {
 	        	var ajustardatas = demanda => {
-	        		if(demanda && demanda.fase_atividades){
-	        			for(let fase_atividade of demanda.fase_atividades){
-	        				if (fase_atividade.atividades){
-	        					for (let atividade of fase_atividade.atividades){
-	        						atividade.data_inicio_string = atividade.data_inicio;
-	        						atividade.data_fim_string = atividade.data_fim;
-	        						
-	        						atividade.data_inicio = CommonsServiceProvider.$get().stringparadata(atividade.data_inicio);
-	        						atividade.data_fim = CommonsServiceProvider.$get().stringparadata(atividade.data_fim);
-	        					}
-	        				}
+	        		if(demanda){
+	        			if (demanda.data_criacao) {
+	        				demanda.data_criacao = CommonsServiceProvider.$get().stringparadata(demanda.data_criacao);
 	        			}
+		        		if (demanda.fase_atividades){
+		        			for(let fase_atividade of demanda.fase_atividades){
+		        				if (fase_atividade.atividades){
+		        					for (let atividade of fase_atividade.atividades){
+		        						atividade.data_inicio_string = atividade.data_inicio;
+		        						atividade.data_fim_string = atividade.data_fim;
+		        						
+		        						atividade.data_inicio = CommonsServiceProvider.$get().stringparadata(atividade.data_inicio);
+		        						atividade.data_fim = CommonsServiceProvider.$get().stringparadata(atividade.data_fim);
+		        					}
+		        				}
+		        			}
+		        		}
 	        		}
 	        	}
 	        	ajustardatas(config.data);
@@ -92,13 +97,18 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 				'observacoes':[{}],
 				'ocorrencias':[{}],
 				'orcamento': {},
-				'fase_atividades':[]
+				'fase_atividades':[],
+				'data_criacao': new Date()
 			}
 			$ctrl.show=true;
 			$ctrl.listacentroresultadoshoras = []
 			share.demanda = $ctrl.demanda;
 		}
 	
+	}
+	
+	$ctrl.abrirmodaldatademanda = () => {
+		$ctrl.data_demanda = true;	
 	}
 	
 	configurardemanda(demanda_id);

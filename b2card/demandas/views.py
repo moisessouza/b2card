@@ -444,6 +444,10 @@ class DemandaDetail(APIView):
             data_string = data['data_fim']
             demanda.data_fim = converter_string_para_data(data_string)
             
+        if 'data_criacao' in data:
+            data_string = data['data_criacao']
+            demanda.data_criacao = converter_string_para_data(data_string)
+            
         demanda.analista_tecnico_responsavel = analista_tecnico_responsavel
         demanda.responsavel = responsavel
         demanda.natureza_demanda = natureza_demanda

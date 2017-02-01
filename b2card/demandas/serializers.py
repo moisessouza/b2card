@@ -22,7 +22,7 @@ class DemandaSerializer (serializers.ModelSerializer):
     natureza_demanda = NaturezaDemandaSerializer()
     class Meta:
         model = Demanda
-        fields = ('id', 'cliente','nome_demanda','descricao','status_demanda','codigo_demanda', 'unidade_administrativa', 'analista_tecnico_responsavel', 'responsavel', 'tipo_demanda', 'responsavel_cliente', 'natureza_demanda', 'percentual_concluido', 'percentual_calculado', 'data_inicio', 'data_fim')
+        fields = ('id', 'cliente','nome_demanda','descricao','status_demanda','codigo_demanda', 'unidade_administrativa', 'analista_tecnico_responsavel', 'responsavel', 'tipo_demanda', 'responsavel_cliente', 'natureza_demanda', 'percentual_concluido', 'percentual_calculado', 'data_inicio', 'data_fim', 'data_criacao')
         
 class PropostaSerializer(serializers.ModelSerializer):
     class Meta:
