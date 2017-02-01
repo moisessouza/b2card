@@ -493,9 +493,14 @@ def buscar_lista_por_parametro(request, format=None):
     if request.data:
         arguments = {}
         
-        if 'demanda_id' in request.data:
-            arguments['id'] = request.data['id']
-        
+        if 'data_inicio' in request.data:
+            data_inicio = converter_string_para_data(request.data['data_inicio'])
+            arguments['data_criacao__gte'] = data_inicio
+            
+        if 'data_fim' in request.data:
+            data_fim = converter_string_para_data(request.data['data_fim'])
+            arguments['data_criacao__lte'] = data_fim
+            
         if 'cliente_id' in request.data:
             arguments['cliente__id'] = request.data['cliente_id']
             
@@ -506,7 +511,8 @@ def buscar_lista_por_parametro(request, format=None):
         demandas = Demanda.objects.filter(**arguments)
         if 'palavra_chave' in request.data:
             palavra_chave = request.data['palavra_chave']
-            demandas = demandas.filter(Q(nome_demanda__icontains=palavra_chave)
+            demandas = demandas.filter(Q(id=palavra_chave)
+                            | Q(nome_demanda__icontains=palavra_chave)
                             | Q(faseatividade__atividade__descricao__icontains=palavra_chave)
                             | Q(descricao__icontains=palavra_chave)
                             | Q(cliente__pessoa__nome_razao_social__icontains=palavra_chave)).distinct()

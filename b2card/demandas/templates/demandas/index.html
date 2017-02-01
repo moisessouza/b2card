@@ -34,12 +34,6 @@ button.margin {
 	<div class="panel panel-primary form-group-sm">
 		<div class="panel-body">
 			<form name="arguments">
-				<div class="col-sm-1">
-					<div class="form-group">
-						<label for="total_orcamento">Demanda ID</label>
-						<input type="number" ng-model="$ctrl.arguments.demanda_id" class="form-control"/>
-					</div>
-				</div>
 				<div class="col-sm-5">
 					<div class="form-group">
 						<label for="total_orcamento">Descrição</label>
@@ -52,6 +46,28 @@ button.margin {
 						<select id="cliente" name="cliente" ng-model="$ctrl.arguments.cliente_id" class="form-control" ng-options="c.id as c.pessoa.nome_razao_social for c in $ctrl.listaclientes">
 							<option value="">Selecione...</option>
 						</select>
+					</div>
+				</div>
+				<div class="col-sm-1" style="width: 150px">
+					<div class="form-group">
+						<label for="cliente">Data inicio</label>
+						<p class="input-group">
+							<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true" ng-model="$ctrl.arguments.data_inicio" is-open="$ctrl.data_inicio" ng-required="true" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+							<span class="input-group-btn">
+								<button type="button" class="btn btn-default" ng-click="$ctrl.abrirdatainicio()"><i class="glyphicon glyphicon-calendar"></i></button>
+							</span>
+						</p>
+					</div>
+				</div>
+				<div class="col-sm-1" style="width: 150px">
+					<div class="form-group">
+						<label for="cliente">Data fim</label>
+						<p class="input-group">
+							<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true" ng-model="$ctrl.arguments.data_fim" is-open="$ctrl.data_fim" ng-required="true" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+							<span class="input-group-btn">
+								<button type="button" class="btn btn-default" ng-click="$ctrl.abrirdatafim()"><i class="glyphicon glyphicon-calendar"></i></button>
+							</span>
+						</p>
 					</div>
 				</div>
 				<button class="btn btn-sm btn-default margin" ng-click="$ctrl.pesquisar();">Pesquisar</button>

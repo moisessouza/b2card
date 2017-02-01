@@ -25,4 +25,12 @@ pesquisademanda.controller('PesquisaDemandaController', function (CommonsService
 		$window.location.href = BASE_URL + 'demandas/novo/'
 	}
 	
+	$ctrl.abrirdatainicio = () => {
+		$ctrl.data_inicio = true;
+	}
+	
+	$ctrl.abrirdatafim = () => {
+		$ctrl.data_fim = true;
+	}
+	
 });
