@@ -16,6 +16,16 @@
 		font-style: italic;
 	}
 	
+	.panel-default {
+		background-color: white;
+		border-color: white;
+	}
+	
+	.panel-default>.panel-heading {
+		background-color: white;
+		border-color: white
+	}
+	
 </style>
 
 <div class="margin-top" ng-controller="ResumoController as $ctrl">
@@ -43,7 +53,7 @@
 						<div class="row" style="margin-left: 18%;">
 							<div class="col-sm-10">
 								<div class="row">
-									<div class="row cabecalho_atividade">
+									<div class="row">
 										<div class="col-sm-10" style="width: 73%"><div class="atividade">Atividade</div></div>
 										<div class="col-sm-1" style="width: 9.6%"><div class="atividade">Data inicio</div></div>
 										<div class="col-sm-1" style="width: 9%"><div class="atividade" >Data fim</div></div>
@@ -55,7 +65,7 @@
 										<div class="col-sm-10" style="width: 73%"><div class="atividade">{{atividade.descricao}}</div></div>
 										<div class="col-sm-1" style="width: 9.6%"><div class="atividade">{{atividade.data_inicio_string}}</div></div>
 										<div class="col-sm-1" style="width: 9%"><div class="atividade" >{{atividade.data_fim_string}}</div></div>
-										<div class="col-sm-1"><div class="atividade" style="text-align: center;" ng-show="atividade.percentual_concluido">{{atividade.percentual_concluido}}%</div></div>
+										<div class="col-sm-1"><div class="atividade" style="text-align: right;" ng-show="atividade.percentual_concluido">{{atividade.percentual_concluido}}%</div></div>
 									</div>
 									<div class="row" style="padding-left: 74px">
 										<div class="panel panel-default" style="margin-bottom: 0">
@@ -75,7 +85,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="row" style="padding-left: 82px; padding-right:23px;" ng-repeat="atividade_profissional in atividade.atividadeprofissionais">
+									<div class="row" style="padding-left: 82px; padding-right:10px;" ng-repeat="atividade_profissional in atividade.atividadeprofissionais">
 										<div class="col-sm-8">
 											{{atividade_profissional.pessoa_fisica.pessoa.nome_razao_social}}
 										</div>
@@ -85,7 +95,7 @@
 										<div class="col-sm-1" style="width: 12%; text-align: center;">
 											{{atividade_profissional.horas_alocadas}}
 										</div>
-										<div class="col-sm-1" style="text-align: center; width:1%;" ng-show="{{atividade_profissional.percentual_concluido}}">
+										<div class="col-sm-1" style="text-align: right; width:5%; padding: 0; margin: 0" ng-show="{{atividade_profissional.percentual_concluido}}">
 											{{atividade_profissional.percentual_concluido}}%
 										</div>
 									</div>
