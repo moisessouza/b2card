@@ -4,6 +4,7 @@ var pesquisademanda = angular.module('pesquisademanda', ['pesquisademanda-servic
 
 pesquisademanda.controller('PesquisaDemandaController', function (CommonsService, MessageService, PesquisaDemandaService, PessoaService, $window){
 	var $ctrl = this;
+	$ctrl.show=true;
 	
 	$ctrl.resultado = PesquisaDemandaService.buscarcentroresultadoshora();
 	$ctrl.listaclientes = PessoaService.buscarpessoasjuridicas();
