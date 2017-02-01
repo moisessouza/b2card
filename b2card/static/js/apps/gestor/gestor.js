@@ -17,7 +17,16 @@ gestor.controller('GestorController', function (GestorService, CommonsService, $
 							}
 							
 							if (atividade_profissional.quantidade_horas && atividade_profissional.quantidade_horas.toString().indexOf(':00') < 0){
-								atividade_profissional.quantidade_horas_formatada = atividade_profissional.quantidade_horas + ':00';							
+								atividade_profissional.quantidade_horas_formatada = atividade_profissional.quantidade_horas + ':00';
+								
+								if (atividade_profissional.horas_alocadas_milisegundos){
+									var milisegundos = atividade_profissional.quantidade_horas * 60 * 60 * 1000;
+									
+									if (atividade_profissional.horas_alocadas_milisegundos > milisegundos){
+										atividade_profissional.atrasado = true;
+									}
+								}
+								
 							}
 						}
 					}

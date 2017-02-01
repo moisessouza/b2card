@@ -74,6 +74,12 @@ form .ng-invalid {
 	display: none
 }
 
+div.atividade_atrasada {
+    background-color: #dd2c00;
+   	color: #ffffff;
+   	border-color: #dd2c00;
+}
+
 select.combo-heading {
 	margin: 0px; padding: 0px; height: 17px;
 	display: inline;
