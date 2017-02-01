@@ -1,40 +1,95 @@
 <meta charset="utf-8">
 {% extends "base_page.html" %}
+
+{% block script %}
+	<script src="/static/js/apps/demandas/pesquisa.js"></script>
+	<script src="/static/js/apps/demandas/pesquisa-services.js"></script>
+	<script src="/static/js/commons/commons.js"></script>
+	<script src="/static/js/angular/ui-bootstrap-tpls-2.2.0.min.js"></script>
+	<script src="/static/js/jquery/priceformat/jquery.priceformat.min.js"></script>
+	
+	<script type="text/javascript">
+	  	angular.bootstrap(document.getElementById('pesquisademanda'), ['pesquisademanda']);
+  	</script>
+	
+{% endblock %}
+
 {% block content %}
 
 <style>
 table tr {
     cursor: pointer;
 }
+
+button.margin {
+	margin-top: 21px
+}
+
 </style>
 
-<form class="navbar-form" action="{% url 'demandas:novo' %}" method="post">
-	{% csrf_token %} 
-	<button class="btn btn-default" value="Novo">Novo</button>
-</form>
+{%verbatim%}
 
-<table class="table table-hover">
-    <thead>
-      <tr>
-        <th>Demanda</th>
-        <th>Número demanda B2Card</th>
-        <th>Coordenador</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for demanda in demandas %}
-      <tr href="{% url 'demandas:editar' demanda.id %}">
-        <td>{{demanda.cliente.pessoa.nome_razao_social}}</td>
-        <td>{{demanda.numero_proposta}}</td>
-        <td>{{demanda.identificacao}}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  
-  <script type="text/javascript">
-  	$('table tr').on('click', function () {
-  		window.location.replace($(this).attr('href'));	
-  	});
-  </script>
+<div id="pesquisademanda" ng-controller="PesquisaDemandaController as $ctrl">
+	<div class="panel panel-primary form-group-sm">
+		<div class="panel-body">
+			<form name="arguments">
+				<div class="col-sm-1">
+					<div class="form-group">
+						<label for="total_orcamento">Demanda ID</label>
+						<input type="number" ng-model="$ctrl.arguments.demanda_id" class="form-control"/>
+					</div>
+				</div>
+				<div class="col-sm-5">
+					<div class="form-group">
+						<label for="total_orcamento">Descrição</label>
+						<input type="number" ng-model="$ctrl.arguments.descricao" class="form-control"/>
+					</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="form-group">
+						<label for="cliente">Cliente</label>
+						<select type="text" id="cliente" name="cliente" ng-model="$ctrl.arguments.cliente_id" class="form-control" ng-options="c.id as c.razao_social for c in $ctrl.listaclientes">
+							<option value="">Selecione...</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="form-group">
+						<label for="status">Status</label>
+						<select type="text" id="status" name="status" ng-model="$ctrl.arguments.status" class="form-control">
+							<option value="">Selecione...</option>
+							<option value="PE">Previsto</option>
+							<option value="PA">Pendente aprovação</option>
+							<option value="PF">Pendente faturamento</option>
+							<option value="FA">Faturado</option>
+							<option value="PA">Pago</option>
+						</select>
+					</div>
+				</div>
+				<button class="btn btn-sm btn-default margin" ng-click="$ctrl.pesquisar();">Pesquisar</button>
+				<button class="btn btn-sm btn-default margin" value="Novo">Novo</button>
+			</form>
+		</div>
+	</div>
+
+	<table class="table table-hover">
+	    <thead>
+	      <tr>
+	        <th>Demanda</th>
+	        <th>Número demanda B2Card</th>
+	        <th>Coordenador</th>
+	      </tr>
+	    </thead>
+	    <tbody>
+	      <tr ng-click="$ctrl.abrirdemanda(demanda)" ng-repeat="demanda in $ctrl.demandas">
+	        <td>{{demanda.cliente.pessoa.nome_razao_social}}</td>
+	        <td>{{demanda.numero_proposta}}</td>
+	        <td>{{demanda.identificacao}}</td>
+	      </tr>
+	    </tbody>
+	</table>
+</div>
+ 
+ {%endverbatim%} 
+ 
 {% endblock %}

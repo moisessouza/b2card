@@ -28,7 +28,8 @@ urlpatterns = [
     url(r'^api/(?P<demanda_id>[0-9]+)/$', views.DemandaDetail.as_view()),
     url(r'^api/(?P<demanda_id>[0-9]+)/centroresultadoshora/$', views.buscar_total_horas_custo_resultado_por_demanda),
     url(r'^api/(?P<demanda_id>[0-9]+)/orcamento/totalhoras/$', views.buscar_total_horas_orcamento),
-    url(r'^api/(?P<demanda_id>[0-9]+)/orcamento/totalhoras/valorhora/$', views.buscar_total_horas_por_valor_hora)
+    url(r'^api/(?P<demanda_id>[0-9]+)/orcamento/totalhoras/valorhora/$', views.buscar_total_horas_por_valor_hora),
+    url(r'^api/query/$', views.buscar_lista_por_parametro),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
