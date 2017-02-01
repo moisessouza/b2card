@@ -16,8 +16,19 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 						}
 						
 						if (atividade.atividade_profissional.quantidade_horas && atividade.atividade_profissional.quantidade_horas.toString().indexOf(':00') < 0){
-							atividade.atividade_profissional.quantidade_horas = atividade.atividade_profissional.quantidade_horas + ':00';							
+							atividade.atividade_profissional.quantidade_horas = atividade.atividade_profissional.quantidade_horas + ':00';	
+							
+							if (atividade.atividade_profissional.horas_alocadas_milisegundos){
+								var horas = parseInt(atividade.atividade_profissional.quantidade_horas.split(':')[0])
+								var milisegundos = horas * 60 * 60 * 1000;
+								
+								if (atividade.atividade_profissional.horas_alocadas_milisegundos > milisegundos){
+									atividade.atividade_profissional.atrasado = true;
+								}
+							}
+							
 						}
+						
 					}
 				}
 				demanda.id = CommonsService.pad(demanda.id, 4);

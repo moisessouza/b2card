@@ -24,6 +24,11 @@
 		line-height: 20px;
 	}
 
+	div.atividade_atrasada {
+	    background-color: #dd2c00;
+    	color: #ffffff;
+    	border-color: #dd2c00;
+	}
 	.table>tbody>tr>td {
 		margin: 0;
 		padding: 0
@@ -101,7 +106,7 @@
 								<td style="width: 1%"><div class="atividade" style="width: 69px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.data_inicio}}</div></td>
 								<td style="width: 1%"><div class="atividade" style="width: 69px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.data_fim}}</div></td>
 								<td style="width: 1%"><div class="atividade" style="width: 93px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.atividade_profissional.quantidade_horas}}</div></td>
-								<td style="width: 1%"><div class="atividade" style="width: 94px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.atividade_profissional.horas_alocadas}}</div></td>
+								<td style="width: 1%"><div class="atividade" style="width: 94px; text-align: center;" ng-class="{atividade_atrasada: atividade.atividade_profissional.atrasado}" ng-repeat="atividade in fase_atividade.atividades">{{atividade.atividade_profissional.horas_alocadas}}</div></td>
 								<td style="width: 1%"><div class="atividade" style="width: 40px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.atividade_profissional.percentual_concluido}}</div></td>
 							</tr>
 						</tbody>
