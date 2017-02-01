@@ -11,4 +11,8 @@ pesquisademanda.controller('PesquisaDemandaController', function (CommonsService
 		$window.location.href = BASE_URL + 'demandas/editar/' + demanda.id
 	}
 	
+	$ctrl.novo = () => {
+		$window.location.href = BASE_URL + 'demandas/novo/'
+	}
+	
 });
