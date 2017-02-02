@@ -35,6 +35,13 @@ gestor.controller('GestorController', function (GestorService, CommonsService, $
 		}
 	}
 	
+	$ctrl.status = {
+		'O': true,
+		'D': true,
+		'A': true,
+		'H': true
+	}
+	
 	$ctrl.demandamap = {} 
 	
 	$ctrl.abrirmodalstatus = () => {
