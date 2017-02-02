@@ -19,9 +19,11 @@ fase.controller('FaseController', function ($scope, $window, FaseService){
 	}
 	
 	$ctrl.deletar = function (data) {
-		FaseService.deletar(data, function () {
-			$ctrl.faselist = FaseService.buscarfases();
-		});
+		if(confirm(MESSAGE_EXCLUIR)) {
+			FaseService.deletar(data, function () {
+				$ctrl.faselist = FaseService.buscarfases();
+			});
+		}
 	}
 	
 	$ctrl.editar = function (data) {

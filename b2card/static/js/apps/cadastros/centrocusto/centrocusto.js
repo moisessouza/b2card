@@ -19,9 +19,11 @@ centrocusto.controller('CentroCustoController', function ($scope, $window, Centr
 	}
 	
 	$ctrl.deletar = function (data) {
-		CentroCustoService.deletar(data, function () {
-			$ctrl.centrocustolist = CentroCustoService.buscarcentrocustos();
-		});
+		if(confirm(MESSAGE_EXCLUIR)) {
+			CentroCustoService.deletar(data, function () {
+				$ctrl.centrocustolist = CentroCustoService.buscarcentrocustos();
+			});
+		}
 	}
 	
 	$ctrl.editar = function (data) {

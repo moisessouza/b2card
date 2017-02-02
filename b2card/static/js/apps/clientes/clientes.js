@@ -44,9 +44,11 @@ clientes.controller('ClientesController', function ($scope, $window, ClientesSer
 	}
 	
 	$ctrl.deletar = function(){
-		ClientesService.deletarcliente($ctrl.cliente.id, function(data){
-			$window.location.href = BASE_URL + 'clientes/';
-		})
+		if(confirm(MESSAGE_EXCLUIR)) {
+			ClientesService.deletarcliente($ctrl.cliente.id, function(data){
+				$window.location.href = BASE_URL + 'clientes/';
+			})
+		}
 	}
 	
 });

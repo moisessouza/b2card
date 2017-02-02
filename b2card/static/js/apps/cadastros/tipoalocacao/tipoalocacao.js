@@ -19,9 +19,11 @@ tipoalocacao.controller('TipoAlocacaoController', function ($scope, $window, Tip
 	}
 	
 	$ctrl.deletar = function (data) {
-		TipoAlocacaoService.deletar(data, function () {
-			$ctrl.tipoalocacaolist = TipoAlocacaoService.buscartipoalocacoes();
-		});
+		if(confirm(MESSAGE_EXCLUIR)) {
+			TipoAlocacaoService.deletar(data, function () {
+				$ctrl.tipoalocacaolist = TipoAlocacaoService.buscartipoalocacoes();
+			});
+		}
 	}
 	
 	$ctrl.editar = function (data) {

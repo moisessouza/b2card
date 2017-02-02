@@ -19,9 +19,11 @@ naturezaoperacao.controller('NaturezaOperacaoController', function ($scope, $win
 	}
 	
 	$ctrl.deletar = function (data) {
-		NaturezaOperacaoService.deletar(data, function () {
-			$ctrl.naturezaoperacaolist = NaturezaOperacaoService.buscarnaturezaoperacoes();
-		});
+		if(confirm(MESSAGE_EXCLUIR)) {
+			NaturezaOperacaoService.deletar(data, function () {
+				$ctrl.naturezaoperacaolist = NaturezaOperacaoService.buscarnaturezaoperacoes();
+			});
+		}
 	}
 	
 	$ctrl.editar = function (data) {

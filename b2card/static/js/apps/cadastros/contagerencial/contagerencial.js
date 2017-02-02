@@ -19,9 +19,11 @@ contagerencial.controller('ContaGerencialController', function ($scope, $window,
 	}
 	
 	$ctrl.deletar = function (data) {
-		ContaGerencialService.deletar(data, function () {
-			$ctrl.contagerenciallist = ContaGerencialService.buscarcontagerenciais();
-		});
+		if(confirm(MESSAGE_EXCLUIR)) {
+			ContaGerencialService.deletar(data, function () {
+				$ctrl.contagerenciallist = ContaGerencialService.buscarcontagerenciais();
+			});
+		}
 	}
 	
 	$ctrl.editar = function (data) {

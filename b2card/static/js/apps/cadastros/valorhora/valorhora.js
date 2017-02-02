@@ -69,9 +69,11 @@ valorhora.controller('ValorHoraController', function (ValorHoraService, CentroCu
 	}
 	
 	$ctrl.deletar = function () {
-		ValorHoraService.deletar($ctrl.valorhora.id, function(data) {
-			window.location.replace(BASE_URL + 'cadastros/valorhora/');	
-		});
+		if(confirm(MESSAGE_EXCLUIR)) {
+			ValorHoraService.deletar($ctrl.valorhora.id, function(data) {
+				window.location.replace(BASE_URL + 'cadastros/valorhora/');	
+			});
+		}
 	}
 	
 });

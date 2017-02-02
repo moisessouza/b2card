@@ -19,9 +19,11 @@ tipohora.controller('TipoHoraController', function ($scope, $window, TipoHoraSer
 	}
 	
 	$ctrl.deletar = function (data) {
-		TipoHoraService.deletar(data, function () {
-			$ctrl.tipohoralist = TipoHoraService.buscartipohoras();
-		});
+		if(confirm(MESSAGE_EXCLUIR)) {
+			TipoHoraService.deletar(data, function () {
+				$ctrl.tipohoralist = TipoHoraService.buscartipohoras();
+			});
+		}
 	}
 	
 	$ctrl.editar = function (data) {

@@ -19,9 +19,11 @@ centrocusto.controller('UnidadeAdministrativaController', function ($scope, $win
 	}
 	
 	$ctrl.deletar = function (data) {
-		UnidadeAdministrativaService.deletar(data, function () {
-			$ctrl.unidadeadministrativalist = UnidadeAdministrativaService.buscarunidadeadministrativas();
-		});
+		if(confirm(MESSAGE_EXCLUIR)) {
+			UnidadeAdministrativaService.deletar(data, function () {
+				$ctrl.unidadeadministrativalist = UnidadeAdministrativaService.buscarunidadeadministrativas();
+			});
+		}
 	}
 	
 	$ctrl.editar = function (data) {

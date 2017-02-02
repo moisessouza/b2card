@@ -19,9 +19,11 @@ naturezademanda.controller('NaturezaDemandaController', function ($scope, $windo
 	}
 	
 	$ctrl.deletar = function (data) {
-		NaturezaDemandaService.deletar(data, function () {
-			$ctrl.naturezademandalist = NaturezaDemandaService.buscarnaturezademandas();
-		});
+		if(confirm(MESSAGE_EXCLUIR)) {
+			NaturezaDemandaService.deletar(data, function () {
+				$ctrl.naturezademandalist = NaturezaDemandaService.buscarnaturezademandas();
+			});
+		}
 	}
 	
 	$ctrl.editar = function (data) {

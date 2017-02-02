@@ -6,6 +6,8 @@ var BASE_URL = '/'
 var $scope_message = null;
 var messages = {}
 
+var MESSAGE_EXCLUIR = "Certeza que deseja excluir?";
+
 commons.directive('gbMoney', function () {
     return {
         require: '?ngModel',

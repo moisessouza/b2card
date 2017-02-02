@@ -168,9 +168,11 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 	}
 	
 	$ctrl.deletar = function () {
-		DemandaService.deletardemanda($ctrl.demanda.id, function(data){
-			$window.location.href = BASE_URL + 'demandas/';
-		});
+		if(confirm(MESSAGE_EXCLUIR)) {
+			DemandaService.deletardemanda($ctrl.demanda.id, function(data){
+				$window.location.href = BASE_URL + 'demandas/';
+			});
+		}
 	}
 	
 	$ctrl.verificardisponibilidadeaba = function(aba){

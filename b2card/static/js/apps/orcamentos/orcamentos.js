@@ -21,7 +21,9 @@ produtos.controller('OrcamentoController', function ($scope, ProdutoService, Orc
 	};
 	
 	$scope.deletarmaterial = function (produto) {
-		$scope.orcamento.produtos.splice($scope.orcamento.produtos.indexOf(produto), 1);
+		if(confirm(MESSAGE_EXCLUIR)) {
+			$scope.orcamento.produtos.splice($scope.orcamento.produtos.indexOf(produto), 1);
+		}
 	};
 	
 	$scope.gravar = function () {

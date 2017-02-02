@@ -178,9 +178,11 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 	}
 	
 	$ctrl.deletarpessoa = function (){
-		PessoaService.deletarpessoa($ctrl.pessoa.id, function () {
-			$window.location.href = BASE_URL + 'cadastros/pessoa/';
-		});
+		if(confirm(MESSAGE_EXCLUIR)) {
+			PessoaService.deletarpessoa($ctrl.pessoa.id, function () {
+				$window.location.href = BASE_URL + 'cadastros/pessoa/';
+			});
+		}
 	}
 	
 	$ctrl.changenumeroconta = function (dado_bancario){
