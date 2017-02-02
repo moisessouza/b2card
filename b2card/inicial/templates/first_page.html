@@ -39,6 +39,17 @@
 		border-color: transparent; 
 	}
 	
+	div.modal-status {
+		position: absolute;
+		z-index: 1;
+	  	background-color: beige;
+	  	border-color: black;
+	  	border: 1px solid #ccc;
+	  	padding: 5px;
+	  	left: 43px;
+	  	top: 16px;
+	}
+	
 </style>
 
 {%verbatim%}
@@ -53,7 +64,44 @@
 				<div class="col-sm-1" style="width: 1px;"></div>
 				<div class="col-sm-5"><strong>Demanda</strong></div>
 				<div class="col-sm-2"><strong>Código no cliente</strong></div>
-				<div class="col-sm-2"><strong>Status</strong></div>
+				<div class="col-sm-2">
+					<div style="float:left;">
+		        		<strong>Status</strong>
+		        	</div>
+		        	<button class="btn btn-primary button-heading" ng-click="$ctrl.abrirmodalstatus()" style="margin-left:5px; float:left;">
+						<span class="glyphicon glyphicon-collapse-down"></span>
+					</button>
+					<div style="position: relative;">
+						<div class="modal-status" ng-show="$ctrl.showmodal">
+							<div>
+								<button class="btn btn-primary button-heading" ng-click="$ctrl.abrirmodalstatus()" style="margin-right:2px; float:right;">
+									<span class="glyphicon glyphicon-remove"></span>
+								</button>
+							</div>
+							<div>
+								<input type="checkbox" ng-model="$ctrl.status['O']" ng-click="$ctrl.pesquisar();"> Em orçamentação
+							</div>
+							<div>
+								<input type="checkbox" ng-model="$ctrl.status['A']" ng-click="$ctrl.pesquisar();"> Aguardando aprovação
+							</div>
+							<div>
+								<input type="checkbox" ng-model="$ctrl.status['N']" ng-click="$ctrl.pesquisar();"> Não aprovada
+							</div>
+							<div>
+								<input type="checkbox" ng-model="$ctrl.status['C']" ng-click="$ctrl.pesquisar();"> Cancelada
+							</div>
+							<div>
+								<input type="checkbox" ng-model="$ctrl.status['H']" ng-click="$ctrl.pesquisar();"> Em homologação
+							</div>
+							<div>
+								<input type="checkbox" ng-model="$ctrl.status['I']" ng-click="$ctrl.pesquisar();"> Implantada
+							</div>
+							<div>
+								<input type="checkbox" ng-model="$ctrl.status['D']" ng-click="$ctrl.pesquisar();"> Em desenvolvimento
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 		

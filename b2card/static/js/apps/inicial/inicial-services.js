@@ -14,9 +14,11 @@ inicialservices.config(['$httpProvider', function($httpProvider) {
 
 inicialservices.service('InicialService', function($resource){
 	return {
-		buscaratividadesprofissional: function (callback){
-			var Clientes = $resource(BASE_URL + 'inicial/api/atividadesprofissional/');
-			return Clientes.query(callback);
+		buscaratividadesprofissional: function (argumento, callback){
+			var Clientes = $resource(BASE_URL + 'inicial/api/atividadesprofissional/', {}, {
+				'set':{method:'POST', isArray: true}
+			});
+			return Clientes.set({}, argumento, callback);
 		},
 		salvaralocacao: function (data, callback) {
 			var AlocacaoHoras = $resource(BASE_URL + 'inicial/api/alocacao/');

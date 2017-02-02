@@ -36,6 +36,11 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 		}
 	}
 	
+	$ctrl.status = {
+		'D': true,
+		'H': true,
+	}
+	
 	$ctrl.abrirmodalalocacao = (ev, atividade) => {
 		
 		var modalInstance = $uibModal.open({
@@ -72,7 +77,15 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 		$ctrl.demandamap[demanda.$$hashKey].expandir = !$ctrl.demandamap[demanda.$$hashKey].expandir; 
 	}
 	
-	$ctrl.clientes = InicialService.buscaratividadesprofissional(configurarregistros);
+	$ctrl.abrirmodalstatus = () => {
+		$ctrl.showmodal = !$ctrl.showmodal; 
+	}
+	
+	$ctrl.clientes = InicialService.buscaratividadesprofissional($ctrl.status, configurarregistros);
+	
+	$ctrl.pesquisar = () => {
+		$ctrl.clientes = InicialService.buscaratividadesprofissional($ctrl.status, configurarregistros);
+	}
 	
 }).controller('ModalAlocacaoController', function (atividade, InicialService, CommonsService, TipoAlocacaoService, $uibModalInstance, $scope, $window) {
 	var $ctrl = this;

@@ -16,18 +16,26 @@ import datetime
 def index (request):
     return render(request, 'first_page.html')
 
-@api_view(['GET'])
+@api_view(['POST'])
 def buscar_atividades_usuario(request, format=None):
 
     clientes  = PessoaJuridica.objects.filter(demanda__faseatividade__atividade__atividadeprofissional__pessoa_fisica__prestador__usuario__id=request.user.id).distinct()
-
     cliente_list = [];
+
+    list_status = []
+    if request.data:
+        for k in request.data:
+            if request.data[k]:
+                list_status.append(k)
 
     for c in clientes:
 
         cliente_dict = PessoaJuridicaComPessoaSerializer(c).data
 
-        demandas = Demanda.objects.filter(cliente = c, faseatividade__atividade__atividadeprofissional__pessoa_fisica__prestador__usuario__id=request.user.id).distinct();
+        if list_status:
+            demandas = Demanda.objects.filter(status_demanda__in=list_status).filter(cliente = c, faseatividade__atividade__atividadeprofissional__pessoa_fisica__prestador__usuario__id=request.user.id).distinct();
+        else:
+            demandas = Demanda.objects.filter(cliente = c, faseatividade__atividade__atividadeprofissional__pessoa_fisica__prestador__usuario__id=request.user.id).distinct();
         demanda_list = []
         
         for i in demandas:
