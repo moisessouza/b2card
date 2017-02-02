@@ -20,6 +20,7 @@ from faturamento.models import Parcela, Medicao, ParcelaFase
 from faturamento.serializers import ParcelaSerializer, MedicaoSerializer, ParcelaFaseSerializer
 from utils.utils import converter_string_para_data, formatar_data, converter_string_para_float,\
     serializarDemanda
+from django.db.models.functions.base import Coalesce
 
 
 # Create your views here.
@@ -507,8 +508,7 @@ def buscar_lista_por_parametro(request, format=None):
         if 'status' in request.data:
             arguments['status_demanda'] = request.data['status']
             
-        demandas = Demanda.objects.filter(**arguments)
-        demandas = Demanda.objects.filter(**arguments)
+        demandas = Demanda.objects.filter(**arguments).order_by('-id')
         if 'palavra_chave' in request.data:
             palavra_chave = request.data['palavra_chave']
             demandas = demandas.filter(Q(id=palavra_chave)
@@ -527,7 +527,7 @@ def buscar_lista_por_parametro(request, format=None):
         total_paginas = paginator.num_pages
             
     else:
-        demandas = Demanda.objects.all()
+        demandas = Demanda.objects.all().order_by('-id')
         paginator = Paginator(demandas, REGISTROS_POR_PAGINA)
         demandas = paginator.page(1)
         total_paginas = paginator.num_pages
