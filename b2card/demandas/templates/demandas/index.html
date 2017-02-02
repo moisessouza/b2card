@@ -81,7 +81,14 @@ button.margin {
 	      <tr>
 	        <th>Demanda</th>
 	        <th>Responsável</th>
-	        <th>Status</th>
+	        <th>
+	        	<div style="float:left;">
+	        		Status
+	        	</div>
+	        	<button class="btn btn-primary button-heading" ng-click="$ctrl.abrirmodalfuncionarios(atividade)" style="margin-left:5px; float:left;">
+					<span class="glyphicon glyphicon-collapse-down"></span>
+				</button>
+	        </th>
 	      </tr>
 	    </thead>
 	    <tbody>
