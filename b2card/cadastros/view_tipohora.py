@@ -9,7 +9,7 @@ def index(request):
 
 class TipoHoraList(APIView):
     def get(self, request, format=None):
-        tipohoras = TipoHora.objects.all()
+        tipohoras = TipoHora.objects.all().order_by('descricao')
         serializer = serializers.TipoHoraSerializer(tipohoras, many=True)
         return Response(serializer.data)
     

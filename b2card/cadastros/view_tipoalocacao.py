@@ -9,7 +9,7 @@ def index(request):
 
 class TipoAlocacaoList(APIView):
     def get(self, request, format=None):
-        tipo_alocacao = TipoAlocacao.objects.all()
+        tipo_alocacao = TipoAlocacao.objects.all().order_by('descricao')
         serializer = serializers.TipoAlocacaoSerializer(tipo_alocacao, many=True)
         return Response(serializer.data)
     

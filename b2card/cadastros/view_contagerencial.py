@@ -9,7 +9,7 @@ def index(request):
 
 class ContaGerencialList(APIView):
     def get(self, request, format=None):
-        conta_gerencial = ContaGerencial.objects.all()
+        conta_gerencial = ContaGerencial.objects.all().order_by('nome')
         serializer = serializers.ContaGerencialSerializer(conta_gerencial, many=True)
         return Response(serializer.data)
     

@@ -10,7 +10,7 @@ def index(request):
 
 class CentroCustoList(APIView):
     def get(self, request, format=None):
-        centro_custos = CentroCusto.objects.all()
+        centro_custos = CentroCusto.objects.all().order_by('nome')
         serializer = serializers.CentroCustoSerializer(centro_custos, many=True)
         return Response(serializer.data)
     

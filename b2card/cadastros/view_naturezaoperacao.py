@@ -9,7 +9,7 @@ def index(request):
 
 class NaturezaOperacaoList(APIView):
     def get(self, request, format=None):
-        natureza_operacao = NaturezaOperacao.objects.all()
+        natureza_operacao = NaturezaOperacao.objects.all().order_by('nome')
         serializer = serializers.NaturezaOperacaoSerializer(natureza_operacao, many=True)
         return Response(serializer.data)
     

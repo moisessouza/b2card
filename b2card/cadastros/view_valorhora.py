@@ -11,7 +11,7 @@ import datetime
 
 def index(request):
     
-    valor_horas = ValorHora.objects.all()
+    valor_horas = ValorHora.objects.all().order_by('descricao')
     
     context = {
         'valor_horas': valor_horas

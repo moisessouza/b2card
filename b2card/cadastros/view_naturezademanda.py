@@ -9,7 +9,7 @@ def index(request):
 
 class NaturezaDemandaList(APIView):
     def get(self, request, format=None):
-        natureza_demandas = NaturezaDemanda.objects.all()
+        natureza_demandas = NaturezaDemanda.objects.all().order_by('descricao')
         serializer = serializers.NaturezaDemandaSerializer(natureza_demandas, many=True)
         return Response(serializer.data)
     

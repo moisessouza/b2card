@@ -36,7 +36,7 @@ def editar(request, pessoa_id):
     return render(request, 'pessoa/cadastro.html', context)
 class PessoaList(APIView):
     def get(self, request, format=None):
-        pessoas = Pessoa.objects.all()
+        pessoas = Pessoa.objects.all().order_by('nome_razao_social')
         data = PessoaSerializer(pessoas, many=True).data
         return Response(data)
     

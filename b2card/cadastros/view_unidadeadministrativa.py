@@ -9,7 +9,7 @@ def index(request):
 
 class UnidadeAdministrativaList(APIView):
     def get(self, request, format=None):
-        unidade_administrativa = UnidadeAdministrativa.objects.all()
+        unidade_administrativa = UnidadeAdministrativa.objects.all().order_by('codigo', 'nome')
         serializer = serializers.UnidadeAdministrativaSerializer(unidade_administrativa, many=True)
         return Response(serializer.data)
     

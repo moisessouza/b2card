@@ -9,7 +9,7 @@ def index(request):
 
 class FaseList(APIView):
     def get(self, request, format=None):
-        fases = Fase.objects.all()
+        fases = Fase.objects.all().order_by('descricao')
         serializer = serializers.FaseSerializer(fases, many=True)
         return Response(serializer.data)
     
