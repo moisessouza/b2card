@@ -103,6 +103,13 @@
 				</a>
 				{%endcheck_permittion%}
 			</li>
+			{% check_permittion 'admin:index' %}
+			<li>
+				<a href="{% url 'admin:index' %}">
+					Controle de Acessos
+				</a>
+			</li>
+			{%endcheck_permittion%}
 			<li>
 				<a href="{% url 'autenticacao:logout_view' %}">
 					Sair
