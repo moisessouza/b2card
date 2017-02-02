@@ -136,7 +136,7 @@ button.exclude {
 						<div class="col-sm-1">
 							<div class="form-group">
 								<label class="control-label" for="id">RG</label>
-								<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.rg" ui-mask="99.999.999" model-view-value="true" ng-required="$ctrl.pessoa.tipo=='F'"/>
+								<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.rg" ng-required="$ctrl.pessoa.tipo=='F'"/>
 							</div>
 						</div>
 						<div class="col-sm-1" style="width: 115px">
@@ -154,10 +154,10 @@ button.exclude {
 									</span>
 								</p>
 						</div>
-						<div class="col-sm-1" style="width: 110px">
+						<div class="col-sm-1" style="width: 130px">
 							<div class="form-group">
 								<label class="control-label" for="id">CPF</label>
-								<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.cpf" gb-cpf maxlength="16" ng-required="$ctrl.pessoa.tipo=='F'"/>
+								<input type="text" class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.cpf" maxlength="16" ng-required="$ctrl.pessoa.tipo=='F'"/>
 							</div>
 						</div>
 						<div class="col-sm-1" style="width: 231px">
@@ -241,6 +241,7 @@ button.exclude {
 								<label class="control-label" for="id">Deficiência</label>
 								<select class="form-control" ng-model = "$ctrl.pessoa.pessoa_fisica.deficiencia">
 									<option value="">Selecione...</option>
+									<option value="N">Não</option>
 									<option value="F">Física</option>
 									<option value="A">Auditiva</option>
 									<option value="V">Visual</option>
@@ -282,19 +283,19 @@ button.exclude {
 						<div class="col-sm-1">
 							<div class="form-group">
 								<label class="control-label" for="id">Seção</label>
-								<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.secao" maxlength="2" ng-required="$ctrl.pessoa.tipo=='F'"/>
+								<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.secao" maxlength="4" ng-required="$ctrl.pessoa.tipo=='F'"/>
 							</div>
 						</div>
 						<div class="col-sm-1" style="width: 136px">
 							<div class="form-group">
 								<label class="control-label" for="id">Documento militar</label>
-								<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.doc_militar" maxlength="6" ng-required="$ctrl.pessoa.tipo=='F'"/>
+								<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.doc_militar" maxlength="6" ng-required="$ctrl.pessoa.tipo=='F' && $ctrl.pessoa.pessoa_fisica.sexo=='M'"/>
 							</div>
 						</div>
 						<div class="col-sm-1" style="width: 66px">
 							<div class="form-group">
 								<label class="control-label" for="id">Categoria</label>
-								<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.categoria_doc_militar" maxlength="2" ng-required="$ctrl.pessoa.tipo=='F'"/>
+								<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.categoria_doc_militar" maxlength="2" ng-required="$ctrl.pessoa.tipo=='F' && $ctrl.pessoa.pessoa_fisica.sexo=='M'"/>
 							</div>
 						</div>
 					</div>
@@ -342,6 +343,7 @@ button.exclude {
 			    					<th>Logradouro</th>
 			    					<th>Número</th>
 			    					<th>Complemento</th>
+			    					<th>Bairro</th>
 			    					<th>Cidade</th>
 			    					<th>Estado</th>
 			    					<th>CEP</th>
@@ -367,6 +369,9 @@ button.exclude {
 			    					</td>
 			    					<td>
 			    						<input type="text" class="form-control" ng-model="endereco.complemento">
+			    					</td>
+			    					<td>
+			    						<input type="text" class="form-control" ng-model="endereco.bairro" ng-required="!endereco.remover">
 			    					</td>
 			    					<td>
 			    						<input type="text" class="form-control" ng-model="endereco.cidade" ng-required="!endereco.remover">

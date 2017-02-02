@@ -17,7 +17,7 @@ class PessoaSerializer(serializers.ModelSerializer):
 class EnderecoPessoaSerializer(serializers.ModelSerializer):
     class Meta:
         model = EnderecoPessoa
-        fields = ('id', 'tipo', 'logradouro', 'numero', 'complemento', 'cidade', 'estado', 'cep')
+        fields = ('id', 'tipo', 'logradouro', 'numero', 'complemento', 'cidade', 'estado', 'cep', 'bairro')
         
 class TelefonePessoaSerializer(serializers.ModelSerializer):
     class Meta:

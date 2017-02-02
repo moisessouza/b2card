@@ -88,6 +88,7 @@ GRAU_INSTRUCAO = (
 )
 
 DEFICIENCIA = (
+    ('N', 'NAO'),
     ('F', 'FISICA'),
     ('A', 'AUDITIVA'),
     ('V', 'VISUAL'),
@@ -140,6 +141,7 @@ class EnderecoPessoa(models.Model):
     logradouro = models.CharField(max_length = 20)
     numero = models.CharField(max_length = 10)
     complemento = models.CharField(max_length = 30)
+    bairro = models.CharField(max_length = 30, default=None)
     cidade = models.CharField(max_length = 30)
     estado = models.CharField(max_length = 20)
     cep = models.CharField(max_length = 10)
