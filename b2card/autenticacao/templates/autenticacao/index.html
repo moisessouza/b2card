@@ -24,9 +24,13 @@
 </head>
 
 <body>
-<div class="container centered col-sm-4">
-	<div class="panel panel-default">
-		<div class="panel-heading">B2Card</div>
+<div class="container centered col-md-4">
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			<div style="text-align: center;">
+				<img src="/static/img/logo.png" style="width: 100px">
+			</div>
+		</div>
 		<div class="panel-body">
 			<form action="{% url 'autenticacao:login' %}" method="post" class="form-horizontal">
 				{% csrf_token %}
