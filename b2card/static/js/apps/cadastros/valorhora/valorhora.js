@@ -4,6 +4,30 @@ var valorhora = angular.module('valorhora', ['valorhora-services', 'centrocusto-
                                              'contagerencial-services',	'naturezaoperacao-services', 'tipohora-services',
                                              'commons', 'ui.bootstrap', 'ui.mask']);
 
+
+valorhora.config(['$httpProvider', 'CommonsServiceProvider', function($httpProvider, CommonsServiceProvider) {  
+    $httpProvider.interceptors.push(function () {
+    	return {
+    		response: function (config, CommonsService) {
+	        	var ajustardatas = valorhora => {
+	        		if(valorhora.vigencias){
+	        			for (let vigencia of valorhora.vigencias) {
+	        				if (vigencia.data_inicio) {
+	        					vigencia.data_inicio = CommonsServiceProvider.$get().stringparadata(vigencia.data_inicio);
+	        				}
+	        				if (vigencia.data_fim){
+	        					vigencia.data_fim = CommonsServiceProvider.$get().stringparadata(vigencia.data_fim);
+	        				}
+	        			}
+	        		}
+	        	}
+	        	ajustardatas(config.data);
+	        	return config;
+	        }
+    	}
+    });
+}]);
+
 valorhora.controller('ValorHoraController', function (ValorHoraService, CentroCustoService, 
 		CentroResultadoService, ContaGerencialService, NaturezaOperacaoService, TipoHoraService, CommonsService){
 	var $ctrl = this;
@@ -74,6 +98,15 @@ valorhora.controller('ValorHoraController', function (ValorHoraService, CentroCu
 				window.location.replace(BASE_URL + 'cadastros/valorhora/');	
 			});
 		}
+	}
+	
+	$ctrl.modalvigenciamap = {};
+	
+	$ctrl.abrirmodaldata = (vigencia, prop) => {
+		if (!$ctrl.modalvigenciamap[vigencia.$$hashKey]) {
+			$ctrl.modalvigenciamap[vigencia.$$hashKey] = {};
+		}
+		$ctrl.modalvigenciamap[vigencia.$$hashKey][prop] = !$ctrl.modalvigenciamap[vigencia.$$hashKey][prop]; 
 	}
 	
 });

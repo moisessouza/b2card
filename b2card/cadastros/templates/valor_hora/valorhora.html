@@ -104,10 +104,20 @@
 				<tbody>
 				    <tr ng-repeat="vigencia in $ctrl.valorhora.vigencias">
 				        <td>
-				        	<input type="text" class="form-control" ng-model="vigencia.data_inicio" ui-mask="99/99/9999" model-view-value="true"/>
+				        	<p class="input-group" style="width: 120px;">
+					        	<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true" ng-model="vigencia.data_inicio" is-open="$ctrl.modalvigenciamap[vigencia.$$hashKey].data_inicio" ng-required="true" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodaldata(vigencia, 'data_inicio')"><i class="glyphicon glyphicon-calendar"></i></button>
+								</span>
+							</p>
 				        </td>
 				        <td>
-				        	<input type="text" class="form-control" ng-model="vigencia.data_fim" ui-mask="99/99/9999" model-view-value="true"/>
+				        	<p class="input-group" style="width: 120px;">
+					        	<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true" ng-model="vigencia.data_fim" is-open="$ctrl.modalvigenciamap[vigencia.$$hashKey].data_fim" ng-required="true" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodaldata(vigencia, 'data_fim')"><i class="glyphicon glyphicon-calendar"></i></button>
+								</span>
+							</p>
 				        </td>
 				        <td>
 				        	<input type="text" class="form-control" ng-model="vigencia.valor" gb-money required/>
