@@ -494,25 +494,27 @@ def buscar_lista_por_parametro(request, format=None):
     if request.data:
         arguments = {}
         
-        if 'data_inicio' in request.data:
+        if 'data_inicio' in request.data and request.data['data_inicio']:
             data_inicio = converter_string_para_data(request.data['data_inicio'])
             arguments['data_criacao__gte'] = data_inicio
             
-        if 'data_fim' in request.data:
+        if 'data_fim' in request.data and request.data['data_fim']:
             data_fim = converter_string_para_data(request.data['data_fim'])
             arguments['data_criacao__lte'] = data_fim
             
-        if 'cliente_id' in request.data:
+        if 'cliente_id' in request.data and request.data['cliente_id']:
             arguments['cliente__id'] = request.data['cliente_id']
             
         if 'status' in request.data:
             arguments['status_demanda'] = request.data['status']
             
         demandas = Demanda.objects.filter(**arguments).order_by('-id')
-        if 'palavra_chave' in request.data:
-            palavra_chave = request.data['palavra_chave']
-            demandas = demandas.filter(Q(id=palavra_chave)
-                            | Q(nome_demanda__icontains=palavra_chave)
+        if 'palavra_chave' in request.data and request.data['palavra_chave']:
+            if  request.data['palavra_chave'].isdigit():
+                demandas.filter(id=request.data['palavra_chave'])
+            else:
+                palavra_chave = request.data['palavra_chave']
+                demandas = demandas.filter(Q(nome_demanda__icontains=palavra_chave)
                             | Q(faseatividade__atividade__descricao__icontains=palavra_chave)
                             | Q(descricao__icontains=palavra_chave)
                             | Q(cliente__pessoa__nome_razao_social__icontains=palavra_chave)).distinct()
