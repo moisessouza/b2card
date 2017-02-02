@@ -80,17 +80,23 @@ button.margin {
 	    <thead>
 	      <tr>
 	        <th>Demanda</th>
-	        <th>Cliente</th>
-	        <th>Código da demanda</th>
 	        <th>Responsável</th>
+	        <th>Status</th>
 	      </tr>
 	    </thead>
 	    <tbody>
 	      <tr ng-click="$ctrl.abrirdemanda(demanda)" ng-repeat="demanda in $ctrl.resultado.demandas">
-	      	<td>{{demanda.nome_demanda}}
-	        <td>{{demanda.cliente.pessoa.nome_razao_social}}</td>
-	        <td>{{demanda.codigo_demanda}}</td>
+	      	<td>{{demanda.descricao}}</td>
 	        <td>{{demanda.responsavel.pessoa.nome_razao_social}}</td>
+	        <td>
+	        	{{demanda.status_demanda == 'O' ? 'Em orçamentação' : ''}}
+				{{demanda.status_demanda == 'A' ? 'Aguardando aprovação' : ''}}
+				{{demanda.status_demanda == 'N' ? 'Não aprovada' : ''}}
+				{{demanda.status_demanda == 'C' ? 'Cancelada' : ''}}
+				{{demanda.status_demanda == 'H' ? 'Em homologação' : ''}}
+				{{demanda.status_demanda == 'I' ? 'Implantada' : ''}}
+				{{demanda.status_demanda == 'D' ? 'Em desenvolvimento' : ''}}
+			</td>
 	      </tr>
 	    </tbody>
 	</table>

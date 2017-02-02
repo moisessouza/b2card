@@ -6,7 +6,15 @@ pesquisademanda.controller('PesquisaDemandaController', function (CommonsService
 	var $ctrl = this;
 	$ctrl.show=true;
 	
-	$ctrl.resultado = PesquisaDemandaService.buscarcentroresultadoshora();
+	var configurarresultado = function (resultado) {
+		if (resultado.demandas) {
+			for(let demanda of resultado.demandas) {
+				demanda.descricao = CommonsService.pad(demanda.id, 5) + ' - ' + demanda.cliente.pessoa.nome_razao_social + ' - ' + demanda.nome_demanda;
+			}
+		}
+	}
+	
+	$ctrl.resultado = PesquisaDemandaService.buscarcentroresultadoshora({}, configurarresultado);
 	$ctrl.listaclientes = PessoaService.buscarpessoasjuridicas();
 	
 	$ctrl.arguments = {
@@ -14,7 +22,7 @@ pesquisademanda.controller('PesquisaDemandaController', function (CommonsService
 	}
 	
 	$ctrl.pesquisar = () => {
-		$ctrl.resultado = PesquisaDemandaService.buscarcentroresultadoshora($ctrl.arguments);
+		$ctrl.resultado = PesquisaDemandaService.buscarcentroresultadoshora($ctrl.arguments, configurarresultado);
 	}
 	
 	$ctrl.abrirdemanda = demanda => {
