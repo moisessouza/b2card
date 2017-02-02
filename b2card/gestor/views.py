@@ -12,24 +12,38 @@ from demandas.serializers import DemandaSerializer
 def index(request):
     return render(request, 'gestor/index.html')
 
-@api_view(['GET'])
+@api_view(['POST'])
 def buscar_clientes_demandas(request, format=None):
     
     clientes = PessoaJuridica.objects.filter(Q(demanda__responsavel__prestador__usuario__id=request.user.id) | Q(demanda__analista_tecnico_responsavel__prestador__usuario__id=request.user.id) | Q(demanda__faseatividade__responsavel__prestador__usuario__id=request.user.id)).distinct()
+    
+    list_status = []
+    if request.data:
+        for k in request.data:
+            if request.data[k]:
+                list_status.append(k)
     
     cliente_list = []
     
     for i in clientes:
         cliente = PessoaJuridicaSerializer(i).data
 
-        demandas = Demanda.objects.filter(Q(cliente = i), Q(responsavel__prestador__usuario__id=request.user.id) | Q(analista_tecnico_responsavel__prestador__usuario__id=request.user.id))
+        if list_status:
+            demandas = Demanda.objects.filter(status_demanda__in=list_status).filter(Q(cliente = i), Q(responsavel__prestador__usuario__id=request.user.id) | Q(analista_tecnico_responsavel__prestador__usuario__id=request.user.id)).order_by('-id')
+        else:
+            demandas = Demanda.objects.filter(Q(cliente = i), Q(responsavel__prestador__usuario__id=request.user.id) | Q(analista_tecnico_responsavel__prestador__usuario__id=request.user.id)).order_by('-id')
+
         demanda_list = []
         
         for d in demandas:
             demanda = serializarDemandaObject(d)
             demanda_list.append(demanda)
         
-        demandas = Demanda.objects.filter(cliente = i, faseatividade__responsavel__prestador__usuario__id=request.user.id).exclude(id__in=[d.id for d in demandas]).distinct()
+        if list_status:
+            demandas = Demanda.objects.filter(status_demanda__in=list_status).filter(cliente = i, faseatividade__responsavel__prestador__usuario__id=request.user.id).exclude(id__in=[d.id for d in demandas]).distinct().order_by('-id')
+        else:
+            demandas = Demanda.objects.filter(cliente = i, faseatividade__responsavel__prestador__usuario__id=request.user.id).exclude(id__in=[d.id for d in demandas]).distinct().order_by('-id')
+            
         
         for d in demandas:
             demanda_dict = DemandaSerializer(d).data

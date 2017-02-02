@@ -37,6 +37,10 @@ gestor.controller('GestorController', function (GestorService, CommonsService, $
 	
 	$ctrl.demandamap = {} 
 	
+	$ctrl.abrirmodalstatus = () => {
+		$ctrl.showmodal = !$ctrl.showmodal; 
+	}
+	
 	$ctrl.expandir = demanda => {
 		if (!$ctrl.demandamap[demanda.$$hashKey]){
 			$ctrl.demandamap[demanda.$$hashKey] = {};
@@ -48,6 +52,10 @@ gestor.controller('GestorController', function (GestorService, CommonsService, $
 		$window.location.href = BASE_URL + 'demandas/editar/' + id;
 	}
 	
-	$ctrl.clientes = GestorService.buscarclientesdemandas(configurarregistros);
+	$ctrl.clientes = GestorService.buscarclientesdemandas($ctrl.status, configurarregistros);
+	
+	$ctrl.pesquisar = () => {
+		$ctrl.clientes = GestorService.buscarclientesdemandas($ctrl.status, configurarregistros);
+	}
 	
 });

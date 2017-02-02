@@ -14,9 +14,11 @@ gestorservices.config(['$httpProvider', function($httpProvider) {
 
 gestorservices.service('GestorService', function($resource){
 	return {
-		buscarclientesdemandas: function (callback){
-			var Clientes = $resource(BASE_URL + 'gestor/api/clientesdemandas/');
-			return Clientes.query({}, callback);
+		buscarclientesdemandas: function (argumento, callback){
+			var Clientes = $resource(BASE_URL + 'gestor/api/clientesdemandas/', {},{
+				'set': {method:'POST', isArray: true}
+			});
+			return Clientes.set({}, argumento, callback);
 		}
 	}
 });
