@@ -33,7 +33,6 @@
 		  <div class="form-group">
 		    <label for="nome">Conta gerencial</label>
 		    <input type="text" class="form-control" id="nome" name="nome" ng-model="$ctrl.contagerencial.nome" placeholder="Conta gerencial" maxlength="30" required>
-		    <span class="red" ng-show="contagerencial.nome.$invalid">Conta gerencial é obrigatório.</span>
 		  </div>
 		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.salvar()" ng-disabled="contagerencial.$invalid">Salvar</button>
 		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.novo()" ng-show="$ctrl.contagerencial.id">Novo</button>

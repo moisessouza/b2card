@@ -34,14 +34,12 @@
 	  	  <div class="form-group col-sm-2">
 		    <label for="codigo">Código</label>
 		    <input type="text" class="form-control" id="codigo" name="codigo" ng-model="$ctrl.unidadeadministrativa.codigo" placeholder="Código" maxlength="10" required>
-		    <span class="red" ng-show="centrocusto.nome.$invalid">Código é obrigatório.</span>
 		  </div>
 		  </div>
 		  <div class="row">
 		  <div class="form-group col-sm-6">
 		    <label for="nome">Nome</label>
 		    <input type="text" class="form-control" id="nome" name="nome" ng-model="$ctrl.unidadeadministrativa.nome" placeholder="Nome" maxlength="30" required>
-		    <span class="red" ng-show="centrocusto.nome.$invalid">Nome é obrigatório.</span>
 		  </div>
 		  </div>
 		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.salvar()" ng-disabled="unidadeadministrativa.$invalid">Salvar</button>

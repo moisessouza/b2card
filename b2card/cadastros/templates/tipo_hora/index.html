@@ -33,7 +33,6 @@
 		  <div class="form-group">
 		    <label for="descricao">Tipo hora</label>
 		    <input type="text" class="form-control" id="descricao" name="descricao" ng-model="$ctrl.tipohora.descricao" maxlength="30" placeholder="Tipo hora" required>
-		    <span class="red" ng-show="tipohora.descricao.$invalid">Tipo hora é obrigatório.</span>
 		  </div>
 		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.salvar()" ng-disabled="tipohora.$invalid">Salvar</button>
 		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.novo()" ng-show="$ctrl.tipohora.id">Novo</button>

@@ -33,7 +33,6 @@
 		  <div class="form-group">
 		    <label for="descricao">Tipo de alocação</label>
 		    <input type="text" class="form-control" id="descricao" name="descricao" ng-model="$ctrl.tipoalocacao.descricao" maxlength="30" placeholder="Tipo de alocação" required>
-		    <span class="red" ng-show="tipoalocacao.descricao.$invalid">Tipo de alocação é obrigatório.</span>
 		  </div>
 		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.salvar()" ng-disabled="tipoalocacao.$invalid">Salvar</button>
 		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.novo()" ng-show="$ctrl.tipoalocacao.id">Novo</button>

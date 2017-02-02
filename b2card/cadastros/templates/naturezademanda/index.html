@@ -33,7 +33,6 @@
 		  <div class="form-group">
 		    <label for="descricao">Natureza da demanda</label>
 		    <input type="text" class="form-control" id="descricao" name="descricao" ng-model="$ctrl.naturezademanda.descricao" maxlength="30" placeholder="Natureza da demanda" required>
-		    <span class="red" ng-show="fase.descricao.$invalid">Natureza da demanda é obrigatório.</span>
 		  </div>
 		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.salvar()" ng-disabled="fase.$invalid">Salvar</button>
 		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.novo()" ng-show="$ctrl.fase.id">Novo</button>

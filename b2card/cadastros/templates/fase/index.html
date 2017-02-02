@@ -33,7 +33,6 @@
 		  <div class="form-group">
 		    <label for="descricao">Fase</label>
 		    <input type="text" class="form-control" id="descricao" name="descricao" ng-model="$ctrl.fase.descricao" maxlength="30" placeholder="Fase" required>
-		    <span class="red" ng-show="fase.descricao.$invalid">Fase é obrigatório.</span>
 		  </div>
 		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.salvar()" ng-disabled="fase.$invalid">Salvar</button>
 		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.novo()" ng-show="$ctrl.fase.id">Novo</button>

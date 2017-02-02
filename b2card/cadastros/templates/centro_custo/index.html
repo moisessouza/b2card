@@ -33,7 +33,6 @@
 		  <div class="form-group">
 		    <label for="nome">Centro de custo</label>
 		    <input type="text" class="form-control" id="nome" name="nome" ng-model="$ctrl.centrocusto.nome" placeholder="Centro de custo" maxlength="30" required>
-		    <span class="red" ng-show="centrocusto.nome.$invalid">Centro de custo é obrigatório.</span>
 		  </div>
 		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.salvar()" ng-disabled="centrocusto.$invalid">Salvar</button>
 		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.novo()" ng-show="$ctrl.centrocusto.id">Novo</button>
