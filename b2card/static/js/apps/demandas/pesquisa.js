@@ -21,7 +21,12 @@ pesquisademanda.controller('PesquisaDemandaController', function (CommonsService
 		pagina: '1'
 	}
 	
+	$ctrl.abrirmodalstatus = () => {
+		$ctrl.showmodal = !$ctrl.showmodal; 
+	}
+	
 	$ctrl.pesquisar = () => {
+		$ctrl.arguments.status = $ctrl.status;
 		$ctrl.resultado = PesquisaDemandaService.buscarcentroresultadoshora($ctrl.arguments, configurarresultado);
 	}
 	

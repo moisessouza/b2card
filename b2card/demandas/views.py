@@ -505,10 +505,17 @@ def buscar_lista_por_parametro(request, format=None):
         if 'cliente_id' in request.data and request.data['cliente_id']:
             arguments['cliente__id'] = request.data['cliente_id']
             
-        if 'status' in request.data:
-            arguments['status_demanda'] = request.data['status']
-            
-        demandas = Demanda.objects.filter(**arguments).order_by('-id')
+        list_status = []
+        if 'status' in request.data and request.data['status']:
+            for k in request.data['status']:
+                if request.data['status'][k]:
+                    list_status.append(k)
+        
+        if list_status:
+            demandas = Demanda.objects.filter(status_demanda__in=list_status).filter(**arguments)
+        else:
+            demandas = Demanda.objects.filter(**arguments)
+        
         if 'palavra_chave' in request.data and request.data['palavra_chave']:
             if  request.data['palavra_chave'].isdigit():
                 demandas.filter(id=request.data['palavra_chave'])
@@ -519,7 +526,7 @@ def buscar_lista_por_parametro(request, format=None):
                             | Q(descricao__icontains=palavra_chave)
                             | Q(cliente__pessoa__nome_razao_social__icontains=palavra_chave)).distinct()
             
-        
+        demandas.order_by('-id')
         pagina = request.data['pagina']
         paginator = Paginator(demandas, REGISTROS_POR_PAGINA)
         if 'pagina' in request.data:
