@@ -5,7 +5,8 @@ from demandas.models import Atividade, Demanda, FaseAtividade,\
     AtividadeProfissional, AlocacaoHoras
 from demandas.serializers import DemandaSerializer, AtividadeSerializer,\
     FaseAtividadeSerializer, AtividadeProfissionalSerializer,\
-    AlocacaoHorasSerializer
+    AlocacaoHorasSerializer, DemandaInicialSerializer,\
+    FaseAtividadeInicialSerializer, AtividadeProfissionalInicialSerializer
 from rest_framework.response import Response
 from cadastros.models import PessoaJuridica, TipoAlocacao
 from cadastros.serializers_pessoa import PessoaJuridicaSerializer,\
@@ -32,49 +33,49 @@ def buscar_atividades_usuario(request, format=None):
     for c in clientes:
 
         cliente_dict = PessoaJuridicaComPessoaSerializer(c).data
-
         if list_status:
             demandas = Demanda.objects.filter(status_demanda__in=list_status).filter(cliente = c, faseatividade__atividade__atividadeprofissional__pessoa_fisica__prestador__usuario__id=request.user.id).distinct();
         else:
             demandas = Demanda.objects.filter(cliente = c, faseatividade__atividade__atividadeprofissional__pessoa_fisica__prestador__usuario__id=request.user.id).distinct();
         demanda_list = []
-        
+
         for i in demandas:
-    
-            demanda_dict = DemandaSerializer(i).data
+            demanda_dict = DemandaInicialSerializer(i).data
             demanda_list.append(demanda_dict)
             
-            fase_atividade_list = []
-            fase_atividades = FaseAtividade.objects.filter(demanda=i, atividade__atividadeprofissional__pessoa_fisica__prestador__usuario__id=request.user.id).distinct();
-            
-            for f in fase_atividades:
-                
-                fase_atividade_dict = FaseAtividadeSerializer(f).data
-                fase_atividade_list.append(fase_atividade_dict)
-                
-                atividades = Atividade.objects.filter(fase_atividade=f,atividadeprofissional__pessoa_fisica__prestador__usuario__id=request.user.id).distinct()
-                atividade_list = [];
-                
-                for a in atividades:
-                    
-                    atividade_dict = AtividadeSerializer(a).data
-                    atividade_dict['data_inicio'] = formatar_data(a.data_inicio)
-                    atividade_dict['data_fim'] = formatar_data(a.data_fim)
-                    atividade_list.append(atividade_dict)
-                    atividade_profissional =  AtividadeProfissional.objects.filter(atividade = a, pessoa_fisica__prestador__usuario__id=request.user.id)[:1]
-                    
-                    atividade_profissional_dict = AtividadeProfissionalSerializer(atividade_profissional[0]).data
-                    atividade_dict['atividade_profissional'] = atividade_profissional_dict
-                    
-                fase_atividade_dict['atividades']=atividade_list
-                    
-            demanda_dict['fase_atividades']=fase_atividade_list       
-        
         cliente_dict['demandas'] = demanda_list
-        
         cliente_list.append(cliente_dict)
         
     return Response(cliente_list)
+
+@api_view(['GET'])
+def buscar_atividades_demanda(request, demanda_id, format=None):
+
+    fase_atividades = FaseAtividade.objects.filter(demanda__id=demanda_id, atividade__atividadeprofissional__pessoa_fisica__prestador__usuario__id=request.user.id).distinct();
+    fase_atividade_list = []
+    
+    for f in fase_atividades:
+
+        fase_atividade_dict = FaseAtividadeInicialSerializer(f).data
+        fase_atividade_list.append(fase_atividade_dict)
+        
+        atividades = Atividade.objects.filter(fase_atividade=f,atividadeprofissional__pessoa_fisica__prestador__usuario__id=request.user.id).distinct()
+        atividade_list = [];
+        
+        for a in atividades:
+            
+            atividade_dict = AtividadeSerializer(a).data
+            atividade_dict['data_inicio'] = formatar_data(a.data_inicio)
+            atividade_dict['data_fim'] = formatar_data(a.data_fim)
+            atividade_list.append(atividade_dict)
+            atividade_profissional =  AtividadeProfissional.objects.filter(atividade = a, pessoa_fisica__prestador__usuario__id=request.user.id)[:1]
+            
+            atividade_profissional_dict = AtividadeProfissionalInicialSerializer(atividade_profissional[0]).data
+            atividade_dict['atividade_profissional'] = atividade_profissional_dict
+            
+        fase_atividade_dict['atividades']=atividade_list
+            
+    return Response(fase_atividade_list)  
 
 @api_view(['POST'])
 def alocar_horas(request, format=None):

@@ -9,26 +9,28 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 	var configurarregistros = data => {
 		for(let cliente of data) {
 			for (let demanda of cliente.demandas) {
-				for (let fase_atividade of demanda.fase_atividades) {
-					for (let atividade of fase_atividade.atividades) {
-						if (atividade.atividade_profissional.horas_alocadas_milisegundos){
-							atividade.atividade_profissional.horas_alocadas = CommonsService.milliparahoras(atividade.atividade_profissional.horas_alocadas_milisegundos);
-						}
-						
-						if (atividade.atividade_profissional.quantidade_horas && atividade.atividade_profissional.quantidade_horas.toString().indexOf(':00') < 0){
-							atividade.atividade_profissional.quantidade_horas = atividade.atividade_profissional.quantidade_horas + ':00';	
-							
+				if (demanda.fase_atividades){
+					for (let fase_atividade of demanda.fase_atividades) {
+						for (let atividade of fase_atividade.atividades) {
 							if (atividade.atividade_profissional.horas_alocadas_milisegundos){
-								var horas = parseInt(atividade.atividade_profissional.quantidade_horas.split(':')[0])
-								var milisegundos = horas * 60 * 60 * 1000;
+								atividade.atividade_profissional.horas_alocadas = CommonsService.milliparahoras(atividade.atividade_profissional.horas_alocadas_milisegundos);
+							}
+							
+							if (atividade.atividade_profissional.quantidade_horas && atividade.atividade_profissional.quantidade_horas.toString().indexOf(':00') < 0){
+								atividade.atividade_profissional.quantidade_horas = atividade.atividade_profissional.quantidade_horas + ':00';	
 								
-								if (atividade.atividade_profissional.horas_alocadas_milisegundos > milisegundos){
-									atividade.atividade_profissional.atrasado = true;
+								if (atividade.atividade_profissional.horas_alocadas_milisegundos){
+									var horas = parseInt(atividade.atividade_profissional.quantidade_horas.split(':')[0])
+									var milisegundos = horas * 60 * 60 * 1000;
+									
+									if (atividade.atividade_profissional.horas_alocadas_milisegundos > milisegundos){
+										atividade.atividade_profissional.atrasado = true;
+									}
 								}
+								
 							}
 							
 						}
-						
 					}
 				}
 				demanda.id = CommonsService.pad(demanda.id, 4);
@@ -74,7 +76,12 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 		if (!$ctrl.demandamap[demanda.$$hashKey]){
 			$ctrl.demandamap[demanda.$$hashKey] = {};
 		}
-		$ctrl.demandamap[demanda.$$hashKey].expandir = !$ctrl.demandamap[demanda.$$hashKey].expandir; 
+		$ctrl.demandamap[demanda.$$hashKey].expandir = !$ctrl.demandamap[demanda.$$hashKey].expandir;
+		if ($ctrl.demandamap[demanda.$$hashKey].expandir) {
+			demanda.fase_atividades = InicialService.buscaratividadesprofissionalpordemandaid(demanda.id, function () {
+				configurarregistros($ctrl.clientes);
+			});
+		}
 	}
 	
 	$ctrl.abrirmodalstatus = () => {

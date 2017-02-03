@@ -31,6 +31,10 @@ inicialservices.service('InicialService', function($resource){
 		buscaratividadesprofissionalporatividade: function (atividade_id, callback){
 			var AtividadeProfissional = $resource(BASE_URL + 'inicial/api/atividadesprofissional/:id/');
 			return AtividadeProfissional.get({id:atividade_id}, callback);
+		},
+		buscaratividadesprofissionalpordemandaid: function (demanda_id, callback) {
+			var AtividadeProfissional = $resource(BASE_URL + 'inicial/api/atividadesprofissional/demanda/:id/');
+			return AtividadeProfissional.query({id:demanda_id}, callback);
 		}
 	}
 });

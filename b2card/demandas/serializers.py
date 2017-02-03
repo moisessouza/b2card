@@ -13,6 +13,11 @@ from cadastros.serializers import CentroCustoSerializer, ValorHoraSerializer, Ce
     TipoAlocacaoSerializer
 from cadastros.serializers_pessoa import PessoaFisicaComPessoaSerializer,\
     PessoaJuridicaComPessoaSerializer
+
+class DemandaInicialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Demanda
+        fields = ('id', 'nome_demanda', 'status_demanda','codigo_demanda', 'data_inicio', 'data_fim')
     
 class DemandaSerializer (serializers.ModelSerializer):
     cliente = PessoaJuridicaComPessoaSerializer()
@@ -56,6 +61,11 @@ class ItemFaseSerializer(serializers.ModelSerializer):
         model = ItemFase
         fields = ('id', 'valor_hora', 'valor_selecionado', 'quantidade_horas', 'valor_total')
 
+class AtividadeProfissionalInicialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AtividadeProfissional
+        fields = ('id', 'quantidade_horas', 'horas_alocadas_milisegundos', 'percentual_concluido', 'percentual_calculado')
+
 class AtividadeProfissionalSerializer(serializers.ModelSerializer):
     pessoa_fisica = PessoaFisicaComPessoaSerializer()
     class Meta:
@@ -78,6 +88,12 @@ class PerfilAtividadeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PerfilAtividade
         fields = ('id', 'perfil', 'horas')
+
+class FaseAtividadeInicialSerializer(serializers.ModelSerializer):
+    fase = FaseSerializer()
+    class Meta:
+        model = FaseAtividade
+        fields = ('id', 'fase', 'data_inicio', 'data_fim', 'percentual_concluido', 'percentual_calculado')
         
 class FaseAtividadeSerializer(serializers.ModelSerializer):
     fase = FaseSerializer()
