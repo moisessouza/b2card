@@ -1,0 +1,59 @@
+<meta charset="utf-8">
+{% extends "base_page.html" %}
+
+{%block content%}
+
+<style>
+   .centered {
+	  position: fixed;
+	  top: 50%;
+	  left: 50%;
+	  /* bring your own prefixes */
+	  transform: translate(-50%, -50%);
+	}
+ </style>
+
+<div class="container centered col-md-3">
+	{% if message.error %}
+		<div class="alert alert-danger" style="text-align: center;">
+			{{message.error}}
+		</div>
+	{% endif %}
+	{% if message.success %}
+		<div class="alert alert-success" style="text-align: center;">
+			{{message.success}}
+		</div>
+	{% endif %}
+	<div class="panel panel-primary">
+		<div class="panel-body">
+			<form action="{% url 'autenticacao:executar_alteracao' %}" method="post" class="form-horizontal">
+				{% csrf_token %}
+				<div class="form-group row">
+					<label class="col-md-5 col-form-label" for="login">Senha atual:</label>
+					<div class="col-md-10">
+		        		<input type="password" id="senha_atual" class="form-control input-sm" name="senha_atual">
+		      		</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-md-5 col-form-label" for="password">Nova senha:</label>
+					<div class="col-md-10">
+		        		<input type="password" id="nova_senha" class="form-control input-sm" name="nova_senha">
+		      		</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-md-6 col-form-label" for="password">Repetir nova senha:</label>
+					<div class="col-md-10">
+		        		<input type="password" id="repetir_senha" class="form-control input-sm" name="repetir_senha">
+		      		</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button id="botao" class="btn btn-default">Salvar</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+{%endblock%}

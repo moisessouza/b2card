@@ -1,4 +1,6 @@
 eclipse.preferences.version=1
+encoding//autenticacao/migrations/0001_initial.py=utf-8
+encoding//autenticacao/views.py=utf-8
 encoding//cadastros/migrations/0001_initial.py=utf-8
 encoding//demandas/migrations/0001_initial.py=utf-8
 encoding//demandas/models.py=utf-8

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
@@ -7,6 +8,7 @@ from datetime import datetime
 from django.db.models import Q
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.contrib.auth.models import User
 
 # Create your views here.
 def index(request):
@@ -14,6 +16,36 @@ def index(request):
 
 def falha(request):
     return render(request, 'autenticacao/falha.html');
+
+def alterar_senha(request):
+    return render(request, 'autenticacao/alterar.html');
+
+def executar_alteracao(request):
+    
+    senha_atual = request.POST['senha_atual']
+    nova_senha = request.POST['nova_senha']
+    repetir_senha = request.POST['repetir_senha']
+    
+    context = {
+        'message': {}
+    }
+    
+    username = request.user.username
+    
+    user = authenticate(username=username, password=senha_atual)
+    
+    if user:
+        if nova_senha == repetir_senha:
+            u = User.objects.get(id=user.id)
+            u.set_password(nova_senha)
+            u.save()    
+            context['message']['success'] = "Senha alterada com sucesso"
+        else:
+            context['message']['error'] = "Nova senha e repetir nova senha não são iguais"
+    else:
+        context['message']['error'] = "Senha atual não confere" 
+    
+    return render(request, 'autenticacao/alterar.html', context)
 
 def executar(request):
     username = request.POST['login']
