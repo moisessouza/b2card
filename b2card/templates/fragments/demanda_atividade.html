@@ -78,9 +78,6 @@
 						</div>
 					</td>
 					<td>
-						<button class="btn btn-primary button-heading" ng-click="$ctrl.adicionaratividade(fase_atividade)" style="float:right;">
-							<span class="glyphicon glyphicon-plus"></span>
-						</button>
 						<table class="table table-sm table-bordered table-striped table-highlight" ng-repeat="atividade in fase_atividade.atividades" ng-show="!atividade.remover">
 							<thead>
 								<tr class="active">
@@ -157,6 +154,9 @@
 								</tr>
 							</tbody>		
 						</table>
+						<button class="btn btn-primary button-heading" ng-click="$ctrl.adicionaratividade(fase_atividade)" style="float:right;">
+							<span class="glyphicon glyphicon-plus"></span>
+						</button>
 					</td>
 					<td>
 						<button type="button" class="btn btn-default" ng-click="$ctrl.remover(fase_atividade)">
