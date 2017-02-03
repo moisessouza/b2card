@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from demandas.models import Atividade, Demanda, FaseAtividade,\
@@ -87,6 +88,13 @@ def alocar_horas(request, format=None):
     if 'tipo_alocacao' in request.data:
         tipo_alocacao = TipoAlocacao.objects.get(pk=request.data['tipo_alocacao']['id'])
         del request.data['tipo_alocacao']
+    
+    hora_inicio =  datetime.datetime.strptime(request.data['hora_inicio'], '%H:%M')
+    hora_fim =  datetime.datetime.strptime(request.data['hora_fim'], '%H:%M')
+    
+    subtracao = hora_fim - hora_inicio
+    if (subtracao.seconds * 1000) != request.data['horas_alocadas_milisegundos']:
+        raise Exception("Milisegundos não confere")
     
     alocacao_horas = AlocacaoHoras(**request.data)
     alocacao_horas.atividade_profissional = atividade_profissional

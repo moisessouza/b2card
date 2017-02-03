@@ -5,3 +5,4 @@ encoding//cadastros/migrations/0001_initial.py=utf-8
 encoding//demandas/migrations/0001_initial.py=utf-8
 encoding//demandas/models.py=utf-8
 encoding//faturamento/models.py=utf-8
+encoding//inicial/views.py=utf-8
