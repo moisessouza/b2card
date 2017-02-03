@@ -135,6 +135,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		
 	$ctrl.listaclientes= PessoaService.buscarpessoasjuridicas();
 	$ctrl.listafuncionarios = PessoaService.buscarprofissionais();
+	$ctrl.listagestores = PessoaService.buscargestores();
 	
 	// TODO mudar isso depois... 
 	share.listafuncionarios = $ctrl.listafuncionarios;
