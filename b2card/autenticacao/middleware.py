@@ -26,8 +26,10 @@ class AuthenticationB2CardMiddleware(object):
                     
         CACHE_GRUPOS[request.user.id] = grupo_urls
 
-        if request.path in self.urls_permited:
-            return self.get_response(request)
+
+        for i in self.urls_permited:
+            if i in request.path:
+                return self.get_response(request)
 
         if '/api/' in request.path: 
             return self.get_response(request)

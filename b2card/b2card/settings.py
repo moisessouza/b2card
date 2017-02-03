@@ -16,7 +16,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-URL_PER = ['/inicial/','/autenticacao/', '/autenticacao/login/', '/autenticacao/logout/','/autenticacao/not_permitted/', '/autenticacao/falha/', '/autenticacao/alterar/', '/autenticacao/executar_alteracao/']
+URL_PER = ['/inicial/','/autenticacao/']
 BASE_URL = '/'
 
 # Quick-start development settings - unsuitable for production
