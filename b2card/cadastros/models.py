@@ -141,7 +141,7 @@ class EnderecoPessoa(models.Model):
     logradouro = models.CharField(max_length = 20)
     numero = models.CharField(max_length = 10)
     complemento = models.CharField(max_length = 30)
-    bairro = models.CharField(max_length = 30, default=None)
+    bairro = models.CharField(max_length = 30, null=True, default=None)
     cidade = models.CharField(max_length = 30)
     estado = models.CharField(max_length = 20)
     cep = models.CharField(max_length = 10)
