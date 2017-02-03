@@ -12,6 +12,9 @@ from rest_framework.response import Response
 def index(request):
     return render(request, 'autenticacao/index.html')
 
+def falha(request):
+    return render(request, 'autenticacao/falha.html');
+
 def executar(request):
     username = request.POST['login']
     password = request.POST['senha']
@@ -34,7 +37,7 @@ def executar(request):
             return redirect('autenticacao:index')
 
     else:
-        return redirect('autenticacao:index')
+        return redirect('autenticacao:falha')
         
 def logout_view(request):
     logout(request)

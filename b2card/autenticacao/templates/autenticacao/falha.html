@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <title>B2Card</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/bootstrap/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+  
+  <script src="/static/js/jquery/jquery-3.1.0.min.js"></script>
+  <script src="/static/bootstrap/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+  <script src="/static/js/angular/angular.min.js"></script>
+  <script src="/static/js/angular/angular-resource.min.js"></script>
+  
+  <style>
+   .centered {
+	  position: fixed;
+	  top: 50%;
+	  left: 50%;
+	  /* bring your own prefixes */
+	  transform: translate(-50%, -50%);
+	}
+  </style>
+</head>
+
+<body>
+<div class="container centered col-md-4">
+	<div class="alert alert-danger" style="text-align: center;">
+		Falha ao logar, verifique se usuário e senha estão corretos.
+	</div>
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			<div style="text-align: center;">
+				<img src="/static/img/logo.png" style="width: 100px">
+			</div>
+		</div>
+		<div class="panel-body">
+			<form action="{% url 'autenticacao:login' %}" method="post" class="form-horizontal">
+				{% csrf_token %}
+				<div class="form-group form-group-sm">
+					<label class="col-sm-2 control-label" for="login">Login</label>
+					<div class="col-sm-10">
+		        		<input type="text" id="login" class="form-control input-sm" name="login">
+		      		</div>
+				</div>
+				<div class="form-group form-group-sm">
+					<label class="col-sm-2 control-label" for="password">Senha</label>
+					<div class="col-sm-10">
+		        		<input type="password" id="password" class="form-control input-sm" name="senha">
+		      		</div>
+				</div>
+				<div class="form-group form-group-sm">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button id="botao" class="btn btn-default">Logar</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+</body>
+</html>
