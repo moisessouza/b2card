@@ -64,7 +64,7 @@
 				    	</select>
 						<div>
 							Responsável
-							<select ng-model="fase_atividade.responsavel.id" class="form-control" ng-options="p.id as p.pessoa.nome_razao_social for p in $ctrl.listagestores">
+							<select ng-model="fase_atividade.responsavel.id" class="form-control" ng-options="p.id as p.pessoa.nome_razao_social for p in $ctrl.share.listafuncionarios">
 								<option value="">Selecione...</option>
 							</select>
 						</div>

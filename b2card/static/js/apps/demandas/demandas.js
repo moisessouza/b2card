@@ -542,7 +542,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 	$ctrl.share = share;
 	
 	$ctrl.listafases = FaseService.buscarfases();
-	$ctrl.listagestores = PessoaService.buscargestores();
+	//$ctrl.listagestores = PessoaService.buscargestores();
 	var atividadeprofissional = {}
 	
 	$ctrl.remover = function (i, callback){
