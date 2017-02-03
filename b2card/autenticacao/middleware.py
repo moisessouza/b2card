@@ -25,16 +25,23 @@ class AuthenticationB2CardMiddleware(object):
                                 grupo__user__prestador__pessoa_fisica__pessoa__status='A')
                     
         CACHE_GRUPOS[request.user.id] = grupo_urls
+        
+        autenticacao_url = self.base_url + 'autenticacao/'
+        autenticacao_url_login = self.base_url + 'autenticacao/login/'
+        autenticacao_url_falha = self.base_url + 'autenticacao/falha/'
 
-
-        for i in self.urls_permited:
-            if i in request.path:
-                return self.get_response(request)
+        if request.path == autenticacao_url or request.path == autenticacao_url_login or request.path == autenticacao_url_falha:
+            return self.get_response(request)
 
         if '/api/' in request.path: 
             return self.get_response(request)
         
         if request.user.is_authenticated:
+            
+            for i in self.urls_permited:
+                if i in request.path:
+                    return self.get_response(request)
+            
             if request.path == self.base_url:
                 response = redirect('inicial:inicial')
             else:
