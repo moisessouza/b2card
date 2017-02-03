@@ -48,7 +48,7 @@ class PessoaJuridicaList(APIView):
     
 class PessoaFisicaList(APIView):
     def get(self, request, format=None):
-        pessoas = PessoaFisica.objects.filter(pessoa__tipo='F')
+        pessoas = PessoaFisica.objects.filter(pessoa__tipo='F').order_by('pessoa__nome_razao_social')
         data = PessoaFisicaComPessoaSerializer(pessoas, many=True).data
         return Response(data)
     
@@ -470,7 +470,7 @@ def buscar_pessoas_por_nome(request, texto, format=None):
 
 @api_view(['GET'])
 def buscar_gestores(request, format=None):
-    pessoas = PessoaFisica.objects.filter(prestador__cargo__gestor=True)
+    pessoas = PessoaFisica.objects.filter(prestador__cargo__gestor=True).order_by('pessoa__nome_razao_social')
     data = PessoaFisicaComPessoaSerializer(pessoas, many=True).data
     return Response(data)
     
