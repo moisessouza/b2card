@@ -12,24 +12,25 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 				if (demanda.fase_atividades){
 					for (let fase_atividade of demanda.fase_atividades) {
 						for (let atividade of fase_atividade.atividades) {
-							if (atividade.atividade_profissional.horas_alocadas_milisegundos){
-								atividade.atividade_profissional.horas_alocadas = CommonsService.milliparahoras(atividade.atividade_profissional.horas_alocadas_milisegundos);
-							}
-							
-							if (atividade.atividade_profissional.quantidade_horas && atividade.atividade_profissional.quantidade_horas.toString().indexOf(':00') < 0){
-								atividade.atividade_profissional.quantidade_horas = atividade.atividade_profissional.quantidade_horas + ':00';	
-								
+							if (atividade.atividade_profissional){
 								if (atividade.atividade_profissional.horas_alocadas_milisegundos){
-									var horas = parseInt(atividade.atividade_profissional.quantidade_horas.split(':')[0])
-									var milisegundos = horas * 60 * 60 * 1000;
-									
-									if (atividade.atividade_profissional.horas_alocadas_milisegundos > milisegundos){
-										atividade.atividade_profissional.atrasado = true;
-									}
+									atividade.atividade_profissional.horas_alocadas = CommonsService.milliparahoras(atividade.atividade_profissional.horas_alocadas_milisegundos);
 								}
 								
+								if (atividade.atividade_profissional.quantidade_horas && atividade.atividade_profissional.quantidade_horas.toString().indexOf(':00') < 0){
+									atividade.atividade_profissional.quantidade_horas = atividade.atividade_profissional.quantidade_horas + ':00';	
+									
+									if (atividade.atividade_profissional.horas_alocadas_milisegundos){
+										var horas = parseInt(atividade.atividade_profissional.quantidade_horas.split(':')[0])
+										var milisegundos = horas * 60 * 60 * 1000;
+										
+										if (atividade.atividade_profissional.horas_alocadas_milisegundos > milisegundos){
+											atividade.atividade_profissional.atrasado = true;
+										}
+									}
+									
+								}
 							}
-							
 						}
 					}
 				}
@@ -84,14 +85,144 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 		}
 	}
 	
+	$ctrl.expandirdemandainterna = demanda => {
+		
+		if (!$ctrl.demandamap[demanda.$$hashKey]){
+			$ctrl.demandamap[demanda.$$hashKey] = {};
+		}
+		$ctrl.demandamap[demanda.$$hashKey].expandir = !$ctrl.demandamap[demanda.$$hashKey].expandir;
+		
+		if ($ctrl.demandamap[demanda.$$hashKey].expandir) {
+			demanda.fase_atividades = InicialService.buscaratividadesdemandainterna(demanda.id, function () {
+				configurarregistros($ctrl.clientesinternos);
+			});
+		}
+		
+	}
+	
 	$ctrl.abrirmodalstatus = () => {
 		$ctrl.showmodal = !$ctrl.showmodal; 
 	}
 	
 	$ctrl.clientes = InicialService.buscaratividadesprofissional($ctrl.status, configurarregistros);
 	
+	$ctrl.clientesinternos = InicialService.buscaratividadesinternas($ctrl.statusinterno, configurarregistros);
+	
 	$ctrl.pesquisar = () => {
 		$ctrl.clientes = InicialService.buscaratividadesprofissional($ctrl.status, configurarregistros);
+	}
+	
+	$ctrl.pesquisarinterno = () => {
+		$ctrl.clientesinternos = InicialService.buscaratividadesinternas($ctrl.statusinterno, configurarregistros);
+	}
+	
+	$ctrl.abrirmodalalocacaointerna = (ev, atividade) => {
+		
+		var modalInstance = $uibModal.open({
+			animation : $ctrl.animationsEnabled,
+			ariaLabelledBy : 'modal-title',
+			ariaDescribedBy : 'modal-body',
+			templateUrl : '/static/modal/modalAlocacaoInterna.html?bust=' + Math.random().toString(36).slice(2),
+			controller : 'ModalAlocacaoInternaController',
+			controllerAs : '$ctrl',
+			//size : 'lg'
+			windowClass: 'app-modal-window',
+			resolve : {
+		    	  atividade: atividade
+			}
+		});
+			
+		modalInstance.result.then(function(data) {
+			InicialService.buscaratividadesprofissionalporatividade(atividade.id, function (data){
+				atividade.atividade_profissional = data;
+				configurarregistros($ctrl.clientesinternos);
+			});
+		}, function() {
+			// $log.info('Modal dismissed at: ' + new Date());
+		});
+		
+	}
+	
+}).controller('ModalAlocacaoInternaController', function (atividade, InicialService, CommonsService, TipoAlocacaoService, $uibModalInstance, $scope, $window) {
+	
+	var $ctrl = this;
+	$ctrl.atividade = atividade;
+	
+	$scope.today = function() {
+		$ctrl.data =new Date();
+	};
+	$scope.today();
+
+	$scope.clear = function() {
+		$scope.dt = null;
+	};
+
+	$ctrl.abrir = function() {
+		$ctrl.aberto = true;
+	};
+	
+	$ctrl.cancelar= function (){
+		$uibModalInstance.close();
+	}
+	
+	$ctrl.salvar = () => {
+		
+		if (!$ctrl.data) {
+			alert('Informe data.')
+			return;
+		}
+		
+		if (!$ctrl.hora_inicio){
+			alert('Informe hora inicio.');
+			return;
+		}
+		
+		if(!$ctrl.hora_fim) {
+			alert('Informe hora fim.');
+			return;
+		}
+		
+		var hora_inicio = $ctrl.hora_inicio.split(':');
+		var hora_fim = $ctrl.hora_fim.split(':');
+		
+		hora_inicio = new Date(0, 0, 0, hora_inicio[0], hora_inicio[1], 0, 0);
+		hora_fim = new Date(0,0,0,hora_fim[0], hora_fim[1], 0,0).getTime();
+		
+		if (hora_inicio >= hora_fim) {
+			alert('Hora inicio deve ser menor que hora fim.');
+			return;
+		}
+		
+		var milisegundos = hora_fim - hora_inicio
+		
+		if ($ctrl.data instanceof Date){
+			$ctrl.data = CommonsService.dataparastring($ctrl.data);
+		}
+		
+		if (atividade.atividade_profissional) {
+			var data = {
+				atividade_profissional: atividade.atividade_profissional,
+				horas_alocadas_milisegundos : milisegundos,
+				hora_inicio: $ctrl.hora_inicio,
+				hora_fim: $ctrl.hora_fim,
+				data_informada: $ctrl.data,
+			}
+		} else {
+			var data = {
+				atividade: atividade,
+				horas_alocadas_milisegundos : milisegundos,
+				hora_inicio: $ctrl.hora_inicio,
+				hora_fim: $ctrl.hora_fim,
+				data_informada: $ctrl.data,
+			}	
+		}
+		
+		
+		
+		InicialService.salvaralocacaointerna(data, function (){
+			$uibModalInstance.close(data);
+		});
+		
 	}
 	
 }).controller('ModalAlocacaoController', function (atividade, InicialService, CommonsService, TipoAlocacaoService, $uibModalInstance, $scope, $window) {

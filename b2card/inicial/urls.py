@@ -26,7 +26,10 @@ urlpatterns = [
     url(r'^api/alocacao/$', views.alocar_horas),
     url(r'^api/ultimaalocacao/(?P<atividade_profissional_id>[0-9]+)/$', views.buscar_ultima_alocacao),
     url(r'^api/atividadesprofissional/(?P<atividade_id>[0-9]+)/$', views.buscar_atividade_profissional_por_atividade),
-    url(r'^api/atividadesprofissional/demanda/(?P<demanda_id>[0-9]+)', views.buscar_atividades_demanda)
+    url(r'^api/atividadesprofissional/demanda/(?P<demanda_id>[0-9]+)/$', views.buscar_atividades_demanda),
+    url(r'^api/atividadesinternas/$', views.buscar_atividades_internas),
+    url(r'^api/atividadesinternas/demanda/(?P<demanda_id>[0-9]+)/$', views.buscar_atividades_demanda_interna),
+    url(r'^api/alocacaointerna/$', views.alocar_horas_internas)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

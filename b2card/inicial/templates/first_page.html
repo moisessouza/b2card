@@ -56,99 +56,201 @@
 
 <div id="first_page" class="ng-hide" ng-controller="InicialController as $ctrl" ng-show="$ctrl.show">
 
-	<div class="panel panel-default" style="margin-bottom: 5px; margin-top: 0px;">
-		<div class="panel-heading" style="height: 22px; padding:2px; font-style: italic;">
-			<div class="col-sm-1" style="width: 1px;"></div>
-			<div class="col-sm-5"><strong>Demanda</strong></div>
-			<div class="col-sm-2"><strong>Código no cliente</strong></div>
-			<div class="col-sm-2">
-				<div style="float:left;">
-	        		<strong>Status</strong>
-	        	</div>
-	        	<button class="btn btn-primary button-heading" ng-click="$ctrl.abrirmodalstatus()" style="margin-left:5px; float:left;">
-					<span class="glyphicon glyphicon-collapse-down"></span>
-				</button>
-				<div style="position: relative;">
-					<div class="modal-status" ng-show="$ctrl.showmodal">
-						<div>
-							<button class="btn btn-primary button-heading" ng-click="$ctrl.abrirmodalstatus()" style="margin-right:2px; float:right;">
-								<span class="glyphicon glyphicon-remove"></span>
-							</button>
-						</div>
-						<div>
-							<input type="checkbox" ng-model="$ctrl.status['O']" ng-click="$ctrl.pesquisar();"> Em orçamentação
-						</div>
-						<div>
-							<input type="checkbox" ng-model="$ctrl.status['A']" ng-click="$ctrl.pesquisar();"> Aguardando aprovação
-						</div>
-						<div>
-							<input type="checkbox" ng-model="$ctrl.status['N']" ng-click="$ctrl.pesquisar();"> Não aprovada
-						</div>
-						<div>
-							<input type="checkbox" ng-model="$ctrl.status['C']" ng-click="$ctrl.pesquisar();"> Cancelada
-						</div>
-						<div>
-							<input type="checkbox" ng-model="$ctrl.status['H']" ng-click="$ctrl.pesquisar();"> Em homologação
-						</div>
-						<div>
-							<input type="checkbox" ng-model="$ctrl.status['I']" ng-click="$ctrl.pesquisar();"> Implantada
-						</div>
-						<div>
-							<input type="checkbox" ng-model="$ctrl.status['D']" ng-click="$ctrl.pesquisar();"> Em desenvolvimento
+	<ul class="nav nav-tabs">
+		<li class="active"><a data-toggle="tab" href="#atividadesalocadas">Atividades alocadas</a></li>
+		<li><a data-toggle="tab" href="#atividadesinternas">Atividades internas</a></li>
+	</ul>
+
+	<div class="tab-content">
+		<div id="atividadesalocadas" class="tab-pane in active">
+			<div class="panel panel-default" style="margin-bottom: 5px; margin-top: 0px;">
+				<div class="panel-heading" style="height: 22px; padding:2px; font-style: italic;">
+					<div class="col-sm-1" style="width: 1px;"></div>
+					<div class="col-sm-5"><strong>Demanda</strong></div>
+					<div class="col-sm-2"><strong>Código no cliente</strong></div>
+					<div class="col-sm-2">
+						<div style="float:left;">
+			        		<strong>Status</strong>
+			        	</div>
+			        	<button class="btn btn-primary button-heading" ng-click="$ctrl.abrirmodalstatus()" style="margin-left:5px; float:left;">
+							<span class="glyphicon glyphicon-collapse-down"></span>
+						</button>
+						<div style="position: relative;">
+							<div class="modal-status" ng-show="$ctrl.showmodal">
+								<div>
+									<button class="btn btn-primary button-heading" ng-click="$ctrl.abrirmodalstatus()" style="margin-right:2px; float:right;">
+										<span class="glyphicon glyphicon-remove"></span>
+									</button>
+								</div>
+								<div>
+									<input type="checkbox" ng-model="$ctrl.status['O']" ng-click="$ctrl.pesquisar();"> Em orçamentação
+								</div>
+								<div>
+									<input type="checkbox" ng-model="$ctrl.status['A']" ng-click="$ctrl.pesquisar();"> Aguardando aprovação
+								</div>
+								<div>
+									<input type="checkbox" ng-model="$ctrl.status['N']" ng-click="$ctrl.pesquisar();"> Não aprovada
+								</div>
+								<div>
+									<input type="checkbox" ng-model="$ctrl.status['C']" ng-click="$ctrl.pesquisar();"> Cancelada
+								</div>
+								<div>
+									<input type="checkbox" ng-model="$ctrl.status['H']" ng-click="$ctrl.pesquisar();"> Em homologação
+								</div>
+								<div>
+									<input type="checkbox" ng-model="$ctrl.status['I']" ng-click="$ctrl.pesquisar();"> Implantada
+								</div>
+								<div>
+									<input type="checkbox" ng-model="$ctrl.status['D']" ng-click="$ctrl.pesquisar();"> Em desenvolvimento
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+		
+			<fieldset ng-repeat="cliente in $ctrl.clientes">
+				<legend>{{cliente.nome_fantasia}}</legend>
+				<div class="panel panel-default" style="margin-bottom: 0px; margin-top: 0px;" ng-repeat="demanda in cliente.demandas">
+					<div class="panel-heading" style="height: 22px; padding:2px">
+						<div class="col-sm-1" style="width: 1px;">
+							<button type="button" class="btn btn-sm btn-default expandir" ng-click="$ctrl.expandir(demanda);">{{!$ctrl.demandamap[demanda.$$hashKey].expandir ? '+' : '-'}}</button>
+						</div>
+						<div class="col-sm-5">{{demanda.id}} - {{demanda.nome_demanda}}</div>
+						<div class="col-sm-2">{{demanda.codigo_demanda}}</div>
+						<div class="col-sm-2">
+							{{demanda.status_demanda == 'O' ? 'Em orçamentação' : ''}}
+							{{demanda.status_demanda == 'A' ? 'Aguardando aprovação' : ''}}
+							{{demanda.status_demanda == 'N' ? 'Não aprovada' : ''}}
+							{{demanda.status_demanda == 'C' ? 'Cancelada' : ''}}
+							{{demanda.status_demanda == 'H' ? 'Em homologação' : ''}}
+							{{demanda.status_demanda == 'I' ? 'Implantada' : ''}}
+							{{demanda.status_demanda == 'D' ? 'Em desenvolvimento' : ''}}
+						</div>
+					</div>
+					<div class="panel-body" style="margin: 0 0 0 50px; padding: 0 0 0 0;" ng-show="$ctrl.demandamap[demanda.$$hashKey].expandir">
+						<table class="table ">
+							<thead>
+								<tr style="font-style: italic;">
+									<td><b>Fase</b></td>
+									<td><b>Atividade</b></td>
+									<td><b>Data inicio</b></td>
+									<td><b>Data fim</b></td>
+									<td><b>Horas prev.</b></td>
+									<td><b>Horas aloc.</b></td>
+									<td style="text-align: center;"><b>%</b></td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="fase_atividade in demanda.fase_atividades">
+									<td style="width: 1%"><div style="width: 150px">{{fase_atividade.fase.descricao}}</div></td>
+									<td><div class="atividade" ng-repeat="atividade in fase_atividade.atividades" ng-click="$ctrl.abrirmodalalocacao($event, atividade);">{{atividade.descricao}}</div></td>
+									<td style="width: 1%"><div class="atividade" style="width: 69px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.data_inicio}}</div></td>
+									<td style="width: 1%"><div class="atividade" style="width: 69px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.data_fim}}</div></td>
+									<td style="width: 1%"><div class="atividade" style="width: 93px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.atividade_profissional.quantidade_horas}}</div></td>
+									<td style="width: 1%"><div class="atividade" style="width: 94px; text-align: center;" ng-class="{atividade_atrasada: atividade.atividade_profissional.atrasado}" ng-repeat="atividade in fase_atividade.atividades">{{atividade.atividade_profissional.horas_alocadas}}</div></td>
+									<td style="width: 1%"><div class="atividade" style="width: 40px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.atividade_profissional.percentual_concluido}}</div></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+		<div id="atividadesinternas" class="tab-pane">
+			<div class="panel panel-default" style="margin-bottom: 5px; margin-top: 0px;">
+				<div class="panel-heading" style="height: 22px; padding:2px; font-style: italic;">
+					<div class="col-sm-1" style="width: 1px;"></div>
+					<div class="col-sm-5"><strong>Demanda</strong></div>
+					<div class="col-sm-2"><strong>Código no cliente</strong></div>
+					<div class="col-sm-2">
+						<div style="float:left;">
+			        		<strong>Status</strong>
+			        	</div>
+			        	<button class="btn btn-primary button-heading" ng-click="$ctrl.abrirmodalstatus()" style="margin-left:5px; float:left;">
+							<span class="glyphicon glyphicon-collapse-down"></span>
+						</button>
+						<div style="position: relative;">
+							<div class="modal-status" ng-show="$ctrl.showmodal">
+								<div>
+									<button class="btn btn-primary button-heading" ng-click="$ctrl.abrirmodalstatus()" style="margin-right:2px; float:right;">
+										<span class="glyphicon glyphicon-remove"></span>
+									</button>
+								</div>
+								<div>
+									<input type="checkbox" ng-model="$ctrl.statusinterno['O']" ng-click="$ctrl.pesquisarinterno();"> Em orçamentação
+								</div>
+								<div>
+									<input type="checkbox" ng-model="$ctrl.statusinterno['A']" ng-click="$ctrl.pesquisarinterno();"> Aguardando aprovação
+								</div>
+								<div>
+									<input type="checkbox" ng-model="$ctrl.statusinterno['N']" ng-click="$ctrl.pesquisarinterno();"> Não aprovada
+								</div>
+								<div>
+									<input type="checkbox" ng-model="$ctrl.statusinterno['C']" ng-click="$ctrl.pesquisarinterno();"> Cancelada
+								</div>
+								<div>
+									<input type="checkbox" ng-model="$ctrl.statusinterno['H']" ng-click="$ctrl.pesquisarinterno();"> Em homologação
+								</div>
+								<div>
+									<input type="checkbox" ng-model="$ctrl.statusinterno['I']" ng-click="$ctrl.pesquisarinterno();"> Implantada
+								</div>
+								<div>
+									<input type="checkbox" ng-model="$ctrl.statusinterno['D']" ng-click="$ctrl.pesquisarinterno();"> Em desenvolvimento
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+			<fieldset ng-repeat="cliente in $ctrl.clientesinternos">
+				<legend>{{cliente.nome_fantasia}}</legend>
+				<div class="panel panel-default" style="margin-bottom: 0px; margin-top: 0px;" ng-repeat="demanda in cliente.demandas">
+					<div class="panel-heading" style="height: 22px; padding:2px">
+						<div class="col-sm-1" style="width: 1px;">
+							<button type="button" class="btn btn-sm btn-default expandir" ng-click="$ctrl.expandirdemandainterna(demanda);">{{!$ctrl.demandamap[demanda.$$hashKey].expandir ? '+' : '-'}}</button>
+						</div>
+						<div class="col-sm-5">{{demanda.id}} - {{demanda.nome_demanda}}</div>
+						<div class="col-sm-2">{{demanda.codigo_demanda}}</div>
+						<div class="col-sm-2">
+							{{demanda.status_demanda == 'O' ? 'Em orçamentação' : ''}}
+							{{demanda.status_demanda == 'A' ? 'Aguardando aprovação' : ''}}
+							{{demanda.status_demanda == 'N' ? 'Não aprovada' : ''}}
+							{{demanda.status_demanda == 'C' ? 'Cancelada' : ''}}
+							{{demanda.status_demanda == 'H' ? 'Em homologação' : ''}}
+							{{demanda.status_demanda == 'I' ? 'Implantada' : ''}}
+							{{demanda.status_demanda == 'D' ? 'Em desenvolvimento' : ''}}
+						</div>
+					</div>
+					<div class="panel-body" style="margin: 0 0 0 50px; padding: 0 0 0 0;" ng-show="$ctrl.demandamap[demanda.$$hashKey].expandir">
+						<table class="table ">
+							<thead>
+								<tr style="font-style: italic;">
+									<td><b>Fase</b></td>
+									<td><b>Atividade</b></td>
+									<td><b>Data inicio</b></td>
+									<td><b>Data fim</b></td>
+									<td><b>Horas aloc.</b></td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="fase_atividade in demanda.fase_atividades">
+									<td style="width: 1%"><div style="width: 150px">{{fase_atividade.fase.descricao}}</div></td>
+									<td><div class="atividade" ng-repeat="atividade in fase_atividade.atividades" ng-click="$ctrl.abrirmodalalocacaointerna($event, atividade);">{{atividade.descricao}}</div></td>
+									<td style="width: 1%"><div class="atividade" style="width: 69px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.data_inicio}}</div></td>
+									<td style="width: 1%"><div class="atividade" style="width: 69px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.data_fim}}</div></td>
+									<td style="width: 1%"><div class="atividade" style="width: 94px; text-align: center;" ng-class="{atividade_atrasada: atividade.atividade_profissional.atrasado}" ng-repeat="atividade in fase_atividade.atividades">{{atividade.atividade_profissional.horas_alocadas}}</div></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</fieldset>
 		</div>
 	</div>
 
-	<fieldset ng-repeat="cliente in $ctrl.clientes">
-		<legend>{{cliente.nome_fantasia}}</legend>
-		<div class="panel panel-default" style="margin-bottom: 0px; margin-top: 0px;" ng-repeat="demanda in cliente.demandas">
-				<div class="panel-heading" style="height: 22px; padding:2px">
-					<div class="col-sm-1" style="width: 1px;">
-						<button type="button" class="btn btn-sm btn-default expandir" ng-click="$ctrl.expandir(demanda);">{{!$ctrl.demandamap[demanda.$$hashKey].expandir ? '+' : '-'}}</button>
-					</div>
-					<div class="col-sm-5">{{demanda.id}} - {{demanda.nome_demanda}}</div>
-					<div class="col-sm-2">{{demanda.codigo_demanda}}</div>
-					<div class="col-sm-2">
-						{{demanda.status_demanda == 'O' ? 'Em orçamentação' : ''}}
-						{{demanda.status_demanda == 'A' ? 'Aguardando aprovação' : ''}}
-						{{demanda.status_demanda == 'N' ? 'Não aprovada' : ''}}
-						{{demanda.status_demanda == 'C' ? 'Cancelada' : ''}}
-						{{demanda.status_demanda == 'H' ? 'Em homologação' : ''}}
-						{{demanda.status_demanda == 'I' ? 'Implantada' : ''}}
-						{{demanda.status_demanda == 'D' ? 'Em desenvolvimento' : ''}}
-					</div>
-				</div>
-				<div class="panel-body" style="margin: 0 0 0 50px; padding: 0 0 0 0;" ng-show="$ctrl.demandamap[demanda.$$hashKey].expandir">
-					<table class="table ">
-						<thead>
-							<tr style="font-style: italic;">
-								<td><b>Fase</b></td>
-								<td><b>Atividade</b></td>
-								<td><b>Data inicio</b></td>
-								<td><b>Data fim</b></td>
-								<td><b>Horas prev.</b></td>
-								<td><b>Horas aloc.</b></td>
-								<td style="text-align: center;"><b>%</b></td>
-							</tr>
-						</thead>
-						<tbody>
-							<tr ng-repeat="fase_atividade in demanda.fase_atividades">
-								<td style="width: 1%"><div style="width: 150px">{{fase_atividade.fase.descricao}}</div></td>
-								<td><div class="atividade" ng-repeat="atividade in fase_atividade.atividades" ng-click="$ctrl.abrirmodalalocacao($event, atividade);">{{atividade.descricao}}</div></td>
-								<td style="width: 1%"><div class="atividade" style="width: 69px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.data_inicio}}</div></td>
-								<td style="width: 1%"><div class="atividade" style="width: 69px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.data_fim}}</div></td>
-								<td style="width: 1%"><div class="atividade" style="width: 93px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.atividade_profissional.quantidade_horas}}</div></td>
-								<td style="width: 1%"><div class="atividade" style="width: 94px; text-align: center;" ng-class="{atividade_atrasada: atividade.atividade_profissional.atrasado}" ng-repeat="atividade in fase_atividade.atividades">{{atividade.atividade_profissional.horas_alocadas}}</div></td>
-								<td style="width: 1%"><div class="atividade" style="width: 40px; text-align: center;" ng-repeat="atividade in fase_atividade.atividades">{{atividade.atividade_profissional.percentual_concluido}}</div></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-		</div>
-	</fieldset>
+	
 
 </div>
 

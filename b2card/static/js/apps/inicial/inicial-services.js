@@ -35,6 +35,20 @@ inicialservices.service('InicialService', function($resource){
 		buscaratividadesprofissionalpordemandaid: function (demanda_id, callback) {
 			var AtividadeProfissional = $resource(BASE_URL + 'inicial/api/atividadesprofissional/demanda/:id/');
 			return AtividadeProfissional.query({id:demanda_id}, callback);
+		},
+		buscaratividadesinternas: function (argumento, callback){
+			var Clientes = $resource(BASE_URL + 'inicial/api/atividadesinternas/', {}, {
+				'set':{method:'POST', isArray: true}
+			});
+			return Clientes.set({}, argumento, callback);
+		},
+		buscaratividadesdemandainterna: function(demanda_id, callback) {
+			var AtividadeProfissional = $resource(BASE_URL + 'inicial/api/atividadesinternas/demanda/:id/');
+			return AtividadeProfissional.query({id:demanda_id}, callback);
+		},
+		salvaralocacaointerna: function(data, callback){
+			var AlocacaoHoras = $resource(BASE_URL + 'inicial/api/alocacaointerna/');
+			return AlocacaoHoras.save({}, data, callback);
 		}
 	}
 });

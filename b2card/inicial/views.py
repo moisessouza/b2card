@@ -8,11 +8,12 @@ from demandas.serializers import DemandaSerializer, AtividadeSerializer,\
     AlocacaoHorasSerializer, DemandaInicialSerializer,\
     FaseAtividadeInicialSerializer, AtividadeProfissionalInicialSerializer
 from rest_framework.response import Response
-from cadastros.models import PessoaJuridica, TipoAlocacao
+from cadastros.models import PessoaJuridica, TipoAlocacao, PessoaFisica
 from cadastros.serializers_pessoa import PessoaJuridicaSerializer,\
     PessoaJuridicaComPessoaSerializer
 from utils.utils import formatar_data, converter_string_para_data
 import datetime
+from django.db.models import Q
 
 # Create your views here.
 def index (request):
@@ -31,21 +32,54 @@ def buscar_atividades_usuario(request, format=None):
                 list_status.append(k)
 
     for c in clientes:
-
-        cliente_dict = PessoaJuridicaComPessoaSerializer(c).data
+        
         if list_status:
-            demandas = Demanda.objects.filter(status_demanda__in=list_status).filter(cliente = c, faseatividade__atividade__atividadeprofissional__pessoa_fisica__prestador__usuario__id=request.user.id).distinct();
+            demandas = Demanda.objects.filter(status_demanda__in=list_status).filter(Q(tipo_demanda='E') | Q(tipo_demanda=None), cliente = c, faseatividade__atividade__atividadeprofissional__pessoa_fisica__prestador__usuario__id=request.user.id).distinct();
         else:
-            demandas = Demanda.objects.filter(cliente = c, faseatividade__atividade__atividadeprofissional__pessoa_fisica__prestador__usuario__id=request.user.id).distinct();
+            demandas = Demanda.objects.filter(Q(tipo_demanda='E') | Q(tipo_demanda=None), cliente = c, faseatividade__atividade__atividadeprofissional__pessoa_fisica__prestador__usuario__id=request.user.id).distinct();
         demanda_list = []
 
         for i in demandas:
             demanda_dict = DemandaInicialSerializer(i).data
             demanda_list.append(demanda_dict)
-            
-        cliente_dict['demandas'] = demanda_list
-        cliente_list.append(cliente_dict)
         
+        if demanda_list:
+            cliente_dict = PessoaJuridicaComPessoaSerializer(c).data    
+            cliente_dict['demandas'] = demanda_list
+            cliente_list.append(cliente_dict)
+        
+    return Response(cliente_list)
+
+@api_view(['POST'])
+def buscar_atividades_internas(request, format=None):
+    
+    clientes = PessoaJuridica.objects.all()
+    cliente_list = [];
+    
+    list_status = []
+    if request.data:
+        for k in request.data:
+            if request.data[k]:
+                list_status.append(k)
+    
+    for c in clientes:
+        
+        if list_status:
+            demandas = Demanda.objects.filter(status_demanda__in=list_status).filter(tipo_demanda='I', cliente = c).distinct();
+        else:
+            demandas = Demanda.objects.filter(tipo_demanda='I', cliente = c).distinct();
+    
+        demanda_list = []
+        
+        for i in demandas:
+            demanda_dict = DemandaInicialSerializer(i).data
+            demanda_list.append(demanda_dict)
+        
+        if demanda_list:
+            cliente_dict = PessoaJuridicaComPessoaSerializer(c).data    
+            cliente_dict['demandas'] = demanda_list
+            cliente_list.append(cliente_dict)
+    
     return Response(cliente_list)
 
 @api_view(['GET'])
@@ -77,6 +111,74 @@ def buscar_atividades_demanda(request, demanda_id, format=None):
             
     return Response(fase_atividade_list)  
 
+@api_view(['GET'])
+def buscar_atividades_demanda_interna(request, demanda_id, format=None):
+    
+    fase_atividades = FaseAtividade.objects.filter(demanda__id=demanda_id)
+    fase_atividade_list = []
+    
+    for f in fase_atividades:
+        fase_atividade_dict = FaseAtividadeInicialSerializer(f).data
+        fase_atividade_list.append(fase_atividade_dict)
+        
+        atividades = Atividade.objects.filter(fase_atividade=f).distinct()
+        atividade_list = [];
+        
+        for a in atividades:
+            
+            atividade_dict = AtividadeSerializer(a).data
+            atividade_dict['data_inicio'] = formatar_data(a.data_inicio)
+            atividade_dict['data_fim'] = formatar_data(a.data_fim)
+            atividade_list.append(atividade_dict)
+            
+            atividade_profissional =  AtividadeProfissional.objects.filter(atividade = a, pessoa_fisica__prestador__usuario__id=request.user.id)[:1]
+            if atividade_profissional:
+                atividade_profissional_dict = AtividadeProfissionalInicialSerializer(atividade_profissional[0]).data
+                atividade_dict['atividade_profissional'] = atividade_profissional_dict
+            
+        fase_atividade_dict['atividades']=atividade_list
+    
+    return Response(fase_atividade_list)  
+
+@api_view(['POST'])
+def alocar_horas_internas(request, format=None):
+    
+    atividade_profissional = None
+    if 'atividade_profissional' in request.data:
+        atividade_profissional = AtividadeProfissional.objects.get(pk=request.data['atividade_profissional']['id'])
+        del request.data['atividade_profissional']
+        
+    if 'atividade' in request.data:
+        if atividade_profissional is None:
+            atividade = Atividade.objects.get(pk=request.data['atividade']['id'])
+            atividade_profissional = AtividadeProfissional()
+            atividade_profissional.atividade = atividade
+            pessoa_fisica = PessoaFisica.objects.filter(prestador__usuario__id=request.user.id)[0]
+            atividade_profissional.pessoa_fisica = pessoa_fisica
+            atividade_profissional.quantidade_horas = 0
+            atividade_profissional.percentual_calculado = 0
+            atividade_profissional.percentual_concluido = 0
+            atividade_profissional.save()
+        del request.data['atividade']
+    
+    alocacao_horas = AlocacaoHoras(**request.data)
+    alocacao_horas.atividade_profissional = atividade_profissional
+    alocacao_horas.data_informada = converter_string_para_data(request.data['data_informada'])
+    alocacao_horas.data_alocacao = datetime.datetime.now()
+    alocacao_horas.percentual_concluido = 0
+    alocacao_horas.save();
+    
+    horas_alocadas_milisegundos = request.data['horas_alocadas_milisegundos']
+    
+    if (atividade_profissional.horas_alocadas_milisegundos):
+        atividade_profissional.horas_alocadas_milisegundos += horas_alocadas_milisegundos
+    else:
+        atividade_profissional.horas_alocadas_milisegundos = horas_alocadas_milisegundos
+        
+    atividade_profissional.save();
+
+    return Response(AtividadeProfissionalSerializer(atividade_profissional).data)
+        
 @api_view(['POST'])
 def alocar_horas(request, format=None):
     
@@ -84,6 +186,8 @@ def alocar_horas(request, format=None):
     if 'atividade_profissional' in request.data:
         atividade_profissional = AtividadeProfissional.objects.get(pk=request.data['atividade_profissional']['id'])
         del request.data['atividade_profissional']
+    
+    
     
     tipo_alocacao = None
     if 'tipo_alocacao' in request.data:
