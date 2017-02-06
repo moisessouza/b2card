@@ -10,7 +10,8 @@ from cadastros.models import CentroCusto, ValorHora, UnidadeAdministrativa, \
     PessoaFisica, PessoaJuridica, NaturezaDemanda
 from demandas.models import Demanda, Proposta, Observacao, Ocorrencia, \
     Orcamento, ItemFase, Fase, Atividade, OrcamentoFase, \
-    OrcamentoAtividade, PerfilAtividade, AtividadeProfissional, FaseAtividade
+    OrcamentoAtividade, PerfilAtividade, AtividadeProfissional, FaseAtividade,\
+    AlocacaoHoras
 from demandas.serializers import DemandaSerializer, PropostaSerializer, \
     ObservacaoSerializer, OcorrenciaSerializer, OrcamentoSerializer, \
     ItemFaseSerializer, AtividadeSerializer, \
@@ -549,3 +550,14 @@ def buscar_lista_por_parametro(request, format=None):
     }
     
     return Response(dict)
+
+@api_view(['GET'])
+def atividade_profissional_possui_alocacao(request, atividade_profissional_id, format=None):
+    
+    count = AlocacaoHoras.objects.filter(atividade_profissional__id=atividade_profissional_id).count()
+    
+    context = {
+        'possui': (count > 0)
+    }
+    
+    return Response(context)

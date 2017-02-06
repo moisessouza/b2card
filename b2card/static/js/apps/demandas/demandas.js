@@ -537,7 +537,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		
 	}
 	
-}).controller('AtividadeController', function($rootScope, ValorHoraService, FaseService, CommonsService, PessoaService, share){
+}).controller('AtividadeController', function($rootScope, ValorHoraService, DemandaService, FaseService, CommonsService, PessoaService, share){
 	var $ctrl = this;
 	$ctrl.share = share;
 	
@@ -862,7 +862,16 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 				}
 			}
 			
-			if (atividadeprofissional){
+			if (atividadeprofissional.id) {
+				DemandaService.verificarseatividadeprofissionalpossuialocacao(atividadeprofissional.id, function (data){
+					if (data.possui) {
+						$ctrl.modalatividademap[atividade.$$hashKey][profissional.id] = true;
+						alert('Não é permitido remover este profissional da atividade, pois ele já alocou horas.')
+					} else {
+						atividadeprofissional.remover=true
+					}	
+				});
+			} else if (atividadeprofissional){
 				atividadeprofissional.remover=true
 			}
 			

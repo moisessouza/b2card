@@ -39,6 +39,10 @@ demandasservices.service('DemandaService', function($resource){
 		buscarcentroresultadoshora: function(demanda_id, callback){
 			var Demandas = $resource(BASE_URL + 'demandas/api/:id/centroresultadoshora/');
 			return Demandas.query({id:demanda_id}, callback);
+		},
+		verificarseatividadeprofissionalpossuialocacao: function(atividade_profissional_id, callback) {
+			var AlocacaoHoras = $resource(BASE_URL + 'demandas/api/profissionalatividade/:id/possuialocacao/');
+			return AlocacaoHoras.get({id: atividade_profissional_id}, callback);
 		}
 	}
 });
