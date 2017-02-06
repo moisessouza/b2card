@@ -9,6 +9,7 @@ gestor.controller('GestorController', function (GestorService, CommonsService, $
 	var configurarregistros = data => {
 		for  (let cliente of data){
 			for (let demanda of cliente.demandas){
+				demanda.id = CommonsService.pad(demanda.id, 5);
 				if (demanda.fase_atividades){
 					for (let fase_atividade of demanda.fase_atividades) {
 						if (fase_atividade.atividades){
