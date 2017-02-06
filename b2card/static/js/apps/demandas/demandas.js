@@ -552,6 +552,27 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		}
 	}
 	
+	$ctrl.removeratividade = function (i, callback){
+		if (i.id) {
+			DemandaService.verificarseatividadepossuialocacao(i.id, function (data){
+				if (data.possui) {
+					alert('Atividade não pode ser removida pois já possui apropriação.')
+					return;
+				} else {
+					i.remover = true;		
+					if (callback){
+						callback();
+					}		
+				}
+			});
+		} else {
+			i.remover = true;		
+			if (callback){
+				callback();
+			}
+		}
+	}
+	
 	$ctrl.adicionarfase = function (){
 		
 		if (!$ctrl.share.demanda.fase_atividades){

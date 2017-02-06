@@ -561,3 +561,14 @@ def atividade_profissional_possui_alocacao(request, atividade_profissional_id, f
     }
     
     return Response(context)
+
+@api_view(['GET'])
+def atividade_possui_alocacao(request, atividade_id, format=None):
+    
+    count = AlocacaoHoras.objects.filter(atividade_profissional__atividade__id=atividade_id).count()
+    
+    context = {
+        'possui': (count > 0)
+    }
+    
+    return Response(context)
