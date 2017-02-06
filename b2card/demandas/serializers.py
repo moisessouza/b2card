@@ -17,7 +17,7 @@ from cadastros.serializers_pessoa import PessoaFisicaComPessoaSerializer,\
 class DemandaInicialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Demanda
-        fields = ('id', 'nome_demanda', 'status_demanda','codigo_demanda', 'data_inicio', 'data_fim')
+        fields = ('id', 'nome_demanda', 'status_demanda','codigo_demanda', 'percentual_concluido', 'percentual_calculado', 'data_inicio', 'data_fim')
     
 class DemandaSerializer (serializers.ModelSerializer):
     cliente = PessoaJuridicaComPessoaSerializer()

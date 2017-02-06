@@ -6,7 +6,7 @@ from cadastros.models import PessoaJuridica
 from cadastros.serializers_pessoa import PessoaJuridicaSerializer
 from utils.utils import serializarDemandaObject, serializar_fase_atividade
 from rest_framework.response import Response
-from demandas.serializers import DemandaSerializer
+from demandas.serializers import DemandaSerializer, DemandaInicialSerializer
 
 # Create your views here.
 def index(request):
@@ -36,7 +36,7 @@ def buscar_clientes_demandas(request, format=None):
         demanda_list = []
         
         for d in demandas:
-            demanda = serializarDemandaObject(d)
+            demanda = DemandaInicialSerializer(d).data
             demanda_list.append(demanda)
         
         if list_status:
@@ -46,12 +46,7 @@ def buscar_clientes_demandas(request, format=None):
             
         
         for d in demandas:
-            demanda_dict = DemandaSerializer(d).data
-            
-            fase_atividades = FaseAtividade.objects.filter(demanda = d, responsavel__prestador__usuario__id=request.user.id)
-            fase_atividade_list = serializar_fase_atividade(fase_atividades)
-            
-            demanda_dict['fase_atividades'] = fase_atividade_list
+            demanda_dict = DemandaInicialSerializer(d).data
             demanda_list.append(demanda_dict)
             
         cliente['demandas'] = demanda_list
@@ -59,3 +54,19 @@ def buscar_clientes_demandas(request, format=None):
         
         
     return Response(cliente_list)
+
+
+@api_view(['GET'])
+def buscar_atividades_demanda(request, demanda_id, format=None):
+    
+    fase_atividade_list = []
+    
+    fase_atividades = FaseAtividade.objects.filter(demanda__id = demanda_id, responsavel__prestador__usuario__id=request.user.id)
+    if fase_atividades:
+        fase_atividade_list.extend(serializar_fase_atividade(fase_atividades))
+    
+    fase_atividades = FaseAtividade.objects.filter(demanda__id = demanda_id, demanda__responsavel__prestador__usuario__id= request.user.id).exclude(id__in=[f.id for f in fase_atividades])
+    if fase_atividades:
+        fase_atividade_list.extend(serializar_fase_atividade(fase_atividades))
+    
+    return Response(fase_atividade_list)

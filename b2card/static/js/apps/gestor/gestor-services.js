@@ -19,6 +19,10 @@ gestorservices.service('GestorService', function($resource){
 				'set': {method:'POST', isArray: true}
 			});
 			return Clientes.set({}, argumento, callback);
+		},
+		buscaratividadesdemanda: function (demanda_id, callback) {
+			var Atividades = $resource(BASE_URL + 'gestor/api/atividadesdemandas/:id/');
+			return Atividades.query({id: demanda_id}, callback);
 		}
 	}
 });

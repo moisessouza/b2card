@@ -22,7 +22,8 @@ app_name='gestor'
 
 urlpatterns = [
     url(r'^index/$', views.index, name="inicio"),
-    url(r'^api/clientesdemandas/$', views.buscar_clientes_demandas)
+    url(r'^api/clientesdemandas/$', views.buscar_clientes_demandas),
+    url(r'^api/atividadesdemandas/(?P<demanda_id>[0-9]+)/$', views.buscar_atividades_demanda)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
