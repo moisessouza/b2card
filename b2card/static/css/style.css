@@ -30,7 +30,7 @@ div.buttonbar {
 	margin-top: 2em;
 }
 
-button.button-heading, a.button-heading {
+div.button-heading, button.button-heading, a.button-heading {
 	padding: 2px;
 	margin: 0;
 	position: relative;

@@ -32,7 +32,7 @@
     		border-color: black;
     		border: 1px solid #ccc;
     		padding: 5px;
-    		right: 43px
+    		left: 23px;
     	}
 		
 	</style>
@@ -85,16 +85,16 @@
 									<td style="width: 1%;">Data inicio</td>
 									<td style="width: 1%;">Data fim</td>
 									<td style="width: 1%;">
-										<div style="width: 180px">
+										<div style="width: 180px; position: relative;">
 											Profissional
-											<button class="btn btn-primary button-heading" ng-click="$ctrl.abrirmodalfuncionarios(atividade)" style="margin-right:2px; float:right;">
+											<div class="btn btn-primary button-heading" ng-click="$ctrl.abrirmodalfuncionarios(atividade)" style="margin-right:2px; float:right;">
 												<span class="glyphicon glyphicon-collapse-down"></span>
-											</button>
+											</div>
 											<div class="modal-funcionario" ng-show="$ctrl.modalatividademap[atividade.$$hashKey].ativo">
 												<div>
-													<button class="btn btn-primary button-heading" ng-click="$ctrl.fecharmodalfuncionario(atividade)" style="margin-right:2px; float:right;">
+													<div class="btn btn-primary button-heading" ng-click="$ctrl.fecharmodalfuncionario(atividade)" style="margin-right:2px; float:right;">
 														<span class="glyphicon glyphicon-remove"></span>
-													</button>
+													</div>
 												</div>
 												<div ng-repeat="f in $ctrl.share.listafuncionarios">
 													<input type="checkbox" ng-model="$ctrl.modalatividademap[atividade.$$hashKey][f.id]" ng-change="$ctrl.adicionarremoverprofissional(atividade, f)"> {{f.pessoa.nome_razao_social}}
