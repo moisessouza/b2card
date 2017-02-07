@@ -84,162 +84,219 @@
 		
 		</div>
 		<div id="orcamentocliente" class="tab-pane">
-			<form name="orcamento">
-				<div class="panel panel-primary margin-top">
-					<div class="panel-heading">Total orçamento</div>
-					<div class="panel-body">
-						<div class="row">
-							<div class="col-sm-6">
-								<div class="form-group form-group-sm">
-									<input type="text" id="total_orcamento" name="total_orcamento"
-										ng-model="$ctrl.share.demanda.orcamento.total_orcamento"
-										class="form-control" disabled="disabled" />
+			<div class="row">
+				<div class="col-sm-3">
+						<div>
+							<div>
+								<div class="cabecalho">
+									Variáveis de cálculo
 								</div>
-							</div>
-							<div class="col-sm-6">
-								<button type="button" class="btn btn-sm btn-primary"
-									ng-click="$ctrl.modalprevisaofaturamento()"
-									ng-show="$ctrl.share.demanda.orcamento.id && $ctrl.share.demanda.orcamento.total_orcamento">Previsão
-									de faturamento</button>
-							</div>
-						</div>
-					</div>
-				</div>
-	
-				<button type="button" class="btn btn-default margin"
-					ng-click="$ctrl.novafase()">Nova fase</button>
-	
-				<div class="panel panel-primary" ng-show="$ctrl.fase">
-					<div class="panel-heading">
-						<strong>{{$ctrl.fase.descricao ? $ctrl.fase.descricao :
-							'(Sem descrição)'}}</strong>
-					</div>
-					<div class="panel-body">
-						<div class="row">
-							<div class="col-sm-6 form-group form-group-sm">
-								<label for="fase_descricao">Fase</label> <input type="text"
-									id="fase_descricao" name="fase_descricao"
-									ng-model="$ctrl.fase.descricao" class="form-control" required />
-							</div>
-						</div>
-	
-						<button type="button" class="btn btn-primary margin"
-							ng-click="$ctrl.adicionaritemfase()">
-							<span class="glyphicon glyphicon-plus"></span> Adicionar valor
-							hora
-						</button>
-						<table
-							class="table table-sm table-bordered table-striped table-highlight">
-							<thead>
-								<tr class="active">
-									<th>Valor hora</th>
-									<th>Valor</th>
-									<th>Quantidade de horas</th>
-									<th>Valor final</th>
-									<th></th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr ng-repeat="itemfase in $ctrl.fase.itensfase"
-									ng-show="!itemfase.remover">
-									<td><select id="valorhora" name="valorhora"
-										ng-model="itemfase.valor_hora.id"
-										ng-change="$ctrl.changevalorhora(itemfase)"
-										class="form-control"
-										ng-options="v.id as v.descricao for v in $ctrl.share.listavalorhora">
-											<option value="">Selecione um tipo...</option>
-									</select></td>
-									<td><input type="text" id="comissao_comercial"
-										name="comissao_comercial" ng-model="itemfase.valor_selecionado"
-										maxlength="30" gb-money class="form-control" disabled /></td>
-									<td><input type="number" id="comissao_comercial"
-										name="comissao_comercial" ng-model="itemfase.quantidade_horas"
-										ng-change="$ctrl.changefasequantidadehoras(itemfase)"
-										class="form-control" /></td>
-									<td><input type="text" id="valor_faturamento"
-										name="valor_faturamento" ng-model="itemfase.valor_total"
-										maxlength="30" gb-money class="form-control" disabled /></td>
-									<td>
-										<button type="button" class="btn btn-default"
-											ng-click="$ctrl.remover(itemfase, $ctrl.calcularvalortotalorcamento)">
-											<span class="glyphicon glyphicon-trash"></span>
-										</button>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-	
-						<div class="form-group form-group-sm">
-							<label for="descricao">Valor total</label> <input type="text"
-								id="descricao" name="descricao" ng-model="$ctrl.fase.valor_total"
-								class="form-control" disabled required />
-						</div>
-	
-						<button type="button" class="btn btn-default margin"
-							ng-click="$ctrl.salvarfase()" ng-disabled="orcamento.$invalid">
-							Incluir</button>
-						<button type="button" class="btn btn-default margin"
-							ng-click="$ctrl.cancelarfase()">Cancelar</button>
-	
-					</div>
-				</div>
-	
-				<table
-					class="table table-sm table-bordered table-striped table-highlight"
-					style="text-align: center;">
-					<thead>
-						<tr class="active">
-							<th class="col-sm-2">Fase</th>
-							<th class="col-sm-12"></th>
-							<th class="col-sm-1"></th>
-							<th class="col-sm-1"></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="fase in $ctrl.share.demanda.orcamento.fases"
-							ng-show="!fase.remover">
-							<td><label>{{fase.descricao}}</label></td>
-							<td>
-								<table
-									class="table table-sm table-bordered table-striped table-highlight nested">
-									<thead>
+								<div>
+									<table class="table table-sm table-bordered">
 										<tr>
-											<th>Valor hora</th>
-											<th>Valor</th>
-											<th>Quantidade</th>
-											<th>Valor total</th>
+											<td>
+												% Margem de lucro
+											</td>
+											<td>
+												<input type="text"/>
+											</td>
 										</tr>
-									</thead>
-									<tbody>
-										<tr ng-repeat="itemfase in fase.itensfase"
-											ng-show="!itemfase.remover">
-											<td>{{itemfase.valor_hora.descricao}}</td>
-											<td>{{itemfase.valor_selecionado}}</td>
-											<td>{{itemfase.quantidade_horas}}</td>
-											<td>{{itemfase.valor_total}}</td>
+										<tr>
+											<td>
+												% Lucro desejado
+											</td>
+											<td>
+												<input type="text"/>
+											</td>
 										</tr>
-									</tbody>
-								</table>
-								<div class="form-group">
-									<label>Valor final: {{fase.valor_total}}</label>
+										<tr>
+											<td>
+												Despesas extras
+											</td>
+											<td>
+												<input type="text"/>
+											</td>
+										</tr>
+									</table>
 								</div>
-							</td>
-							<td>
-								<button type="button" class="btn btn-default"
-									ng-click="$ctrl.editarfase(fase)">
-									<span class="glyphicon glyphicon-edit"></span>
-								</button>
-							</td>
-							<td>
-								<button type="button" class="btn btn-default"
-									ng-click="$ctrl.remover(fase, $ctrl.calcularvalortotalorcamento)">
-									<span class="glyphicon glyphicon-trash"></span>
-								</button>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</form>
+							</div>
+						</div>
+						<div>
+							<div class="cabecalho">
+								Simulações
+							</div>
+							<div>
+								<table class="table table-sm table-bordered">
+									<tr>
+										<td>
+											Valor hora cliente
+										</td>
+										<td>
+											<input type="text"/>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											Horas projetadas
+										</td>
+										<td>
+											<input type="text"/>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div>
+							<table class="table table-sm table-bordered">
+								<thead>
+									<tr>
+										<td>
+										</td>
+										<td>
+											Horas
+										</td>
+										<td>
+											Valor
+										</td>
+										<td>
+											% Lucro
+										</td>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Desejado</td>
+										<td>H1</td>
+										<td>V1</td>
+										<td>P1</td>
+									</tr>
+									<tr>
+										<td>Projetado</td>
+										<td>H2</td>
+										<td>V2</td>
+										<td>P2</td>
+									</tr>
+									<tr>
+										<td>Proposto</td>
+										<td>H3</td>
+										<td>V3</td>
+										<td>P3</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+				</div>
+				<div class="col-sm-9">
+					<table class="table table-sm table-bordered" style="margin-top: 5px;">
+						<thead>
+							<tr>
+								<td>
+									Fase
+								</td>
+								<td>
+									Perfil
+								</td>
+								<td>
+									Horas
+								</td>
+								<td>
+									Dias(Fase)
+								</td>
+								<td>
+									Valor(Fase)
+								</td>
+								
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									TSD
+								</td>
+								<td>
+									<div>
+										ANALISTA
+									</div>
+									<div>
+										CONSULTOR
+									</div>
+								</td>
+								<td>
+									<div>
+										40
+									</div>
+								</td>
+								<td>
+									<div>
+										10
+									</div>
+								</td>
+								<td>
+									<div>
+										400
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									TSD
+								</td>
+								<td>
+									<div>
+										ANALISTA
+									</div>
+									<div>
+										CONSULTOR
+									</div>
+								</td>
+								<td>
+									<div>
+										40
+									</div>
+								</td>
+								<td>
+									<div>
+										10
+									</div>
+								</td>
+								<td>
+									<div>
+										400
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									TSD
+								</td>
+								<td>
+									<div>
+										ANALISTA
+									</div>
+									<div>
+										CONSULTOR
+									</div>
+								</td>
+								<td>
+									<div>
+										40
+									</div>
+								</td>
+								<td>
+									<div>
+										10
+									</div>
+								</td>
+								<td>
+									<div>
+										400
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
