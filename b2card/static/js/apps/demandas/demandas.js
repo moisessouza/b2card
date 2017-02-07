@@ -912,13 +912,15 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 	var configurarregistros = (data) => {
 		for (let fase_atividade of data.fase_atividades) {
 			for (let atividade of fase_atividade.atividades) {
-				for (let atividade_profissional of atividade.atividadeprofissionais){
-					if (atividade_profissional.horas_alocadas_milisegundos){
-						atividade_profissional.horas_alocadas = CommonsService.milliparahoras(atividade_profissional.horas_alocadas_milisegundos);
-					}
-					
-					if (atividade_profissional.quantidade_horas && atividade_profissional.quantidade_horas.toString().indexOf(':00') < 0){
-						atividade_profissional.quantidade_horas_formatada = atividade_profissional.quantidade_horas + ':00';							
+				if (atividade.atividadeprofissionais){
+					for (let atividade_profissional of atividade.atividadeprofissionais){
+						if (atividade_profissional.horas_alocadas_milisegundos){
+							atividade_profissional.horas_alocadas = CommonsService.milliparahoras(atividade_profissional.horas_alocadas_milisegundos);
+						}
+						
+						if (atividade_profissional.quantidade_horas && atividade_profissional.quantidade_horas.toString().indexOf(':00') < 0){
+							atividade_profissional.quantidade_horas_formatada = atividade_profissional.quantidade_horas + ':00';							
+						}
 					}
 				}
 			}
