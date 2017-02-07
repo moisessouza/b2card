@@ -1,12 +1,12 @@
 <meta charset="utf-8">
 {%verbatim%}
-<div class="margin-top" ng-controller="OrcamentoController as $ctrl">
+<div class="margin-top">
 	<ul class="nav nav-tabs">
 		<li class="active"><a data-toggle="tab" href="#atividadesplanejada">Atividades planejadas</a></li>
 		<li><a data-toggle="tab" href="#orcamentocliente">Orçamento no cliente</a></li>
 	</ul>
 	<div class="tab-content">
-		<div id="atividadesplanejada" class="tab-pane in active">
+		<div id="atividadesplanejada" ng-controller="OrcamentoAtividadeController as $ctrl" class="tab-pane in active">
 			
 			<button class="btn btn-primary margin" ng-click="$ctrl.adicionarcoluna()">
 				<span class="glyphicon glyphicon-plus"></span>Coluna
@@ -83,7 +83,7 @@
 			</table>
 		
 		</div>
-		<div id="orcamentocliente" class="tab-pane">
+		<div id="orcamentocliente" ng-controller="OrcamentoController as $ctrl" class="tab-pane">
 			<div class="row">
 				<div class="col-sm-3">
 						<div>
