@@ -11,7 +11,7 @@ from cadastros.models import CentroCusto, ValorHora, UnidadeAdministrativa, \
 from demandas.models import Demanda, Proposta, Observacao, Ocorrencia, \
     Orcamento, ItemFase, Fase, Atividade, OrcamentoFase, \
     OrcamentoAtividade, PerfilAtividade, AtividadeProfissional, FaseAtividade,\
-    AlocacaoHoras
+    AlocacaoHoras, Despesa
 from demandas.serializers import DemandaSerializer, PropostaSerializer, \
     ObservacaoSerializer, OcorrenciaSerializer, OrcamentoSerializer, \
     ItemFaseSerializer, AtividadeSerializer, \
@@ -139,7 +139,13 @@ class DemandaDetail(APIView):
             if orcamento_dict['orcamento_atividades']:
                 orcamento_atividades = orcamento_dict['orcamento_atividades']
             del orcamento_dict['orcamento_atividades']
-        
+            
+        despesas = None
+        if 'despesas' in orcamento_dict:
+            if orcamento_dict['despesas']:
+                despesas = orcamento_dict['despesas']
+            del orcamento_dict['despesas']
+                
         orcamento = Orcamento(**orcamento_dict)
         orcamento.total_orcamento = converter_string_para_float(orcamento.total_orcamento)
         orcamento.demanda = demanda
@@ -147,6 +153,7 @@ class DemandaDetail(APIView):
         orcamento.save();
         
         self.salvar_orcamento_atividades(orcamento_atividades, orcamento)
+        self.salvar_despesas(despesas, orcamento);
         
         if fases_list is not None:    
             for f in fases_list:
@@ -186,6 +193,19 @@ class DemandaDetail(APIView):
                 elif 'id' in f:
                     fase = Fase.objects.get(pk=f['id'])
                     fase.delete()
+    
+    def salvar_despesas(self, despesas, orcamento):
+        if despesas:
+            for i in despesas:
+                if ('descricao' in i and i['descricao'] and
+                    'valor' in i and i['valor']):
+                    despesa = Despesa(**i)
+                    despesa.valor = converter_string_para_float(despesa.valor)
+                    despesa.orcamento = orcamento
+                    despesa.save()
+                elif 'id' in i:
+                    despesa = Despesa.objects.get(i['id'])
+                    despesa.delete()
     
     def salvar_orcamento_atividades(self,orcamento_atividades, orcamento):
         

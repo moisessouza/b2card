@@ -2,12 +2,13 @@ from datetime import datetime
 import locale
 from demandas.models import Demanda, Proposta, Observacao, Ocorrencia, Orcamento,\
     FaseAtividade, Atividade, AtividadeProfissional, OrcamentoFase, ItemFase,\
-    OrcamentoAtividade, PerfilAtividade
+    OrcamentoAtividade, PerfilAtividade, Despesa
 from faturamento.models import Parcela, ParcelaFase, Medicao
 from demandas.serializers import DemandaSerializer, PropostaSerializer,\
     ObservacaoSerializer, OcorrenciaSerializer, FaseAtividadeSerializer,\
     AtividadeSerializer, AtividadeProfissionalSerializer, OrcamentoSerializer,\
-    ItemFaseSerializer, OrcamentoFaseSerializer, OrcamentoAtividadeSerializer
+    ItemFaseSerializer, OrcamentoFaseSerializer, OrcamentoAtividadeSerializer,\
+    DespesaSerializer
 from faturamento.serializers import ParcelaSerializer, ParcelaFaseSerializer,\
     MedicaoSerializer
 import re
@@ -144,6 +145,11 @@ def serializar_orcamento(orcamentos):
                     orcamento_atividade_dict['colunas'] = dict
                     orcamento_atividades_list.append(orcamento_atividade_dict)
             orcamento_dict['orcamento_atividades'] = orcamento_atividades_list
+            
+            despesas = Despesa.objects.filter(orcamento = orcamento)
+            despesa_list = DespesaSerializer(despesas, many=True).data
+            
+            orcamento_dict['despesas'] = despesa_list
             
         return orcamento_dict;
     

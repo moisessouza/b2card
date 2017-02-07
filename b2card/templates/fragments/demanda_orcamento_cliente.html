@@ -60,13 +60,13 @@
 												<tbody>
 													<tr ng-repeat="despesa in $ctrl.share.demanda.orcamento.despesas">
 														<td width="600px">
-															<input type="text" style="width: 100%"/>
+															<input type="text" ng-model="despesa.descricao" style="width: 100%"/>
 														</td>
 														<td style="text-align:right;">
-															<input type="text"  style="width: 100%"/>
+															<input type="text" ng-model="despesa.valor" style="width: 100%"/>
 														</td>
 														<td style="width: 60px; text-align:center;"> 
-															<input type="checkbox"/>
+															<input type="checkbox" ng-model="despesa.a_faturar"/>
 														</td>
 													</tr>
 												</tbody>

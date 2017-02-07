@@ -7,7 +7,7 @@ from rest_framework import serializers
 from demandas.models import Demanda, Proposta, Observacao, Ocorrencia,\
     Orcamento, Fase, ItemFase, Atividade, OrcamentoFase,\
     OrcamentoAtividade, PerfilAtividade, AtividadeProfissional,\
-    FaseAtividade, AlocacaoHoras
+    FaseAtividade, AlocacaoHoras, Despesa
 from cadastros.serializers import CentroCustoSerializer, ValorHoraSerializer, CentroResultadoSerializer,\
     UnidadeAdministrativaSerializer, FaseSerializer, NaturezaDemandaSerializer,\
     TipoAlocacaoSerializer
@@ -49,6 +49,11 @@ class OrcamentoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Orcamento
         fields = ('id', 'total_orcamento', 'margem_risco', 'lucro_desejado')
+        
+class DespesaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Despesa
+        fields = ('id', 'descricao', 'valor', 'a_faturar')
         
 class OrcamentoFaseSerializer(serializers.ModelSerializer):
     class Meta:

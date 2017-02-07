@@ -133,10 +133,16 @@ class Orcamento(models.Model):
     margem_risco = models.FloatField(default = None, null = True)
     lucro_desejado = models.FloatField(default = None, null = True)
     
+class Despesa(models.Model):
+    orcamento = models.ForeignKey(Orcamento, default = None)
+    descricao = models.CharField(max_length = 200, default = None)
+    valor = models.FloatField(default = None)
+    a_faturar = models.NullBooleanField(default = None)
+    
 class OrcamentoFase(models.Model):
+    orcamento = models.ForeignKey(Orcamento, default=None)
     descricao = models.CharField(max_length=100)
     valor_total = models.FloatField(default = None)
-    orcamento = models.ForeignKey(Orcamento, default=None)
     
 class ItemFase(models.Model):
     fase = models.ForeignKey(OrcamentoFase, default = None)
