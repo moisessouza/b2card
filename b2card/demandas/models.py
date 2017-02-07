@@ -129,7 +129,9 @@ class Ocorrencia(models.Model):
 class Orcamento(models.Model):
     demanda = models.ForeignKey(Demanda)
     descricao = models.TextField(null=True, default = None)
-    total_orcamento = models.FloatField(default = None, null=True)
+    total_orcamento = models.FloatField(default = None, null = True)
+    margem_risco = models.FloatField(default = None, null = True)
+    lucro_desejado = models.FloatField(default = None, null = True)
     
 class OrcamentoFase(models.Model):
     descricao = models.CharField(max_length=100)

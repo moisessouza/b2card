@@ -95,3 +95,13 @@ select.combo-heading {
 div.cabecalho {
 	padding: 8px; text-align: center; font-weight:bold; background-color: #007d9a; color: #fff; margin-top: 5px;
 }
+
+div.classe_modal {
+	position: absolute;
+	z-index: 1;
+	background-color: beige;
+	border-color: black;
+	border: 1px solid #ccc;
+	padding: 5px;
+	left: 23px;
+ }

@@ -3,105 +3,160 @@
 <div id="orcamentocliente" ng-controller="OrcamentoClienteController as $ctrl" class="tab-pane">
 	<div class="row">
 		<div class="col-sm-3">
-				<div>
-					<div>
-						<div class="cabecalho">
-							Variáveis de cálculo
-						</div>
-						<div>
-							<table class="table table-sm table-bordered">
-								<tr>
-									<td>
-										% Margem de lucro
-									</td>
-									<td>
-										<input type="text"/>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										% Lucro desejado
-									</td>
-									<td>
-										<input type="text"/>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										Despesas extras
-									</td>
-									<td>
-										<input type="text"/>
-									</td>
-								</tr>
-							</table>
-						</div>
-					</div>
-				</div>
+			<div>
 				<div>
 					<div class="cabecalho">
-						Simulações
+						Variáveis de cálculo
 					</div>
 					<div>
 						<table class="table table-sm table-bordered">
 							<tr>
 								<td>
-									Valor hora cliente
+									% Margem de risco
 								</td>
 								<td>
-									<input type="text"/>
+									<input type="number" ng-model="$ctrl.share.demanda.orcamento.margem_risco"/>
 								</td>
 							</tr>
 							<tr>
 								<td>
-									Horas projetadas
+									% Lucro desejado
 								</td>
 								<td>
-									<input type="text"/>
+									<input type="number" ng-model="$ctrl.share.demanda.orcamento.lucro_desejado"/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Despesas extras
+								</td>
+								<td style="position: relative;">
+									<input type="number" style="width: 114px" disabled/>
+									<div class="btn btn-sm btn-default" ng-click="$ctrl.abrirfecharmodaldespesas();">
+										<span class="glyphicon glyphicon-plus"></span>
+									</div>
+									<div class="classe_modal" style="left: 122px" ng-show="$ctrl.modaldespesasextras">
+										<div class="btn btn-primary button-heading" style="margin-right:2px; float:right;" ng-click="$ctrl.abrirfecharmodaldespesas();">
+											<span class="glyphicon glyphicon-remove"></span>
+										</div>
+										<div ng-controller="ModalDespesasOrcamentoController as $ctrl" style="width: 800px">
+											<table class="table table-sm">
+												<thead>
+													<tr>
+														<th>
+															Descrição
+															<div class="btn btn-sm btn-primary" style="float: right;" ng-click="$ctrl.adicionardespesa();">
+																<span class="glyphicon glyphicon-plus"></span>
+															</div>
+														</th>
+														<th style="text-align:center;">
+															Valor
+														</th>
+														<th>
+															A faturar
+														</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr ng-repeat="despesa in $ctrl.share.demanda.orcamento.despesas">
+														<td width="600px">
+															<input type="text" style="width: 100%"/>
+														</td>
+														<td style="text-align:right;">
+															<input type="text"  style="width: 100%"/>
+														</td>
+														<td style="width: 60px; text-align:center;"> 
+															<input type="checkbox"/>
+														</td>
+													</tr>
+												</tbody>
+												<tfoot>
+													<tr>
+														<td>
+															Total
+														</td>
+														<td style="text-align:right;">
+															200,00
+														</td>
+														<td>
+														</td>
+													</tr>
+												</tfoot>
+											</table>
+										</div>
+									</div>								
 								</td>
 							</tr>
 						</table>
 					</div>
 				</div>
+			</div>
+			<div>
+				<div class="cabecalho">
+					Simulações
+				</div>
 				<div>
 					<table class="table table-sm table-bordered">
-						<thead>
-							<tr>
-								<td>
-								</td>
-								<td>
-									Horas
-								</td>
-								<td>
-									Valor
-								</td>
-								<td>
-									% Lucro
-								</td>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>Desejado</td>
-								<td>H1</td>
-								<td>V1</td>
-								<td>P1</td>
-							</tr>
-							<tr>
-								<td>Projetado</td>
-								<td>H2</td>
-								<td>V2</td>
-								<td>P2</td>
-							</tr>
-							<tr>
-								<td>Proposto</td>
-								<td>H3</td>
-								<td>V3</td>
-								<td>P3</td>
-							</tr>
-						</tbody>
+						<tr>
+							<td>
+								Valor hora cliente
+							</td>
+							<td>
+								<select id="valorhora" name="valorhora" ng-model="$ctrl.valor_hora.id" style="height: 26px" ng-options="v.id as v.descricao for v in $ctrl.share.listavalorhora">
+									<option value="">Selecione um tipo...</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Horas projetadas
+							</td>
+							<td>
+								<input type="number" ng-model="$ctrl.horas_projetadas"/>
+							</td>
+						</tr>
 					</table>
 				</div>
+			</div>
+			<div>
+				<table class="table table-sm table-bordered">
+					<thead>
+						<tr>
+							<td>
+							</td>
+							<td>
+								Horas
+							</td>
+							<td>
+								Valor
+							</td>
+							<td>
+								% Lucro
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Desejado</td>
+							<td>H1</td>
+							<td>V1</td>
+							<td>P1</td>
+						</tr>
+						<tr>
+							<td>Projetado</td>
+							<td>H2</td>
+							<td>V2</td>
+							<td>P2</td>
+						</tr>
+						<tr>
+							<td>Proposto</td>
+							<td>H3</td>
+							<td>V3</td>
+							<td>P3</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 		<div class="col-sm-9">
 			<table class="table table-sm table-bordered" style="margin-top: 5px;">

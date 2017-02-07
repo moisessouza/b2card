@@ -96,7 +96,10 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 				'propostas':[{}],
 				'observacoes':[{}],
 				'ocorrencias':[{}],
-				'orcamento': {},
+				'orcamento': {
+					'margem_risco': 15,
+					'lucro_desejado': 30
+				},
 				'fase_atividades':[],
 				'data_criacao': new Date()
 			}

@@ -193,4 +193,32 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		}
 	}
 	
+	
+	if ($ctrl.share.demanda.orcamento) {
+		if (!$ctrl.share.demanda.orcamento.margem_risco){
+			$ctrl.share.demanda.orcamento.margem_risco = 15;
+		}
+		
+		if (!$ctrl.share.demanda.orcamento.lucro_desejado) {
+			$ctrl.share.demanda.orcamento.lucro_desejado = 30;
+		}
+	}
+	
+	$ctrl.abrirfecharmodaldespesas = () => {
+		$ctrl.modaldespesasextras = !$ctrl.modaldespesasextras;
+	}
+	
+	
+}).controller('ModalDespesasOrcamentoController', function ($scope, $window, share, CommonsService){
+	var $ctrl = this;
+	$ctrl.share = share;
+	
+	$ctrl.adicionardespesa = () => {
+		if (!$ctrl.share.demanda.orcamento.despesas){
+			$ctrl.share.demanda.orcamento.despesas = [];
+		}
+		
+		$ctrl.share.demanda.orcamento.despesas.push({});
+	}
+	
 });

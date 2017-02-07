@@ -48,7 +48,7 @@ class OcorrenciaSerializer(serializers.ModelSerializer):
 class OrcamentoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Orcamento
-        fields = ('id', 'total_orcamento')
+        fields = ('id', 'total_orcamento', 'margem_risco', 'lucro_desejado')
         
 class OrcamentoFaseSerializer(serializers.ModelSerializer):
     class Meta:
