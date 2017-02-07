@@ -91,3 +91,7 @@ select.combo-heading {
 	margin: 0px; padding: 0px; height: 17px;
 	display: inline;
 }
+
+div.cabecalho {
+	padding: 8px; text-align: center; font-weight:bold; background-color: #007d9a; color: #fff; margin-top: 5px;
+}
