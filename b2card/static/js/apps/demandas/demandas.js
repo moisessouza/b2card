@@ -943,4 +943,16 @@ $(function(){
 	    window.location.hash = this.hash;
 	    $('html,body').scrollTop(scrollmem);
 	  });
+	  
+	  
+	  $('li').on('click', function () {
+		 if (!$('#dadosdemanda').hasClass('active')) {
+			 $('#btnDeletar').css('display', 'none');
+		 } else {
+			 $('#btnDeletar').css('display', '');
+		 }
+	  });
+	  
+	  hash && hash != '#dadosdemanda' && $('#btnDeletar').css('display', 'none');
+	  
 });

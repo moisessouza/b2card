@@ -448,7 +448,7 @@
 	</div>
 	
 	<button type="button" class="btn btn-primary margin" ng-click="$ctrl.salvardemanda()" ng-disabled="!$ctrl.demanda.unidade_administrativa.id || !$ctrl.demanda.codigo_demanda || !$ctrl.demanda.status_demanda || !$ctrl.demanda.cliente.id || !$ctrl.demanda.nome_demanda || $ctrl.bloquearsalvar">Salvar</button>
-	<button type="submit" class="btn btn-danger margin" name="deletar" ng-click="$ctrl.deletar()" ng-show="$ctrl.demanda.id" ng-disabled="$ctrl.bloquearsalvar">Deletar</button>
+	<button id="btnDeletar" type="submit" class="btn btn-danger margin" name="deletar" ng-click="$ctrl.deletar()" ng-show="$ctrl.demanda.id" ng-disabled="$ctrl.bloquearsalvar">Deletar</button>
 	
 </div>
 
