@@ -1,0 +1,294 @@
+<meta charset="utf-8">
+{%verbatim%}
+<div id="atividadesplanejada" ng-controller="OrcamentoAtividadeController as $ctrl" class="tab-pane in active">
+	
+	<button class="btn btn-primary margin" ng-click="$ctrl.adicionarcoluna()">
+		<span class="glyphicon glyphicon-plus"></span>Coluna
+	</button>
+	<button class="btn btn-primary margin" ng-click="$ctrl.adicionaratividade()">
+		<span class="glyphicon glyphicon-plus"></span>Atividade
+	</button>
+	
+	<table class="table table-sm table-bordered table-striped table-highlight">
+		<thead>
+			<tr>
+				<td style="width: 1%">
+					<div style="width: 140px">
+						Fase
+					</div>
+				</td>
+				<td width="50%">Atividade</td>
+				<td ng-repeat="coluna in $ctrl.colunas" style="width: 1%">
+					<div style="width: 101px">
+						<select class="form-control combo-heading" style="width: 80px" ng-model="coluna.valor_hora.id" ng-change="$ctrl.validarcolunaalterada(coluna, {{coluna.valor_hora && coluna.valor_hora.id? coluna.valor_hora.id : 'null'}})" ng-options="v.id as v.descricao for v in $ctrl.listavalorhorab2card">
+							<option value="">Selecione...</option>
+						</select>
+						<button class="btn btn-primary button-heading" ng-click="$ctrl.removercoluna(coluna)">
+							<span class="glyphicon glyphicon-minus"></span>
+						</button>
+					</div>
+				</td>
+				<td style="width: 1%">
+					<div style="width: 67px">
+						Total
+					</div>
+				</td>
+				<td style="width: 1%"></td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="atividade in $ctrl.share.demanda.orcamento.orcamento_atividades" ng-show="!atividade.remover">
+				<td>
+					<select class="form-control" ng-model="atividade.fase.id" ng-options="f.id as f.descricao for f in $ctrl.listafases">
+						<option value="">Selecione...</option>
+					</select>
+				</td>
+				<td>
+					<input type="text" ng-model="atividade.descricao" maxlength="100"  class="form-control"/>
+				</td>
+				<td ng-repeat="coluna in $ctrl.colunas">
+					<input type="number"  class="form-control" ng-model="atividade.colunas[coluna.valor_hora.id].horas" ng-change="$ctrl.changecoluna()" ng-disabled="!coluna.valor_hora.id"/>
+				</td>
+				<td>
+					<input type="text"  class="form-control" ng-model="atividade.total_horas" disabled/>
+				</td>
+				<td>
+					<button class="btn btn-default" ng-click="$ctrl.remover(atividade); $ctrl.calculartotaiscolunas();">
+						<span class="glyphicon glyphicon-trash"></span>
+					</button>
+				</td>
+			</tr>
+		</tbody>
+		<tfoot ng-show="$ctrl.share.demanda.orcamento.orcamento_atividades.length > 0">
+			<tr>
+				<td>
+					<input type="text" class="form-control" value="Totais" disabled/>
+				</td>
+				<td ></td>
+				<td ng-repeat="coluna in $ctrl.colunas" style="text-align: center;">
+					<input type="text" class="form-control" ng-model="coluna.valor_total" disabled/>
+				</td>
+				<td>
+					<input type="text" class="form-control" ng-model="$ctrl.total_colunas" disabled/>
+				</td>
+				<td></td>
+			</tr>
+		</tfoot>
+	</table>
+
+</div>
+<div id="orcamentocliente" ng-controller="OrcamentoController as $ctrl" class="tab-pane">
+	<div class="row">
+		<div class="col-sm-3">
+				<div>
+					<div>
+						<div class="cabecalho">
+							Variáveis de cálculo
+						</div>
+						<div>
+							<table class="table table-sm table-bordered">
+								<tr>
+									<td>
+										% Margem de lucro
+									</td>
+									<td>
+										<input type="text"/>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										% Lucro desejado
+									</td>
+									<td>
+										<input type="text"/>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										Despesas extras
+									</td>
+									<td>
+										<input type="text"/>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div>
+					<div class="cabecalho">
+						Simulações
+					</div>
+					<div>
+						<table class="table table-sm table-bordered">
+							<tr>
+								<td>
+									Valor hora cliente
+								</td>
+								<td>
+									<input type="text"/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Horas projetadas
+								</td>
+								<td>
+									<input type="text"/>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div>
+					<table class="table table-sm table-bordered">
+						<thead>
+							<tr>
+								<td>
+								</td>
+								<td>
+									Horas
+								</td>
+								<td>
+									Valor
+								</td>
+								<td>
+									% Lucro
+								</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Desejado</td>
+								<td>H1</td>
+								<td>V1</td>
+								<td>P1</td>
+							</tr>
+							<tr>
+								<td>Projetado</td>
+								<td>H2</td>
+								<td>V2</td>
+								<td>P2</td>
+							</tr>
+							<tr>
+								<td>Proposto</td>
+								<td>H3</td>
+								<td>V3</td>
+								<td>P3</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+		</div>
+		<div class="col-sm-9">
+			<table class="table table-sm table-bordered" style="margin-top: 5px;">
+				<thead>
+					<tr>
+						<td>
+							Fase
+						</td>
+						<td>
+							Perfil
+						</td>
+						<td>
+							Horas
+						</td>
+						<td>
+							Dias(Fase)
+						</td>
+						<td>
+							Valor(Fase)
+						</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							TSD
+						</td>
+						<td>
+							<div>
+								ANALISTA
+							</div>
+							<div>
+								CONSULTOR
+							</div>
+						</td>
+						<td>
+							<div>
+								40
+							</div>
+						</td>
+						<td>
+							<div>
+								10
+							</div>
+						</td>
+						<td>
+							<div>
+								400
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							TSD
+						</td>
+						<td>
+							<div>
+								ANALISTA
+							</div>
+							<div>
+								CONSULTOR
+							</div>
+						</td>
+						<td>
+							<div>
+								40
+							</div>
+						</td>
+						<td>
+							<div>
+								10
+							</div>
+						</td>
+						<td>
+							<div>
+								400
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							TSD
+						</td>
+						<td>
+							<div>
+								ANALISTA
+							</div>
+							<div>
+								CONSULTOR
+							</div>
+						</td>
+						<td>
+							<div>
+								40
+							</div>
+						</td>
+						<td>
+							<div>
+								10
+							</div>
+						</td>
+						<td>
+							<div>
+								400
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{%endverbatim%}
