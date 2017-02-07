@@ -1,6 +1,6 @@
 "use strict";
 
-demandas.controller('OrcamentoController', function($rootScope, ValorHoraService, $uibModal, FaseService, CommonsService, share){
+demandas.controller('OrcamentoClienteController', function($rootScope, ValorHoraService, $uibModal, FaseService, CommonsService, share){
 	var $ctrl = this;
 	$ctrl.share = share;
 	
