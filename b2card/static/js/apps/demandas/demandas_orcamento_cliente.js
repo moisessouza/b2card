@@ -114,11 +114,11 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		$ctrl.calcularvalortotalorcamento();
 	}
 	
-	$ctrl.adicionaritemfase = function (){
-		if (!$ctrl.fase.itensfase){
-			$ctrl.fase.itensfase = [];
+	$ctrl.adicionaritemfase = function (orcamento_fase){
+		if (!orcamento_fase.itensfase){
+			orcamento_fase.itensfase = [];
 		}
-		$ctrl.fase.itensfase.push({});
+		orcamento_fase.itensfase.push({});
 	}
 	
 	$ctrl.calcularvalortotalorcamento = function (){
@@ -148,7 +148,12 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		$ctrl.share.demanda.orcamento.total_orcamento =  CommonsService.formatarnumero(totalorcamento);
 	}
 	
-	$ctrl.changefasequantidadehoras = function (itemfase) {
+	$ctrl.changefasequantidadehoras = function (itemfase, orcamento_fase) {
+		
+		if (!itemfase.valor_hora || !itemfase.valor_hora.id){
+			return;
+		}
+		
 		for (var i in $ctrl.share.listavalorhora){
 			var valorhora = $ctrl.share.listavalorhora[i]
 			if (valorhora.id == itemfase.valor_hora.id){
@@ -156,7 +161,7 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 			}
 		}
 		
-		var itensfase = $ctrl.fase.itensfase;
+		var itensfase = orcamento_fase.itensfase;
 		
 		var valorfase = 0
 		for (i in itensfase){
@@ -167,13 +172,13 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 			}
 		}
 		
-		$ctrl.fase.valor_total = CommonsService.formatarnumero(valorfase);
+		orcamento_fase.valor_total = CommonsService.formatarnumero(valorfase);
 		
-		$ctrl.calcularvalortotalorcamento();
+		//$ctrl.calcularvalortotalorcamento();
 		
 	}
 	
-	$ctrl.changevalorhora = function (itemfase) {
+	$ctrl.changevalorhora = function (itemfase, orcamento_fase) {
 		itemfase.valor_selecionado = CommonsService.formatarnumero(0);
 		for (var i in $ctrl.share.listavalorhora){
 			var valorhora = $ctrl.share.listavalorhora[i]
@@ -184,7 +189,12 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 				}
 			}
 		}
-		$ctrl.changefasequantidadehoras(itemfase);
+		$ctrl.changefasequantidadehoras(itemfase, orcamento_fase);
+	}
+	
+	$ctrl.removeritemfase = function (i, orcamento_fase){
+		i.remover = true;		
+		$ctrl.changefasequantidadehoras(i, orcamento_fase);
 	}
 	
 	$ctrl.remover = function (i, callback){
@@ -340,17 +350,17 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 	});
 	
 	$rootScope.$on('incluirfasesorcamento', function(event, data) {
-		if (!$ctrl.share.demanda.orcamento.fases) {
+		if (!$ctrl.share.demanda.orcamento.orcamento_fases) {
 			
 			$ctrl.share.demanda.orcamento.orcamento_fases = [];
 			var listfases = [];
 			
 			for (let orcamento_atividade of $ctrl.share.demanda.orcamento.orcamento_atividades) {
-				if (listfases.indexoOf(orcamento_atividade.fase.id) < 0) {
-					$ctrl.share.demanda.orcamento.orcamento_fases = {
+				if (listfases.indexOf(orcamento_atividade.fase.id) < 0) {
+					$ctrl.share.demanda.orcamento.orcamento_fases.push({
 						fase: orcamento_atividade.fase
-					}
-					$ctrl.share.demanda.orcamento.orcamento_fases.push(orcamento_atividade.fase.id);
+					});
+					listfases.push(orcamento_atividade.fase.id);
 				}
 			}
 		}

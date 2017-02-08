@@ -182,87 +182,32 @@
 				<tbody>
 					<tr ng-repeat="orcamento_fase in $ctrl.share.demanda.orcamento.orcamento_fases">
 						<td>
-							<select ng-model="orcamento_fase.fase.id" ng-options="v.id as v.descricao for v in $ctrl.listafases" disabled>
+							<select ng-model="orcamento_fase.fase.id" class="disabled_select" style="height: 26px" ng-options="v.id as v.descricao for v in $ctrl.listafases" disabled>
 								<option value="">Selecione um tipo...</option>
 							</select>
+							<div class="btn btn-sm btn-primary" style="float: right; padding: 0 5px" ng-click="$ctrl.adicionaritemfase(orcamento_fase);">+</div>
 						</td>
 						<td>
-							<div>
-								ANALISTA
-							</div>
-							<div>
-								CONSULTOR
-							</div>
-						</td>
-						<td>
-							<div>
-								40
+							<div ng-repeat="itemfase in orcamento_fase.itensfase" ng-show="!itemfase.remover">
+								<select ng-model="itemfase.valor_hora.id" style="height: 23px" ng-change="$ctrl.changevalorhora(itemfase, orcamento_fase)" ng-options="v.id as v.descricao for v in $ctrl.share.listavalorhora">
+									<option value="">Selecione um tipo...</option>
+								</select>
+								<div class="btn btn-sm btn-primary" style="float: right; padding: 0 5px" ng-click="$ctrl.removeritemfase(itemfase, orcamento_fase)">-</div>
 							</div>
 						</td>
 						<td>
-							<div>
-								10
+							<div ng-repeat="itemfase in orcamento_fase.itensfase" ng-show="!itemfase.remover">
+								<input type="number" ng-model="itemfase.quantidade_horas" ng-change="$ctrl.changefasequantidadehoras(itemfase, orcamento_fase);">
 							</div>
 						</td>
 						<td>
 							<div>
-								400
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							TSD
-						</td>
-						<td>
-							<div>
-								ANALISTA
-							</div>
-							<div>
-								CONSULTOR
+								<input type="number" ng-model="orcamento_fase.dias"/>
 							</div>
 						</td>
 						<td>
 							<div>
-								40
-							</div>
-						</td>
-						<td>
-							<div>
-								10
-							</div>
-						</td>
-						<td>
-							<div>
-								400
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							TSD
-						</td>
-						<td>
-							<div>
-								ANALISTA
-							</div>
-							<div>
-								CONSULTOR
-							</div>
-						</td>
-						<td>
-							<div>
-								40
-							</div>
-						</td>
-						<td>
-							<div>
-								10
-							</div>
-						</td>
-						<td>
-							<div>
-								400
+								{{orcamento_fase.valor_total}}
 							</div>
 						</td>
 					</tr>

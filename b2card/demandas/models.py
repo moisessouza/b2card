@@ -158,6 +158,7 @@ class Despesa(models.Model):
 class OrcamentoFase(models.Model):
     orcamento = models.ForeignKey(Orcamento, default=None)
     fase = models.ForeignKey(Fase, default = None, null=True)
+    dias = models.IntegerField(default = None, null = True)
     valor_total = models.FloatField(default = None)
     
 class ItemFase(models.Model):

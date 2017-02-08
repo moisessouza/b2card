@@ -104,7 +104,8 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 						share.listavalorhora.$promise.then(function (data) {
 							$rootScope.$emit('calculardesejado');
 							$rootScope.$emit('calcularprojetado');
-							$rootScope.$emit('calcularproposto');			
+							$rootScope.$emit('calcularproposto');
+							$rootScope.$emit('incluirfasesorcamento');
 						});
 					}
 				}
