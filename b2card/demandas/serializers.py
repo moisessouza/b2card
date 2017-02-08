@@ -46,9 +46,10 @@ class OcorrenciaSerializer(serializers.ModelSerializer):
         fields = ('id', 'tipo_ocorrencia', 'descricao', 'nome_solicitante', 'data_solicitacao', 'data_prevista_conclusao', 'etapa', 'responsavel', 'descricao_motivo', 'observacao')
         
 class OrcamentoSerializer(serializers.ModelSerializer):
+    valor_hora_orcamento = ValorHoraSerializer()
     class Meta:
         model = Orcamento
-        fields = ('id', 'total_orcamento', 'margem_risco', 'lucro_desejado', 'imposto_devidos', 'total_despesas')
+        fields = ('id', 'total_orcamento', 'margem_risco', 'lucro_desejado', 'imposto_devidos', 'total_despesas', 'valor_hora_orcamento', 'valor_desejado', 'lucro_calculado_desejado', 'horas_desejado', 'valor_projetado', 'horas_projetadas')
         
 class DespesaSerializer(serializers.ModelSerializer):
     class Meta:

@@ -132,9 +132,18 @@ class Orcamento(models.Model):
     descricao = models.TextField(null=True, default = None)
     total_orcamento = models.FloatField(default = None, null = True)
     margem_risco = models.FloatField(default = None, null = True)
-    lucro_desejado = models.FloatField(default = None, null = True)
+    
+    valor_desejado = models.FloatField(default = None, null = True)
+    horas_desejado = models.FloatField(default = None, null = True)
+    lucro_calculado_desejado =  models.FloatField(default = None, null = True)
+    
+    valor_projetado = models.FloatField(default = None, null = True)
+    lucro_calculado_projetado = models.FloatField(default = None, null = True)
+
+    lucro_desejado = models.FloatField(default = None, null = True)    
     imposto_devidos = models.FloatField(default = None, null = True)
     total_despesas = models.FloatField(default = None, null = True)
+    horas_projetadas = models.FloatField(default = None, null = True)
     
 class Despesa(models.Model):
     orcamento = models.ForeignKey(Orcamento, default = None)

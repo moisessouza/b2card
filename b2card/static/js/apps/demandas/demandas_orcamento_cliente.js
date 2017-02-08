@@ -62,7 +62,13 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 	if ($ctrl.share.demanda.$promise) {
 		$ctrl.share.demanda.$promise.then(function (data) {
 			$rootScope.$emit('orcamento', data);
-			$rootScope.$emit('calculardesejado', data);
+			if ($ctrl.share.listavalorhora.$promise){
+				$ctrl.share.listavalorhora.$promise.then(function (data) {
+					$rootScope.$emit('calculardesejado', data);
+					$rootScope.$emit('calcularprojetado', data);
+					$rootScope.$emit('calcularproposto', data);
+				});
+			}
 		});
 	} 
 	
@@ -221,11 +227,52 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 			}
 		}
 		
+		if ($ctrl.share.listavalorhora) {
+			for (let valor_hora of $ctrl.share.listavalorhora) {
+				if (valor_hora.id == valor_hora_id) {
+					return valor_hora;
+				}
+			}
+		}
+		
+		return null;
+		
 	}
 	
 	
 	
+	
+	
 	let calcularatividadestotais = () => {
+		
+		let coluna_valor_map = {};
+		
+		if ($ctrl.share.demanda.orcamento.orcamento_atividades) {
+			for (let orcamento_atividade of $ctrl.share.demanda.orcamento.orcamento_atividades) {
+				if (orcamento_atividade.colunas){
+					for (let coluna in orcamento_atividade.colunas){
+						let valor_hora = buscarvalorhora(coluna);
+						if (coluna_valor_map[valor_hora.id]) {
+							coluna_valor_map[valor_hora.id] += orcamento_atividade.colunas[valor_hora.id].horas; 
+						} else {
+							coluna_valor_map[valor_hora.id] = orcamento_atividade.colunas[valor_hora.id].horas; 
+						}
+					}
+				}
+			}
+			
+		}
+		
+		let horas_total = 0;
+		
+		for (let coluna in coluna_valor_map) {
+			horas_total+=coluna_valor_map[coluna];
+		}
+		
+		return horas_total;
+	}
+	
+	let calcularatividadestotaishoras = () => {
 		
 		let coluna_valor_map = {};
 		
@@ -261,12 +308,43 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		
 		$ctrl.share.demanda.orcamento.valor_desejado = custo_sem_imposto / (($ctrl.share.demanda.orcamento.lucro_desejado / 100) + ($ctrl.share.demanda.orcamento.imposto_devidos / 100)) + CommonsService.stringparafloat($ctrl.share.demanda.orcamento.total_despesas);
 		
-		if ($ctrl.share.demanda.orcamento.valor_hora_orcamento.id){
+		if ($ctrl.share.demanda.orcamento.valor_hora_orcamento && $ctrl.share.demanda.orcamento.valor_hora_orcamento.id){
 			let valor_hora = buscarvalorhora($ctrl.share.demanda.orcamento.valor_hora_orcamento.id);
-			$ctrl.share.demanda.orcamento.horas_desejado =  $ctrl.share.demanda.orcamento.valor_desejado / valor_hora.vigencia.valor;
+			$ctrl.share.demanda.orcamento.horas_desejado =  ($ctrl.share.demanda.orcamento.valor_desejado / valor_hora.vigencia.valor).toFixed(2);
 		}
 		
-		$ctrl.share.demanda.orcamento.valor_desejado = CommonsService.formatarnumero($ctrl.share.demanda.orcamento.horas_desejado)
+		$ctrl.share.demanda.orcamento.lucro_calculado_desejado = ((($ctrl.share.demanda.orcamento.valor_desejado - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_desejado * ($ctrl.share.demanda.orcamento.imposto_devidos / 100))) / $ctrl.share.demanda.orcamento.valor_desejado) * 100).toFixed(2);
+		
+		$ctrl.share.demanda.orcamento.valor_desejado = CommonsService.formatarnumero($ctrl.share.demanda.orcamento.valor_desejado)
+		
+	});
+	
+	$rootScope.$on('calcularprojetado', function (event, data){
+		
+		let valor_total = calcularatividadestotais();
+		let custo_sem_imposto = valor_total * (1 + ($ctrl.share.demanda.orcamento.margem_risco / 100))
+		
+		let valor_hora = buscarvalorhora($ctrl.share.demanda.orcamento.valor_hora_orcamento.id);
+		$ctrl.share.demanda.orcamento.valor_projetado = (valor_hora.vigencia.valor * $ctrl.share.demanda.orcamento.horas_projetadas) + CommonsService.stringparafloat($ctrl.share.demanda.orcamento.total_despesas);
+		
+		$ctrl.share.demanda.orcamento.lucro_calculado_projetado = ((($ctrl.share.demanda.orcamento.valor_projetado - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_projetado * ($ctrl.share.demanda.orcamento.imposto_devidos / 100))) / $ctrl.share.demanda.orcamento.valor_projetado) * 100).toFixed(2);
+		
+		$ctrl.share.demanda.orcamento.valor_projetado = CommonsService.formatarnumero($ctrl.share.demanda.orcamento.valor_projetado);
+	});
+	
+	$rootScope.$on('calcularproposto', function(event, data) {
+		
+		let valor_total = calcularatividadestotais();
+		let custo_sem_imposto = valor_total * (1 + ($ctrl.share.demanda.orcamento.margem_risco / 100))
+		
+		let horas_total = calcularatividadestotaishoras()
+		
+		$ctrl.share.demanda.orcamento.valor_proposto = valor_total;
+		$ctrl.share.demanda.orcamento.horas_proposto = horas_total;
+		
+		$ctrl.share.demanda.orcamento.lucro_calculado_proposto = ((($ctrl.share.demanda.orcamento.valor_proposto - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_proposto * ($ctrl.share.demanda.orcamento.imposto_devidos / 100))) / $ctrl.share.demanda.orcamento.valor_proposto) * 100).toFixed(2);
+		
+		$ctrl.share.demanda.orcamento.valor_proposto = CommonsService.formatarnumero($ctrl.share.demanda.orcamento.valor_proposto);
 		
 	});
 	

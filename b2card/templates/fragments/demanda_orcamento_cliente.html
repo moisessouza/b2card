@@ -112,7 +112,7 @@
 								Horas projetadas
 							</td>
 							<td>
-								<input type="number" ng-model="$ctrl.horas_projetadas"/>
+								<input type="number" ng-model="$ctrl.share.demanda.orcamento.horas_projetadas"/>
 							</td>
 						</tr>
 					</table>
@@ -140,19 +140,19 @@
 							<td>Desejado</td>
 							<td>{{$ctrl.share.demanda.orcamento.horas_desejado}}</td>
 							<td>{{$ctrl.share.demanda.orcamento.valor_desejado}}</td>
-							<td>P1</td>
+							<td>{{$ctrl.share.demanda.orcamento.lucro_calculado_desejado}}</td>
 						</tr>
 						<tr>
 							<td>Projetado</td>
-							<td>H2</td>
-							<td>V2</td>
-							<td>P2</td>
+							<td>{{$ctrl.share.demanda.orcamento.horas_projetadas}}</td>
+							<td>{{$ctrl.share.demanda.orcamento.valor_projetado}}</td>
+							<td>{{$ctrl.share.demanda.orcamento.lucro_calculado_projetado}}</td>
 						</tr>
 						<tr>
 							<td>Proposto</td>
-							<td>H3</td>
-							<td>V3</td>
-							<td>P3</td>
+							<td>{{$ctrl.share.demanda.orcamento.horas_proposto}}</td>
+							<td>{{$ctrl.share.demanda.orcamento.valor_proposto}}</td>
+							<td>{{$ctrl.share.demanda.orcamento.lucro_calculado_proposto}}</td>
 						</tr>
 					</tbody>
 				</table>
