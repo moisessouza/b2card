@@ -128,10 +128,13 @@ class Ocorrencia(models.Model):
     
 class Orcamento(models.Model):
     demanda = models.ForeignKey(Demanda)
+    valor_hora_orcamento = models.ForeignKey(ValorHora, default = None, null = True)
     descricao = models.TextField(null=True, default = None)
     total_orcamento = models.FloatField(default = None, null = True)
     margem_risco = models.FloatField(default = None, null = True)
     lucro_desejado = models.FloatField(default = None, null = True)
+    imposto_devidos = models.FloatField(default = None, null = True)
+    total_despesas = models.FloatField(default = None, null = True)
     
 class Despesa(models.Model):
     orcamento = models.ForeignKey(Orcamento, default = None)

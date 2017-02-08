@@ -5,6 +5,7 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 	$ctrl.share = share;
 	
 	$ctrl.listafases = FaseService.buscarfases();
+	$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card();
 		
 	$rootScope.$on('orcamento', function(event, data) {
 		if (data.orcamento){
@@ -61,6 +62,7 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 	if ($ctrl.share.demanda.$promise) {
 		$ctrl.share.demanda.$promise.then(function (data) {
 			$rootScope.$emit('orcamento', data);
+			$rootScope.$emit('calculardesejado', data);
 		});
 	} 
 	
@@ -209,7 +211,66 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 	}
 	
 	
-}).controller('ModalDespesasOrcamentoController', function ($scope, $window, share, CommonsService){
+	let buscarvalorhora = valor_hora_id => {
+	
+		if ($ctrl.listavalorhorab2card) {
+			for (let valor_hora of $ctrl.listavalorhorab2card) {
+				if (valor_hora.id == valor_hora_id) {
+					return valor_hora;
+				}
+			}
+		}
+		
+	}
+	
+	
+	
+	let calcularatividadestotais = () => {
+		
+		let coluna_valor_map = {};
+		
+		if ($ctrl.share.demanda.orcamento.orcamento_atividades) {
+			for (let orcamento_atividade of $ctrl.share.demanda.orcamento.orcamento_atividades) {
+				if (orcamento_atividade.colunas){
+					for (let coluna in orcamento_atividade.colunas){
+						let valor_hora = buscarvalorhora(coluna);
+						if (coluna_valor_map[valor_hora.id]) {
+							coluna_valor_map[valor_hora.id] += orcamento_atividade.colunas[valor_hora.id].horas * valor_hora.vigencia.valor; 
+						} else {
+							coluna_valor_map[valor_hora.id] = orcamento_atividade.colunas[valor_hora.id].horas * valor_hora.vigencia.valor; 
+						}
+					}
+				}
+			}
+			
+		}
+		
+		let valor_total = 0;
+		
+		for (let coluna in coluna_valor_map) {
+			valor_total+=coluna_valor_map[coluna];
+		}
+		
+		return valor_total;
+	}
+	
+	$rootScope.$on('calculardesejado', function (event, data) {
+
+		let valor_total = calcularatividadestotais();
+		let custo_sem_imposto = valor_total * (1 + ($ctrl.share.demanda.orcamento.margem_risco / 100))
+		
+		$ctrl.share.demanda.orcamento.valor_desejado = custo_sem_imposto / (($ctrl.share.demanda.orcamento.lucro_desejado / 100) + ($ctrl.share.demanda.orcamento.imposto_devidos / 100)) + CommonsService.stringparafloat($ctrl.share.demanda.orcamento.total_despesas);
+		
+		if ($ctrl.share.demanda.orcamento.valor_hora_orcamento.id){
+			let valor_hora = buscarvalorhora($ctrl.share.demanda.orcamento.valor_hora_orcamento.id);
+			$ctrl.share.demanda.orcamento.horas_desejado =  $ctrl.share.demanda.orcamento.valor_desejado / valor_hora.vigencia.valor;
+		}
+		
+		$ctrl.share.demanda.orcamento.valor_desejado = CommonsService.formatarnumero($ctrl.share.demanda.orcamento.horas_desejado)
+		
+	});
+	
+}).controller('ModalDespesasOrcamentoController', function ($rootScope, $scope, $window, share, CommonsService){
 	var $ctrl = this;
 	$ctrl.share = share;
 	
@@ -220,5 +281,34 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		
 		$ctrl.share.demanda.orcamento.despesas.push({});
 	}
+	
+	$ctrl.calculartotaldespesas = () => {
+		if (!$ctrl.share.demanda.orcamento) {
+			$ctrl.share.demanda.orcamento = {}	
+		}
+
+		// TODO buscar do banco em UN		
+		$ctrl.share.demanda.orcamento.imposto_devidos= 20	
+		
+		if ($ctrl.share.demanda.orcamento.despesas){
+
+			let total_despesas = 0;
+			for (let despesa of $ctrl.share.demanda.orcamento.despesas) {
+				if (despesa.descricao && despesa.valor){
+					let valor = CommonsService.stringparafloat(despesa.valor);
+					if (despesa.a_faturar) {
+						valor = valor + (valor * ($ctrl.share.demanda.orcamento.imposto_devidos / 100));
+					}
+					total_despesas+=valor;
+				}
+			}
+			
+			$ctrl.share.demanda.orcamento.total_despesas = CommonsService.formatarnumero(parseFloat(total_despesas));
+			
+		}
+		
+	}
+	
+	
 	
 });

@@ -3,7 +3,8 @@
 demandas.controller('OrcamentoAtividadeController', function($rootScope, ValorHoraService, $uibModal, FaseService, CommonsService, share){
 	var $ctrl = this;
 	$ctrl.share = share;
-	
+
+	$ctrl.listafases = FaseService.buscarfases();
 	$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card();
 	
 	$rootScope.$on('atividades', function(event, data) {

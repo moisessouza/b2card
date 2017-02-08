@@ -146,8 +146,17 @@ class DemandaDetail(APIView):
                 despesas = orcamento_dict['despesas']
             del orcamento_dict['despesas']
                 
+        valor_hora_orcamento = None
+        if 'valor_hora_orcamento' in orcamento_dict:
+            if 'id' in orcamento_dict['valor_hora_orcamento']:
+                valor_hora_orcamento = ValorHora.objects.get(pk=orcamento_dict['valor_hora_orcamento']['id'])
+            del orcamento_dict['valor_hora_orcamento']
+                
         orcamento = Orcamento(**orcamento_dict)
         orcamento.total_orcamento = converter_string_para_float(orcamento.total_orcamento)
+        orcamento.imposto_devidos = orcamento.imposto_devidos
+        orcamento.total_despesas = converter_string_para_float(orcamento.total_despesas)
+        orcamento.valor_hora_orcamento = valor_hora_orcamento
         orcamento.demanda = demanda
         orcamento.centro_custo = centro_custo
         orcamento.save();

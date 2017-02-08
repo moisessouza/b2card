@@ -7,10 +7,11 @@ demandas.config(['$httpProvider', 'CommonsServiceProvider', function($httpProvid
     $httpProvider.interceptors.push(function () {
     	return {
     		response: function (config, CommonsService) {
-	        	var ajustardatas = demanda => {
+	        	var ajustardados = demanda => {
 	        		if(demanda){
+	        			CommonsService = CommonsServiceProvider.$get()
 	        			if (demanda.data_criacao) {
-	        				demanda.data_criacao = CommonsServiceProvider.$get().stringparadata(demanda.data_criacao);
+	        				demanda.data_criacao = CommonsService.stringparadata(demanda.data_criacao);
 	        			}
 		        		if (demanda.fase_atividades){
 		        			for(let fase_atividade of demanda.fase_atividades){
@@ -19,15 +20,29 @@ demandas.config(['$httpProvider', 'CommonsServiceProvider', function($httpProvid
 		        						atividade.data_inicio_string = atividade.data_inicio;
 		        						atividade.data_fim_string = atividade.data_fim;
 		        						
-		        						atividade.data_inicio = CommonsServiceProvider.$get().stringparadata(atividade.data_inicio);
-		        						atividade.data_fim = CommonsServiceProvider.$get().stringparadata(atividade.data_fim);
+		        						atividade.data_inicio = CommonsService.stringparadata(atividade.data_inicio);
+		        						atividade.data_fim = CommonsService.stringparadata(atividade.data_fim);
 		        					}
 		        				}
 		        			}
 		        		}
+		        		
+		        		if (demanda.orcamento) {
+		        			if (demanda.orcamento.despesas) {
+		        				
+		        				if (demanda.orcamento.total_despesas) {
+		        					demanda.orcamento.total_despesas = CommonsService.formatarnumero(demanda.orcamento.total_despesas);
+		        				}
+		        				
+		        				for (let despesa of demanda.orcamento.despesas) {
+		        					despesa.valor = CommonsService.formatarnumero(despesa.valor);
+		        				}
+		        			}
+		        		}
+		        		
 	        		}
 	        	}
-	        	ajustardatas(config.data);
+	        	ajustardados(config.data);
 	        	return config;
 	        }
     	}

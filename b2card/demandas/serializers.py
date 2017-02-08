@@ -48,7 +48,7 @@ class OcorrenciaSerializer(serializers.ModelSerializer):
 class OrcamentoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Orcamento
-        fields = ('id', 'total_orcamento', 'margem_risco', 'lucro_desejado')
+        fields = ('id', 'total_orcamento', 'margem_risco', 'lucro_desejado', 'imposto_devidos', 'total_despesas')
         
 class DespesaSerializer(serializers.ModelSerializer):
     class Meta:

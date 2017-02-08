@@ -31,7 +31,7 @@
 									Despesas extras
 								</td>
 								<td style="position: relative;">
-									<input type="number" style="width: 114px" disabled/>
+									<input type="text" style="width: 114px" disabled ng-model="$ctrl.share.demanda.orcamento.total_despesas"/>
 									<div class="btn btn-sm btn-default" ng-click="$ctrl.abrirfecharmodaldespesas();">
 										<span class="glyphicon glyphicon-plus"></span>
 									</div>
@@ -60,13 +60,13 @@
 												<tbody>
 													<tr ng-repeat="despesa in $ctrl.share.demanda.orcamento.despesas">
 														<td width="600px">
-															<input type="text" ng-model="despesa.descricao" style="width: 100%"/>
+															<input type="text" ng-model="despesa.descricao" style="width: 100%" ng-change="$ctrl.calculartotaldespesas()"/>
 														</td>
 														<td style="text-align:right;">
-															<input type="text" ng-model="despesa.valor" style="width: 100%"/>
+															<input type="text" ng-model="despesa.valor" style="width: 100%" gb-money ng-change="$ctrl.calculartotaldespesas()" />
 														</td>
 														<td style="width: 60px; text-align:center;"> 
-															<input type="checkbox" ng-model="despesa.a_faturar"/>
+															<input type="checkbox" ng-model="despesa.a_faturar" ng-change="$ctrl.calculartotaldespesas()"/>
 														</td>
 													</tr>
 												</tbody>
@@ -76,7 +76,7 @@
 															Total
 														</td>
 														<td style="text-align:right;">
-															200,00
+															<input type="text" ng-model="$ctrl.share.demanda.orcamento.total_despesas" style="width: 100%" disabled/>
 														</td>
 														<td>
 														</td>
@@ -102,7 +102,7 @@
 								Valor hora cliente
 							</td>
 							<td>
-								<select id="valorhora" name="valorhora" ng-model="$ctrl.valor_hora.id" style="height: 26px" ng-options="v.id as v.descricao for v in $ctrl.share.listavalorhora">
+								<select id="valorhora" name="valorhora" ng-model="$ctrl.share.demanda.orcamento.valor_hora_orcamento.id" style="height: 26px" ng-options="v.id as v.descricao for v in $ctrl.share.listavalorhora">
 									<option value="">Selecione um tipo...</option>
 								</select>
 							</td>
@@ -138,8 +138,8 @@
 					<tbody>
 						<tr>
 							<td>Desejado</td>
-							<td>H1</td>
-							<td>V1</td>
+							<td>{{$ctrl.share.demanda.orcamento.horas_desejado}}</td>
+							<td>{{$ctrl.share.demanda.orcamento.valor_desejado}}</td>
 							<td>P1</td>
 						</tr>
 						<tr>
