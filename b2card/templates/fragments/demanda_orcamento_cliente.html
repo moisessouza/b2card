@@ -15,7 +15,7 @@
 									% Margem de risco
 								</td>
 								<td>
-									<input type="number" ng-model="$ctrl.share.demanda.orcamento.margem_risco"/>
+									<input type="number" ng-model="$ctrl.share.demanda.orcamento.margem_risco" ng-change="$ctrl.alteracaoorcamento()"/>
 								</td>
 							</tr>
 							<tr>
@@ -23,7 +23,7 @@
 									% Lucro desejado
 								</td>
 								<td>
-									<input type="number" ng-model="$ctrl.share.demanda.orcamento.lucro_desejado"/>
+									<input type="number" ng-model="$ctrl.share.demanda.orcamento.lucro_desejado" ng-change="$ctrl.alteracaoorcamento()"/>
 								</td>
 							</tr>
 							<tr>
@@ -102,7 +102,7 @@
 								Valor hora cliente
 							</td>
 							<td>
-								<select id="valorhora" name="valorhora" ng-model="$ctrl.share.demanda.orcamento.valor_hora_orcamento.id" style="height: 26px" ng-options="v.id as v.descricao for v in $ctrl.share.listavalorhora">
+								<select id="valorhora" name="valorhora" ng-model="$ctrl.share.demanda.orcamento.valor_hora_orcamento.id" style="height: 26px" ng-change="$ctrl.alteracaoorcamento()" ng-options="v.id as v.descricao for v in $ctrl.share.listavalorhora">
 									<option value="">Selecione um tipo...</option>
 								</select>
 							</td>
@@ -112,7 +112,7 @@
 								Horas projetadas
 							</td>
 							<td>
-								<input type="number" ng-model="$ctrl.share.demanda.orcamento.horas_projetadas"/>
+								<input type="number" ng-model="$ctrl.share.demanda.orcamento.horas_projetadas" ng-change="$ctrl.alteracaoorcamento()"/>
 							</td>
 						</tr>
 					</table>

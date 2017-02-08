@@ -49,7 +49,11 @@ class OrcamentoSerializer(serializers.ModelSerializer):
     valor_hora_orcamento = ValorHoraSerializer()
     class Meta:
         model = Orcamento
-        fields = ('id', 'total_orcamento', 'margem_risco', 'lucro_desejado', 'imposto_devidos', 'total_despesas', 'valor_hora_orcamento', 'valor_desejado', 'lucro_calculado_desejado', 'horas_desejado', 'valor_projetado', 'horas_projetadas')
+        fields = ('id', 'total_orcamento', 'margem_risco', 'lucro_desejado', 
+                  'imposto_devidos', 'total_despesas', 'valor_hora_orcamento', 
+                  'valor_desejado', 'lucro_calculado_desejado', 'horas_desejado', 
+                  'valor_projetado', 'horas_projetadas', 'lucro_calculado_projetado', 
+                  'valor_proposto', 'horas_proposto', 'lucro_calculado_proposto')
         
 class DespesaSerializer(serializers.ModelSerializer):
     class Meta:

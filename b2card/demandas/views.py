@@ -158,6 +158,7 @@ class DemandaDetail(APIView):
         orcamento.total_despesas = converter_string_para_float(orcamento.total_despesas)
         orcamento.valor_desejado = converter_string_para_float(orcamento.valor_desejado)
         orcamento.valor_projetado = converter_string_para_float(orcamento.valor_projetado)
+        orcamento.valor_proposto = converter_string_para_float(orcamento.valor_proposto)
         orcamento.valor_hora_orcamento = valor_hora_orcamento
         orcamento.demanda = demanda
         orcamento.centro_custo = centro_custo

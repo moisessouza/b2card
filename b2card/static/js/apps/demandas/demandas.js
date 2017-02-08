@@ -98,7 +98,16 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 					tarefas[i].show = false;
 				}
 				
-				
+				if (data.cliente.id) {
+					share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente(data.cliente.id);
+					if (share.listavalorhora.$promise) {
+						share.listavalorhora.$promise.then(function (data) {
+							$rootScope.$emit('calculardesejado');
+							$rootScope.$emit('calcularprojetado');
+							$rootScope.$emit('calcularproposto');			
+						});
+					}
+				}
 				
 				$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(demanda_id);
 				
@@ -182,6 +191,9 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 			share.demanda.$promise.then(function (data) {
 				$rootScope.$emit('orcamento', data);
 				$rootScope.$emit('atividades', data);
+				$rootScope.$emit('calculardesejado');
+				$rootScope.$emit('calcularprojetado');
+				$rootScope.$emit('calcularproposto');
 			});
 		}
 	}

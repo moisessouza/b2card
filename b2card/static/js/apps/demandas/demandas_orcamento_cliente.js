@@ -62,13 +62,6 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 	if ($ctrl.share.demanda.$promise) {
 		$ctrl.share.demanda.$promise.then(function (data) {
 			$rootScope.$emit('orcamento', data);
-			if ($ctrl.share.listavalorhora.$promise){
-				$ctrl.share.listavalorhora.$promise.then(function (data) {
-					$rootScope.$emit('calculardesejado', data);
-					$rootScope.$emit('calcularprojetado', data);
-					$rootScope.$emit('calcularproposto', data);
-				});
-			}
 		});
 	} 
 	
@@ -239,11 +232,7 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		
 	}
 	
-	
-	
-	
-	
-	let calcularatividadestotais = () => {
+	let calcularatividadestotaishoras = () => {
 		
 		let coluna_valor_map = {};
 		
@@ -272,7 +261,7 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		return horas_total;
 	}
 	
-	let calcularatividadestotaishoras = () => {
+	let calcularatividadestotais = () => {
 		
 		let coluna_valor_map = {};
 		
@@ -324,12 +313,14 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		let valor_total = calcularatividadestotais();
 		let custo_sem_imposto = valor_total * (1 + ($ctrl.share.demanda.orcamento.margem_risco / 100))
 		
-		let valor_hora = buscarvalorhora($ctrl.share.demanda.orcamento.valor_hora_orcamento.id);
-		$ctrl.share.demanda.orcamento.valor_projetado = (valor_hora.vigencia.valor * $ctrl.share.demanda.orcamento.horas_projetadas) + CommonsService.stringparafloat($ctrl.share.demanda.orcamento.total_despesas);
-		
-		$ctrl.share.demanda.orcamento.lucro_calculado_projetado = ((($ctrl.share.demanda.orcamento.valor_projetado - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_projetado * ($ctrl.share.demanda.orcamento.imposto_devidos / 100))) / $ctrl.share.demanda.orcamento.valor_projetado) * 100).toFixed(2);
-		
-		$ctrl.share.demanda.orcamento.valor_projetado = CommonsService.formatarnumero($ctrl.share.demanda.orcamento.valor_projetado);
+		if ($ctrl.share.demanda.orcamento.valor_hora_orcamento.id) {
+			let valor_hora = buscarvalorhora($ctrl.share.demanda.orcamento.valor_hora_orcamento.id);
+			$ctrl.share.demanda.orcamento.valor_projetado = (valor_hora.vigencia.valor * $ctrl.share.demanda.orcamento.horas_projetadas) + CommonsService.stringparafloat($ctrl.share.demanda.orcamento.total_despesas);
+			
+			$ctrl.share.demanda.orcamento.lucro_calculado_projetado = ((($ctrl.share.demanda.orcamento.valor_projetado - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_projetado * ($ctrl.share.demanda.orcamento.imposto_devidos / 100))) / $ctrl.share.demanda.orcamento.valor_projetado) * 100).toFixed(2);
+			
+			$ctrl.share.demanda.orcamento.valor_projetado = CommonsService.formatarnumero($ctrl.share.demanda.orcamento.valor_projetado);
+		}
 	});
 	
 	$rootScope.$on('calcularproposto', function(event, data) {
@@ -347,6 +338,12 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		$ctrl.share.demanda.orcamento.valor_proposto = CommonsService.formatarnumero($ctrl.share.demanda.orcamento.valor_proposto);
 		
 	});
+	
+	$ctrl.alteracaoorcamento = () => {
+		$rootScope.$emit('calculardesejado');
+		$rootScope.$emit('calcularprojetado');
+		$rootScope.$emit('calcularproposto');
+	}
 	
 }).controller('ModalDespesasOrcamentoController', function ($rootScope, $scope, $window, share, CommonsService){
 	var $ctrl = this;
@@ -384,6 +381,10 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 			$ctrl.share.demanda.orcamento.total_despesas = CommonsService.formatarnumero(parseFloat(total_despesas));
 			
 		}
+		
+		$rootScope.$emit('calculardesejado');
+		$rootScope.$emit('calcularprojetado');
+		$rootScope.$emit('calcularproposto');
 		
 	}
 	

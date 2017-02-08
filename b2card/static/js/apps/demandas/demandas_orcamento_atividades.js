@@ -8,9 +8,6 @@ demandas.controller('OrcamentoAtividadeController', function($rootScope, ValorHo
 	$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card();
 	
 	$rootScope.$on('atividades', function(event, data) {
-		if (data.cliente){
-			share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente(data.cliente.id);
-		}
 		
 		if (share.demanda.orcamento.orcamento_atividades &&
 				share.demanda.orcamento.orcamento_atividades.length > 0) {

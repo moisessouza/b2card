@@ -139,6 +139,10 @@ class Orcamento(models.Model):
     
     valor_projetado = models.FloatField(default = None, null = True)
     lucro_calculado_projetado = models.FloatField(default = None, null = True)
+    
+    valor_proposto = models.FloatField(default = None, null = True)
+    horas_proposto = models.FloatField(default = None, null = True)
+    lucro_calculado_proposto = models.FloatField(default = None, null = True)
 
     lucro_desejado = models.FloatField(default = None, null = True)    
     imposto_devidos = models.FloatField(default = None, null = True)
