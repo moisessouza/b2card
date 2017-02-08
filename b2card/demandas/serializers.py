@@ -61,9 +61,10 @@ class DespesaSerializer(serializers.ModelSerializer):
         fields = ('id', 'descricao', 'valor', 'a_faturar')
         
 class OrcamentoFaseSerializer(serializers.ModelSerializer):
+    fase = FaseSerializer()
     class Meta:
         model = OrcamentoFase
-        fields = ('id', 'descricao', 'valor_total')
+        fields = ('id', 'fase', 'valor_total', 'dias')
         
 class ItemFaseSerializer(serializers.ModelSerializer):
     valor_hora = ValorHoraSerializer()

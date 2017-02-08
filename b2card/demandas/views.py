@@ -170,16 +170,23 @@ class DemandaDetail(APIView):
         if fases_list is not None:    
             for f in fases_list:
                 if 'remover' not in f or f['remover'] is False:
-                    if 'descricao' in f and f['descricao'] and 'valor_total' in f and f['valor_total']:
+                    if 'valor_total' in f and f['valor_total']:
                         itens_fase = None
                         if 'itensfase' in f:
                             itens_fase = f['itensfase']
                             del f['itensfase']
+                        
+                        fase = None
+                        if 'fase' in f:
+                            if f['fase']['id']:
+                                fase = Fase.objects.get(pk=f['fase']['id'])
+                            del f['fase']
                             
-                        fase = OrcamentoFase(**f)
-                        fase.valor_total = converter_string_para_float(fase.valor_total)
-                        fase.orcamento = orcamento
-                        fase.save()
+                        orcamento_fase = OrcamentoFase(**f)
+                        orcamento_fase.valor_total = converter_string_para_float(orcamento_fase.valor_total)
+                        orcamento_fase.fase = fase
+                        orcamento_fase.orcamento = orcamento
+                        orcamento_fase.save()
                          
                         if itens_fase is not None:
                             for i in itens_fase:
@@ -195,7 +202,7 @@ class DemandaDetail(APIView):
                                     item_fase.valor_selecionado = converter_string_para_float(item_fase.valor_selecionado)
                                     item_fase.valor_total = converter_string_para_float(item_fase.valor_total)
                                     item_fase.valor_hora = valor_hora
-                                    item_fase.fase = fase
+                                    item_fase.orcamento_fase = orcamento_fase
                                     item_fase.save()
                                     
                                 elif 'id' in i:
@@ -203,8 +210,8 @@ class DemandaDetail(APIView):
                                     item_fase.delete()
                                 
                 elif 'id' in f:
-                    fase = Fase.objects.get(pk=f['id'])
-                    fase.delete()
+                    orcamento_fase = Fase.objects.get(pk=f['id'])
+                    orcamento_fase.delete()
     
     def salvar_despesas(self, despesas, orcamento):
         if despesas:

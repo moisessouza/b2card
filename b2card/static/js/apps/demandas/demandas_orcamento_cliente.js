@@ -12,16 +12,12 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 			
 			data.orcamento.total_orcamento = CommonsService.formatarnumero(data.orcamento.total_orcamento);
 			
-			if (data.orcamento.fases) {
+			if (data.orcamento.orcamento_fases) {
 				
-				for (var i in data.orcamento.fases){
-					
-					var fase =  data.orcamento.fases[i]
-					fase.valor_total = CommonsService.formatarnumero(fase.valor_total);
-					
+				for (var fase of data.orcamento.orcamento_fases){
 					if (fase.itensfase) {
-						for (var j in fase.itensfase) {
-							var itemfase = fase.itensfase[j]
+						fase.valor_total = CommonsService.formatarnumero(fase.valor_total);
+						for (var itemfase of fase.itensfase) {
 							itemfase.valor_selecionado = CommonsService.formatarnumero(itemfase.valor_selecionado);
 							itemfase.valor_total = CommonsService.formatarnumero(itemfase.valor_total);
 						}

@@ -120,11 +120,11 @@ def serializar_orcamento(orcamentos):
         if  orcamentos:
             orcamento = orcamentos[0]
             orcamento_dict = OrcamentoSerializer(orcamento).data
-            fases = OrcamentoFase.objects.filter(orcamento = orcamento)
+            orcamento_fases = OrcamentoFase.objects.filter(orcamento = orcamento)
             
             fases_list = []
-            for i in fases:
-                itens_fase = ItemFase.objects.filter(fase = i)
+            for i in orcamento_fases:
+                itens_fase = ItemFase.objects.filter(orcamento_fase = i)
                 intes_fase_list = ItemFaseSerializer(itens_fase, many=True).data
                 fase_dict = OrcamentoFaseSerializer(i).data
                 fase_dict['itensfase'] = intes_fase_list
