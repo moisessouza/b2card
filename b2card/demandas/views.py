@@ -129,10 +129,10 @@ class DemandaDetail(APIView):
             del orcamento_dict['centro_custo']
         
         fases_list= None
-        if 'fases' in orcamento_dict:
-            if orcamento_dict['fases']:
-                fases_list = orcamento_dict['fases']
-            del orcamento_dict['fases']
+        if 'orcamento_fases' in orcamento_dict:
+            if orcamento_dict['orcamento_fases']:
+                fases_list = orcamento_dict['orcamento_fases']
+            del orcamento_dict['orcamento_fases']
             
         orcamento_atividades = None
         if 'orcamento_atividades' in orcamento_dict:

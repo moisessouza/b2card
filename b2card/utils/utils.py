@@ -130,7 +130,7 @@ def serializar_orcamento(orcamentos):
                 fase_dict['itensfase'] = intes_fase_list
                 fases_list.append(fase_dict)
                 
-            orcamento_dict['fases'] = fases_list
+            orcamento_dict['orcamento_fases'] = fases_list
             
             orcamento_atividades = OrcamentoAtividade.objects.filter(orcamento = orcamento)
             orcamento_atividades_list = []

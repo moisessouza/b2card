@@ -63,55 +63,6 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		$ctrl.share.demanda.$promise.then(function (data) {
 			$rootScope.$emit('orcamento', data);
 		});
-	} 
-	
-	$ctrl.novafase = function () {
-		$ctrl.fase = {
-			itensfase: [{}]
-		};
-	}
-	
-	$ctrl.cancelarfase = function () {
-		$ctrl.fase = null;
-	}
-	
-	$ctrl.editarfase = function (fase) {
-		$ctrl.fase = fase;
-	}
-	
-	$ctrl.salvarfase = function () {
-		if (!$ctrl.share.demanda.orcamento){
-			$ctrl.share.demanda.orcamento = {};
-		}
-		if (!$ctrl.share.demanda.orcamento.fases){
-			$ctrl.share.demanda.orcamento.fases = [];
-		}
-		
-		if ($ctrl.fase.descricao){
-			
-			if ( $ctrl.fase.itensfase){
-				for (var i in $ctrl.fase.itensfase){
-					var itemfase = $ctrl.fase.itensfase[i];
-					for (var j in $ctrl.share.listavalorhora){
-				
-						var valorhora = $ctrl.share.listavalorhora[j];
-						if (itemfase.valor_hora && valorhora.id == itemfase.valor_hora.id){
-							itemfase.valor_hora.descricao = valorhora.descricao;
-							break;
-						}
-					}
-					
-				}
-			}
-			
-			if ($ctrl.share.demanda.orcamento.fases.indexOf($ctrl.fase) < 0){
-				$ctrl.share.demanda.orcamento.fases.push($ctrl.fase);	
-			}
-		}
-		
-		$ctrl.fase = null;
-		
-		$ctrl.calcularvalortotalorcamento();
 	}
 	
 	$ctrl.adicionaritemfase = function (orcamento_fase){
@@ -121,7 +72,7 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		orcamento_fase.itensfase.push({});
 	}
 	
-	$ctrl.calcularvalortotalorcamento = function (){
+	/*$ctrl.calcularvalortotalorcamento = function (){
 		
 		var fases = $ctrl.share.demanda.orcamento.fases;
 		var totalorcamento = 0;
@@ -146,7 +97,7 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		}
 		
 		$ctrl.share.demanda.orcamento.total_orcamento =  CommonsService.formatarnumero(totalorcamento);
-	}
+	}*/
 	
 	$ctrl.changefasequantidadehoras = function (itemfase, orcamento_fase) {
 		
@@ -350,7 +301,7 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 	});
 	
 	$rootScope.$on('incluirfasesorcamento', function(event, data) {
-		if (!$ctrl.share.demanda.orcamento.orcamento_fases) {
+		if (!$ctrl.share.demanda.orcamento.orcamento_fases || $ctrl.share.demanda.orcamento.orcamento_fases.length <= 0) {
 			
 			$ctrl.share.demanda.orcamento.orcamento_fases = [];
 			var listfases = [];
