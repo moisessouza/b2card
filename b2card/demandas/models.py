@@ -157,11 +157,11 @@ class Despesa(models.Model):
     
 class OrcamentoFase(models.Model):
     orcamento = models.ForeignKey(Orcamento, default=None)
-    descricao = models.CharField(max_length=100)
+    fase = models.ForeignKey(Fase, default = None, null=True)
     valor_total = models.FloatField(default = None)
     
 class ItemFase(models.Model):
-    fase = models.ForeignKey(OrcamentoFase, default = None)
+    orcamento_fase = models.ForeignKey(OrcamentoFase, default = None)
     valor_hora = models.ForeignKey(ValorHora, default=None)
     valor_selecionado = models.FloatField()
     quantidade_horas = models.IntegerField()

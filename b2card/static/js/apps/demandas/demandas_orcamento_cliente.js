@@ -339,6 +339,23 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		
 	});
 	
+	$rootScope.$on('incluirfasesorcamento', function(event, data) {
+		if (!$ctrl.share.demanda.orcamento.fases) {
+			
+			$ctrl.share.demanda.orcamento.orcamento_fases = [];
+			var listfases = [];
+			
+			for (let orcamento_atividade of $ctrl.share.demanda.orcamento.orcamento_atividades) {
+				if (listfases.indexoOf(orcamento_atividade.fase.id) < 0) {
+					$ctrl.share.demanda.orcamento.orcamento_fases = {
+						fase: orcamento_atividade.fase
+					}
+					$ctrl.share.demanda.orcamento.orcamento_fases.push(orcamento_atividade.fase.id);
+				}
+			}
+		}
+	});
+	
 	$ctrl.alteracaoorcamento = () => {
 		$rootScope.$emit('calculardesejado');
 		$rootScope.$emit('calcularprojetado');

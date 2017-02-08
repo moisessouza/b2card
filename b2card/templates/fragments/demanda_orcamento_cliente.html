@@ -180,9 +180,11 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
+					<tr ng-repeat="orcamento_fase in $ctrl.share.demanda.orcamento.orcamento_fases">
 						<td>
-							TSD
+							<select ng-model="orcamento_fase.fase.id" ng-options="v.id as v.descricao for v in $ctrl.listafases" disabled>
+								<option value="">Selecione um tipo...</option>
+							</select>
 						</td>
 						<td>
 							<div>
