@@ -72,9 +72,9 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		orcamento_fase.itensfase.push({});
 	}
 	
-	/*$ctrl.calcularvalortotalorcamento = function (){
+	$ctrl.calcularvalortotalorcamento = () => {
 		
-		var fases = $ctrl.share.demanda.orcamento.fases;
+		var fases = $ctrl.share.demanda.orcamento.orcamento_fases;
 		var totalorcamento = 0;
 		
 		for (var i in fases) {
@@ -97,7 +97,7 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		}
 		
 		$ctrl.share.demanda.orcamento.total_orcamento =  CommonsService.formatarnumero(totalorcamento);
-	}*/
+	}
 	
 	$ctrl.changefasequantidadehoras = function (itemfase, orcamento_fase) {
 		
@@ -125,7 +125,7 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		
 		orcamento_fase.valor_total = CommonsService.formatarnumero(valorfase);
 		
-		//$ctrl.calcularvalortotalorcamento();
+		$ctrl.calcularvalortotalorcamento();
 		
 	}
 	
