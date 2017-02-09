@@ -61,12 +61,18 @@
 				<thead>
 					<th>Código</th>
 				    <th>Nome</th>
+				    <th>% Margem de risco</th>
+				    <th>% Imposto devidos</th>
+				    <th>% Lucro desejado</th>
 				    <th></th>
 				</thead>
 				<tbody>
 				    <tr ng-repeat="unidadeadministrativa in $ctrl.unidadeadministrativalist">
-				    	<td class="col-sm-2" ng-click="$ctrl.editar(unidadeadministrativa);">{{unidadeadministrativa.codigo}}</td>
-				        <td class="col-sm-12" ng-click="$ctrl.editar(unidadeadministrativa);">{{unidadeadministrativa.nome}}</td>
+				    	<td class="col-sm-1" ng-click="$ctrl.editar(unidadeadministrativa);">{{unidadeadministrativa.codigo}}</td>
+				        <td class="col-sm-5" ng-click="$ctrl.editar(unidadeadministrativa);">{{unidadeadministrativa.nome}}</td>
+				        <td class="col-sm-2" ng-click="$ctrl.editar(unidadeadministrativa);">{{unidadeadministrativa.margem_risco}}</td>
+				        <td class="col-sm-2" ng-click="$ctrl.editar(unidadeadministrativa);">{{unidadeadministrativa.imposto_devidos}}</td>
+				        <td class="col-sm-2" ng-click="$ctrl.editar(unidadeadministrativa);">{{unidadeadministrativa.lucro_desejado}}</td>
 				        <td>
 				       		<button type="button" class="btn btn-default" ng-click="$ctrl.deletar(unidadeadministrativa)">
 								<span class="glyphicon glyphicon-trash"></span>
