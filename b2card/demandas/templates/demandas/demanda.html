@@ -187,7 +187,7 @@
 							<div class="col-md-3">
 								<div class="form-group">
 									<label for="unidade_administrativa">Unidade administrativa</label> 
-								    <select id="unidade_administrativa" name="unidade_administrativa" class="form-control" ng-model="$ctrl.demanda.unidade_administrativa.id" ng-options="u.id as (u.codigo + ' - ' + u.nome) for u in $ctrl.listaunidadeadministrativas" required>
+								    <select id="unidade_administrativa" name="unidade_administrativa" class="form-control" ng-model="$ctrl.demanda.unidade_administrativa.id" ng-change="$ctrl.changeunidadeadministrativa()" ng-options="u.id as (u.codigo + ' - ' + u.nome) for u in $ctrl.listaunidadeadministrativas" required>
 								    	<option value="">Selecione uma unidade...</option>
 								    </select>
 								</div>

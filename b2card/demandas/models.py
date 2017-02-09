@@ -147,6 +147,7 @@ class Orcamento(models.Model):
     lucro_desejado = models.FloatField(default = None, null = True)    
     imposto_devidos = models.FloatField(default = None, null = True)
     total_despesas = models.FloatField(default = None, null = True)
+    
     horas_projetadas = models.FloatField(default = None, null = True)
     
 class Despesa(models.Model):

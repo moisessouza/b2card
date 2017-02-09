@@ -40,6 +40,9 @@ class Vigencia(models.Model):
 class UnidadeAdministrativa(models.Model):
     codigo = models.CharField(max_length=10, default=None)
     nome = models.CharField(max_length=30, default=None)
+    margem_risco = models.FloatField(default = None, null = True)
+    imposto_devidos = models.FloatField(default = None, null = True)
+    lucro_desejado = models.FloatField(default = None, null = True)
     
 
 TIPO = (

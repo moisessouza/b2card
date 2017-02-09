@@ -51,7 +51,7 @@ class VigenciaSerializer(serializers.ModelSerializer):
 class UnidadeAdministrativaSerializer(serializers.ModelSerializer):
     class Meta:
         model = UnidadeAdministrativa
-        fields = ('id', 'codigo', 'nome')
+        fields = ('id', 'codigo', 'nome', 'margem_risco', 'imposto_devidos', 'lucro_desejado')
         
 class FaseSerializer(serializers.ModelSerializer):
     class Meta:

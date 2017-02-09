@@ -118,8 +118,8 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 				'observacoes':[{}],
 				'ocorrencias':[{}],
 				'orcamento': {
-					'margem_risco': 15,
-					'lucro_desejado': 30,
+					'margem_risco': 0,
+					'lucro_desejado': 0,
 					'total_despesas': '0,00',
 					'imposto_devidos': 0
 				},
@@ -195,6 +195,17 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 				$rootScope.$emit('calcularproposto');
 				$rootScope.$emit('incluirfasesorcamento');
 			});
+		}
+	}
+	
+	$ctrl.changeunidadeadministrativa = function () {
+		for (let unidade of $ctrl.listaunidadeadministrativas){
+			if ($ctrl.demanda.unidade_administrativa.id == 	unidade.id) {
+				!$ctrl.demanda.orcamento && ($ctrl.demanda.orcamento = {})
+				$ctrl.demanda.orcamento.margem_risco = unidade.margem_risco;
+				$ctrl.demanda.orcamento.lucro_desejado = unidade.lucro_desejado;
+				$ctrl.demanda.orcamento.imposto_devidos = unidade.imposto_devidos;
+			}
 		}
 	}
 	

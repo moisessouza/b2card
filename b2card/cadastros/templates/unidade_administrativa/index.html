@@ -31,16 +31,28 @@
   <div class="panel panel-default form-group-sm" >
 	  <div class="panel-body">
 	  	  <div class="row">
-	  	  <div class="form-group col-sm-2">
-		    <label for="codigo">Código</label>
-		    <input type="text" class="form-control" id="codigo" name="codigo" ng-model="$ctrl.unidadeadministrativa.codigo" placeholder="Código" maxlength="10" required>
-		  </div>
+		  	  <div class="form-group col-sm-2">
+			    <label>Código</label>
+			    <input type="text" class="form-control" ng-model="$ctrl.unidadeadministrativa.codigo" placeholder="Código" maxlength="10" required>
+			  </div>
 		  </div>
 		  <div class="row">
-		  <div class="form-group col-sm-6">
-		    <label for="nome">Nome</label>
-		    <input type="text" class="form-control" id="nome" name="nome" ng-model="$ctrl.unidadeadministrativa.nome" placeholder="Nome" maxlength="30" required>
-		  </div>
+			  <div class="form-group col-sm-3">
+			    <label>Nome</label>
+			    <input type="text" class="form-control" ng-model="$ctrl.unidadeadministrativa.nome" placeholder="Nome" maxlength="30" required>
+			  </div>
+			  <div class="form-group col-sm-2">
+			    <label>% Margem de risco</label>
+			    <input type="number" class="form-control" ng-model="$ctrl.unidadeadministrativa.margem_risco" placeholder="% Margem de risco" maxlength="30" required>
+			  </div>
+			  <div class="form-group col-sm-2">
+			    <label for="nome">% Imposto devidos</label>
+			    <input type="number" class="form-control" ng-model="$ctrl.unidadeadministrativa.imposto_devidos" placeholder="% Imposto devidos" maxlength="30" required>
+			  </div>
+			  <div class="form-group col-sm-2">
+			    <label for="nome">% Lucro desejado</label>
+			    <input type="number" class="form-control" ng-model="$ctrl.unidadeadministrativa.lucro_desejado" placeholder="% Lucro desejado" maxlength="30" required>
+			  </div>
 		  </div>
 		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.salvar()" ng-disabled="unidadeadministrativa.$invalid">Salvar</button>
 		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.novo()" ng-show="$ctrl.unidadeadministrativa.id">Novo</button>
