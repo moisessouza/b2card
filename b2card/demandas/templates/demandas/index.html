@@ -90,7 +90,17 @@ div.modal-status {
 	<table class="table table-hover">
 	    <thead>
 	      <tr>
-	        <th>Demanda</th>
+	        <th>
+	        	<div style="float:left;">
+	        		Demanda
+	        	</div>
+	        	<button class="btn btn-primary button-heading" ng-click="$ctrl.ordenar()" style="margin-left:5px; float:left;" ng-show="$ctrl.arguments.ordenar">
+					<span class="glyphicon glyphicon-chevron-up"></span>
+				</button>
+				<button class="btn btn-primary button-heading" ng-click="$ctrl.ordenar()" style="margin-left:5px; float:left;" ng-show="!$ctrl.arguments.ordenar">
+					<span class="glyphicon glyphicon-chevron-down"></span>
+				</button>
+	        </th>
 	        <th>Responsável</th>
 	        <th>
 	        	<div style="float:left;">

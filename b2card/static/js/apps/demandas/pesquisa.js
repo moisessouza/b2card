@@ -14,15 +14,22 @@ pesquisademanda.controller('PesquisaDemandaController', function (CommonsService
 		}
 	}
 	
-	$ctrl.resultado = PesquisaDemandaService.buscarcentroresultadoshora({}, configurarresultado);
 	$ctrl.listaclientes = PessoaService.buscarpessoasjuridicas();
 	
 	$ctrl.arguments = {
-		pagina: '1'
+		pagina: '1',
+		ordenar: false
 	}
+	
+	$ctrl.resultado = PesquisaDemandaService.buscarcentroresultadoshora($ctrl.arguments, configurarresultado);
 	
 	$ctrl.abrirmodalstatus = () => {
 		$ctrl.showmodal = !$ctrl.showmodal; 
+	}
+	
+	$ctrl.ordenar = () => {
+		$ctrl.arguments.ordenar = !$ctrl.arguments.ordenar
+		$ctrl.pesquisar();
 	}
 	
 	$ctrl.pesquisar = () => {
