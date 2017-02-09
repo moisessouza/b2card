@@ -104,7 +104,7 @@
 										<tbody>
 											<tr ng-repeat="parcelafase in parcela.parcelafases">
 												<td width="26%">
-													<select ng-model="parcelafase.fase.id" ng-options="f.id as f.descricao for f in $ctrl.listafases" ng-change="$ctrl.verificarduplicidadefase(parcela, parcelafase, {{ parcelafase.fase && parcelafase.fase.id ? parcelafase.fase.id : 'null' }})" class="form-control">
+													<select ng-model="parcelafase.fase.id" ng-options="f.id as f.fase.descricao for f in $ctrl.listafases" ng-change="$ctrl.verificarduplicidadefase(parcela, parcelafase, {{ parcelafase.fase && parcelafase.fase.id ? parcelafase.fase.id : 'null' }})" class="form-control">
 												    	<option value="">Selecione...</option>
 												    </select>
 												</td>

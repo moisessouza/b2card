@@ -28,12 +28,8 @@ demandas.config(['$httpProvider', 'CommonsServiceProvider', function($httpProvid
 		        		}
 		        		
 		        		if (demanda.orcamento) {
+		        			demanda.orcamento.total_despesas = CommonsService.formatarnumero(demanda.orcamento.total_despesas);
 		        			if (demanda.orcamento.despesas) {
-		        				
-		        				if (demanda.orcamento.total_despesas) {
-		        					demanda.orcamento.total_despesas = CommonsService.formatarnumero(demanda.orcamento.total_despesas);
-		        				}
-		        				
 		        				for (let despesa of demanda.orcamento.despesas) {
 		        					despesa.valor = CommonsService.formatarnumero(despesa.valor);
 		        				}
@@ -123,7 +119,9 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 				'ocorrencias':[{}],
 				'orcamento': {
 					'margem_risco': 15,
-					'lucro_desejado': 30
+					'lucro_desejado': 30,
+					'total_despesas': '0,00',
+					'imposto_devidos': 0
 				},
 				'fase_atividades':[],
 				'data_criacao': new Date()
@@ -195,6 +193,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 				$rootScope.$emit('calculardesejado');
 				$rootScope.$emit('calcularprojetado');
 				$rootScope.$emit('calcularproposto');
+				$rootScope.$emit('incluirfasesorcamento');
 			});
 		}
 	}

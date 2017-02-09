@@ -137,14 +137,12 @@
 								    <select id="cliente" name="cliente" class="form-control" ng-change="$ctrl.changecliente()" ng-model="$ctrl.demanda.cliente.id" ng-options="c.id as c.pessoa.nome_razao_social for c in $ctrl.listaclientes" required>
 								    	<option value="">Selecione um cliente...</option>
 								    </select>
-									<span class="red" ng-show="demanda.cliente.$invalid">Cliente é obrigatório.</span>
 								</div>
 							</div>
 							<div class="col-md-3">
 								<div class="form-group">
 									<label for="nome_demanda">Nome da demanda</label> 
 								    <input type="text" id="nome_demanda" name="nome_demanda" ng-model="$ctrl.demanda.nome_demanda" class="form-control" required maxlength="30"/>
-								    <span class="red" ng-show="demanda.nome_demanda.$invalid">Nome da demanda é obrigatório.</span>
 								</div>
 							</div>
 							<div class="col-md-2">
@@ -160,14 +158,12 @@
 							    		<option value="I">Implantada</option>
 							    		<option value="D">Em desenvolvimento</option>
 							    	</select>
-							    	<span class="red" ng-show="demanda.status_demanda.$invalid">Status da demanda é obrigatório.</span>
 								</div>
 							</div>
 							<div class="col-md-3">
 								<div class="form-group">
 									<label for="codigo_demanda">Código da demanda</label> 
 								    <input type="text" id="codigo_demanda" name="codigo_demanda" ng-model="$ctrl.demanda.codigo_demanda" class="form-control" maxlength="12" required/>
-								    <span class="red" ng-show="demanda.codigo_demanda.$invalid">Código da demanda é obrigatório.</span>
 								</div>
 							</div>
 							<div class="col-md-3">
@@ -194,7 +190,6 @@
 								    <select id="unidade_administrativa" name="unidade_administrativa" class="form-control" ng-model="$ctrl.demanda.unidade_administrativa.id" ng-options="u.id as (u.codigo + ' - ' + u.nome) for u in $ctrl.listaunidadeadministrativas" required>
 								    	<option value="">Selecione uma unidade...</option>
 								    </select>
-								    <span class="red" ng-show="demanda.unidade_administrativa.$invalid">Unidade administrativa é obrigatório.</span>
 								</div>
 							</div>
 							<div class="col-sm-3">

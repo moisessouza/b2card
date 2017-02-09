@@ -87,6 +87,10 @@ commons.directive('gbMoney', function () {
 		  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 		},
 		stringparafloat: function(string) {
+			if (typeof string == 'number') {
+				return parseFloat(string);
+			}
+			
 			return parseFloat(string.replace(/\./g, '').replace(',','.'));
 		},
 		stringparadata: function (string) {

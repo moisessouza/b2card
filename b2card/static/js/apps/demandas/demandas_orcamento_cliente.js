@@ -259,7 +259,9 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 			$ctrl.share.demanda.orcamento.horas_desejado =  ($ctrl.share.demanda.orcamento.valor_desejado / valor_hora.vigencia.valor).toFixed(2);
 		}
 		
-		$ctrl.share.demanda.orcamento.lucro_calculado_desejado = ((($ctrl.share.demanda.orcamento.valor_desejado - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_desejado * ($ctrl.share.demanda.orcamento.imposto_devidos / 100))) / $ctrl.share.demanda.orcamento.valor_desejado) * 100).toFixed(2);
+		if ($ctrl.share.demanda.orcamento.valor_desejado) {
+			$ctrl.share.demanda.orcamento.lucro_calculado_desejado = ((($ctrl.share.demanda.orcamento.valor_desejado - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_desejado * ($ctrl.share.demanda.orcamento.imposto_devidos / 100))) / $ctrl.share.demanda.orcamento.valor_desejado) * 100).toFixed(2);
+		}
 		
 		$ctrl.share.demanda.orcamento.valor_desejado = CommonsService.formatarnumero($ctrl.share.demanda.orcamento.valor_desejado)
 		
@@ -270,11 +272,13 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		let valor_total = calcularatividadestotais();
 		let custo_sem_imposto = valor_total * (1 + ($ctrl.share.demanda.orcamento.margem_risco / 100))
 		
-		if ($ctrl.share.demanda.orcamento.valor_hora_orcamento.id) {
+		if ($ctrl.share.demanda.orcamento.valor_hora_orcamento && $ctrl.share.demanda.orcamento.valor_hora_orcamento.id) {
 			let valor_hora = buscarvalorhora($ctrl.share.demanda.orcamento.valor_hora_orcamento.id);
 			$ctrl.share.demanda.orcamento.valor_projetado = (valor_hora.vigencia.valor * $ctrl.share.demanda.orcamento.horas_projetadas) + CommonsService.stringparafloat($ctrl.share.demanda.orcamento.total_despesas);
 			
-			$ctrl.share.demanda.orcamento.lucro_calculado_projetado = ((($ctrl.share.demanda.orcamento.valor_projetado - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_projetado * ($ctrl.share.demanda.orcamento.imposto_devidos / 100))) / $ctrl.share.demanda.orcamento.valor_projetado) * 100).toFixed(2);
+			if ($ctrl.share.demanda.orcamento.valor_projetado) {
+				$ctrl.share.demanda.orcamento.lucro_calculado_projetado = ((($ctrl.share.demanda.orcamento.valor_projetado - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_projetado * ($ctrl.share.demanda.orcamento.imposto_devidos / 100))) / $ctrl.share.demanda.orcamento.valor_projetado) * 100).toFixed(2);
+			}
 			
 			$ctrl.share.demanda.orcamento.valor_projetado = CommonsService.formatarnumero($ctrl.share.demanda.orcamento.valor_projetado);
 		}
@@ -290,7 +294,9 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		$ctrl.share.demanda.orcamento.valor_proposto = valor_total;
 		$ctrl.share.demanda.orcamento.horas_proposto = horas_total;
 		
-		$ctrl.share.demanda.orcamento.lucro_calculado_proposto = ((($ctrl.share.demanda.orcamento.valor_proposto - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_proposto * ($ctrl.share.demanda.orcamento.imposto_devidos / 100))) / $ctrl.share.demanda.orcamento.valor_proposto) * 100).toFixed(2);
+		if ($ctrl.share.demanda.orcamento.valor_proposto) {
+			$ctrl.share.demanda.orcamento.lucro_calculado_proposto = ((($ctrl.share.demanda.orcamento.valor_proposto - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_proposto * ($ctrl.share.demanda.orcamento.imposto_devidos / 100))) / $ctrl.share.demanda.orcamento.valor_proposto) * 100).toFixed(2);
+		}
 		
 		$ctrl.share.demanda.orcamento.valor_proposto = CommonsService.formatarnumero($ctrl.share.demanda.orcamento.valor_proposto);
 		
@@ -303,7 +309,7 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 			var listfases = [];
 			
 			for (let orcamento_atividade of $ctrl.share.demanda.orcamento.orcamento_atividades) {
-				if (listfases.indexOf(orcamento_atividade.fase.id) < 0) {
+				if (orcamento_atividade.fase && listfases.indexOf(orcamento_atividade.fase.id) < 0) {
 					$ctrl.share.demanda.orcamento.orcamento_fases.push({
 						fase: orcamento_atividade.fase
 					});

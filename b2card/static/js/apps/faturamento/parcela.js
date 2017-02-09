@@ -8,7 +8,7 @@ parcela.controller('ModalParcelasController', function ($scope, $window, $uibMod
 	$ctrl.demanda = demanda;
 	$ctrl.total_orcamento = demanda.orcamento.total_orcamento;
 	$ctrl.listavalorhora = listavalorhora;
-	$ctrl.listafases = demanda.orcamento.fases;
+	$ctrl.listafases = demanda.orcamento.orcamento_fases;
 	
 	var configurarparcelas = function (parcelas) {
 		for ( var i in parcelas) {
@@ -74,7 +74,7 @@ parcela.controller('ModalParcelasController', function ($scope, $window, $uibMod
 			if (!$ctrl.objeto_horas_raw[o.orcamentofase__id]) {
 				$ctrl.objeto_horas_raw[o.orcamentofase__id] = {
 					fase_id: o.orcamentofase__id,
-					fase_descricao: o.orcamentofase__descricao
+					fase_descricao: o.orcamentofase__fase__descricao
 				}
 			}
 			

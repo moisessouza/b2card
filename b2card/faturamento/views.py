@@ -187,7 +187,7 @@ def buscar_tipo_hora_por_fases(request, demanda_id, format=None):
     for i in fase_list:
         serializer = OrcamentoFaseSerializer(i).data
         faseserializer_list.append(serializer)
-        valor_horas = ValorHora.objects.filter(itemfase__fase = i).distinct()
+        valor_horas = ValorHora.objects.filter(itemfase__orcamento_fase = i).distinct()
         
         valor_hora_list = []
         for i in valor_horas:

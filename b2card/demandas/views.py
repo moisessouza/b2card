@@ -147,7 +147,7 @@ class DemandaDetail(APIView):
             del orcamento_dict['despesas']
                 
         valor_hora_orcamento = None
-        if 'valor_hora_orcamento' in orcamento_dict:
+        if 'valor_hora_orcamento' in orcamento_dict and orcamento_dict['valor_hora_orcamento']:
             if 'id' in orcamento_dict['valor_hora_orcamento']:
                 valor_hora_orcamento = ValorHora.objects.get(pk=orcamento_dict['valor_hora_orcamento']['id'])
             del orcamento_dict['valor_hora_orcamento']
@@ -523,7 +523,7 @@ def buscar_total_horas_orcamento(request, demanda_id, format=None):
 
 @api_view(['GET'])
 def buscar_total_horas_por_valor_hora(request, demanda_id, format=None):
-    resultado = Orcamento.objects.filter(demanda__id=demanda_id).values('orcamentofase__id', 'orcamentofase__descricao', 'orcamentofase__itemfase__valor_hora__id', 'orcamentofase__itemfase__valor_hora__descricao').annotate(total_horas = Sum('orcamentofase__itemfase__quantidade_horas'))
+    resultado = Orcamento.objects.filter(demanda__id=demanda_id).values('orcamentofase__id', 'orcamentofase__fase__descricao', 'orcamentofase__itemfase__valor_hora__id', 'orcamentofase__itemfase__valor_hora__descricao').annotate(total_horas = Sum('orcamentofase__itemfase__quantidade_horas'))
     return Response(resultado)
 
 REGISTROS_POR_PAGINA = 14
