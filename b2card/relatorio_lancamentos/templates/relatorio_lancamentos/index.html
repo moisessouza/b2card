@@ -1,8 +1,109 @@
 <meta charset="utf-8">
 {% extends "base_page.html" %}
 
+{% block script %}
+	<script src="/static/js/apps/relatorio_lancamentos/relatorio_lancamentos.js"></script>
+	<script src="/static/js/apps/relatorio_lancamentos/relatorio_lancamentos-services.js"></script>
+	<script src="/static/js/apps/demandas/demandas-services.js"></script>
+	<script src="/static/js/apps/cadastros/pessoa/pessoa-services.js"></script>
+	<script src="/static/js/commons/commons.js"></script>
+	<script src="/static/js/angular/ui-bootstrap-tpls-2.2.0.min.js"></script>
+	<script src="/static/js/jquery/priceformat/jquery.priceformat.min.js"></script>
+	
+	<script type="text/javascript">
+	  	angular.bootstrap(document.getElementById('relatorio_lancamentos'), ['relatorio_lancamentos']);
+  	</script>
+	
+{% endblock %}
+
 {% block content %}
 
-asdfasdf
+{%verbatim%}
+
+<style>
+
+		button.margin {
+			margin-top: 21px
+		}
+
+		md-autocomplete md-autocomplete-wrap {
+			height: 26px;
+		}
+		
+		md-autocomplete input:not(.md-input) {
+			height: 26px;
+			font-size: 12px;
+			padding-right: 0px;
+		}
+		
+		md-autocomplete {
+			height: 26px;
+			margin-top: 4px;
+		}
+
+</style>
+
+<div id="relatorio_lancamentos" ng-controller="RelatorioLancamentosController as $ctrl">
+	<div class="panel panel-primary form-group-sm">
+		<div class="panel-body">
+			<form name="arguments">
+				<div class="col-sm-2" style="width: 135px">
+					<label for="total_orcamento">Período</label>
+					<div class="input-group">
+						<input type="text" class="form-control input-sm" uib-datepicker-popup="MM/yyyy" datepicker-options="$ctrl.datepicker_options" ui-mask="99/9999" model-view-value="true"  ng-model = "$ctrl.arguments.periodo" is-open="$ctrl.modaldata['periodo']" current-text="Hoje" clear-text="Limpar" close-text="Fechar" required/>
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodaldata('periodo')"><i class="glyphicon glyphicon-calendar"></i></button>
+						</span>
+					</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="form-group">
+						<label>Profissional</label>
+						<select ng-model="$ctrl.arguments.profissional_id" class="form-control" ng-options="f.id as f.pessoa.nome_razao_social for f in $ctrl.listafuncionarios">
+							<option value="">Selecione...</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="form-group">
+						<label>Cliente</label>
+						<select ng-model="$ctrl.arguments.cliente_id" class="form-control" ng-options="c.id as c.pessoa.nome_razao_social for c in $ctrl.listaclientes">
+							<option value="">Selecione...</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="form-group">
+						<label>Status da demanda</label>
+						 <select id="status_demanda" name="status_demanda" ng-model="$ctrl.arguments.status_demanda" class="form-control">
+				    		<option value="">Selecione um tipo...</option>
+				    		<option value="O">Em orçamentação</option>
+				    		<option value="A">Aguardando aprovação</option>
+				    		<option value="N">Não aprovada</option>
+				    		<option value="C">Cancelada</option>
+				    		<option value="H">Em homologação</option>
+				    		<option value="I">Implantada</option>
+				    		<option value="D">Em desenvolvimento</option>
+				    	</select>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label>Demanda</label>
+						<md-autocomplete md-selected-item="$ctrl.arguments.demanda" md-search-text-change="$ctrl.buscardemandas($ctrl.demanda_descricao)" md-search-text="$ctrl.demanda_descricao" md-selected-item-change="$ctrl.limparlistademandas()" md-items="demanda in $ctrl.listademandas"  md-item-text="demanda.nome_demanda">
+			    			<md-item-template>
+					    		<span md-highlight-text="searchText">{{demanda.nome_demanda}}</span>
+					  		</md-item-template>
+						</md-autocomplete>	
+					</div>
+				</div>
+				<button class="btn btn-sm btn-default margin" ng-click="$ctrl.pesquisar();">Pesquisar</button>
+				<button class="btn btn-sm btn-default margin" ng-click="$ctrl.novo();" value="Novo">Novo</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+{%endverbatim%}
 
 {% endblock %}

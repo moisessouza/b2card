@@ -16,7 +16,8 @@ from demandas.serializers import DemandaSerializer, PropostaSerializer, \
     ObservacaoSerializer, OcorrenciaSerializer, OrcamentoSerializer, \
     ItemFaseSerializer, AtividadeSerializer, \
     OrcamentoFaseSerializer, OrcamentoAtividadeSerializer, \
-    AtividadeProfissionalSerializer, FaseAtividadeSerializer
+    AtividadeProfissionalSerializer, FaseAtividadeSerializer,\
+    DemandaInicialSerializer
 from faturamento.models import Parcela, Medicao, ParcelaFase
 from faturamento.serializers import ParcelaSerializer, MedicaoSerializer, ParcelaFaseSerializer
 from utils.utils import converter_string_para_data, formatar_data, converter_string_para_float,\
@@ -545,6 +546,9 @@ def buscar_lista_por_parametro(request, format=None):
         if 'cliente_id' in request.data and request.data['cliente_id']:
             arguments['cliente__id'] = request.data['cliente_id']
             
+        if 'nome_demanda' in request.data and request.data['nome_demanda']:
+            arguments['nome_demanda__icontains'] = request.data['nome_demanda']
+            
         list_status = []
         if 'status' in request.data and request.data['status']:
             for k in request.data['status']:
@@ -615,3 +619,11 @@ def atividade_possui_alocacao(request, atividade_id, format=None):
     }
     
     return Response(context)
+
+
+
+@api_view(['GET'])
+def buscar_lista_por_texto(request, texto, format=None):
+    demandas = Demanda.objects.filter(nome_demanda__icontains=texto)[:10]
+    demandas = DemandaInicialSerializer(demandas, many=True).data
+    return Response(demandas)

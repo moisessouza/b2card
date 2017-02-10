@@ -22,6 +22,7 @@ app_name='relatorio_lancamentos'
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    url(r'^search/', views.pesquisar_alocacoes_horas)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

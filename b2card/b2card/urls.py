@@ -25,5 +25,5 @@ urlpatterns = [
     url(r'^demandas/', include('demandas.urls')),
     url(r'^faturamento/', include('faturamento.urls')),
     url(r'^gestor/', include('gestor.urls')),
-    url(r'^relatorio_lancamentos', include('relatorio_lancamentos.urls'))
+    url(r'^relatorio_lancamentos/', include('relatorio_lancamentos.urls'))
 ]

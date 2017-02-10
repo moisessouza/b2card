@@ -47,6 +47,10 @@ demandasservices.service('DemandaService', function($resource){
 		verificarseatividadepossuialocacao: function(atividade_id, callback) {
 			var AlocacaoHoras = $resource(BASE_URL + 'demandas/api/atividade/:id/possuialocacao/');
 			return AlocacaoHoras.get({id: atividade_id}, callback);
+		},
+		buscardemandaportexto: function(p, callback) {
+			var Demandas = $resource(BASE_URL + 'demandas/api/texto/:texto/');
+			return Demandas.query({texto:p}, callback);
 		}
 	}
 });
