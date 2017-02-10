@@ -105,10 +105,17 @@
 				</a>
 				{%endcheck_permittion%}
 			</li>
-			{% check_permittion 'admin:index' %}
 			<li>
-				<a href="{% url 'admin:index' %}">
-					Controle de Acessos
+				{% check_permittion 'demandas:inicial' %}
+				<a href="{% url 'demandas:inicial' %}">
+					Demandas
+				</a>
+				{%endcheck_permittion%}
+			</li>
+			{% check_permittion 'relatorio_lancamentos:index' %}
+			<li>
+				<a href="{% url 'relatorio_lancamentos:index' %}">
+					Relatório de lançamentos
 				</a>
 			</li>
 			{%endcheck_permittion%}

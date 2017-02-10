@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'faturamento.apps.FaturamentoConfig',
     'seguranca.apps.SegurancaConfig',
     'gestor.apps.GestorConfig',
+    'relatorio_lancamentos.apps.RelatorioLancamentosConfig'
 ]
 
 MIDDLEWARE = [

@@ -14,7 +14,7 @@ register = template.Library()
 
 @register.tag('check_permittion')
 def check_permittion(parser, token):
-    r = re.compile('.*\s\'([a-z]+\:[a-z]+)\'')
+    r = re.compile('.*\s\'([a-z_]+\:[a-z_]+)\'')
     url_name = r.match(token.contents).group(1)
     nodelist = parser.parse(('endcheck_permittion',))
     parser.delete_first_token()
