@@ -44,64 +44,109 @@
 </style>
 
 <div id="relatorio_lancamentos" ng-controller="RelatorioLancamentosController as $ctrl">
-	<div class="panel panel-primary form-group-sm">
-		<div class="panel-body">
-			<form name="arguments">
-				<div class="col-sm-2" style="width: 135px">
-					<label for="total_orcamento">Período</label>
-					<div class="input-group">
-						<input type="text" class="form-control input-sm" uib-datepicker-popup="MM/yyyy" datepicker-options="$ctrl.datepicker_options" ui-mask="99/9999" model-view-value="true"  ng-model = "$ctrl.arguments.periodo" is-open="$ctrl.modaldata['periodo']" current-text="Hoje" clear-text="Limpar" close-text="Fechar" required/>
-						<span class="input-group-btn">
-							<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodaldata('periodo')"><i class="glyphicon glyphicon-calendar"></i></button>
-						</span>
+	<form name="pesquisa">
+		<div class="panel panel-primary form-group-sm">
+			<div class="panel-body">
+				<form name="arguments">
+					<div class="col-sm-2" style="width: 135px">
+						<label for="total_orcamento">Período</label>
+						<div class="input-group">
+							<input type="text" class="form-control input-sm" uib-datepicker-popup="MM/yyyy" datepicker-options="$ctrl.datepicker_options" ui-mask="99/9999" model-view-value="true"  ng-model = "$ctrl.arguments.periodo" is-open="$ctrl.modaldata['periodo']" current-text="Hoje" clear-text="Limpar" close-text="Fechar" required/>
+							<span class="input-group-btn">
+								<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodaldata('periodo')"><i class="glyphicon glyphicon-calendar"></i></button>
+							</span>
+						</div>
 					</div>
-				</div>
-				<div class="col-sm-2">
-					<div class="form-group">
-						<label>Profissional</label>
-						<select ng-model="$ctrl.arguments.profissional_id" class="form-control" ng-options="f.id as f.pessoa.nome_razao_social for f in $ctrl.listafuncionarios">
-							<option value="">Selecione...</option>
-						</select>
+					<div class="col-sm-2">
+						<div class="form-group">
+							<label>Profissional</label>
+							<select ng-model="$ctrl.arguments.profissional_id" class="form-control" ng-options="f.id as f.pessoa.nome_razao_social for f in $ctrl.listafuncionarios">
+								<option value="">Selecione...</option>
+							</select>
+						</div>
 					</div>
-				</div>
-				<div class="col-sm-2">
-					<div class="form-group">
-						<label>Cliente</label>
-						<select ng-model="$ctrl.arguments.cliente_id" class="form-control" ng-options="c.id as c.pessoa.nome_razao_social for c in $ctrl.listaclientes">
-							<option value="">Selecione...</option>
-						</select>
+					<div class="col-sm-2">
+						<div class="form-group">
+							<label>Cliente</label>
+							<select ng-model="$ctrl.arguments.cliente_id" class="form-control" ng-options="c.id as c.pessoa.nome_razao_social for c in $ctrl.listaclientes">
+								<option value="">Selecione...</option>
+							</select>
+						</div>
 					</div>
-				</div>
-				<div class="col-sm-2">
-					<div class="form-group">
-						<label>Status da demanda</label>
-						 <select id="status_demanda" name="status_demanda" ng-model="$ctrl.arguments.status_demanda" class="form-control">
-				    		<option value="">Selecione um tipo...</option>
-				    		<option value="O">Em orçamentação</option>
-				    		<option value="A">Aguardando aprovação</option>
-				    		<option value="N">Não aprovada</option>
-				    		<option value="C">Cancelada</option>
-				    		<option value="H">Em homologação</option>
-				    		<option value="I">Implantada</option>
-				    		<option value="D">Em desenvolvimento</option>
-				    	</select>
+					<div class="col-sm-2">
+						<div class="form-group">
+							<label>Status da demanda</label>
+							 <select id="status_demanda" name="status_demanda" ng-model="$ctrl.arguments.status_demanda" class="form-control">
+					    		<option value="">Selecione um tipo...</option>
+					    		<option value="O">Em orçamentação</option>
+					    		<option value="A">Aguardando aprovação</option>
+					    		<option value="N">Não aprovada</option>
+					    		<option value="C">Cancelada</option>
+					    		<option value="H">Em homologação</option>
+					    		<option value="I">Implantada</option>
+					    		<option value="D">Em desenvolvimento</option>
+					    	</select>
+						</div>
 					</div>
-				</div>
-				<div class="col-sm-6">
-					<div class="form-group">
-						<label>Demanda</label>
-						<md-autocomplete md-selected-item="$ctrl.arguments.demanda" md-search-text-change="$ctrl.buscardemandas($ctrl.demanda_descricao)" md-search-text="$ctrl.demanda_descricao" md-selected-item-change="$ctrl.limparlistademandas()" md-items="demanda in $ctrl.listademandas"  md-item-text="demanda.nome_demanda">
-			    			<md-item-template>
-					    		<span md-highlight-text="searchText">{{demanda.nome_demanda}}</span>
-					  		</md-item-template>
-						</md-autocomplete>	
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label>Demanda</label>
+							<md-autocomplete md-selected-item="$ctrl.arguments.demanda" md-search-text-change="$ctrl.buscardemandas($ctrl.demanda_descricao)" md-search-text="$ctrl.demanda_descricao" md-selected-item-change="$ctrl.limparlistademandas()" md-items="demanda in $ctrl.listademandas"  md-item-text="demanda.nome_demanda">
+				    			<md-item-template>
+						    		<span md-highlight-text="searchText">{{demanda.nome_demanda}}</span>
+						  		</md-item-template>
+							</md-autocomplete>	
+						</div>
 					</div>
-				</div>
-				<button class="btn btn-sm btn-default margin" ng-click="$ctrl.pesquisar();">Pesquisar</button>
-				<button class="btn btn-sm btn-default margin" ng-click="$ctrl.novo();" value="Novo">Novo</button>
-			</form>
+					<button class="btn btn-sm btn-default margin" ng-click="$ctrl.pesquisar();" ng-disabled="pesquisa.$invalid">Pesquisar</button>
+					<button class="btn btn-sm btn-default margin" ng-click="$ctrl.relatorio();" ng-disabled="pesquisa.$invalid"value="Novo">Novo</button>
+				</form>
+			</div>
 		</div>
-	</div>
+	</form>
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>
+					Data da alocacao
+				</th>
+				<th>
+					Profissional
+				</th>
+				<th>
+					Cliente
+				</th>
+				<th>
+					Demanda
+				</th>
+				<th>
+					Atividade
+				</th>
+				<th>
+					Hora inicio
+				</th>
+				<th>
+					Hora fim
+				</th>
+				<th>
+					Horas alocadas
+				</th>
+				
+			</tr>
+		</thead>
+	    <tbody>
+	      <tr ng-click="$ctrl.abrirdemanda(demanda)" ng-repeat="alocacao in $ctrl.listaalocacao">
+	      		<td>{{alocacao.data_alocacao}}</td>
+	      		<td>{{alocacao.atividade_profissional.pessoa_fisica.pessoa.nome_razao_social}}</td>
+	      		<td>{{alocacao.atividade_profissional.atividade.fase_atividade.demanda.cliente.pessoa.nome_razao_social}}</td>
+	      		<td>{{alocacao.atividade_profissional.atividade.fase_atividade.demanda.nome_demanda}}</td>
+	      		<td>{{alocacao.atividade_profissional.atividade.descricao}}</td>
+	      		<td>{{alocacao.hora_inicio}}</td>
+	      		<td>{{alocacao.hora_fim}}</td>
+	      		<td>{{alocacao.horas_alocadas}}</td>
+	      </tr>
+	    </tbody>
+	</table>
 </div>
 
 {%endverbatim%}

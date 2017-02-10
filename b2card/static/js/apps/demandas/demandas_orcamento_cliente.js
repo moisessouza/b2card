@@ -267,7 +267,7 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		
 		if ($ctrl.share.demanda.orcamento.valor_hora_orcamento && $ctrl.share.demanda.orcamento.valor_hora_orcamento.id) {
 			let valor_hora = buscarvalorhora($ctrl.share.demanda.orcamento.valor_hora_orcamento.id);
-			$ctrl.share.demanda.orcamento.valor_projetado = (valor_hora.vigencia.valor * $ctrl.share.demanda.orcamento.horas_projetadas) + CommonsService.stringparafloat($ctrl.share.demanda.orcamento.total_despesas);
+			$ctrl.share.demanda.orcamento.valor_projetado = (valor_hora.vigencia.valor * $ctrl.share.demanda.orcamento.horas_projetadas) + CommonsService.stringparafloat($ctrl.share.demanda.orcamento.total_despesas ? $ctrl.share.demanda.orcamento.total_despesas : 0);
 			
 			if ($ctrl.share.demanda.orcamento.valor_projetado) {
 				$ctrl.share.demanda.orcamento.lucro_calculado_projetado = ((($ctrl.share.demanda.orcamento.valor_projetado - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_projetado * ($ctrl.share.demanda.orcamento.imposto_devidos / 100))) / $ctrl.share.demanda.orcamento.valor_projetado) * 100).toFixed(2);

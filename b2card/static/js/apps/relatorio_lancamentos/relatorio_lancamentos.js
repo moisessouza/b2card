@@ -32,8 +32,14 @@ relatorio_lancamentos.controller('RelatorioLancamentosController', function (Rel
 		});	
 	}
 	
+	$ctrl.listaalocacao = [];
+	
 	$ctrl.pesquisar = () => {
-		RelatorioLancamentosService.pesquisar($ctrl.arguments);
+		$ctrl.listaalocacao = RelatorioLancamentosService.pesquisar($ctrl.arguments, function (data){
+			for(let alocacao of data) {
+				alocacao.horas_alocadas = CommonsService.milliparahoras(alocacao.horas_alocadas_milisegundos);
+			}
+		});
 	}
 	
 });

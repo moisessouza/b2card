@@ -105,13 +105,6 @@
 				</a>
 				{%endcheck_permittion%}
 			</li>
-			<li>
-				{% check_permittion 'demandas:inicial' %}
-				<a href="{% url 'demandas:inicial' %}">
-					Demandas
-				</a>
-				{%endcheck_permittion%}
-			</li>
 			{% check_permittion 'relatorio_lancamentos:index' %}
 			<li>
 				<a href="{% url 'relatorio_lancamentos:index' %}">

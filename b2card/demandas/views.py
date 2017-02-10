@@ -179,7 +179,7 @@ class DemandaDetail(APIView):
                         
                         fase = None
                         if 'fase' in f:
-                            if f['fase']['id']:
+                            if f['fase'] is not None and 'id' in f['fase'] and f['fase']['id']:
                                 fase = Fase.objects.get(pk=f['fase']['id'])
                             del f['fase']
                             

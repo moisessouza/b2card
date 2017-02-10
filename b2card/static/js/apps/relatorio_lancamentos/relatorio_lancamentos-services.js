@@ -16,7 +16,7 @@ relatorio_lancamentos.service('RelatorioLancamentosService', function($resource)
 	return {
 		pesquisar: function (argumentos, callback) {
 			var AlocacaoHoras = $resource(BASE_URL + 'relatorio_lancamentos/search/', {}, {
-				'set': {method:'POST'}
+				'set': {method:'POST', isArray: true}
 			});
 			return AlocacaoHoras.set({}, argumentos, callback);
 		}

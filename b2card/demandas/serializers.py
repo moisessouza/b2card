@@ -82,12 +82,13 @@ class AtividadeProfissionalSerializer(serializers.ModelSerializer):
     class Meta:
         model = AtividadeProfissional
         fields = ('id', 'pessoa_fisica', 'quantidade_horas', 'horas_alocadas_milisegundos', 'percentual_concluido', 'percentual_calculado')
-
+        
 class AlocacaoHorasSerializer(serializers.ModelSerializer):
     tipo_alocacao = TipoAlocacaoSerializer()
     class Meta:
         model = AlocacaoHoras
-        fields = ('id', 'horas_alocadas_milisegundos', 'percentual_concluido', 'observacao', 'data_alocacao', 'tipo_alocacao')
+        fields = ('id', 'horas_alocadas_milisegundos', 'percentual_concluido', 'observacao', 'data_alocacao', 'tipo_alocacao',
+                  'hora_inicio', 'hora_fim', 'data_alocacao', 'atividade_profissional')
 
 class OrcamentoAtividadeSerializer(serializers.ModelSerializer):
     fase = FaseSerializer()
@@ -113,7 +114,40 @@ class FaseAtividadeSerializer(serializers.ModelSerializer):
         model = FaseAtividade
         fields = ('id', 'fase', 'responsavel', 'data_inicio', 'data_fim', 'percentual_concluido', 'percentual_calculado')
         
+class DemandaRelatorioSerializar(serializers.ModelSerializer):
+    cliente = PessoaJuridicaComPessoaSerializer()
+    class Meta:
+        model = Demanda
+        fields = ('id', 'nome_demanda','cliente', 'status_demanda','codigo_demanda', 'percentual_concluido', 'percentual_calculado', 'data_inicio', 'data_fim')
+        
+class FaseAtividadeComDemandaSerializer(serializers.ModelSerializer):
+    demanda = DemandaRelatorioSerializar()
+    class Meta:
+        model = FaseAtividade
+        fields = ('id', 'demanda')
+        
 class AtividadeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Atividade
         fields = ('id', 'descricao', 'data_inicio', 'data_fim', 'percentual_concluido', 'percentual_calculado')
+        
+class AtividadeComFaseAtividadeSerializer(serializers.ModelSerializer):
+    fase_atividade = FaseAtividadeComDemandaSerializer()
+    class Meta:
+        model = Atividade
+        fields = ('id', 'fase_atividade', 'descricao')
+        
+class AtividadeProfissionalAlocacaoHorasSerializer(serializers.ModelSerializer):
+    pessoa_fisica = PessoaFisicaComPessoaSerializer()
+    atividade = AtividadeComFaseAtividadeSerializer()
+    class Meta:
+        model = AtividadeProfissional
+        fields=('id', 'pessoa_fisica', 'atividade')
+        
+class RelatorioAlocacaoHorasSerializer(serializers.ModelSerializer):
+    tipo_alocacao = TipoAlocacaoSerializer()
+    atividade_profissional = AtividadeProfissionalAlocacaoHorasSerializer()
+    class Meta:
+        model = AlocacaoHoras
+        fields = ('id', 'horas_alocadas_milisegundos', 'percentual_concluido', 'observacao', 'data_alocacao', 'tipo_alocacao',
+                  'hora_inicio', 'hora_fim', 'data_alocacao', 'atividade_profissional')
