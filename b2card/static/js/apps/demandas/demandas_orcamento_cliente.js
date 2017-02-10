@@ -241,18 +241,22 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		let valor_total = calcularatividadestotais();
 		let custo_sem_imposto = valor_total * (1 + ($ctrl.share.demanda.orcamento.margem_risco / 100))
 		
-		$ctrl.share.demanda.orcamento.valor_desejado = custo_sem_imposto / (($ctrl.share.demanda.orcamento.lucro_desejado / 100) + ($ctrl.share.demanda.orcamento.imposto_devidos / 100)) + CommonsService.stringparafloat($ctrl.share.demanda.orcamento.total_despesas);
+		if ($ctrl.share.demanda.orcamento.lucro_desejado && $ctrl.share.demanda.orcamento.imposto_devidos) {
+
+			$ctrl.share.demanda.orcamento.valor_desejado = custo_sem_imposto / (($ctrl.share.demanda.orcamento.lucro_desejado / 100) + ($ctrl.share.demanda.orcamento.imposto_devidos / 100)) + CommonsService.stringparafloat($ctrl.share.demanda.orcamento.total_despesas ? $ctrl.share.demanda.orcamento.total_despesas : 0);
+			
+			if ($ctrl.share.demanda.orcamento.valor_hora_orcamento && $ctrl.share.demanda.orcamento.valor_hora_orcamento.id){
+				let valor_hora = buscarvalorhora($ctrl.share.demanda.orcamento.valor_hora_orcamento.id);
+				$ctrl.share.demanda.orcamento.horas_desejado =  ($ctrl.share.demanda.orcamento.valor_desejado / valor_hora.vigencia.valor).toFixed(2);
+			}
+			
+			if ($ctrl.share.demanda.orcamento.valor_desejado) {
+				$ctrl.share.demanda.orcamento.lucro_calculado_desejado = ((($ctrl.share.demanda.orcamento.valor_desejado - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_desejado * ($ctrl.share.demanda.orcamento.imposto_devidos / 100))) / $ctrl.share.demanda.orcamento.valor_desejado) * 100).toFixed(2);
+			}
+			
+			$ctrl.share.demanda.orcamento.valor_desejado = CommonsService.formatarnumero($ctrl.share.demanda.orcamento.valor_desejado)
 		
-		if ($ctrl.share.demanda.orcamento.valor_hora_orcamento && $ctrl.share.demanda.orcamento.valor_hora_orcamento.id){
-			let valor_hora = buscarvalorhora($ctrl.share.demanda.orcamento.valor_hora_orcamento.id);
-			$ctrl.share.demanda.orcamento.horas_desejado =  ($ctrl.share.demanda.orcamento.valor_desejado / valor_hora.vigencia.valor).toFixed(2);
 		}
-		
-		if ($ctrl.share.demanda.orcamento.valor_desejado) {
-			$ctrl.share.demanda.orcamento.lucro_calculado_desejado = ((($ctrl.share.demanda.orcamento.valor_desejado - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_desejado * ($ctrl.share.demanda.orcamento.imposto_devidos / 100))) / $ctrl.share.demanda.orcamento.valor_desejado) * 100).toFixed(2);
-		}
-		
-		$ctrl.share.demanda.orcamento.valor_desejado = CommonsService.formatarnumero($ctrl.share.demanda.orcamento.valor_desejado)
 		
 	});
 	

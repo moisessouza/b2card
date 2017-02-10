@@ -106,6 +106,10 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 					}
 				}
 				
+				if (!$ctrl.demanda.orcamento) {
+					$ctrl.demanda.orcamento = {};
+				}
+				
 				$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(demanda_id);
 				
 			});
@@ -167,7 +171,15 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 	share.listafuncionarios = $ctrl.listafuncionarios;
 	
 	$ctrl.listacentroresultados = CentroResultadoService.buscarcentroresultados();
-	$ctrl.listaunidadeadministrativas = UnidadeAdministrativaService.buscarunidadeadministrativas();
+	$ctrl.listaunidadeadministrativas = UnidadeAdministrativaService.buscarunidadeadministrativas(function () {
+		if ($ctrl.demanda.$promise) {
+			$ctrl.demanda.$promise.then(function (){
+				if (!$ctrl.demanda.orcamento.margem_risco || !$ctrl.demanda.orcamento.lucro_desejado || !$ctrl.demanda.orcamento.imposto_devidos) {
+					$ctrl.changeunidadeadministrativa();
+				}		
+			})
+		}
+	});
 	$ctrl.listanaturezademanda = NaturezaDemandaService.buscarnaturezademandas();
 	
 	var abas = ['#dadosdemanda', '#orcamento', '#atividades', 
