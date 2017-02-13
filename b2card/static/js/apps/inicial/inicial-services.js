@@ -49,6 +49,10 @@ inicialservices.service('InicialService', function($resource){
 		salvaralocacaointerna: function(data, callback){
 			var AlocacaoHoras = $resource(BASE_URL + 'inicial/api/alocacaointerna/');
 			return AlocacaoHoras.save({}, data, callback);
+		},
+		verificarsepossuivigencia: function(date, callback) {
+			var CustoPrestador = $resource(BASE_URL + 'inicial/api/verificar_se_possui_vigencia/:data_informada/');
+			return CustoPrestador.get({data_informada: date}, callback);
 		}
 	}
 });

@@ -258,61 +258,72 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 	
 	$ctrl.salvar = () => {
 		
-		if (!$ctrl.data) {
-			alert('Informe data.')
-			return;
-		}
+		let data = CommonsService.dataparaurl($ctrl.data);
 		
-		if (!$ctrl.percentual_conclusao) {
-			alert('Informe % conclusão.');
-			return;
-		}
-		
-		if (!$ctrl.hora_inicio){
-			alert('Informe hora inicio.');
-			return;
-		}
-		
-		if(!$ctrl.hora_fim) {
-			alert('Informe hora fim.');
-			return;
-		}
-		
-		if($ctrl.atividade_fechada && (!$ctrl.tipo_alocacao || !$ctrl.tipo_alocacao.id)) {
-			alert('Informe tipo de alocação.');
-			return;
-		}
-		
-		var hora_inicio = $ctrl.hora_inicio.split(':');
-		var hora_fim = $ctrl.hora_fim.split(':');
-		
-		hora_inicio = new Date(0, 0, 0, hora_inicio[0], hora_inicio[1], 0, 0);
-		hora_fim = new Date(0,0,0,hora_fim[0], hora_fim[1], 0,0).getTime();
-		
-		if (hora_inicio >= hora_fim) {
-			alert('Hora inicio deve ser menor que hora fim.');
-			return;
-		}
-		
-		var milisegundos = hora_fim - hora_inicio
+		InicialService.verificarsepossuivigencia (data, function(result) {
+			
+			if(result.custo_prestador) {
+				
+				if (!$ctrl.data) {
+					alert('Informe data.')
+					return;
+				}
+				
+				if (!$ctrl.percentual_conclusao) {
+					alert('Informe % conclusão.');
+					return;
+				}
+				
+				if (!$ctrl.hora_inicio){
+					alert('Informe hora inicio.');
+					return;
+				}
+				
+				if(!$ctrl.hora_fim) {
+					alert('Informe hora fim.');
+					return;
+				}
+				
+				if($ctrl.atividade_fechada && (!$ctrl.tipo_alocacao || !$ctrl.tipo_alocacao.id)) {
+					alert('Informe tipo de alocação.');
+					return;
+				}
+				
+				var hora_inicio = $ctrl.hora_inicio.split(':');
+				var hora_fim = $ctrl.hora_fim.split(':');
+				
+				hora_inicio = new Date(0, 0, 0, hora_inicio[0], hora_inicio[1], 0, 0);
+				hora_fim = new Date(0,0,0,hora_fim[0], hora_fim[1], 0,0).getTime();
+				
+				if (hora_inicio >= hora_fim) {
+					alert('Hora inicio deve ser menor que hora fim.');
+					return;
+				}
+				
+				var milisegundos = hora_fim - hora_inicio
 
-		if ($ctrl.data instanceof Date){
-			$ctrl.data = CommonsService.dataparastring($ctrl.data);
-		}
-		
-		var data = {
-			atividade_profissional: atividade.atividade_profissional,
-			horas_alocadas_milisegundos : milisegundos,
-			percentual_concluido : $ctrl.percentual_conclusao,
-			hora_inicio: $ctrl.hora_inicio,
-			hora_fim: $ctrl.hora_fim,
-			data_informada: $ctrl.data,
-			observacao: $ctrl.observacao,
-			tipo_alocacao: $ctrl.tipo_alocacao
-		}
+				if ($ctrl.data instanceof Date){
+					$ctrl.data = CommonsService.dataparastring($ctrl.data);
+				}
+				
+				var data = {
+					atividade_profissional: atividade.atividade_profissional,
+					horas_alocadas_milisegundos : milisegundos,
+					percentual_concluido : $ctrl.percentual_conclusao,
+					hora_inicio: $ctrl.hora_inicio,
+					hora_fim: $ctrl.hora_fim,
+					data_informada: $ctrl.data,
+					observacao: $ctrl.observacao,
+					tipo_alocacao: $ctrl.tipo_alocacao
+				}
 
-		InicialService.salvaralocacao(data, function (){
-			$uibModalInstance.close(data);
+				InicialService.salvaralocacao(data, function (){
+					$uibModalInstance.close(data);
+				});
+				
+			} else {
+				alert('Você não possui vigência para esta data, favor verificar!');
+			}
 		});
 		
 	}

@@ -54,7 +54,7 @@ def pesquisar_alocacoes_horas(request, format=None):
     return Response(alocacao_hora_list)
 
 @api_view(['GET'])
-def eh_gestor(request):
+def eh_gestor(request, format=None):
     if request.user.is_superuser:
         return Response({'gestor': True})
     

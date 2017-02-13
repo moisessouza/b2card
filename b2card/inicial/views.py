@@ -8,10 +8,12 @@ from demandas.serializers import DemandaSerializer, AtividadeSerializer,\
     AlocacaoHorasSerializer, DemandaInicialSerializer,\
     FaseAtividadeInicialSerializer, AtividadeProfissionalInicialSerializer
 from rest_framework.response import Response
-from cadastros.models import PessoaJuridica, TipoAlocacao, PessoaFisica
+from cadastros.models import PessoaJuridica, TipoAlocacao, PessoaFisica,\
+    CustoPrestador
 from cadastros.serializers_pessoa import PessoaJuridicaSerializer,\
     PessoaJuridicaComPessoaSerializer
-from utils.utils import formatar_data, converter_string_para_data
+from utils.utils import formatar_data, converter_string_para_data,\
+    converter_data_url
 import datetime
 from django.db.models import Q
 
@@ -273,3 +275,16 @@ def buscar_atividade_profissional_por_atividade(request, atividade_id, format=No
     atividade_profissional_dict = AtividadeProfissionalSerializer(atividade_profissional[0]).data
     
     return Response(atividade_profissional_dict)
+
+@api_view(['GET'])
+def verificar_se_possui_vigencia(request, data_informada, format=None):
+    
+    data = converter_data_url(data_informada)
+    
+    custo_prestador = CustoPrestador.objects.filter(pessoa_fisica__prestador__usuario__id=request.user.id, data_inicio__lte=data).filter(Q(data_fim__isnull = True) | Q(data_fim__gte = data))
+    
+    if len(custo_prestador) > 0:
+        return Response({'custo_prestador' : True})
+    else:
+        return Response({'custo_prestador': False})
+    

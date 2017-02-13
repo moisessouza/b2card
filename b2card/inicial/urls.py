@@ -29,7 +29,8 @@ urlpatterns = [
     url(r'^api/atividadesprofissional/demanda/(?P<demanda_id>[0-9]+)/$', views.buscar_atividades_demanda),
     url(r'^api/atividadesinternas/$', views.buscar_atividades_internas),
     url(r'^api/atividadesinternas/demanda/(?P<demanda_id>[0-9]+)/$', views.buscar_atividades_demanda_interna),
-    url(r'^api/alocacaointerna/$', views.alocar_horas_internas)
+    url(r'^api/alocacaointerna/$', views.alocar_horas_internas),
+    url(r'^api/verificar_se_possui_vigencia/(?P<data_informada>[0-9]+)/$', views.verificar_se_possui_vigencia)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

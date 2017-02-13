@@ -113,6 +113,17 @@ commons.directive('gbMoney', function () {
 			
 			return [dia, mes, ano].join('/');	
 		},
+		dataparaurl: function(data){
+			if (data instanceof Date) {
+				var dia = data.getDate() < 10 ? '0' + data.getDate() : data.getDate();
+				var mes = (data.getMonth() + 1) < 10 ? '0' + (data.getMonth() + 1) : data.getMonth() + 1;
+				var ano = data.getFullYear();
+				
+				return [dia, mes, ano].join('');
+			} else {
+				return data.replace(/\//g, '')
+			}
+		},
 		arredondar: function (numero){
 			if (numero || numero == 0){
 				return numero.toFixed(2);
