@@ -35,7 +35,7 @@ TIPO_DEMANDA=(
 )
 class Demanda(models.Model):
     cliente = models.ForeignKey(PessoaJuridica, default=None)
-    nome_demanda = models.CharField(max_length=30,default=None)
+    nome_demanda = models.CharField(max_length=60,default=None)
     descricao = models.TextField(default=None, null=True)
     status_demanda = models.CharField(max_length=1, choices=STATUS_DEMANDA, null=True)
     codigo_demanda = models.CharField(max_length=12, null=True)
