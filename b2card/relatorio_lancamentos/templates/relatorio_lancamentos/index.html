@@ -4,8 +4,10 @@
 {% block script %}
 	<script src="/static/js/apps/relatorio_lancamentos/relatorio_lancamentos.js"></script>
 	<script src="/static/js/apps/relatorio_lancamentos/relatorio_lancamentos-services.js"></script>
+	<script src="/static/js/apps/inicial/inicial-services.js"></script>
 	<script src="/static/js/apps/demandas/demandas-services.js"></script>
 	<script src="/static/js/apps/cadastros/pessoa/pessoa-services.js"></script>
+	<script src="/static/js/apps/cadastros/tipoalocacao/tipoalocacao-services.js"></script>
 	<script src="/static/js/commons/commons.js"></script>
 	<script src="/static/js/angular/ui-bootstrap-tpls-2.2.0.min.js"></script>
 	<script src="/static/js/jquery/priceformat/jquery.priceformat.min.js"></script>
@@ -135,7 +137,7 @@
 			</tr>
 		</thead>
 	    <tbody>
-	      <tr ng-click="$ctrl.abrirdemanda(demanda)" ng-repeat="alocacao in $ctrl.listaalocacao">
+	      <tr ng-click="$ctrl.abrirmodalalocacao(alocacao)" ng-repeat="alocacao in $ctrl.listaalocacao">
 	      		<td>{{alocacao.data_alocacao}}</td>
 	      		<td>{{alocacao.atividade_profissional.pessoa_fisica.pessoa.nome_razao_social}}</td>
 	      		<td>{{alocacao.atividade_profissional.atividade.fase_atividade.demanda.cliente.pessoa.nome_razao_social}}</td>
