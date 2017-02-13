@@ -4,8 +4,9 @@ import datetime
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.db.models import Q
 
-from cadastros.models import TipoAlocacao
+from cadastros.models import TipoAlocacao, Prestador
 from demandas.models import AlocacaoHoras, AtividadeProfissional, Atividade, \
     FaseAtividade, Demanda
 from demandas.serializers import AlocacaoHorasSerializer, \
@@ -38,7 +39,22 @@ def pesquisar_alocacoes_horas(request, format=None):
     if 'demanda' in request.data and request.data['demanda']:
         alocacao_horas = alocacao_horas.filter(atividade_profissional__atividade__fase_atividade__demanda__id=request.data['demanda']['id'])
         
-    alocacao_hora_list = RelatorioAlocacaoHorasSerializer(alocacao_horas, many=True).data
+    if not request.user.is_superuser:
+        eh_gestor = Prestador.objects.filter(Q(data_fim__isnull=True) | Q(data_fim__gte = datetime.datetime.now()), Q(cargo__gestor=True), Q(usuario__id = request.user.id))
+    
+        if len(eh_gestor) <= 0:
+            alocacao_horas = alocacao_horas.filter(atividade_profissional__pessoa_fisica__prestador__usuario__id = request.user.id)
+        
+        
+    list = []
+    list.extend(alocacao_horas)
+    
+    count = 0
+    while(count < 5):
+        count+=1
+        list.extend(list)
+        
+    alocacao_hora_list = RelatorioAlocacaoHorasSerializer(list, many=True).data
     
     for i in alocacao_hora_list:
         d = converter_string_para_data(i['data_alocacao'])
