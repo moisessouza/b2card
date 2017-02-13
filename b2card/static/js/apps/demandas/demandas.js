@@ -263,7 +263,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		if (i.id) {
 			DemandaService.verificarseatividadepossuialocacao(i.id, function (data){
 				if (data.possui) {
-					alert('Atividade não pode ser removida pois já possui apropriação.')
+					alert('Atividade não pode ser removida pois já possui alocação.')
 					return;
 				} else {
 					i.remover = true;		
