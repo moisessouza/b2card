@@ -134,11 +134,7 @@
 									</td>
 									<td>
 										<span ng-repeat="atividadeprofissional in atividade.atividadeprofissionais" ng-show="!atividadeprofissional.remover">
-									    	<md-autocomplete required md-selected-item="atividadeprofissional.pessoa_fisica" ng-disabled="true" md-search-text="$ctrl.atividadeprofissionalmap[atividadeprofissional.$$hashKey].text" md-selected-item-change="$ctrl.limparlistaatividadeprofissionallist()" md-search-text-change="$ctrl.buscarprofissional($ctrl.atividadeprofissionalmap[atividadeprofissional.$$hashKey].text, atividadeprofissional)" md-items="p in $ctrl.atividadeprofissionallist"  md-item-text="p.pessoa.nome_razao_social">
-									    		<md-item-template>
-											    	<span md-highlight-text="searchText">{{p.pessoa.nome_razao_social}}</span>
-											  	</md-item-template>
-											</md-autocomplete>
+											<input type="text" ng-model="atividadeprofissional.pessoa_fisica.pessoa.nome_razao_social" class="form-control" style="margin-top: 1px" disabled/>
 								    	</span>
 									</td>
 									<td>
