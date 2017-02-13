@@ -2,7 +2,7 @@
 
 var relatorio_lancamentos = angular.module('relatorio_lancamentos', ['relatorio_lancamentos-services', 'pessoa-services', 'demandas-services', 'commons', 'ui.bootstrap', 'ui.mask', 'ngMaterial']);
 
-relatorio_lancamentos.controller('RelatorioLancamentosController', function (RelatorioLancamentosService, PessoaService, DemandaService, CommonsService, $scope, $window){
+relatorio_lancamentos.controller('RelatorioLancamentosController', function (RelatorioLancamentosService, PessoaService, DemandaService, CommonsService, $scope, $window, $uibModal){
 	var $ctrl = this;
 	
 	$ctrl.modaldata = {}
@@ -15,6 +15,33 @@ relatorio_lancamentos.controller('RelatorioLancamentosController', function (Rel
 		minMode: 'month'
 	}
 
+	$ctrl.abrirmodalalocacao = (alocacao) => {
+		
+		var modalInstance = $uibModal.open({
+			animation : $ctrl.animationsEnabled,
+			ariaLabelledBy : 'modal-title',
+			ariaDescribedBy : 'modal-body',
+			templateUrl : '/static/modal/modalAtualizarAlocacao.html?bust=' + Math.random().toString(36).slice(2),
+			controller : 'ModalAlocacaoController',
+			controllerAs : '$ctrl',
+			//size : 'lg'
+			windowClass: 'app-modal-window',
+			resolve : {
+		    	  alocacao: alocacao
+			}
+		});
+			
+		modalInstance.result.then(function(data) {
+			InicialService.buscaratividadesprofissionalporatividade(atividade.id, function (data){
+				atividade.atividade_profissional = data;
+				configurarregistros($ctrl.clientes);
+			});
+		}, function() {
+			// $log.info('Modal dismissed at: ' + new Date());
+		});
+		
+	}
+	
 	$ctrl.listademandas = [];
 	
 	$ctrl.abrirmodaldata = prop => {
@@ -40,6 +67,94 @@ relatorio_lancamentos.controller('RelatorioLancamentosController', function (Rel
 				alocacao.horas_alocadas = CommonsService.milliparahoras(alocacao.horas_alocadas_milisegundos);
 			}
 		});
+	}
+	
+}).controller('ModalAlocacaoController', function (alocacao, CommonsService, RelatorioLancamentosService, $uibModalInstance, $scope, $window) {
+	var $ctrl = this;
+	$ctrl.atividade = alocacao.atividade_profissional.atividade;
+	$ctrl.atividade_fechada;
+	
+	$ctrl.data = alocacao.data_informada;
+	$ctrl.hora_inicio = alocacao.hora_inicio;
+	$ctrl.hora_fim = alocacao.hora_fim;
+	$ctrl.percentual_conclusao = alocacao.percentual_concluido;
+	
+	$scope.today = function() {
+		$ctrl.data =new Date();
+	};
+	$scope.today();
+
+	$scope.clear = function() {
+		$scope.dt = null;
+	};
+
+	$ctrl.abrir = function() {
+		$ctrl.aberto = true;
+	};
+	
+	$ctrl.cancelar= function (){
+		$uibModalInstance.close();
+	}
+	
+	$ctrl.salvar = () => {
+		
+		if (!$ctrl.data) {
+			alert('Informe data.')
+			return;
+		}
+		
+		if (!$ctrl.percentual_conclusao) {
+			alert('Informe % conclusão.');
+			return;
+		}
+		
+		if (!$ctrl.hora_inicio){
+			alert('Informe hora inicio.');
+			return;
+		}
+		
+		if(!$ctrl.hora_fim) {
+			alert('Informe hora fim.');
+			return;
+		}
+		
+		if($ctrl.atividade_fechada && (!$ctrl.tipo_alocacao || !$ctrl.tipo_alocacao.id)) {
+			alert('Informe tipo de alocação.');
+			return;
+		}
+		
+		var hora_inicio = $ctrl.hora_inicio.split(':');
+		var hora_fim = $ctrl.hora_fim.split(':');
+		
+		hora_inicio = new Date(0, 0, 0, hora_inicio[0], hora_inicio[1], 0, 0);
+		hora_fim = new Date(0,0,0,hora_fim[0], hora_fim[1], 0,0).getTime();
+		
+		if (hora_inicio >= hora_fim) {
+			alert('Hora inicio deve ser menor que hora fim.');
+			return;
+		}
+		
+		var milisegundos = hora_fim - hora_inicio
+
+		if ($ctrl.data instanceof Date){
+			$ctrl.data = CommonsService.dataparastring($ctrl.data);
+		}
+		
+		var data = {
+			alocacao_id: alocacao.id,
+			horas_alocadas_milisegundos : milisegundos,
+			percentual_concluido : $ctrl.percentual_conclusao,
+			hora_inicio: $ctrl.hora_inicio,
+			hora_fim: $ctrl.hora_fim,
+			data_informada: $ctrl.data,
+			observacao: $ctrl.observacao,
+			tipo_alocacao: $ctrl.tipo_alocacao
+		}
+		
+		RelatorioLancamentosService.salvaralocacao(data, function (data) {
+			$uibModalInstance.close(data);
+		});
+		
 	}
 	
 });

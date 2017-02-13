@@ -7,3 +7,4 @@ encoding//demandas/migrations/0028_auto_20170208_1458.py=utf-8
 encoding//demandas/models.py=utf-8
 encoding//faturamento/models.py=utf-8
 encoding//inicial/views.py=utf-8
+encoding//relatorio_lancamentos/views.py=utf-8
