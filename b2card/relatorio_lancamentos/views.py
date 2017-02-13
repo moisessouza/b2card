@@ -11,7 +11,8 @@ from demandas.models import AlocacaoHoras, AtividadeProfissional, Atividade, \
     FaseAtividade, Demanda
 from demandas.serializers import AlocacaoHorasSerializer, \
     RelatorioAlocacaoHorasSerializer, AtividadeProfissionalSerializer
-from utils.utils import converter_string_para_data, formatar_data
+from utils.utils import converter_string_para_data, formatar_data,\
+    serializar_data
 
 
 # Create your views here.
@@ -48,8 +49,7 @@ def pesquisar_alocacoes_horas(request, format=None):
     alocacao_hora_list = RelatorioAlocacaoHorasSerializer(alocacao_horas, many=True).data
     
     for i in alocacao_hora_list:
-        d = converter_string_para_data(i['data_alocacao'])
-        i['data_alocacao'] = formatar_data(d)
+        i['data_alocacao'] = serializar_data(i['data_alocacao'])
         
     return Response(alocacao_hora_list)
 
