@@ -23,6 +23,10 @@ relatorio_lancamentos.service('RelatorioLancamentosService', function($resource)
 		salvaralocacao: function(data, callback) {
 			var AlocacaoHoras =  $resource(BASE_URL + 'relatorio_lancamentos/alocarhoras/');
 			return AlocacaoHoras.save({}, data, callback);
+		},
+		ehgestor: function(callback) {
+			var EhGestor =  $resource(BASE_URL + 'relatorio_lancamentos/eh_gestor/');
+			return EhGestor.get(callback);
 		}
 	}
 });

@@ -45,22 +45,25 @@ def pesquisar_alocacoes_horas(request, format=None):
         if len(eh_gestor) <= 0:
             alocacao_horas = alocacao_horas.filter(atividade_profissional__pessoa_fisica__prestador__usuario__id = request.user.id)
         
-        
-    list = []
-    list.extend(alocacao_horas)
-    
-    count = 0
-    while(count < 5):
-        count+=1
-        list.extend(list)
-        
-    alocacao_hora_list = RelatorioAlocacaoHorasSerializer(list, many=True).data
+    alocacao_hora_list = RelatorioAlocacaoHorasSerializer(alocacao_horas, many=True).data
     
     for i in alocacao_hora_list:
         d = converter_string_para_data(i['data_alocacao'])
         i['data_alocacao'] = formatar_data(d)
         
     return Response(alocacao_hora_list)
+
+@api_view(['GET'])
+def eh_gestor(request):
+    if request.user.is_superuser:
+        return Response({'gestor': True})
+    
+    if not request.user.is_superuser:
+        eh_gestor = Prestador.objects.filter(Q(data_fim__isnull=True) | Q(data_fim__gte = datetime.datetime.now()), Q(cargo__gestor=True), Q(usuario__id = request.user.id))
+        if len(eh_gestor) > 0:
+            return Response({'gestor':True})
+        
+    return Response({'gestor':False})
 
 @api_view(['POST'])
 def alocar_horas(request, format=None):

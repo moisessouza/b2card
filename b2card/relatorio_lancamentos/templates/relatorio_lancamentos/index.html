@@ -45,7 +45,7 @@
 
 </style>
 
-<div id="relatorio_lancamentos" ng-controller="RelatorioLancamentosController as $ctrl">
+<div id="relatorio_lancamentos" class="ng-hide" ng-controller="RelatorioLancamentosController as $ctrl" ng-show="$ctrl.show">
 	<form name="pesquisa">
 		<div class="panel panel-primary form-group-sm">
 			<div class="panel-body">
@@ -59,7 +59,7 @@
 							</span>
 						</div>
 					</div>
-					<div class="col-sm-2">
+					<div class="col-sm-2" ng-if="$ctrl.eh_gestor">
 						<div class="form-group">
 							<label>Profissional</label>
 							<select ng-model="$ctrl.arguments.profissional_id" class="form-control" ng-options="f.id as f.pessoa.nome_razao_social for f in $ctrl.listafuncionarios">
@@ -101,7 +101,7 @@
 						</div>
 					</div>
 					<button class="btn btn-sm btn-default margin" ng-click="$ctrl.pesquisar();" ng-disabled="pesquisa.$invalid">Pesquisar</button>
-					<button class="btn btn-sm btn-default margin" ng-click="$ctrl.relatorio();" ng-disabled="pesquisa.$invalid"value="Novo">Novo</button>
+					<button class="btn btn-sm btn-default margin" ng-click="$ctrl.relatorio();" ng-disabled="pesquisa.$invalid" value="Novo" ng-if="$ctrl.eh_gestor">Gerar relatório</button>
 				</form>
 			</div>
 		</div>

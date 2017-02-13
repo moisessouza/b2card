@@ -4,11 +4,16 @@ var relatorio_lancamentos = angular.module('relatorio_lancamentos', ['relatorio_
 
 relatorio_lancamentos.controller('RelatorioLancamentosController', function (RelatorioLancamentosService, PessoaService, DemandaService, CommonsService, $scope, $window, $uibModal){
 	var $ctrl = this;
+	$ctrl.show = true;
 	
 	$ctrl.modaldata = {}
 	
 	$ctrl.listaclientes= PessoaService.buscarpessoasjuridicas();
 	$ctrl.listafuncionarios = PessoaService.buscarprofissionais();
+	
+	RelatorioLancamentosService.ehgestor(function (data){
+		$ctrl.eh_gestor = data.gestor;
+	});
 	
 	$ctrl.datepicker_options = {
 		datepickerMode: 'month',
