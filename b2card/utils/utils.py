@@ -160,6 +160,8 @@ def serializar_orcamento(orcamentos):
     
 def serializar_fase_atividade(fase_atividades):
     
+    fase_atividade_list = []
+    
     if fase_atividades:
         fase_atividade_list = FaseAtividadeSerializer(fase_atividades, many = True).data   
         for i in fase_atividade_list:
