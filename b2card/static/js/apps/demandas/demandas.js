@@ -6,15 +6,31 @@ var demandas = angular.module('demandas', ['demandas-services', 'pessoa-services
 demandas.config(['$httpProvider', 'CommonsServiceProvider', function($httpProvider, CommonsServiceProvider) {  
     $httpProvider.interceptors.push(function () {
     	return {
-    		response: function (config, CommonsService) {
-	        	var ajustardados = demanda => {
-	        		if(demanda){
-	        			CommonsService = CommonsServiceProvider.$get()
-	        			if (demanda.data_criacao) {
-	        				demanda.data_criacao = CommonsService.stringparadata(demanda.data_criacao);
+    		response: function (config) {
+    			var ajustarfaseatividade = data => {
+    				
+    				var CommonsService = CommonsServiceProvider.$get();
+    				
+	    			for(let fase_atividade of data){
+	    				if (fase_atividade.atividades){
+	    					for (let atividade of fase_atividade.atividades){
+	    						atividade.data_inicio_string = atividade.data_inicio;
+	    						atividade.data_fim_string = atividade.data_fim;
+	    						
+	    						atividade.data_inicio = CommonsService.stringparadata(atividade.data_inicio);
+	    						atividade.data_fim = CommonsService.stringparadata(atividade.data_fim);
+	    					}
+	    				}
+	    			}
+    			}
+	        	var ajustardados = data => {
+	        		if(data){
+	        			var CommonsService = CommonsServiceProvider.$get()
+	        			if (data.data_criacao) {
+	        				data.data_criacao = CommonsService.stringparadata(data.data_criacao);
 	        			}
-		        		if (demanda.fase_atividades){
-		        			for(let fase_atividade of demanda.fase_atividades){
+		        		if (data.fase_atividades){
+		        			for(let fase_atividade of data.fase_atividades){
 		        				if (fase_atividade.atividades){
 		        					for (let atividade of fase_atividade.atividades){
 		        						atividade.data_inicio_string = atividade.data_inicio;
@@ -27,10 +43,10 @@ demandas.config(['$httpProvider', 'CommonsServiceProvider', function($httpProvid
 		        			}
 		        		}
 		        		
-		        		if (demanda.orcamento) {
-		        			demanda.orcamento.total_despesas = CommonsService.formatarnumero(demanda.orcamento.total_despesas);
-		        			if (demanda.orcamento.despesas) {
-		        				for (let despesa of demanda.orcamento.despesas) {
+		        		if (data.orcamento) {
+		        			data.orcamento.total_despesas = CommonsService.formatarnumero(data.orcamento.total_despesas);
+		        			if (data.orcamento.despesas) {
+		        				for (let despesa of data.orcamento.despesas) {
 		        					despesa.valor = CommonsService.formatarnumero(despesa.valor);
 		        				}
 		        			}
@@ -38,7 +54,11 @@ demandas.config(['$httpProvider', 'CommonsServiceProvider', function($httpProvid
 		        		
 	        		}
 	        	}
-	        	ajustardados(config.data);
+	        	if (config.data instanceof Array) {
+	        		ajustarfaseatividade(config.data);
+	        	} else {
+	        		ajustardados(config.data);	
+	        	}
 	        	return config;
 	        }
     	}
@@ -73,7 +93,9 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 	
 	$ctrl.changecliente = function () {
 		if ($ctrl.demanda.cliente){
-			share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente($ctrl.demanda.cliente.id);
+			share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente($ctrl.demanda.cliente.id, function () {
+				$rootScope.$emit('orcamentovalorhora');
+			});
 		}
 	}
 	
@@ -95,15 +117,9 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 				}
 				
 				if (data.cliente.id) {
-					share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente(data.cliente.id);
-					if (share.listavalorhora.$promise) {
-						share.listavalorhora.$promise.then(function (data) {
-							$rootScope.$emit('calculardesejado');
-							$rootScope.$emit('calcularprojetado');
-							$rootScope.$emit('calcularproposto');
-							$rootScope.$emit('incluirfasesorcamento');
-						});
-					}
+					share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente(data.cliente.id, function () {
+						$rootScope.$emit('orcamentovalorhora');
+					});
 				}
 				
 				if (!$ctrl.demanda.orcamento) {
@@ -111,6 +127,15 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 				}
 				
 				$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(demanda_id);
+				
+				var hash = window.location.hash;
+				if (hash == '#atividades') {
+					DemandaService.buscaratividadesdemanda(data.id, function (data) {
+						$ctrl.demanda.fase_atividades = data;
+						$rootScope.$emit('configurarresumo', data);
+						$ctrl.show_fase_atividades = true;
+					});
+				}
 				
 			});
 			
@@ -131,6 +156,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 				'data_criacao': new Date()
 			}
 			$ctrl.show=true;
+			$ctrl.show_fase_atividades = true;
 			$ctrl.listacentroresultadoshoras = []
 			share.demanda = $ctrl.demanda;
 		}
@@ -162,7 +188,21 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 			callback();
 		}
 	}
-		
+	
+	$ctrl.showatividadesdemanda = () => {
+		if (!$ctrl.demanda.fase_atividades){
+			if ($ctrl.demanda.id) {
+				DemandaService.buscaratividadesdemanda($ctrl.demanda.id, function (data) {
+					$ctrl.demanda.fase_atividades = data;
+					$rootScope.$emit('configurarresumo', data);
+					$ctrl.show_fase_atividades = true;
+				});	
+			} else {
+				$ctrl.show_fase_atividades = true;
+			}
+		}
+	}
+	
 	$ctrl.listaclientes= PessoaService.buscarpessoasjuridicas();
 	$ctrl.listafuncionarios = PessoaService.buscarprofissionais();
 	$ctrl.listagestores = PessoaService.buscargestores();
@@ -190,12 +230,23 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 	$ctrl.salvardemanda = function (){
 		MessageService.clear();
 		$ctrl.bloquearsalvar = true;
+		$ctrl.show_fase_atividades = false;
 		share.demanda = DemandaService.salvardemanda($ctrl.demanda, function(data){
 			$ctrl.demanda = data;
 			
 			$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(data.id);
 			MessageService.messagesuccess('Salvo com sucesso!')
 			$ctrl.bloquearsalvar = false;
+			
+			var hash = window.location.hash;
+			if (hash == '#atividades') {
+				DemandaService.buscaratividadesdemanda(data.id, function (data) {
+					$ctrl.demanda.fase_atividades = data;
+					$rootScope.$emit('configurarresumo', data);
+					$ctrl.show_fase_atividades = true;
+				});
+			}
+			
 		});
 		
 		if (share.demanda.$promise){
@@ -208,6 +259,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 				$rootScope.$emit('incluirfasesorcamento');
 			});
 		}
+		
 	}
 	
 	$ctrl.changeunidadeadministrativa = function () {
@@ -617,7 +669,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 	$scope.demanda = $ctrl.share.demanda;
 	
 	var configurarregistros = (data) => {
-		for (let fase_atividade of data.fase_atividades) {
+		for (let fase_atividade of data) {
 			for (let atividade of fase_atividade.atividades) {
 				if (atividade.atividadeprofissionais){
 					for (let atividade_profissional of atividade.atividadeprofissionais){
@@ -634,11 +686,9 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		}
 	}
 	
-	if ($ctrl.share.demanda.$promise){
-		$ctrl.share.demanda.$promise.then(function (data) {
-			configurarregistros(data);
-		});
-	}
+	$rootScope.$on('configurarresumo', function(e, data) {
+		configurarregistros(data);
+	});
 	
 });
 

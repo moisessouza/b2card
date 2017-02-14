@@ -51,6 +51,10 @@ demandasservices.service('DemandaService', function($resource){
 		buscardemandaportexto: function(p, callback) {
 			var Demandas = $resource(BASE_URL + 'demandas/api/texto/:texto/');
 			return Demandas.query({texto:p}, callback);
+		},
+		buscaratividadesdemanda: function(demanda_id, callback){
+			var Atividades = $resource(BASE_URL + 'demandas/api/:id/atividades/');
+			return Atividades.query({id:demanda_id}, callback);
 		}
 	}
 });

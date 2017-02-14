@@ -1,12 +1,14 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from demandas.models import Demanda, FaseAtividade
 from django.db.models import Q
 from cadastros.models import PessoaJuridica
 from cadastros.serializers_pessoa import PessoaJuridicaSerializer
-from utils.utils import serializarDemandaObject, serializar_fase_atividade
+
 from rest_framework.response import Response
 from demandas.serializers import DemandaSerializer, DemandaInicialSerializer
+from demandas.views import serializar_fase_atividade
 
 # Create your views here.
 def index(request):

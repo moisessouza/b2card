@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^api/profissionalatividade/(?P<atividade_profissional_id>[0-9]+)/possuialocacao/$', views.atividade_profissional_possui_alocacao),
     url(r'^api/atividade/(?P<atividade_id>[0-9]+)/possuialocacao/$', views.atividade_possui_alocacao),
     url(r'^api/texto/(?P<texto>[a-z]+)/$', views.buscar_lista_por_texto),
+    url(r'^api/(?P<demanda_id>[0-9]+)/atividades/$', views.buscar_atividades_demanda)
     
 ]
 

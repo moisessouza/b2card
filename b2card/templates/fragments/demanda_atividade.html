@@ -1,167 +1,173 @@
 <meta charset="utf-8">
 {%verbatim%}
-<div class="col-sm-12" ng-controller="AtividadeController as $ctrl">
 
-	<button class="btn btn-sm btn-primary margin" ng-click="$ctrl.importaratividadesorcamento()">
-		Importar
-	</button>
+<div ng-show="!$ctrl.show_fase_atividades" style="text-align: center; padding: 50px;">
+	<img alt="" src="/static/img/spinner.gif">	Carregando...
+</div>
+<div ng-show="$ctrl.show_fase_atividades">
+	<div class="col-sm-12" ng-controller="AtividadeController as $ctrl">
 	
-	<style type="text/css">
+		<button class="btn btn-sm btn-primary margin" ng-click="$ctrl.importaratividadesorcamento()">
+			Importar
+		</button>
 		
-		md-autocomplete md-autocomplete-wrap {
-			height: 26px;
-			border-radius: 5px
-		}
+		<style type="text/css">
+			
+			md-autocomplete md-autocomplete-wrap {
+				height: 26px;
+				border-radius: 5px
+			}
+			
+			md-autocomplete input:not(.md-input) {
+				height: 26px;
+				font-size: 12px;
+				padding-right: 0px
+			}
+			
+			md-autocomplete {
+				height: 26px;
+				margin-top: 4px;
+				border-radius: 5px
+			}
+			
+			div.modal-funcionario {
+				position: absolute;
+	    		z-index: 1;
+	    		background-color: beige;
+	    		border-color: black;
+	    		border: 1px solid #ccc;
+	    		padding: 5px;
+	    		left: 23px;
+	    	}
+			
+		</style>
 		
-		md-autocomplete input:not(.md-input) {
-			height: 26px;
-			font-size: 12px;
-			padding-right: 0px
-		}
-		
-		md-autocomplete {
-			height: 26px;
-			margin-top: 4px;
-			border-radius: 5px
-		}
-		
-		div.modal-funcionario {
-			position: absolute;
-    		z-index: 1;
-    		background-color: beige;
-    		border-color: black;
-    		border: 1px solid #ccc;
-    		padding: 5px;
-    		left: 23px;
-    	}
-		
-	</style>
-	
-	<form name="atividades">
-		<table class="table table-sm table-bordered table-striped table-highlight">
-			<thead>	
-				<tr>
-					<td style="width: 1%">
-						<div style="width: 200px">
-							Fase
-							<div class="btn btn-primary button-heading" ng-click="$ctrl.adicionarfase()" style="float:right;">
-								<span class="glyphicon glyphicon-plus"></span>
+		<form name="atividades">
+			<table class="table table-sm table-bordered table-striped table-highlight">
+				<thead>	
+					<tr>
+						<td style="width: 1%">
+							<div style="width: 200px">
+								Fase
+								<div class="btn btn-primary button-heading" ng-click="$ctrl.adicionarfase()" style="float:right;">
+									<span class="glyphicon glyphicon-plus"></span>
+								</div>
 							</div>
-						</div>
-					</td>
-					<td>
-						Atividades
-					</td>
-					<td style="width: 1%">
-					</td>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="fase_atividade in $ctrl.share.demanda.fase_atividades" ng-show="!fase_atividade.remover">
-					<td>
-						<select class="form-control" ng-model="fase_atividade.fase.id" ng-options="f.id as f.descricao for f in $ctrl.listafases" required>
-				    		<option value="">Selecione uma fase...</option>
-				    	</select>
-						<div>
-							Responsável
-							<select ng-model="fase_atividade.responsavel.id" class="form-control" ng-options="p.id as p.pessoa.nome_razao_social for p in $ctrl.share.listafuncionarios">
-								<option value="">Selecione...</option>
-							</select>
-						</div>
-						<div>
-							Data inicio 
-							<input type="text" class="form-control" ng-model="fase_atividade.data_inicio" ui-mask="99/99/9999" model-view-value="true" required  disabled/>
-						</div>
-						<div>
-							Data fim
-							<input type="text" class="form-control" ng-model="fase_atividade.data_fim" ui-mask="99/99/9999" model-view-value="true" required  disabled/>
-						</div>
-					</td>
-					<td>
-						<table class="table table-sm table-bordered table-striped table-highlight" style="margin-bottom: 4px" ng-repeat="atividade in fase_atividade.atividades" ng-show="!atividade.remover">
-							<thead>
-								<tr class="active">
-									<td>Atividade</td>
-									<td style="width: 1%;">Data inicio</td>
-									<td style="width: 1%;">Data fim</td>
-									<td style="width: 1%;">
-										<div style="width: 180px; position: relative;">
-											Profissional
-											<div class="btn btn-primary button-heading" ng-click="$ctrl.abrirmodalfuncionarios(atividade)" style="margin-right:2px; float:right;">
-												<span class="glyphicon glyphicon-collapse-down"></span>
-											</div>
-											<div class="modal-funcionario" ng-show="$ctrl.modalatividademap[atividade.$$hashKey].ativo">
-												<div>
-													<div class="btn btn-primary button-heading" ng-click="$ctrl.fecharmodalfuncionario(atividade)" style="margin-right:2px; float:right;">
-														<span class="glyphicon glyphicon-remove"></span>
+						</td>
+						<td>
+							Atividades
+						</td>
+						<td style="width: 1%">
+						</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="fase_atividade in $ctrl.share.demanda.fase_atividades" ng-show="!fase_atividade.remover">
+						<td>
+							<select class="form-control" ng-model="fase_atividade.fase.id" ng-options="f.id as f.descricao for f in $ctrl.listafases" required>
+					    		<option value="">Selecione uma fase...</option>
+					    	</select>
+							<div>
+								Responsável
+								<select ng-model="fase_atividade.responsavel.id" class="form-control" ng-options="p.id as p.pessoa.nome_razao_social for p in $ctrl.share.listafuncionarios">
+									<option value="">Selecione...</option>
+								</select>
+							</div>
+							<div>
+								Data inicio 
+								<input type="text" class="form-control" ng-model="fase_atividade.data_inicio" ui-mask="99/99/9999" model-view-value="true" required  disabled/>
+							</div>
+							<div>
+								Data fim
+								<input type="text" class="form-control" ng-model="fase_atividade.data_fim" ui-mask="99/99/9999" model-view-value="true" required  disabled/>
+							</div>
+						</td>
+						<td>
+							<table class="table table-sm table-bordered table-striped table-highlight" style="margin-bottom: 4px" ng-repeat="atividade in fase_atividade.atividades" ng-show="!atividade.remover">
+								<thead>
+									<tr class="active">
+										<td>Atividade</td>
+										<td style="width: 1%;">Data inicio</td>
+										<td style="width: 1%;">Data fim</td>
+										<td style="width: 1%;">
+											<div style="width: 180px; position: relative;">
+												Profissional
+												<div class="btn btn-primary button-heading" ng-click="$ctrl.abrirmodalfuncionarios(atividade)" style="margin-right:2px; float:right;">
+													<span class="glyphicon glyphicon-collapse-down"></span>
+												</div>
+												<div class="modal-funcionario" ng-show="$ctrl.modalatividademap[atividade.$$hashKey].ativo">
+													<div>
+														<div class="btn btn-primary button-heading" ng-click="$ctrl.fecharmodalfuncionario(atividade)" style="margin-right:2px; float:right;">
+															<span class="glyphicon glyphicon-remove"></span>
+														</div>
+													</div>
+													<div ng-repeat="f in $ctrl.share.listafuncionarios">
+														<input type="checkbox" ng-model="$ctrl.modalatividademap[atividade.$$hashKey][f.id]" ng-change="$ctrl.adicionarremoverprofissional(atividade, f)"> {{f.pessoa.nome_razao_social}}
 													</div>
 												</div>
-												<div ng-repeat="f in $ctrl.share.listafuncionarios">
-													<input type="checkbox" ng-model="$ctrl.modalatividademap[atividade.$$hashKey][f.id]" ng-change="$ctrl.adicionarremoverprofissional(atividade, f)"> {{f.pessoa.nome_razao_social}}
-												</div>
 											</div>
-										</div>
-									</td>
-									<td style="width: 1%;">
-										<div style="width: 86px">
-											Horas alocadas
-										</div>
-									</td>
-									<td style="width: 1%;">
-									</td>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>
-										<input type="text" class="form-control input-sm" ng-model="atividade.descricao" required/>
-									</td>
-									<td>
-										<div class="form-group" style="width: 119px; display: table;">
-											<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true" ng-model="atividade.data_inicio" is-open="$ctrl.modalatividademap[atividade.$$hashKey].data_inicio" ng-change="$ctrl.alteracaodataatividade(fase_atividade, atividade, 'data_inicio', '{{atividade.data_inicio}}')" ng-required="true" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
-											<span class="input-group-btn">
-												<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodaldatainicio(atividade)"><i class="glyphicon glyphicon-calendar"></i></button>
+										</td>
+										<td style="width: 1%;">
+											<div style="width: 86px">
+												Horas alocadas
+											</div>
+										</td>
+										<td style="width: 1%;">
+										</td>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>
+											<input type="text" class="form-control input-sm" ng-model="atividade.descricao" required/>
+										</td>
+										<td>
+											<div class="form-group" style="width: 119px; display: table;">
+												<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true" ng-model="atividade.data_inicio" is-open="$ctrl.modalatividademap[atividade.$$hashKey].data_inicio" ng-change="$ctrl.alteracaodataatividade(fase_atividade, atividade, 'data_inicio', '{{atividade.data_inicio}}')" ng-required="true" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+												<span class="input-group-btn">
+													<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodaldatainicio(atividade)"><i class="glyphicon glyphicon-calendar"></i></button>
+												</span>
+											</div>
+										</td>
+										<td>
+											<div class="form-group" style="width: 119px; display: table;">
+												<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true" ng-model="atividade.data_fim" is-open="$ctrl.modalatividademap[atividade.$$hashKey].data_fim" ng-change="$ctrl.alteracaodataatividade(fase_atividade, atividade, 'data_inicio', '{{atividade.data_inicio}}')" ng-required="true" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+												<span class="input-group-btn">
+													<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodaldatafim(atividade)"><i class="glyphicon glyphicon-calendar"></i></button>
+												</span>
+											</div>
+										</td>
+										<td>
+											<span ng-repeat="atividadeprofissional in atividade.atividadeprofissionais" ng-show="!atividadeprofissional.remover">
+												<input type="text" ng-model="atividadeprofissional.pessoa_fisica.pessoa.nome_razao_social" class="form-control" style="margin-top: 1px" disabled/>
+									    	</span>
+										</td>
+										<td>
+											<span ng-repeat="atividadeprofissional in atividade.atividadeprofissionais" ng-show="!atividadeprofissional.remover">
+												<input type="number" ng-model="atividadeprofissional.quantidade_horas" class="form-control" style="margin-top: 1px" required/>
 											</span>
-										</div>
-									</td>
-									<td>
-										<div class="form-group" style="width: 119px; display: table;">
-											<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true" ng-model="atividade.data_fim" is-open="$ctrl.modalatividademap[atividade.$$hashKey].data_fim" ng-change="$ctrl.alteracaodataatividade(fase_atividade, atividade, 'data_inicio', '{{atividade.data_inicio}}')" ng-required="true" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
-											<span class="input-group-btn">
-												<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodaldatafim(atividade)"><i class="glyphicon glyphicon-calendar"></i></button>
-											</span>
-										</div>
-									</td>
-									<td>
-										<span ng-repeat="atividadeprofissional in atividade.atividadeprofissionais" ng-show="!atividadeprofissional.remover">
-											<input type="text" ng-model="atividadeprofissional.pessoa_fisica.pessoa.nome_razao_social" class="form-control" style="margin-top: 1px" disabled/>
-								    	</span>
-									</td>
-									<td>
-										<span ng-repeat="atividadeprofissional in atividade.atividadeprofissionais" ng-show="!atividadeprofissional.remover">
-											<input type="number" ng-model="atividadeprofissional.quantidade_horas" class="form-control" style="margin-top: 1px" required/>
-										</span>
-									</td>
-									<td>
-										<button type="button" class="btn btn-default" ng-click="$ctrl.removeratividade(atividade)">
-											<span class="glyphicon glyphicon-trash"></span>
-										</button>
-									</td>
-								</tr>
-							</tbody>		
-						</table>
-						<div class="btn btn-primary button-heading" ng-click="$ctrl.adicionaratividade(fase_atividade)" style="float:right;">
-							<span class="glyphicon glyphicon-plus"></span>
-						</div>
-					</td>
-					<td>
-						<button type="button" class="btn btn-default" ng-click="$ctrl.remover(fase_atividade)">
-							<span class="glyphicon glyphicon-trash"></span>
-						</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</form>
+										</td>
+										<td>
+											<button type="button" class="btn btn-default" ng-click="$ctrl.removeratividade(atividade)">
+												<span class="glyphicon glyphicon-trash"></span>
+											</button>
+										</td>
+									</tr>
+								</tbody>		
+							</table>
+							<div class="btn btn-primary button-heading" ng-click="$ctrl.adicionaratividade(fase_atividade)" style="float:right;">
+								<span class="glyphicon glyphicon-plus"></span>
+							</div>
+						</td>
+						<td>
+							<button type="button" class="btn btn-default" ng-click="$ctrl.remover(fase_atividade)">
+								<span class="glyphicon glyphicon-trash"></span>
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</form>
+	</div>
 </div>
 {%endverbatim%}

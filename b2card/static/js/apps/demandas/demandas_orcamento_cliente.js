@@ -6,7 +6,23 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 	
 	$ctrl.listafases = FaseService.buscarfases();
 	$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card();
-		
+	
+	
+	$rootScope.$on('orcamentovalorhora', function (evt, data) {
+		if (share.listavalorhora.$promise) {
+			share.listavalorhora.$promise.then(function (data) {
+				if ($ctrl.listavalorhorab2card.$promise){
+					$ctrl.listavalorhorab2card.$promise.then(function (data) {
+						$rootScope.$emit('calculardesejado');
+						$rootScope.$emit('calcularprojetado');
+						$rootScope.$emit('calcularproposto');
+						$rootScope.$emit('incluirfasesorcamento');		
+					});
+				}
+			});
+		}	
+	});
+	
 	$rootScope.$on('orcamento', function(event, data) {
 		if (data.orcamento){
 			
