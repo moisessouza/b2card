@@ -53,7 +53,7 @@ class Demanda(models.Model):
 
 class FaseAtividade(models.Model):
     demanda = models.ForeignKey(Demanda, default = None)
-    fase = models.ForeignKey(Fase, default = None)
+    fase = models.ForeignKey(Fase, default = None, on_delete=models.PROTECT)
     responsavel = models.ForeignKey(PessoaFisica, default = None, null=True)
     data_inicio = models.DateField(default=None)
     data_fim = models.DateField(default=None)
@@ -158,7 +158,7 @@ class Despesa(models.Model):
     
 class OrcamentoFase(models.Model):
     orcamento = models.ForeignKey(Orcamento, default=None)
-    fase = models.ForeignKey(Fase, default = None, null=True)
+    fase = models.ForeignKey(Fase, default = None, null=True, on_delete=models.PROTECT)
     dias = models.IntegerField(default = None, null = True)
     valor_total = models.FloatField(default = None)
     
@@ -170,7 +170,7 @@ class ItemFase(models.Model):
     valor_total = models.FloatField()
     
 class OrcamentoAtividade(models.Model):
-    fase = models.ForeignKey(Fase)
+    fase = models.ForeignKey(Fase, on_delete=models.PROTECT)
     orcamento = models.ForeignKey(Orcamento, default = None)
     descricao = models.CharField(max_length=100, default = None)
     total_horas = models.IntegerField(null=True, default = None)
