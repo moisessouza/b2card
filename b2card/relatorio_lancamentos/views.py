@@ -50,6 +50,7 @@ def pesquisar_alocacoes_horas(request, format=None):
     
     for i in alocacao_hora_list:
         i['data_alocacao'] = serializar_data(i['data_alocacao'])
+        i['data_informada'] = serializar_data(i['data_informada'])
         
     return Response(alocacao_hora_list)
 

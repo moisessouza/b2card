@@ -149,5 +149,5 @@ class RelatorioAlocacaoHorasSerializer(serializers.ModelSerializer):
     atividade_profissional = AtividadeProfissionalAlocacaoHorasSerializer()
     class Meta:
         model = AlocacaoHoras
-        fields = ('id', 'horas_alocadas_milisegundos', 'percentual_concluido', 'observacao', 'data_alocacao', 'tipo_alocacao',
+        fields = ('id', 'horas_alocadas_milisegundos', 'percentual_concluido', 'observacao', 'data_alocacao', 'data_informada', 'tipo_alocacao',
                   'hora_inicio', 'hora_fim', 'data_alocacao', 'atividade_profissional')
