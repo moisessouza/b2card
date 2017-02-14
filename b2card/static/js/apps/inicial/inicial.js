@@ -260,9 +260,9 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 		
 		let data = CommonsService.dataparaurl($ctrl.data);
 		
-		InicialService.verificarsepossuivigencia (data, function(result) {
+		InicialService.validardatahora ($ctrl.atividade.id, data, $ctrl.hora_inicio, $ctrl.hora_fim, function(result) {
 			
-			if(result.custo_prestador) {
+			if(result.custo_prestador && !result.possui_alocacao) {
 				
 				if (!$ctrl.data) {
 					alert('Informe data.')
@@ -322,7 +322,11 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 				});
 				
 			} else {
-				alert('Você não possui vigência para esta data, favor verificar!');
+				if (result.possui_alocacao){
+					alert('Você já possui alocação no horário especificado');
+				} else {
+					alert('Você não possui vigência para esta data, favor verificar!');	
+				}
 			}
 		});
 		

@@ -277,14 +277,39 @@ def buscar_atividade_profissional_por_atividade(request, atividade_id, format=No
     return Response(atividade_profissional_dict)
 
 @api_view(['GET'])
-def verificar_se_possui_vigencia(request, data_informada, format=None):
+def validar_data_hora(request, atividade_id, data_informada, hora_inicio, hora_fim, format=None):
     
     data = converter_data_url(data_informada)
     
     custo_prestador = CustoPrestador.objects.filter(pessoa_fisica__prestador__usuario__id=request.user.id, data_inicio__lte=data).filter(Q(data_fim__isnull = True) | Q(data_fim__gte = data))
     
-    if len(custo_prestador) > 0:
-        return Response({'custo_prestador' : True})
-    else:
-        return Response({'custo_prestador': False})
+    result = {}
     
+    if len(custo_prestador) > 0:
+        result['custo_prestador'] = True
+    else:
+        result['custo_prestador'] = False
+    
+    
+    alocacoes = AlocacaoHoras.objects.filter(atividade_profissional__atividade__id=atividade_id, atividade_profissional__pessoa_fisica__prestador__usuario__id=request.user.id, data_informada = data)
+    
+    hora_inicio =  datetime.datetime.strptime(hora_inicio, '%H:%M')
+    hora_fim =  datetime.datetime.strptime(hora_fim, '%H:%M')
+    
+    for i in alocacoes:
+        
+        hora_inicio_aloc =  datetime.datetime.strptime(i.hora_inicio, '%H:%M')
+        hora_fim_aloc =  datetime.datetime.strptime(i.hora_fim, '%H:%M')
+        
+        if hora_inicio >= hora_inicio_aloc and hora_inicio <= hora_fim_aloc:
+            result['possui_alocacao'] = True
+            break
+        elif hora_fim >= hora_inicio_aloc and hora_fim <= hora_fim_aloc:
+            result['possui_alocacao']  = True
+            break
+        elif hora_inicio <= hora_inicio_aloc and hora_fim >= hora_fim_aloc:
+            result['possui_alocacao']  = True
+            break
+            
+            
+    return Response(result)
