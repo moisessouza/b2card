@@ -92,7 +92,7 @@ relatorio_lancamentos.controller('RelatorioLancamentosController', function (Rel
 	
 	$ctrl.tipoalocacaolist = TipoAlocacaoService.buscartipoalocacoes();
 	
-	$ctrl.data = alocacao.data_informada;
+	$ctrl.data = CommonsService.stringparadata(alocacao.data_informada);
 	$ctrl.hora_inicio = alocacao.hora_inicio;
 	$ctrl.hora_fim = alocacao.hora_fim;
 	$ctrl.percentual_conclusao = alocacao.percentual_concluido;
@@ -101,7 +101,6 @@ relatorio_lancamentos.controller('RelatorioLancamentosController', function (Rel
 	$scope.today = function() {
 		$ctrl.data =new Date();
 	};
-	$scope.today();
 
 	$scope.clear = function() {
 		$scope.dt = null;
@@ -119,9 +118,9 @@ relatorio_lancamentos.controller('RelatorioLancamentosController', function (Rel
 		
 		let data = CommonsService.dataparaurl($ctrl.data);
 		
-		InicialService.verificarsepossuivigencia (data, function(result) {
+		RelatorioLancamentosService.validardatahora (alocacao.id, $ctrl.atividade.id, data, $ctrl.hora_inicio, $ctrl.hora_fim, function(result) {
 			
-			if(result.custo_prestador) {
+			if(result.custo_prestador && !result.possui_alocacao) {
 			
 				if (!$ctrl.data) {
 					alert('Informe data.')

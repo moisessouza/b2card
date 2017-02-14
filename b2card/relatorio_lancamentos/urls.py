@@ -24,7 +24,8 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^api/search/$', views.pesquisar_alocacoes_horas),
     url(r'api/alocarhoras/$', views.alocar_horas),
-    url(r'api/eh_gestor/$', views.eh_gestor)
+    url(r'api/eh_gestor/$', views.eh_gestor),
+    url(r'^api/validar_data_hora/(?P<alocacao_id>[0-9]+)/(?P<atividade_id>[0-9]+)/(?P<data_informada>[0-9]+)/(?P<hora_inicio>[0-9:0-9]+)/(?P<hora_fim>[0-9:0-9]+)/$', views.validar_data_hora),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

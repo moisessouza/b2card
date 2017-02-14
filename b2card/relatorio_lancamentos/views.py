@@ -6,13 +6,13 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.db.models import Q
 
-from cadastros.models import TipoAlocacao, Prestador
+from cadastros.models import TipoAlocacao, Prestador, CustoPrestador
 from demandas.models import AlocacaoHoras, AtividadeProfissional, Atividade, \
     FaseAtividade, Demanda
 from demandas.serializers import AlocacaoHorasSerializer, \
     RelatorioAlocacaoHorasSerializer, AtividadeProfissionalSerializer
 from utils.utils import converter_string_para_data, formatar_data,\
-    serializar_data
+    serializar_data, converter_data_url
 
 
 # Create your views here.
@@ -149,4 +149,44 @@ def alocar_horas(request, format=None):
     demanda.percentual_concluido = percentual_concluido
     demanda.save()
     
-    return Response(AtividadeProfissionalSerializer(atividade_profissional).data)    
+    return Response(AtividadeProfissionalSerializer(atividade_profissional).data)
+
+
+
+@api_view(['GET'])
+def validar_data_hora(request, alocacao_id, atividade_id, data_informada, hora_inicio, hora_fim, format=None):
+    
+    data = converter_data_url(data_informada)
+    
+    custo_prestador = CustoPrestador.objects.filter(pessoa_fisica__prestador__usuario__id=request.user.id, data_inicio__lte=data).filter(Q(data_fim__isnull = True) | Q(data_fim__gte = data))
+    
+    result = {}
+    
+    if len(custo_prestador) > 0:
+        result['custo_prestador'] = True
+    else:
+        result['custo_prestador'] = False
+    
+    
+    alocacoes = AlocacaoHoras.objects.filter(atividade_profissional__atividade__id=atividade_id, atividade_profissional__pessoa_fisica__prestador__usuario__id=request.user.id, data_informada = data).filter(~Q(id=alocacao_id))
+    
+    hora_inicio =  datetime.datetime.strptime(hora_inicio, '%H:%M')
+    hora_fim =  datetime.datetime.strptime(hora_fim, '%H:%M')
+    
+    for i in alocacoes:
+        
+        hora_inicio_aloc =  datetime.datetime.strptime(i.hora_inicio, '%H:%M')
+        hora_fim_aloc =  datetime.datetime.strptime(i.hora_fim, '%H:%M')
+        
+        if hora_inicio >= hora_inicio_aloc and hora_inicio <= hora_fim_aloc:
+            result['possui_alocacao'] = True
+            break
+        elif hora_fim >= hora_inicio_aloc and hora_fim <= hora_fim_aloc:
+            result['possui_alocacao']  = True
+            break
+        elif hora_inicio <= hora_inicio_aloc and hora_fim >= hora_fim_aloc:
+            result['possui_alocacao']  = True
+            break
+            
+            
+    return Response(result)
