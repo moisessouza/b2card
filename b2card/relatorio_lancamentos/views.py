@@ -66,6 +66,34 @@ def eh_gestor(request, format=None):
         
     return Response({'gestor':False})
 
+
+@api_view(['POST'])
+def alocar_horas_internas(request, format=None):
+    
+    if 'alocacao_id' in request.data:
+        alocacao_horas = AlocacaoHoras.objects.get(pk=request.data['alocacao_id'])
+    else:
+        raise Exception('Alocação não selecionado')
+    
+    atividade_profissional = alocacao_horas.atividade_profissional
+    
+    alocacao_horas.atividade_profissional = atividade_profissional
+    alocacao_horas.horas_alocadas_milisegundos = request.data['horas_alocadas_milisegundos']
+    alocacao_horas.data_informada = converter_string_para_data(request.data['data_informada'])
+    alocacao_horas.hora_inicio = request.data['hora_inicio']
+    alocacao_horas.hora_fim= request.data['hora_fim']
+    alocacao_horas.data_alocacao = datetime.datetime.now()
+    alocacao_horas.percentual_concluido = 0
+    alocacao_horas.save();
+    
+    alocacoes = AlocacaoHoras.objects.filter(atividade_profissional = atividade_profissional)
+    
+    atividade_profissional.horas_alocadas_milisegundos =  sum(a.horas_alocadas_milisegundos for a in alocacoes)
+        
+    atividade_profissional.save();
+
+    return Response(AtividadeProfissionalSerializer(atividade_profissional).data)
+
 @api_view(['POST'])
 def alocar_horas(request, format=None):
     
@@ -92,7 +120,7 @@ def alocar_horas(request, format=None):
     alocacao_horas.horas_alocadas_milisegundos = request.data['horas_alocadas_milisegundos']
     alocacao_horas.hora_inicio = request.data['hora_inicio']
     alocacao_horas.hora_fim= request.data['hora_fim']
-    alocacao_horas.percentual_concluido= request.data['percentual_concluido']
+    alocacao_horas.percentual_concluido= request.data['percentual_concluido'] if 'percentual_concluido' in request.data else None 
     alocacao_horas.observacao= request.data['observacao'] if 'observacao' in request.data else None 
     alocacao_horas.data_informada = converter_string_para_data(request.data['data_informada'])
     alocacao_horas.data_alocacao = datetime.datetime.now()
@@ -190,3 +218,10 @@ def validar_data_hora(request, alocacao_id, atividade_id, data_informada, hora_i
             
             
     return Response(result)
+
+@api_view(['GET'])
+def verificar_tipo_demanda(request, alocacao_id, format=None):
+    demanda = Demanda.objects.filter(faseatividade__atividade__atividadeprofissional__alocacaohoras__id=alocacao_id)[0]
+    context = {'tipo_demanda': demanda.tipo_demanda}
+    return Response(context)
+    

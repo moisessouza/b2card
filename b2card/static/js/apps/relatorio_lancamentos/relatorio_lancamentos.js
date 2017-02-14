@@ -22,24 +22,52 @@ relatorio_lancamentos.controller('RelatorioLancamentosController', function (Rel
 
 	$ctrl.abrirmodalalocacao = (alocacao) => {
 		
-		var modalInstance = $uibModal.open({
-			animation : $ctrl.animationsEnabled,
-			ariaLabelledBy : 'modal-title',
-			ariaDescribedBy : 'modal-body',
-			templateUrl : '/static/modal/modalAtualizarAlocacao.html?bust=' + Math.random().toString(36).slice(2),
-			controller : 'ModalAlocacaoController',
-			controllerAs : '$ctrl',
-			//size : 'lg'
-			windowClass: 'app-modal-window',
-			resolve : {
-		    	  alocacao: alocacao
-			}
-		});
+		RelatorioLancamentosService.verificartipodemanda(alocacao.id, function(data){
 			
-		modalInstance.result.then(function(data) {
-			$ctrl.pesquisar();
-		}, function() {
-			// $log.info('Modal dismissed at: ' + new Date());
+			if (data.tipo_demanda == 'E'){
+
+				var modalInstance = $uibModal.open({
+					animation : $ctrl.animationsEnabled,
+					ariaLabelledBy : 'modal-title',
+					ariaDescribedBy : 'modal-body',
+					templateUrl : '/static/modal/modalAtualizarAlocacao.html?bust=' + Math.random().toString(36).slice(2),
+					controller : 'ModalAlocacaoController',
+					controllerAs : '$ctrl',
+					//size : 'lg'
+					windowClass: 'app-modal-window',
+					resolve : {
+				    	  alocacao: alocacao
+					}
+				});
+					
+				modalInstance.result.then(function(data) {
+					$ctrl.pesquisar();
+				}, function() {
+					// $log.info('Modal dismissed at: ' + new Date());
+				});
+				
+			} else {
+				var modalInstance = $uibModal.open({
+					animation : $ctrl.animationsEnabled,
+					ariaLabelledBy : 'modal-title',
+					ariaDescribedBy : 'modal-body',
+					templateUrl : '/static/modal/modalAtualizarAlocacaoInterna.html?bust=' + Math.random().toString(36).slice(2),
+					controller : 'ModalAlocacaoInternaController',
+					controllerAs : '$ctrl',
+					//size : 'lg'
+					windowClass: 'app-modal-window',
+					resolve : {
+						alocacao: alocacao
+					}
+				});
+					
+				modalInstance.result.then(function(data) {
+					$ctrl.pesquisar();
+				}, function() {
+					// $log.info('Modal dismissed at: ' + new Date());
+				});
+			}
+			
 		});
 		
 	}
@@ -76,6 +104,79 @@ relatorio_lancamentos.controller('RelatorioLancamentosController', function (Rel
 			$ctrl.total_horas = CommonsService.milliparahoras(total_horas_milisegundos);
 			
 		});
+	}
+	
+}).controller('ModalAlocacaoInternaController', function (alocacao, RelatorioLancamentosService, CommonsService, TipoAlocacaoService, $uibModalInstance, $scope, $window) {
+	
+	var $ctrl = this;
+	$ctrl.atividade = alocacao.atividade_profissional.atividade;
+	
+	$ctrl.data = CommonsService.stringparadata(alocacao.data_informada);
+	$ctrl.hora_inicio = alocacao.hora_inicio;
+	$ctrl.hora_fim = alocacao.hora_fim;
+	
+	$scope.today = function() {
+		$ctrl.data =new Date();
+	};
+	
+	$scope.clear = function() {
+		$scope.dt = null;
+	};
+
+	$ctrl.abrir = function() {
+		$ctrl.aberto = true;
+	};
+	
+	$ctrl.cancelar= function (){
+		$uibModalInstance.close();
+	}
+	
+	$ctrl.salvar = () => {
+		
+		if (!$ctrl.data) {
+			alert('Informe data.')
+			return;
+		}
+		
+		if (!$ctrl.hora_inicio){
+			alert('Informe hora inicio.');
+			return;
+		}
+		
+		if(!$ctrl.hora_fim) {
+			alert('Informe hora fim.');
+			return;
+		}
+		
+		var hora_inicio = $ctrl.hora_inicio.split(':');
+		var hora_fim = $ctrl.hora_fim.split(':');
+		
+		hora_inicio = new Date(0, 0, 0, hora_inicio[0], hora_inicio[1], 0, 0);
+		hora_fim = new Date(0,0,0,hora_fim[0], hora_fim[1], 0,0).getTime();
+		
+		if (hora_inicio >= hora_fim) {
+			alert('Hora inicio deve ser menor que hora fim.');
+			return;
+		}
+		
+		var milisegundos = hora_fim - hora_inicio
+		
+		if ($ctrl.data instanceof Date){
+			$ctrl.data = CommonsService.dataparastring($ctrl.data);
+		}
+	
+		var data = {
+			alocacao_id: alocacao.id,
+			horas_alocadas_milisegundos : milisegundos,
+			hora_inicio: $ctrl.hora_inicio,
+			hora_fim: $ctrl.hora_fim,
+			data_informada: $ctrl.data,
+		}	
+
+		RelatorioLancamentosService.salvaralocacaointerna(data, function (data) {
+			$uibModalInstance.close(data);
+		});
+		
 	}
 	
 }).controller('ModalAlocacaoController', function (alocacao, CommonsService, InicialService, RelatorioLancamentosService, TipoAlocacaoService, $uibModalInstance, $scope, $window) {
