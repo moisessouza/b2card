@@ -111,7 +111,7 @@
 	
 	<ul class="nav nav-tabs">
 	  <li class="active" ng-show="$ctrl.verificardisponibilidadeaba('#dadosdemanda')"><a data-toggle="tab" href="#dadosdemanda">Dados da demanda</a></li>
-	  <li ng-show="$ctrl.verificardisponibilidadeaba('#resumo')" ng-click="$ctrl.tabselecionada('#resumo');"><a data-toggle="tab" href="#resumo">Resumo</a></li>
+	  <li ng-show="$ctrl.verificardisponibilidadeaba('#resumo')" ng-click="$ctrl.tabselecionada('#resumo'); $ctrl.showatividadesdemanda();"><a data-toggle="tab" href="#resumo">Resumo</a></li>
 	  <li ng-show="$ctrl.verificardisponibilidadeaba('#orcamento')" ng-click="$ctrl.tabselecionada('#orcamento');"><a data-toggle="tab" href="#orcamento">Orçamento</a></li>
 	  <li ng-show="$ctrl.verificardisponibilidadeaba('#atividades')" ng-click="$ctrl.tabselecionada('#atividades'); $ctrl.showatividadesdemanda();"><a data-toggle="tab" href="#atividades">Atividades</a></li>
 	  <li ng-show="$ctrl.verificardisponibilidadeaba('#proposta')" ng-click="$ctrl.tabselecionada('#proposta');"><a data-toggle="tab" href="#proposta">Proposta</a></li>

@@ -129,7 +129,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 				$ctrl.listacentroresultadoshoras = DemandaService.buscarcentroresultadoshora(demanda_id);
 				
 				var hash = window.location.hash;
-				if (hash == '#atividades') {
+				if (hash == '#atividades' || hash == '#resumo') {
 					DemandaService.buscaratividadesdemanda(data.id, function (data) {
 						$ctrl.demanda.fase_atividades = data;
 						$rootScope.$emit('configurarresumo', data);
@@ -239,7 +239,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 			$ctrl.bloquearsalvar = false;
 			
 			var hash = window.location.hash;
-			if (hash == '#atividades') {
+			if (hash == '#atividades' || hash == '#resumo') {
 				DemandaService.buscaratividadesdemanda(data.id, function (data) {
 					$ctrl.demanda.fase_atividades = data;
 					$rootScope.$emit('configurarresumo', data);
