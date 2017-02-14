@@ -293,18 +293,57 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		}
 	});
 	
+	
+	let selecionarfaseorcamentostotais = () => {
+		
+		let valor_total = 0;
+		
+		if ($ctrl.share.demanda.orcamento.orcamento_fases) {
+			for (let orcamento_fase of $ctrl.share.demanda.orcamento.orcamento_fases) {
+				if (orcamento_fase.itensfase) {
+					for (let item_fase of orcamento_fase.itensfase) {
+						let valor_hora = buscarvalorhora(item_fase.valor_hora.id);
+						valor_total+=(valor_hora.vigencia.valor * item_fase.quantidade_horas)
+					}
+				}
+			}
+		}
+		
+		return valor_total;
+		
+	}
+	
+	let selecionarfaseorcamentostotaishoras = () => {
+		
+		let horas_totais = 0;
+		
+		if ($ctrl.share.demanda.orcamento.orcamento_fases) {
+			for (let orcamento_fase of $ctrl.share.demanda.orcamento.orcamento_fases) {
+				if (orcamento_fase.itensfase) {
+					for (let item_fase of orcamento_fase.itensfase) {
+						horas_totais += item_fase.quantidade_horas;
+					}
+				}
+			}
+		}
+		
+		return horas_totais;
+		
+	}
+	
 	$rootScope.$on('calcularproposto', function(event, data) {
 		
-		let valor_total = calcularatividadestotais();
+		let valor_total = selecionarfaseorcamentostotais();
 		let custo_sem_imposto = valor_total * (1 + ($ctrl.share.demanda.orcamento.margem_risco / 100))
 		
-		let horas_total = calcularatividadestotaishoras()
+		let horas_total = selecionarfaseorcamentostotaishoras()
 		
 		$ctrl.share.demanda.orcamento.valor_proposto = valor_total;
 		$ctrl.share.demanda.orcamento.horas_proposto = horas_total;
 		
 		if ($ctrl.share.demanda.orcamento.valor_proposto) {
-			$ctrl.share.demanda.orcamento.lucro_calculado_proposto = ((($ctrl.share.demanda.orcamento.valor_proposto - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_proposto * ($ctrl.share.demanda.orcamento.imposto_devidos / 100))) / $ctrl.share.demanda.orcamento.valor_proposto) * 100).toFixed(2);
+			//$ctrl.share.demanda.orcamento.lucro_calculado_proposto = ((($ctrl.share.demanda.orcamento.valor_proposto - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_proposto * ($ctrl.share.demanda.orcamento.imposto_devidos / 100))) / $ctrl.share.demanda.orcamento.valor_proposto) * 100).toFixed(2);
+			$ctrl.share.demanda.orcamento.lucro_calculado_proposto = (($ctrl.share.demanda.orcamento.valor_proposto - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_proposto * ($ctrl.share.demanda.orcamento.imposto_devidos / 100))) / $ctrl.share.demanda.orcamento.valor_proposto ).toFixed(2);
 		}
 		
 		$ctrl.share.demanda.orcamento.valor_proposto = CommonsService.formatarnumero($ctrl.share.demanda.orcamento.valor_proposto);
