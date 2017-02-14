@@ -196,28 +196,17 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 	
 	let calcularatividadestotaishoras = () => {
 		
-		let coluna_valor_map = {};
+		let horas_total = 0;
 		
-		if ($ctrl.share.demanda.orcamento.orcamento_atividades) {
-			for (let orcamento_atividade of $ctrl.share.demanda.orcamento.orcamento_atividades) {
-				if (orcamento_atividade.colunas){
-					for (let coluna in orcamento_atividade.colunas){
-						let valor_hora = buscarvalorhora(coluna);
-						if (coluna_valor_map[valor_hora.id]) {
-							coluna_valor_map[valor_hora.id] += orcamento_atividade.colunas[valor_hora.id].horas; 
-						} else {
-							coluna_valor_map[valor_hora.id] = orcamento_atividade.colunas[valor_hora.id].horas; 
-						}
+		if ($ctrl.share.demanda.orcamento.orcamento_fases) {
+			for (let orcamento_fase of $ctrl.share.demanda.orcamento.orcamento_fases) {
+				if (orcamento_fase.itensfase) {
+					for(let item_fase of orcamento_fase.itensfase) {
+						let valor_hora = buscarvalorhora(item_fase.valor_hora.id);
+						horas_total+= item_fase.quantidade_horas;
 					}
 				}
 			}
-			
-		}
-		
-		let horas_total = 0;
-		
-		for (let coluna in coluna_valor_map) {
-			horas_total+=coluna_valor_map[coluna];
 		}
 		
 		return horas_total;
@@ -225,28 +214,17 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 	
 	let calcularatividadestotais = () => {
 		
-		let coluna_valor_map = {};
+		let valor_total = 0;
 		
-		if ($ctrl.share.demanda.orcamento.orcamento_atividades) {
-			for (let orcamento_atividade of $ctrl.share.demanda.orcamento.orcamento_atividades) {
-				if (orcamento_atividade.colunas){
-					for (let coluna in orcamento_atividade.colunas){
-						let valor_hora = buscarvalorhora(coluna);
-						if (coluna_valor_map[valor_hora.id]) {
-							coluna_valor_map[valor_hora.id] += orcamento_atividade.colunas[valor_hora.id].horas * valor_hora.vigencia.valor; 
-						} else {
-							coluna_valor_map[valor_hora.id] = orcamento_atividade.colunas[valor_hora.id].horas * valor_hora.vigencia.valor; 
-						}
+		if ($ctrl.share.demanda.orcamento.orcamento_fases) {
+			for (let orcamento_fase of $ctrl.share.demanda.orcamento.orcamento_fases) {
+				if (orcamento_fase.itensfase) {
+					for(let item_fase of orcamento_fase.itensfase) {
+						let valor_hora = buscarvalorhora(item_fase.valor_hora.id);
+						valor_total+=(item_fase.quantidade_horas * valor_hora.vigencia.valor);
 					}
 				}
 			}
-			
-		}
-		
-		let valor_total = 0;
-		
-		for (let coluna in coluna_valor_map) {
-			valor_total+=coluna_valor_map[coluna];
 		}
 		
 		return valor_total;

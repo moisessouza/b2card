@@ -194,7 +194,7 @@
 						</td>
 						<td>
 							<div ng-repeat="itemfase in orcamento_fase.itensfase" ng-show="!itemfase.remover">
-								<select ng-model="itemfase.valor_hora.id" style="height: 23px" ng-change="$ctrl.changevalorhora(itemfase, orcamento_fase)" ng-options="v.id as v.descricao for v in $ctrl.share.listavalorhora">
+								<select ng-model="itemfase.valor_hora.id" style="height: 23px" ng-change="$ctrl.changevalorhora(itemfase, orcamento_fase); $ctrl.alteracaoorcamento();" ng-options="v.id as v.descricao for v in $ctrl.share.listavalorhora">
 									<option value="">Selecione um tipo...</option>
 								</select>
 								<div class="btn btn-sm btn-primary" style="float: right; padding: 0 5px" ng-click="$ctrl.removeritemfase(itemfase, orcamento_fase)">-</div>
@@ -202,7 +202,7 @@
 						</td>
 						<td>
 							<div ng-repeat="itemfase in orcamento_fase.itensfase" ng-show="!itemfase.remover">
-								<input type="number" ng-model="itemfase.quantidade_horas" ng-change="$ctrl.changefasequantidadehoras(itemfase, orcamento_fase);">
+								<input type="number" ng-model="itemfase.quantidade_horas" ng-change="$ctrl.changefasequantidadehoras(itemfase, orcamento_fase); $ctrl.alteracaoorcamento();">
 							</div>
 						</td>
 						<td>
