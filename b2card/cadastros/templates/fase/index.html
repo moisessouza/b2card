@@ -4,6 +4,7 @@
 {% block script %}
 	<script src="/static/js/apps/cadastros/fase/fase.js"></script>
 	<script src="/static/js/apps/cadastros/fase/fase-services.js"></script>
+	<script src="/static/js/apps/cadastros/centroresultado/centroresultado-services.js"></script>
 	<script src="/static/js/commons/commons.js"></script>
 	<script src="/static/js/angular/ui-bootstrap-tpls-2.2.0.min.js"></script>
 	<script src="/static/js/jquery/priceformat/jquery.priceformat.min.js"></script>
@@ -18,7 +19,7 @@
     	cursor: pointer;
 	}
 	button.margin {
-		margin-bottom: 1em;
+		margin-top: 21px
 	}
 	span.red { 
    		color:red;
@@ -30,9 +31,18 @@
 <form  name="fase" ng-app="fase" ng-controller="FaseController as $ctrl" ng-show="$ctrl.show" class="ng-hide">
   <div class="panel panel-default form-group-sm" >
 	  <div class="panel-body">
-		  <div class="form-group">
-		    <label for="descricao">Fase</label>
-		    <input type="text" class="form-control" id="descricao" name="descricao" ng-model="$ctrl.fase.descricao" maxlength="30" placeholder="Fase" required>
+	  	  <div class="form-group col-sm-3">
+			  <div class="form-group">
+			    <label for="descricao">Fase</label>
+			    <input type="text" class="form-control" id="descricao" name="descricao" ng-model="$ctrl.fase.descricao" maxlength="30" placeholder="Fase" required>
+			  </div>
+		  </div>
+		  <div class="form-group col-sm-3">
+		    <label for="centro_resultado">Centro de resultado</label>
+		    <select class="form-control" id="centro_resultado" name="centro_resultado" ng-model="$ctrl.fase.centro_resultado.id" ng-options="c.id as c.nome for c in $ctrl.centroresultadolist" required>
+		    	<option value="">Selecione...</option>
+		    </select>
+		    <span class="red" ng-show="valorhora.centro_resultado.$invalid">Centro de resultado é obrigatório.</span>
 		  </div>
 		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.salvar()" ng-disabled="fase.$invalid">Salvar</button>
 		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.novo()" ng-show="$ctrl.fase.id">Novo</button>

@@ -1,8 +1,8 @@
 "use strict";
 
-var fase = angular.module('fase', ['fase-services', 'commons', 'ui.bootstrap', 'ui.mask']);
+var fase = angular.module('fase', ['fase-services', 'centroresultado-services', 'commons', 'ui.bootstrap', 'ui.mask']);
 
-fase.controller('FaseController', function ($scope, $window, FaseService){
+fase.controller('FaseController', function ($scope, $window, FaseService, CentroResultadoService){
 	var $ctrl = this;
 	
 	$ctrl.fase = {}
@@ -10,6 +10,7 @@ fase.controller('FaseController', function ($scope, $window, FaseService){
 	$ctrl.show =true;
 	
 	$ctrl.faselist = FaseService.buscarfases();
+	$ctrl.centroresultadolist = CentroResultadoService.buscarcentroresultados();
 	
 	$ctrl.salvar = function () {
 		FaseService.salvar($ctrl.fase, function () {

@@ -224,6 +224,7 @@ class CustoPrestador(models.Model):
     valor = models.FloatField(max_length=30, default = None)
     
 class Fase(models.Model):
+    centro_resultado = models.ForeignKey(CentroResultado, default = None, null = True)
     descricao = models.CharField(max_length = 100, default = None)
     
 class NaturezaDemanda(models.Model):

@@ -54,9 +54,10 @@ class UnidadeAdministrativaSerializer(serializers.ModelSerializer):
         fields = ('id', 'codigo', 'nome', 'margem_risco', 'imposto_devidos', 'lucro_desejado')
         
 class FaseSerializer(serializers.ModelSerializer):
+    centro_resultado = CentroResultadoSerializer()
     class Meta:
         model = Fase
-        fields = ('id', 'descricao')
+        fields = ('id', 'descricao', 'centro_resultado')
 
 class TipoAlocacaoSerializer(serializers.ModelSerializer):
     class Meta:
