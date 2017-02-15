@@ -722,7 +722,12 @@ def buscar_lista_por_parametro(request, format=None):
         
         if 'palavra_chave' in request.data and request.data['palavra_chave']:
             if  request.data['palavra_chave'].isdigit():
-                demandas = demandas.filter(id=request.data['palavra_chave'])
+                palavra_chave = request.data['palavra_chave']
+                demandas = demandas.filter(Q(id=palavra_chave)
+                            | Q(nome_demanda__icontains=palavra_chave)
+                            | Q(faseatividade__atividade__descricao__icontains=palavra_chave)
+                            | Q(descricao__icontains=palavra_chave)
+                            | Q(cliente__pessoa__nome_razao_social__icontains=palavra_chave)).distinct()
             else:
                 palavra_chave = request.data['palavra_chave']
                 demandas = demandas.filter(Q(nome_demanda__icontains=palavra_chave)
