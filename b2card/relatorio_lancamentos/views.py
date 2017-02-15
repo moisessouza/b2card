@@ -94,6 +94,21 @@ def alocar_horas_internas(request, format=None):
 
     return Response(AtividadeProfissionalSerializer(atividade_profissional).data)
 
+@api_view(['DELETE'])
+def deletar_alocacao_interna(request, alocacao_id, format=None):
+    
+    alocacao_horas = AlocacaoHoras.objects.get(pk=alocacao_id)
+    alocacao_horas.delete()
+    
+    atividade_profissional = alocacao_horas.atividade_profissional
+    alocacoes = AlocacaoHoras.objects.filter(atividade_profissional = atividade_profissional)
+    atividade_profissional.horas_alocadas_milisegundos =  sum(a.horas_alocadas_milisegundos for a in alocacoes)
+    atividade_profissional.save();
+    
+    return Response(AtividadeProfissionalSerializer(atividade_profissional).data)
+    
+    
+
 def calcular_horas_percentual_atividade(atividade_profissional):
     
     alocacoes_horas = AlocacaoHoras.objects.filter(atividade_profissional=atividade_profissional)

@@ -131,6 +131,14 @@ relatorio_lancamentos.controller('RelatorioLancamentosController', function (Rel
 		$uibModalInstance.close();
 	}
 	
+	$ctrl.excluir = () => {
+		if (confirm(MESSAGE_EXCLUIR)) {
+			RelatorioLancamentosService.excluiralocacaointerna(alocacao.id, function (result) {
+				$uibModalInstance.close(result);
+			});
+		}
+	}
+	
 	$ctrl.salvar = () => {
 		
 		if (!$ctrl.data) {
@@ -217,7 +225,7 @@ relatorio_lancamentos.controller('RelatorioLancamentosController', function (Rel
 	
 	$ctrl.excluir = () => {
 		if (confirm(MESSAGE_EXCLUIR)) {
-			RelatorioLancamentosService.salvaralocacao(alocacao.id, function (result) {
+			RelatorioLancamentosService.excluiralocacao(alocacao.id, function (result) {
 				$uibModalInstance.close(result);
 			});
 		}
