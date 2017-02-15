@@ -4,7 +4,10 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 	var $ctrl = this;
 	$ctrl.share = share;
 	
-	$ctrl.listafases = FaseService.buscarfases();
+	$ctrl.valorhoraporfasemap = {}
+	
+	
+	
 	$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card();
 	
 	
@@ -19,6 +22,20 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 						$rootScope.$emit('incluirfasesorcamento');		
 					});
 				}
+				
+				$ctrl.listafases = FaseService.buscarfases(function (data) {
+					if ($ctrl.share.listavalorhora) {
+						for (let fase of data) {
+							$ctrl.valorhoraporfasemap[fase.id] = [];
+							for (let valorhora of $ctrl.share.listavalorhora){
+								if (fase.centro_resultado.id == valorhora.centro_resultado.id){
+									$ctrl.valorhoraporfasemap[fase.id].push(valorhora);
+								}
+							}
+						}
+					}
+				});
+				
 			});
 		}	
 	});
