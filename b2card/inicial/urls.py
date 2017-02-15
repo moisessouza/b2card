@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^api/atividadesinternas/$', views.buscar_atividades_internas),
     url(r'^api/atividadesinternas/demanda/(?P<demanda_id>[0-9]+)/$', views.buscar_atividades_demanda_interna),
     url(r'^api/alocacaointerna/$', views.alocar_horas_internas),
-    url(r'^api/validar_data_hora/(?P<atividade_id>[0-9]+)/(?P<data_informada>[0-9]+)/(?P<hora_inicio>[0-9:0-9]+)/(?P<hora_fim>[0-9:0-9]+)/$', views.validar_data_hora),
+    url(r'^api/validar_data_hora/(?P<data_informada>[0-9]+)/(?P<hora_inicio>[0-9:0-9]+)/(?P<hora_fim>[0-9:0-9]+)/$', views.validar_data_hora),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

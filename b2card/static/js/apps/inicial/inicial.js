@@ -260,7 +260,7 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 		
 		let data = CommonsService.dataparaurl($ctrl.data);
 		
-		InicialService.validardatahora ($ctrl.atividade.id, data, $ctrl.hora_inicio, $ctrl.hora_fim, function(result) {
+		InicialService.validardatahora (data, $ctrl.hora_inicio, $ctrl.hora_fim, function(result) {
 			
 			if(result.custo_prestador && !result.possui_alocacao) {
 				

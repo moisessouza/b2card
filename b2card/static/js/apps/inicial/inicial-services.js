@@ -50,9 +50,9 @@ inicialservices.service('InicialService', function($resource){
 			var AlocacaoHoras = $resource(BASE_URL + 'inicial/api/alocacaointerna/');
 			return AlocacaoHoras.save({}, data, callback);
 		},
-		validardatahora: function(atividade_id, data, hora_inicio, hora_fim, callback) {
-			var CustoPrestador = $resource(BASE_URL + 'inicial/api/validar_data_hora/:atividade_id/:data_informada/:hora_inicio/:hora_fim/');
-			return CustoPrestador.get({'atividade_id': atividade_id, 'data_informada': data, 'hora_inicio': hora_inicio, 'hora_fim': hora_fim}, callback);
+		validardatahora: function(data, hora_inicio, hora_fim, callback) {
+			var CustoPrestador = $resource(BASE_URL + 'inicial/api/validar_data_hora/:data_informada/:hora_inicio/:hora_fim/');
+			return CustoPrestador.get({'data_informada': data, 'hora_inicio': hora_inicio, 'hora_fim': hora_fim}, callback);
 		}
 	}
 });

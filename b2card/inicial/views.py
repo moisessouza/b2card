@@ -277,7 +277,7 @@ def buscar_atividade_profissional_por_atividade(request, atividade_id, format=No
     return Response(atividade_profissional_dict)
 
 @api_view(['GET'])
-def validar_data_hora(request, atividade_id, data_informada, hora_inicio, hora_fim, format=None):
+def validar_data_hora(request, data_informada, hora_inicio, hora_fim, format=None):
     
     data = converter_data_url(data_informada)
     
@@ -291,7 +291,7 @@ def validar_data_hora(request, atividade_id, data_informada, hora_inicio, hora_f
         result['custo_prestador'] = False
     
     
-    alocacoes = AlocacaoHoras.objects.filter(atividade_profissional__atividade__id=atividade_id, atividade_profissional__pessoa_fisica__prestador__usuario__id=request.user.id, data_informada = data)
+    alocacoes = AlocacaoHoras.objects.filter(atividade_profissional__pessoa_fisica__prestador__usuario__id=request.user.id, data_informada = data)
     
     hora_inicio =  datetime.datetime.strptime(hora_inicio, '%H:%M')
     hora_fim =  datetime.datetime.strptime(hora_fim, '%H:%M')
