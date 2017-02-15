@@ -742,11 +742,14 @@ def buscar_lista_por_parametro(request, format=None):
             
         pagina = request.data['pagina']
         paginator = Paginator(demandas, REGISTROS_POR_PAGINA)
+        total_paginas = paginator.num_pages
         if 'pagina' in request.data:
+            if pagina > total_paginas:
+                pagina = total_paginas
             demandas = paginator.page(pagina)
         else:
             demandas = paginator.page(1)
-        total_paginas = paginator.num_pages
+        
             
     else:
         demandas = Demanda.objects.all().order_by('-id')
