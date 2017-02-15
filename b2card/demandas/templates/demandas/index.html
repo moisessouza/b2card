@@ -158,12 +158,20 @@ div.modal-status {
 	      </tr>
 	    </tbody>
 	</table>
-	<div class="col-sm-1">
-		<div class="form-group">
-			<label>Página</label>
-			<select type="text" ng-model="$ctrl.arguments.pagina" ng-change="$ctrl.pesquisar()" class="form-control">
-				<option ng-repeat="i in [].constructor($ctrl.resultado.total_paginas) track by $index" value="{{$index + 1}}">{{$index + 1}}</option>
-			</select>
+	<div class="col-sm-12">
+		<div class="form-group" style="text-align: center;">
+			<button class="btn btn-primary" ng-click="$ctrl.primeirapagina();">
+				<span class="glyphicon glyphicon-fast-backward"></span>
+			</button>
+			<button class="btn btn-primary" ng-click="$ctrl.recuarpagina();">
+				<span class="glyphicon glyphicon-step-backward"></span>
+			</button>
+			<button class="btn btn-primary" ng-click="$ctrl.avancarpagina();">
+				<span class="glyphicon glyphicon-step-forward"></span>
+			</button>
+			<button class="btn btn-primary" ng-click="$ctrl.ultimapagina();">
+				<span class="glyphicon glyphicon-fast-forward"></span>
+			</button>
 		</div>
 	</div>
 </div>
