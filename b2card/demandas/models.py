@@ -40,7 +40,6 @@ class Demanda(models.Model):
     status_demanda = models.CharField(max_length=1, choices=STATUS_DEMANDA, null=True)
     codigo_demanda = models.CharField(max_length=12, null=True)
     unidade_administrativa = models.ForeignKey(UnidadeAdministrativa, default=None, null=True)
-    analista_tecnico_responsavel = models.ForeignKey(PessoaFisica, null=True, related_name="%(app_label)s_%(class)s_related", related_query_name="%(app_label)s_%(class)ss")
     responsavel = models.ForeignKey(PessoaFisica, null = True)
     tipo_demanda = models.CharField(max_length=1, choices=TIPO_DEMANDA, default = None, null=True)
     natureza_demanda = models.ForeignKey(NaturezaDemanda, default = None, null = True)

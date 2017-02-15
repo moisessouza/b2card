@@ -4,7 +4,7 @@ Created on 14 de set de 2016
 @author: moi09
 '''
 from rest_framework import serializers
-from demandas.models import Demanda, Proposta, Observacao, Ocorrencia,\
+from demandas.models import  Demanda, Proposta, Observacao, Ocorrencia,\
     Orcamento, Fase, ItemFase, Atividade, OrcamentoFase,\
     OrcamentoAtividade, PerfilAtividade, AtividadeProfissional,\
     FaseAtividade, AlocacaoHoras, Despesa
@@ -22,12 +22,11 @@ class DemandaInicialSerializer(serializers.ModelSerializer):
 class DemandaSerializer (serializers.ModelSerializer):
     cliente = PessoaJuridicaComPessoaSerializer()
     unidade_administrativa = UnidadeAdministrativaSerializer()
-    analista_tecnico_responsavel = PessoaFisicaComPessoaSerializer()
     responsavel = PessoaFisicaComPessoaSerializer()
     natureza_demanda = NaturezaDemandaSerializer()
     class Meta:
         model = Demanda
-        fields = ('id', 'cliente','nome_demanda','descricao','status_demanda','codigo_demanda', 'unidade_administrativa', 'analista_tecnico_responsavel', 'responsavel', 'tipo_demanda', 'responsavel_cliente', 'natureza_demanda', 'percentual_concluido', 'percentual_calculado', 'data_inicio', 'data_fim', 'data_criacao')
+        fields = ('id', 'cliente','nome_demanda','descricao','status_demanda','codigo_demanda', 'unidade_administrativa', 'responsavel', 'tipo_demanda', 'responsavel_cliente', 'natureza_demanda', 'percentual_concluido', 'percentual_calculado', 'data_inicio', 'data_fim', 'data_criacao')
         
 class PropostaSerializer(serializers.ModelSerializer):
     class Meta:
