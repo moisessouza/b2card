@@ -38,7 +38,7 @@ class Demanda(models.Model):
     nome_demanda = models.CharField(max_length=60,default=None)
     descricao = models.TextField(default=None, null=True)
     status_demanda = models.CharField(max_length=1, choices=STATUS_DEMANDA, null=True)
-    codigo_demanda = models.CharField(max_length=12, null=True)
+    codigo_demanda = models.CharField(max_length=20, null=True)
     unidade_administrativa = models.ForeignKey(UnidadeAdministrativa, default=None, null=True)
     responsavel = models.ForeignKey(PessoaFisica, null = True)
     tipo_demanda = models.CharField(max_length=1, choices=TIPO_DEMANDA, default = None, null=True)
