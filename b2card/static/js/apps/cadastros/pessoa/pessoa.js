@@ -3,6 +3,10 @@
 var pessoa = angular.module('pessoa', ['pessoa-services', 'centrocusto-services','centroresultado-services', 
     'contagerencial-services',	'naturezaoperacao-services', 'recursos-services', 'commons', 'ui.bootstrap', 'ui.mask']);
 
+pessoa.run(function (uiMaskConfig) {
+  uiMaskConfig.clearOnBlur = false;
+});
+
 pessoa.config(['$httpProvider', 'CommonsServiceProvider', function($httpProvider, CommonsServiceProvider) {  
     $httpProvider.interceptors.push(function () {
     	return {
