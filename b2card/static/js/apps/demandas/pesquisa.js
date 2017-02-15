@@ -9,7 +9,7 @@ pesquisademanda.controller('PesquisaDemandaController', function (CommonsService
 	var configurarresultado = function (resultado) {
 		if (resultado.demandas) {
 			for(let demanda of resultado.demandas) {
-				demanda.descricao = CommonsService.pad(demanda.id, 5) + ' - ' + demanda.cliente.pessoa.nome_razao_social + ' - ' + demanda.nome_demanda;
+				demanda.descricao = CommonsService.pad(demanda.id, 5) + ' - ' + demanda.cliente.nome_fantasia + ' - ' + demanda.nome_demanda;
 			}
 		}
 	}
