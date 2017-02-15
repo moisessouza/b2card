@@ -94,7 +94,8 @@ relatorio_lancamentos.controller('RelatorioLancamentosController', function (Rel
 	$ctrl.total_horas = 0;
 	
 	$ctrl.pesquisar = () => {
-		$ctrl.listaalocacao = RelatorioLancamentosService.pesquisar($ctrl.arguments, function (data){
+		RelatorioLancamentosService.pesquisar($ctrl.arguments, function (data){
+			$ctrl.listaalocacao = data;
 			let total_horas_milisegundos = 0;
 			for(let alocacao of data) {
 				alocacao.horas_alocadas = CommonsService.milliparahoras(alocacao.horas_alocadas_milisegundos);
