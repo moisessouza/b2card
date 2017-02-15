@@ -215,6 +215,14 @@ relatorio_lancamentos.controller('RelatorioLancamentosController', function (Rel
 		$uibModalInstance.close();
 	}
 	
+	$ctrl.excluir = () => {
+		if (confirm(MESSAGE_EXCLUIR)) {
+			RelatorioLancamentosService.salvaralocacao(alocacao.id, function (result) {
+				$uibModalInstance.close(result);
+			});
+		}
+	}
+	
 	$ctrl.salvar = () => {
 		
 		let data = CommonsService.dataparaurl($ctrl.data);

@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^api/eh_gestor/$', views.eh_gestor),
     url(r'^api/validar_data_hora/(?P<alocacao_id>[0-9]+)/(?P<atividade_id>[0-9]+)/(?P<data_informada>[0-9]+)/(?P<hora_inicio>[0-9:0-9]+)/(?P<hora_fim>[0-9:0-9]+)/$', views.validar_data_hora),
     url(r'^api/verificar_tipo_demanda/(?P<alocacao_id>[0-9]+)/$', views.verificar_tipo_demanda),
+    url(r'^api/(?P<alocacao_id>[0-9]+)/excluir/', views.deletar_alocacao)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

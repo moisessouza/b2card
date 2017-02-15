@@ -94,6 +94,49 @@ def alocar_horas_internas(request, format=None):
 
     return Response(AtividadeProfissionalSerializer(atividade_profissional).data)
 
+def calcular_horas_percentual_atividade(atividade_profissional):
+    
+    alocacoes_horas = AlocacaoHoras.objects.filter(atividade_profissional=atividade_profissional)
+    total_milisegundos = 0
+    maior_percentual_concluido = 0
+    for i in alocacoes_horas:
+        total_milisegundos += i.horas_alocadas_milisegundos
+        if maior_percentual_concluido < i.percentual_concluido:
+            maior_percentual_concluido = i.percentual_concluido
+    
+    atividade_profissional.horas_alocadas_milisegundos = total_milisegundos
+    quantidade_horas_milisegundos = atividade_profissional.quantidade_horas * 60 * 60 * 1000
+    percentual_calculado = (atividade_profissional.horas_alocadas_milisegundos * 100) / quantidade_horas_milisegundos
+    if percentual_calculado > 100:
+        percentual_calculado = 100
+    atividade_profissional.percentual_calculado = percentual_calculado
+    atividade_profissional.percentual_concluido = maior_percentual_concluido
+    atividade_profissional.save()
+    #Calcular percentual atividade
+    atividade = Atividade.objects.filter(atividadeprofissional=atividade_profissional)[0]
+    atividades_profissionais = AtividadeProfissional.objects.filter(atividade=atividade)
+    percentual_calculado = sum((a.percentual_calculado if a.percentual_calculado else 0) for a in atividades_profissionais) / len(atividades_profissionais)
+    percentual_concluido = sum((a.percentual_concluido if a.percentual_concluido else 0) for a in atividades_profissionais) / len(atividades_profissionais)
+    atividade.percentual_calculado = percentual_calculado
+    atividade.percentual_concluido = percentual_concluido
+    atividade.save()
+    #calcular percentual fase_atividade
+    fase_atividade = FaseAtividade.objects.filter(atividade=atividade)[0]
+    atividades = Atividade.objects.filter(fase_atividade=fase_atividade)
+    percentual_calculado = sum((a.percentual_calculado if a.percentual_calculado else 0) for a in atividades) / len(atividades)
+    percentual_concluido = sum((a.percentual_concluido if a.percentual_concluido else 0) for a in atividades) / len(atividades)
+    fase_atividade.percentual_calculado = percentual_calculado
+    fase_atividade.percentual_concluido = percentual_concluido
+    fase_atividade.save()
+    demanda = Demanda.objects.filter(faseatividade=fase_atividade)[0]
+    fase_atividades = FaseAtividade.objects.filter(demanda=demanda)
+    percentual_calculado = sum((a.percentual_calculado if a.percentual_calculado else 0) for a in fase_atividades) / len(fase_atividades)
+    percentual_concluido = sum((a.percentual_concluido if a.percentual_concluido else 0) for a in fase_atividades) / len(fase_atividades)
+    demanda.percentual_calculado = percentual_calculado
+    demanda.percentual_concluido = percentual_concluido
+    demanda.save()
+    return atividade_profissional
+
 @api_view(['POST'])
 def alocar_horas(request, format=None):
     
@@ -127,59 +170,18 @@ def alocar_horas(request, format=None):
     alocacao_horas.tipo_alocacao = tipo_alocacao
     alocacao_horas.save();
     
-    alocacoes_horas = AlocacaoHoras.objects.filter(atividade_profissional =  atividade_profissional)
-    
-    total_milisegundos = 0
-    maior_percentual_concluido = 0
-    for i in alocacoes_horas:
-        total_milisegundos += i.horas_alocadas_milisegundos
-        if maior_percentual_concluido < i.percentual_concluido:
-            maior_percentual_concluido = i.percentual_concluido
-        
-    atividade_profissional.horas_alocadas_milisegundos = total_milisegundos
-    
-    quantidade_horas_milisegundos = atividade_profissional.quantidade_horas * 60 * 60 * 1000
-    percentual_calculado = (atividade_profissional.horas_alocadas_milisegundos * 100) / quantidade_horas_milisegundos 
-    
-    if percentual_calculado > 100:
-        percentual_calculado = 100
-    
-    atividade_profissional.percentual_calculado = percentual_calculado
-    atividade_profissional.percentual_concluido = maior_percentual_concluido
-    atividade_profissional.save();
-    
-    #Calcular percentual atividade
-    atividade = Atividade.objects.filter(atividadeprofissional = atividade_profissional)[0]
-    atividades_profissionais = AtividadeProfissional.objects.filter(atividade = atividade)
-    percentual_calculado = sum((a.percentual_calculado if a.percentual_calculado else 0) for a in atividades_profissionais) / len(atividades_profissionais);
-    percentual_concluido = sum((a.percentual_concluido if a.percentual_concluido else 0) for a in atividades_profissionais) / len(atividades_profissionais);
-
-    atividade.percentual_calculado = percentual_calculado
-    atividade.percentual_concluido = percentual_concluido
-    atividade.save();
-    
-    #calcular percentual fase_atividade
-    fase_atividade = FaseAtividade.objects.filter(atividade = atividade)[0]
-    atividades = Atividade.objects.filter(fase_atividade = fase_atividade)
-    percentual_calculado = sum((a.percentual_calculado if a.percentual_calculado else 0) for a in atividades) / len(atividades);
-    percentual_concluido = sum((a.percentual_concluido if a.percentual_concluido else 0) for a in atividades) / len(atividades);
-    
-    fase_atividade.percentual_calculado = percentual_calculado
-    fase_atividade.percentual_concluido = percentual_concluido
-    fase_atividade.save()
-    
-    demanda = Demanda.objects.filter(faseatividade = fase_atividade)[0]
-    fase_atividades = FaseAtividade.objects.filter(demanda = demanda)
-    percentual_calculado = sum((a.percentual_calculado if a.percentual_calculado else 0) for a in fase_atividades) / len(fase_atividades);
-    percentual_concluido = sum((a.percentual_concluido if a.percentual_concluido else 0) for a in fase_atividades) / len(fase_atividades);
-    
-    demanda.percentual_calculado = percentual_calculado
-    demanda.percentual_concluido = percentual_concluido
-    demanda.save()
+    calcular_horas_percentual_atividade(atividade_profissional)
     
     return Response(AtividadeProfissionalSerializer(atividade_profissional).data)
 
-
+@api_view(['DELETE'])
+def deletar_alocacao(request, alocacao_id, format=None):
+    
+    alocacao_horas = AlocacaoHoras.objects.get(pk=alocacao_id)
+    alocacao_horas.delete()
+    calcular_horas_percentual_atividade(alocacao_horas.atividade_profissional)
+    
+    return Response(AtividadeProfissionalSerializer(alocacao_horas.atividade_profissional).data)
 
 @api_view(['GET'])
 def validar_data_hora(request, alocacao_id, atividade_id, data_informada, hora_inicio, hora_fim, format=None):

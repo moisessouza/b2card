@@ -39,6 +39,10 @@ relatorio_lancamentos.service('RelatorioLancamentosService', function($resource)
 		verificartipodemanda: function(alocacao_id, callback) {
 			var TipoDemanda = $resource(BASE_URL + 'relatorio_lancamentos/api/verificar_tipo_demanda/:alocacao_id/');
 			return TipoDemanda.get({'alocacao_id': alocacao_id}, callback);
+		},
+		salvaralocacao: function (alocacao_id, callback) {
+			var AlocacaoHoras =  $resource(BASE_URL + 'relatorio_lancamentos/api/:alocacao_id/excluir/');
+			return AlocacaoHoras.remove({'alocacao_id': alocacao_id}, callback)
 		}
 	}
 });
