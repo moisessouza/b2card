@@ -365,7 +365,7 @@ class DemandaDetail(APIView):
                     despesa.orcamento = orcamento
                     despesa.save()
                 elif 'id' in i:
-                    despesa = Despesa.objects.get(i['id'])
+                    despesa = Despesa.objects.get(pk=i['id'])
                     despesa.delete()
     
     def salvar_orcamento_atividades(self,orcamento_atividades, orcamento):

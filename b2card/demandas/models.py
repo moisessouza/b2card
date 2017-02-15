@@ -165,7 +165,7 @@ class ItemFase(models.Model):
     orcamento_fase = models.ForeignKey(OrcamentoFase, default = None)
     valor_hora = models.ForeignKey(ValorHora, default=None)
     valor_selecionado = models.FloatField()
-    quantidade_horas = models.IntegerField(default = None, null = True)
+    quantidade_horas = models.FloatField(default = None, null = True)
     valor_total = models.FloatField()
     
 class OrcamentoAtividade(models.Model):
