@@ -301,13 +301,13 @@ def validar_data_hora(request, data_informada, hora_inicio, hora_fim, format=Non
         hora_inicio_aloc =  datetime.datetime.strptime(i.hora_inicio, '%H:%M')
         hora_fim_aloc =  datetime.datetime.strptime(i.hora_fim, '%H:%M')
         
-        if hora_inicio >= hora_inicio_aloc and hora_inicio <= hora_fim_aloc:
+        if hora_inicio > hora_inicio_aloc and hora_inicio < hora_fim_aloc:
             result['possui_alocacao'] = True
             break
-        elif hora_fim >= hora_inicio_aloc and hora_fim <= hora_fim_aloc:
+        elif hora_fim > hora_inicio_aloc and hora_fim < hora_fim_aloc:
             result['possui_alocacao']  = True
             break
-        elif hora_inicio <= hora_inicio_aloc and hora_fim >= hora_fim_aloc:
+        elif hora_inicio < hora_inicio_aloc and hora_fim > hora_fim_aloc:
             result['possui_alocacao']  = True
             break
             

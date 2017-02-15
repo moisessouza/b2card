@@ -236,7 +236,7 @@ relatorio_lancamentos.controller('RelatorioLancamentosController', function (Rel
 		
 		let data = CommonsService.dataparaurl($ctrl.data);
 		
-		RelatorioLancamentosService.validardatahora (alocacao.id, $ctrl.atividade.id, data, $ctrl.hora_inicio, $ctrl.hora_fim, function(result) {
+		RelatorioLancamentosService.validardatahora (alocacao.id, data, $ctrl.hora_inicio, $ctrl.hora_fim, function(result) {
 			
 			if(result.custo_prestador && !result.possui_alocacao) {
 			
@@ -298,7 +298,11 @@ relatorio_lancamentos.controller('RelatorioLancamentosController', function (Rel
 				});
 			
 			} else {
-				alert('Você não possui vigência para esta data, favor verificar!');
+				if (result.possui_alocacao){
+					alert('Você já possui alocação no horário especificado');
+				} else {
+					alert('Você não possui vigência para esta data, favor verificar!');	
+				}
 			}
 			
 		});

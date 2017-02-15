@@ -199,7 +199,7 @@ def deletar_alocacao(request, alocacao_id, format=None):
     return Response(AtividadeProfissionalSerializer(alocacao_horas.atividade_profissional).data)
 
 @api_view(['GET'])
-def validar_data_hora(request, alocacao_id, atividade_id, data_informada, hora_inicio, hora_fim, format=None):
+def validar_data_hora(request, alocacao_id, data_informada, hora_inicio, hora_fim, format=None):
     
     data = converter_data_url(data_informada)
     
@@ -213,7 +213,7 @@ def validar_data_hora(request, alocacao_id, atividade_id, data_informada, hora_i
         result['custo_prestador'] = False
     
     
-    alocacoes = AlocacaoHoras.objects.filter(atividade_profissional__atividade__id=atividade_id, atividade_profissional__pessoa_fisica__prestador__usuario__id=request.user.id, data_informada = data).filter(~Q(id=alocacao_id))
+    alocacoes = AlocacaoHoras.objects.filter(atividade_profissional__pessoa_fisica__prestador__usuario__id=request.user.id, data_informada = data).filter(~Q(id=alocacao_id))
     
     hora_inicio =  datetime.datetime.strptime(hora_inicio, '%H:%M')
     hora_fim =  datetime.datetime.strptime(hora_fim, '%H:%M')
@@ -223,13 +223,13 @@ def validar_data_hora(request, alocacao_id, atividade_id, data_informada, hora_i
         hora_inicio_aloc =  datetime.datetime.strptime(i.hora_inicio, '%H:%M')
         hora_fim_aloc =  datetime.datetime.strptime(i.hora_fim, '%H:%M')
         
-        if hora_inicio >= hora_inicio_aloc and hora_inicio <= hora_fim_aloc:
+        if hora_inicio > hora_inicio_aloc and hora_inicio < hora_fim_aloc:
             result['possui_alocacao'] = True
             break
-        elif hora_fim >= hora_inicio_aloc and hora_fim <= hora_fim_aloc:
+        elif hora_fim > hora_inicio_aloc and hora_fim < hora_fim_aloc:
             result['possui_alocacao']  = True
             break
-        elif hora_inicio <= hora_inicio_aloc and hora_fim >= hora_fim_aloc:
+        elif hora_inicio < hora_inicio_aloc and hora_fim > hora_fim_aloc:
             result['possui_alocacao']  = True
             break
             
