@@ -705,11 +705,20 @@ def buscar_lista_por_parametro(request, format=None):
             for k in request.data['status']:
                 if request.data['status'][k]:
                     list_status.append(k)
+                    
+        list_responsaveis = []
+        if 'responsaveis' in request.data and request.data['responsaveis']:
+            for k in request.data['responsaveis']:
+                if request.data['responsaveis'][k]:
+                    list_responsaveis.append(k);
         
         demandas = Demanda.objects.filter(**arguments)
             
         if list_status:
             demandas = demandas.filter(status_demanda__in=list_status)
+
+        if list_responsaveis:
+            demandas = demandas.filter(responsavel__id__in=list_responsaveis)
         
         if 'palavra_chave' in request.data and request.data['palavra_chave']:
             if  request.data['palavra_chave'].isdigit():

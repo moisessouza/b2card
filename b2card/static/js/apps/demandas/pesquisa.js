@@ -16,6 +16,7 @@ pesquisademanda.controller('PesquisaDemandaController', function (CommonsService
 	}
 	
 	$ctrl.listaclientes = PessoaService.buscarpessoasjuridicas();
+	$ctrl.listaresponsaveis = PessoaService.buscargestores();
 	
 	$ctrl.arguments = {
 		pagina: 1,
@@ -58,6 +59,10 @@ pesquisademanda.controller('PesquisaDemandaController', function (CommonsService
 		$ctrl.showmodal = !$ctrl.showmodal; 
 	}
 	
+	$ctrl.abrirmodalresponsaveis = () => {
+		$ctrl.showmodalresponsaveis = !$ctrl.showmodalresponsaveis;
+	}
+	
 	$ctrl.ordenar = () => {
 		$ctrl.arguments.ordenar = !$ctrl.arguments.ordenar
 		$ctrl.pesquisar();
@@ -65,6 +70,7 @@ pesquisademanda.controller('PesquisaDemandaController', function (CommonsService
 	
 	$ctrl.pesquisar = () => {
 		$ctrl.arguments.status = $ctrl.status;
+		$ctrl.arguments.responsaveis = $ctrl.responsavel;
 		PesquisaDemandaService.buscarcentroresultadoshora($ctrl.arguments, configurarresultado);
 	}
 	

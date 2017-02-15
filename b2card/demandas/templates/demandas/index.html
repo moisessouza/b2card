@@ -101,7 +101,24 @@ div.modal-status {
 					<span class="glyphicon glyphicon-chevron-down"></span>
 				</button>
 	        </th>
-	        <th>Responsável</th>
+	        <th>
+	        	<div style="float:left;">
+	        		Responsável
+	        	</div>
+	        	<button class="btn btn-primary button-heading" ng-click="$ctrl.abrirmodalresponsaveis()" style="margin-left:5px; float:left;">
+					<span class="glyphicon glyphicon-collapse-down"></span>
+				</button>
+				<div style="position: relative;">
+					<div class="modal-status" ng-show="$ctrl.showmodalresponsaveis" style="width: 240px;">
+						<button class="btn btn-primary button-heading" ng-click="$ctrl.abrirmodalresponsaveis()" style="margin-right:2px; float:right;">
+							<span class="glyphicon glyphicon-remove"></span>
+						</button>
+						<div ng-repeat="r in $ctrl.listaresponsaveis">
+							<input type="checkbox" ng-model="$ctrl.responsavel[r.id]" ng-click="$ctrl.pesquisar();"> {{r.pessoa.nome_razao_social}}
+						</div>
+					</div>
+				</div>
+	        </th>
 	        <th>
 	        	<div style="float:left;">
 	        		Status
