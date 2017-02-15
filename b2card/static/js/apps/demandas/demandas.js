@@ -557,7 +557,13 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 	
 	$ctrl.modalatividademap = {};
 	
+	$ctrl.listafuncionariosmap = {};
+	
 	$ctrl.abrirmodalfuncionarios = atividade => {
+		if (!$ctrl.listafuncionariosmap[atividade.$$hashKey]) {
+			$ctrl.listafuncionariosmap[atividade.$$hashKey] = $ctrl.share.listafuncionarios; 
+		}
+		
 		for(let key in $ctrl.modalatividademap){
 			if (atividade.$$hashKey != key){
 				$ctrl.modalatividademap[key] = {

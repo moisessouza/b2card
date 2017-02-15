@@ -101,7 +101,7 @@
 															<span class="glyphicon glyphicon-remove"></span>
 														</div>
 													</div>
-													<div ng-repeat="f in $ctrl.share.listafuncionarios">
+													<div ng-repeat="f in $ctrl.listafuncionariosmap[atividade.$$hashKey]">
 														<input type="checkbox" ng-model="$ctrl.modalatividademap[atividade.$$hashKey][f.id]" ng-change="$ctrl.adicionarremoverprofissional(atividade, f)"> {{f.pessoa.nome_razao_social}}
 													</div>
 												</div>
