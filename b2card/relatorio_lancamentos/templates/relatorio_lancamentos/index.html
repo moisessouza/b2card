@@ -49,7 +49,7 @@
 	<form name="pesquisa">
 		<div class="panel panel-primary form-group-sm">
 			<div class="panel-body">
-				<form name="arguments">
+				<form name="arguments" action="{% url 'relatorio_lancamentos:relatorio' %}">
 					<div class="col-sm-2" style="width: 135px">
 						<label for="total_orcamento">Período</label>
 						<div class="input-group">
@@ -101,7 +101,8 @@
 						</div>
 					</div>
 					<button class="btn btn-sm btn-default margin" ng-click="$ctrl.pesquisar();" ng-disabled="pesquisa.$invalid">Pesquisar</button>
-					<button class="btn btn-sm btn-default margin" ng-click="$ctrl.relatorio();" ng-disabled="pesquisa.$invalid" value="Novo" ng-if="$ctrl.eh_gestor">Gerar relatório</button>
+					<button class="btn btn-sm btn-default margin" name="gerar_relatorio" ng-disabled="pesquisa.$invalid" value="gerar_relatorio" ng-click="$ctrl.gerar_relatorio('gerar_relatorio')">Gerar relatório</button>
+					<button class="btn btn-sm btn-default margin" name="gerar_relatorio_com_valor" ng-disabled="pesquisa.$invalid" value="gerar_relatorio_com_valor" ng-click="$ctrl.gerar_relatorio('gerar_relatorio_com_valor')" ng-if="$ctrl.eh_gestor">Gerar relatório com valor</button>
 				</form>
 			</div>
 		</div>
@@ -164,5 +165,15 @@
 </div>
 
 {%endverbatim%}
+
+<form id="relatorio" action="{% url 'relatorio_lancamentos:relatorio' %}" method="post" target="_blank">
+	{% csrf_token %} 
+	<input name="tipo_relatorio" id="tipo_relatorio" type="hidden"/>
+	<input name="periodo" id="periodo" type="hidden"/>
+	<input name="profissional_id" id="profissional_id" type="hidden"/>
+	<input name="cliente_id" id="cliente_id" type="hidden"/>
+	<input name="status_demanda" id="periodo" type="hidden"/>
+	<input name="demanda_id" id="demanda_id" type="hidden"/>
+</form>
 
 {% endblock %}

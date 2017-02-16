@@ -13,6 +13,8 @@ from demandas.serializers import AlocacaoHorasSerializer, \
     RelatorioAlocacaoHorasSerializer, AtividadeProfissionalSerializer
 from utils.utils import converter_string_para_data, formatar_data,\
     serializar_data, converter_data_url
+from django.template.context_processors import request
+from django.db.models.aggregates import Sum
 
 
 # Create your views here.
@@ -54,18 +56,19 @@ def pesquisar_alocacoes_horas(request, format=None):
         
     return Response(alocacao_hora_list)
 
-@api_view(['GET'])
-def eh_gestor(request, format=None):
+def verificar_gestor(request):
     if request.user.is_superuser:
-        return Response({'gestor': True})
+        return True
     
     if not request.user.is_superuser:
         eh_gestor = Prestador.objects.filter(Q(data_fim__isnull=True) | Q(data_fim__gte = datetime.datetime.now()), Q(cargo__gestor=True), Q(usuario__id = request.user.id))
         if len(eh_gestor) > 0:
-            return Response({'gestor':True})
-        
-    return Response({'gestor':False})
+            return True
+    return False
 
+@api_view(['GET'])
+def eh_gestor(request, format=None):
+    return Response({'gestor': verificar_gestor(request)})
 
 @api_view(['POST'])
 def alocar_horas_internas(request, format=None):
@@ -241,4 +244,62 @@ def verificar_tipo_demanda(request, alocacao_id, format=None):
     demanda = Demanda.objects.filter(faseatividade__atividade__atividadeprofissional__alocacaohoras__id=alocacao_id)[0]
     context = {'tipo_demanda': demanda.tipo_demanda}
     return Response(context)
+
+def relatorio(request):
+    
+    gestor = verificar_gestor(request)
+    
+    tipo_relatorio = request.POST['tipo_relatorio']
+    
+    if tipo_relatorio == 'gerar_relatorio':
+
+        alocacao_horas = AlocacaoHoras.objects.all()
+        if not gestor:
+            alocacao_horas = alocacao_horas.filter(atividade_profissional__pessoa_fisica__prestador__usuario__id=request.user.id)
+            
+        periodo = request.POST['periodo']
+        periodo = converter_string_para_data(periodo)
+        alocacao_horas = alocacao_horas.filter(data_informada__month=periodo.month, data_informada__year=periodo.year)
+        
+        if 'profissional_id' in request.POST and request.POST['profissional_id']:
+            profissional_id = request.POST['profissional_id']
+            alocacao_horas = alocacao_horas.filter(atividade_profissional__pessoa_fisica__prestador__usuario__id=profissional_id)
+
+        if 'cliente_id' in request.POST and request.POST['cliente_id']:
+            cliente_id = request.POST['cliente_id']
+            alocacao_horas = alocacao_horas.filter(atividade_profissional__atividade__faseatividade__demanda__cliente__id=cliente_id)
+            
+        if 'status_demanda' in request.POST and request.POST['status_demanda']:
+            status_demanda = request.POST['status_demanda']
+            alocacao_horas = alocacao_horas.filter(atividade_profissional__atividade__faseatividade__demanda__status_demanda=status_demanda)
+            
+        if 'demanda_id' in request.POST and request.POST['demanda_id']:
+            demanda_id = request.POST['demanda_id']
+            alocacao_horas = alocacao_horas.filter(atividade_profissional__atividade__faseatividade__demanda__id=demanda_id)
+            
+        alocacao_horas_profissional = alocacao_horas.values('id', 'data_informada', 'atividade_profissional__pessoa_fisica__pessoa__nome_razao_social').annotate(total_horas_dia = Sum('horas_alocadas_milisegundos'))
+        alocacao_total = alocacao_horas.values('data_informada').annotate(total_horas_dia = Sum('horas_alocadas_milisegundos'))
+        
+        list_total = []
+        
+        for total in alocacao_total:
+            for profissional in alocacao_horas_profissional:
+                
+                total_dict = {'total': total}
+                list_alocacao_prof = []
+                
+                if total.data_informada == profissional.data_informada:
+                    list_alocacao_prof.append(profissional)
+                
+                total_dict['list_alocacao_prof'] = list_alocacao_prof
+                list_total.append(total_dict)
+        
+        context = {
+            'lista': list_total
+        }
+        
+        return render(request, 'relatorio_lancamentos/relatorio_sem_valor.html', context)
+    
+    elif tipo_relatorio == 'gerar_relatorio_com_valor':
+        return render(request, 'relatorio_lancamentos/relatorio_com_valor.html')
     

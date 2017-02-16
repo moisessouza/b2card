@@ -1,0 +1,98 @@
+<table width='900px' bgcolor='#FFFFFF' cellspacing='0' cellpadding='0' border='0' align='center'>
+<tr>
+<td width="05px"></td>
+<td>
+
+      <table cellspacing='0' cellpadding='0' border='1'>
+      <tr>
+      <td width='165px' rowspan='3'><img src="<?php echo $logomarca_propria ?>" align="left"></td>
+      <td width='730px' >
+           <table cellspacing=0 cellpadding=0 border=0>
+           <tr> <td width='730px' align='center' valign='bottom'>&nbsp;</td></tr>
+           <tr> <td align='center' valign='top'><font size="3"> Controle de Horas</font> </td></tr>
+           <tr> <td align='center' valign='top'>&nbsp;</td></tr>
+           </table>
+       </td>
+       </tr>
+      </table>
+      <div id="cabecgd55a">
+      <table cellspacing='0' cellpadding='0' border='0'>
+      <tr>
+      <td width='260px' align='left'><font size="2">&nbsp;Data:&nbsp;<?php echo $d = date("d-m-y") ?></font></td>
+      <td width='370px' align='center' colspan='3'><font size="2"><?php echo $titulo_relatorio ?></font></td>
+      <td width='260px' align='right'><font size="2">Hora:&nbsp;<?php echo $hora ?></font></td>
+       </tr>
+      <tr>
+      <td width='260px' align='left'><font size="2">&nbsp;Nome:&nbsp;<?php echo $nome_recurso ?></font></td>
+      <td width='35px' align='left'>&nbsp;</td>
+      <td width='300px' align='center'><font size="1"><?php echo $periodo_relatorio ?></font></td>
+      <td width='35px' align='left'>&nbsp;</td>
+      <td width='260px' align='right'><font size="2">&nbsp;</font></td>
+       </tr>
+      </table>
+      </div>
+
+      <div id="relatorio">
+      <table cellspacing='0' cellpadding='0' border='0'>
+      <tr>
+      <td width='50px' align='center'><font size="1"><b>Dia</b></font></td>
+      <td width='100px' align='center'><font size="1"><b>Usuario</b></font></td>
+      <td width='130px' align='center'><font size="1"><b>Empresa</b></font></td>
+      <td width='120px' align='center'><font size="1"><b>Demanda</b></font></td>
+      <td width='55px' align='center'><font size="1"><b>Atividade</b></font></td>
+      <td width='300px' align='center'><font size="1"><b>Descri&ccedil;&atilde;o da Atividade</b></font></td>
+      <td width='50px' align='center'><font size="1"><b>Hrs.Inicio</b></font></td>
+      <td width='50px' align='center'><font size="1"><b>Hrs.Final</b></font></td>
+      <td width='50px' align='center'><font size="1"><b>Total Hrs.</b></font></td>
+      </tr>
+     
+                                       <tr>
+                                       <td><font size="1">  -------------</font></td>
+                                       <td><font size="1">-----------------------------</font></td>
+                                       <td><font size="1">----------------------------------</font></td>
+                                       <td><font size="1">--------------------------------</font></td>
+                                       <td><font size="1">--------------</font></td>
+                                       <td><font size="1">---------------------------------------------------------------------------------------</font></td>
+                                       <td><font size="1">--------------</font></td>
+                                       <td><font size="1">--------------</font></td>
+                                       <td align='center' class='hrs'><font size="1"><b><?php echo $horas_minutos_dia ?></b></font></td>
+                                      </tr>
+       {% for o in lista %}
+                          <tr>
+                          <td  align='center'><font size="1"><?php echo $data_aux ?></font></td>
+                          <td  align='left'><font size="1"><?php echo $apelido ?></font></td>
+                          <td  align='left'><font size="1"><?php echo $nome_cliente ?></font></td>
+                          <td  align='left'><font size="1"><?php echo $novo_nr_demandante ?></font></td>
+                          <td  align='center'><font size="1"><?php echo $atividade_abreviada ?></font></td>
+                          <td  align='left'><font size="1"><?php echo $descricao_aux ?></font></td>
+                          <td  align='center'><font size="1"><?php echo $hora_inicio_aux ?></font></td>
+                          <td  align='center'><font size="1"><?php echo $hora_fim_aux ?></font></td>
+                          <td  align='center'><font size="1"><?php echo $horas_alocadas_aux ?></font></td>
+                          </tr>
+                        <tr>
+                        <td><font size="1">  -------------</font></td>
+                        <td><font size="1">-----------------------------</font></td>
+                        <td><font size="1">----------------------------------</font></td>
+                        <td><font size="1">--------------------------------</font></td>
+                        <td><font size="1">--------------</font></td>
+                        <td><font size="1">---------------------------------------------------------------------------------------</font></td>
+                        <td><font size="1">--------------</font></td>
+                        <td><font size="1">--------------</font></td>
+                        <td align='center' class='hrs'><font size="1"><b><?php echo $horas_minutos_dia ?></b></font></td>
+                        </tr>
+                        <tr>
+                        <td colspan=5>&nbsp;</td>
+                        <td colspan=3 align="center"><font size="1"><b>Total Horas do Periodo</b></font></td>
+                        <td align='center' ><font size="1"><b><?php echo $horas_minutos_geral ?></b></font></td>
+                        </tr>
+       {% endfor %}
+      </table>
+
+
+      <br>
+      </div>
+
+</td>
+<td width="05px"></td>
+</tr>
+</table>

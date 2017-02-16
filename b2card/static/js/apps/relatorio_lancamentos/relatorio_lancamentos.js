@@ -20,6 +20,16 @@ relatorio_lancamentos.controller('RelatorioLancamentosController', function (Rel
 		minMode: 'month'
 	}
 
+	$ctrl.gerar_relatorio = (tipo) => {
+		$('#tipo_relatorio').val(tipo);
+		$('#periodo').val($ctrl.arguments.periodo instanceof Date ? CommonsService.dataparastring($ctrl.arguments.periodo) : $ctrl.arguments.periodo);
+		$('#profissional_id').val($ctrl.arguments.profissional_id);
+		$('#cliente_id').val($ctrl.arguments.cliente_id);
+		$('#status_demanda').val($ctrl.arguments.status_demanda);
+		$('#demanda_id').val($ctrl.arguments.demanda ? $ctrl.arguments.demanda.id : '');
+		$('#relatorio').submit();
+	}
+	
 	$ctrl.abrirmodalalocacao = (alocacao) => {
 		
 		RelatorioLancamentosService.verificartipodemanda(alocacao.id, function(data){

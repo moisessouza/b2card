@@ -22,6 +22,7 @@ app_name='relatorio_lancamentos'
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    url(r'^relatorio/$', views.relatorio, name="relatorio"),
     url(r'^api/search/$', views.pesquisar_alocacoes_horas),
     url(r'^api/alocarhoras/$', views.alocar_horas),
     url(r'^api/alocarhorasinternas/$', views.alocar_horas_internas),
