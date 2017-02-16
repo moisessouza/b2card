@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <table width="100%" bgcolor='#FFFFFF' cellspacing='0' cellpadding='0' border='0' align='center'>
 <tr>
 <td width="05px"></td>
@@ -35,27 +36,27 @@
       <div id="relatorio">
       <table width="100%"  cellspacing='0' cellpadding='0' border='0'>
       <tr>
-      <td width='50px' align='center'><font size="1"><b>Dia</b></font></td>
-      <td width='100px' align='center'><font size="1"><b>Usuario</b></font></td>
+      <td width='60px' align='center'><font size="1"><b>Dia</b></font></td>
+      <td width='50px' align='center'><font size="1"><b>Usuario</b></font></td>
       <td width='130px' align='center'><font size="1"><b>Empresa</b></font></td>
       <td width='120px' align='center'><font size="1"><b>Demanda</b></font></td>
-      <td width='55px' align='center'><font size="1"><b>Atividade</b></font></td>
-      <td width='300px' align='center'><font size="1"><b>Descri&ccedil;&atilde;o da Atividade</b></font></td>
+      <td width='300px' align='center'><font size="1"><b>Atividade</b></font></td>
+      <td width='420px' align='center'><font size="1"><b>Observação</b></font></td>
       <td width='50px' align='center'><font size="1"><b>Hrs.Inicio</b></font></td>
       <td width='50px' align='center'><font size="1"><b>Hrs.Final</b></font></td>
       <td width='50px' align='center'><font size="1"><b>Total Hrs.</b></font></td>
       </tr>
      
                                        <tr>
-                                       <td><font size="1">  -------------</font></td>
-                                       <td><font size="1">-----------------------------</font></td>
-                                       <td><font size="1">----------------------------------</font></td>
-                                       <td><font size="1">--------------------------------</font></td>
-                                       <td><font size="1">--------------</font></td>
-                                       <td><font size="1">---------------------------------------------------------------------------------------</font></td>
-                                       <td><font size="1">--------------</font></td>
-                                       <td><font size="1">--------------</font></td>
-                                       <td align='center' class='hrs'><font size="1"><b><?php echo $horas_minutos_dia ?></b></font></td>
+                                       <td><font size="1">  -------------------</font></td>
+                                       <td><font size="1">-----------------------------------------------</font></td>
+                                       <td><font size="1">------------------------------------------</font></td>
+                                       <td><font size="1">--------------------------------------</font></td>
+                                       <td><font size="1">--------------------------------------------------------------------------------------------------</font></td>
+                                       <td><font size="1">-------------------------------------------------------------------------------------------------------------------------------------------</font></td>
+                                       <td><font size="1">----------------</font></td>
+                                       <td><font size="1">-----------------</font></td>
+                                       <td align='center' class='hrs'><font size="1">--------------</font></td>
                                       </tr>
        {% for o in lista %}
        					{% for alocacao_prof in o.list_alocacao_prof %}
@@ -64,7 +65,7 @@
 	                          <td  align='left'><font size="1">{{alocacao_prof.atividade_profissional__pessoa_fisica__pessoa__nome_razao_social}}</font></td>
 	                          <td  align='left'><font size="1">{{alocacao_prof.atividade_profissional__atividade__fase_atividade__demanda__cliente__nome_fantasia}}</font></td>
 	                          <td  align='left'><font size="1">{{alocacao_prof.atividade_profissional__atividade__fase_atividade__demanda__codigo_demanda}}</font></td>
-	                          <td  align='center'><font size="1">{{alocacao_prof.atividade_profissional__atividade__descricao}}</font></td>
+	                          <td  align='left'><font size="1">{{alocacao_prof.atividade_profissional__atividade__descricao}}</font></td>
 	                          <td  align='left'><font size="1">{{alocacao_prof.observacao}}</font></td>
 	                          <td  align='center'><font size="1">{{alocacao_prof.hora_inicio}}</font></td>
 	                          <td  align='center'><font size="1">{{alocacao_prof.hora_fim}}</font></td>
@@ -72,14 +73,14 @@
                           </tr>
                         {% endfor %}
                         <tr>
-	                        <td><font size="1">  -------------</font></td>
-	                        <td><font size="1">-----------------------------</font></td>
-	                        <td><font size="1">----------------------------------</font></td>
-	                        <td><font size="1">--------------------------------</font></td>
-	                        <td><font size="1">--------------</font></td>
-	                        <td><font size="1">---------------------------------------------------------------------------------------</font></td>
-	                        <td><font size="1">--------------</font></td>
-	                        <td><font size="1">--------------</font></td>
+	                        <td><font size="1">  -------------------</font></td>
+                            <td><font size="1">-----------------------------------------------</font></td>
+                            <td><font size="1">------------------------------------------</font></td>
+                            <td><font size="1">--------------------------------------</font></td>
+                            <td><font size="1">--------------------------------------------------------------------------------------------------</font></td>
+                            <td><font size="1">-------------------------------------------------------------------------------------------------------------------------------------------</font></td>
+                            <td><font size="1">----------------</font></td>
+                            <td><font size="1">-----------------</font></td>
 	                        <td align='center' class='hrs'><font size="1"><b>{{o.total.total_horas_dia}}</b></font></td>
                         </tr>
        {% endfor %}
