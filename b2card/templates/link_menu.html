@@ -122,6 +122,11 @@
 		</ul>
 		<ul class="nav navbar-nav display-none pull-right">
 			<li>
+				<a href="#">
+					{{ request.user.username }}
+				</a>
+			</li>
+			<li>
 				<a href="{% url 'autenticacao:alterar_senha' %}">
 					Alterar senha
 				</a>
