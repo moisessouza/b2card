@@ -112,6 +112,13 @@
 				</a>
 			</li>
 			{%endcheck_permittion%}
+			{% check_permittion 'admin:index' %}
+			<li>
+				<a href="{% url 'admin:index' %}">
+					Controle de Acessos
+				</a>
+			</li>
+			{%endcheck_permittion%}
 		</ul>
 		<ul class="nav navbar-nav display-none pull-right">
 			<li>
