@@ -325,7 +325,7 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 				if (result.possui_alocacao){
 					alert('Você já possui alocação no horário especificado');
 				} else {
-					alert('Você não possui vigência para esta data, favor verificar!');	
+					alert('Você não possui cadastro de custo prestador ou vigência para esta data, favor verificar!');	
 				}
 			}
 		});
