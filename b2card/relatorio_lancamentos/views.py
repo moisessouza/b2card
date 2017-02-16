@@ -12,7 +12,7 @@ from demandas.models import AlocacaoHoras, AtividadeProfissional, Atividade, \
 from demandas.serializers import AlocacaoHorasSerializer, \
     RelatorioAlocacaoHorasSerializer, AtividadeProfissionalSerializer
 from utils.utils import converter_string_para_data, formatar_data,\
-    serializar_data, converter_data_url
+    serializar_data, converter_data_url, transformar_mili_para_horas
 from django.template.context_processors import request
 from django.db.models.aggregates import Sum
 
@@ -267,34 +267,47 @@ def relatorio(request):
 
         if 'cliente_id' in request.POST and request.POST['cliente_id']:
             cliente_id = request.POST['cliente_id']
-            alocacao_horas = alocacao_horas.filter(atividade_profissional__atividade__faseatividade__demanda__cliente__id=cliente_id)
+            alocacao_horas = alocacao_horas.filter(atividade_profissional__atividade__fase_atividade__demanda__cliente__id=cliente_id)
             
         if 'status_demanda' in request.POST and request.POST['status_demanda']:
             status_demanda = request.POST['status_demanda']
-            alocacao_horas = alocacao_horas.filter(atividade_profissional__atividade__faseatividade__demanda__status_demanda=status_demanda)
+            alocacao_horas = alocacao_horas.filter(atividade_profissional__atividade__fase_atividade__demanda__status_demanda=status_demanda)
             
         if 'demanda_id' in request.POST and request.POST['demanda_id']:
             demanda_id = request.POST['demanda_id']
-            alocacao_horas = alocacao_horas.filter(atividade_profissional__atividade__faseatividade__demanda__id=demanda_id)
+            alocacao_horas = alocacao_horas.filter(atividade_profissional__atividade__fase_atividade__demanda__id=demanda_id)
             
-        alocacao_horas_profissional = alocacao_horas.values('id', 'data_informada', 'atividade_profissional__pessoa_fisica__pessoa__nome_razao_social').annotate(total_horas_dia = Sum('horas_alocadas_milisegundos'))
+        alocacao_horas_profissional = alocacao_horas.values('id', 'observacao', 
+                'data_informada', 'atividade_profissional__pessoa_fisica__pessoa__nome_razao_social', 
+                'hora_inicio',
+                'atividade_profissional__atividade__fase_atividade__demanda__cliente__nome_fantasia',
+                'atividade_profissional__atividade__fase_atividade__demanda__codigo_demanda',
+                'atividade_profissional__atividade__descricao',
+                'hora_fim').annotate(horas_alocadas = Sum('horas_alocadas_milisegundos'))
         alocacao_total = alocacao_horas.values('data_informada').annotate(total_horas_dia = Sum('horas_alocadas_milisegundos'))
+        
+        alocacao_mensal = alocacao_horas.aggregate(total_horas_mes = Sum('horas_alocadas_milisegundos'))
         
         list_total = []
         
         for total in alocacao_total:
+            total_dict = {'total': total}
+            total['total_horas_dia'] = transformar_mili_para_horas(total['total_horas_dia'])
+            list_alocacao_prof = []
             for profissional in alocacao_horas_profissional:
                 
-                total_dict = {'total': total}
-                list_alocacao_prof = []
-                
-                if total.data_informada == profissional.data_informada:
+                if total['data_informada'] == profissional['data_informada']:
+                    profissional['data_informada'] = formatar_data(profissional['data_informada'])
+                    profissional['horas_alocadas'] = transformar_mili_para_horas(profissional['horas_alocadas'])
+                    profissional['observacao'] = profissional['observacao'] if profissional['observacao'] else '' 
                     list_alocacao_prof.append(profissional)
                 
-                total_dict['list_alocacao_prof'] = list_alocacao_prof
-                list_total.append(total_dict)
+            total_dict['list_alocacao_prof'] = list_alocacao_prof
+            list_total.append(total_dict)
         
+        alocacao_mensal['total_horas_mes'] = transformar_mili_para_horas(alocacao_mensal['total_horas_mes'])
         context = {
+            'alocacao_mensal':alocacao_mensal,
             'lista': list_total
         }
         

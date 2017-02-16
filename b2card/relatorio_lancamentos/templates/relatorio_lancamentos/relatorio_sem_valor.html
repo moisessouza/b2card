@@ -58,34 +58,37 @@
                                        <td align='center' class='hrs'><font size="1"><b><?php echo $horas_minutos_dia ?></b></font></td>
                                       </tr>
        {% for o in lista %}
+       					{% for alocacao_prof in o.list_alocacao_prof %}
                           <tr>
-                          <td  align='center'><font size="1"><?php echo $data_aux ?></font></td>
-                          <td  align='left'><font size="1"><?php echo $apelido ?></font></td>
-                          <td  align='left'><font size="1"><?php echo $nome_cliente ?></font></td>
-                          <td  align='left'><font size="1"><?php echo $novo_nr_demandante ?></font></td>
-                          <td  align='center'><font size="1"><?php echo $atividade_abreviada ?></font></td>
-                          <td  align='left'><font size="1"><?php echo $descricao_aux ?></font></td>
-                          <td  align='center'><font size="1"><?php echo $hora_inicio_aux ?></font></td>
-                          <td  align='center'><font size="1"><?php echo $hora_fim_aux ?></font></td>
-                          <td  align='center'><font size="1"><?php echo $horas_alocadas_aux ?></font></td>
+	                          <td  align='center'><font size="1">{{alocacao_prof.data_informada}}</font></td>
+	                          <td  align='left'><font size="1">{{alocacao_prof.atividade_profissional__pessoa_fisica__pessoa__nome_razao_social}}</font></td>
+	                          <td  align='left'><font size="1">{{alocacao_prof.atividade_profissional__atividade__fase_atividade__demanda__cliente__nome_fantasia}}</font></td>
+	                          <td  align='left'><font size="1">{{alocacao_prof.atividade_profissional__atividade__fase_atividade__demanda__codigo_demanda}}</font></td>
+	                          <td  align='center'><font size="1">{{alocacao_prof.atividade_profissional__atividade__descricao}}</font></td>
+	                          <td  align='left'><font size="1">{{alocacao_prof.observacao}}</font></td>
+	                          <td  align='center'><font size="1">{{alocacao_prof.hora_inicio}}</font></td>
+	                          <td  align='center'><font size="1">{{alocacao_prof.hora_fim}}</font></td>
+	                          <td  align='center'><font size="1">{{alocacao_prof.horas_alocadas}}</font></td>
                           </tr>
+                        {% endfor %}
                         <tr>
-                        <td><font size="1">  -------------</font></td>
-                        <td><font size="1">-----------------------------</font></td>
-                        <td><font size="1">----------------------------------</font></td>
-                        <td><font size="1">--------------------------------</font></td>
-                        <td><font size="1">--------------</font></td>
-                        <td><font size="1">---------------------------------------------------------------------------------------</font></td>
-                        <td><font size="1">--------------</font></td>
-                        <td><font size="1">--------------</font></td>
-                        <td align='center' class='hrs'><font size="1"><b><?php echo $horas_minutos_dia ?></b></font></td>
-                        </tr>
-                        <tr>
-                        <td colspan=5>&nbsp;</td>
-                        <td colspan=3 align="center"><font size="1"><b>Total Horas do Periodo</b></font></td>
-                        <td align='center' ><font size="1"><b><?php echo $horas_minutos_geral ?></b></font></td>
+	                        <td><font size="1">  -------------</font></td>
+	                        <td><font size="1">-----------------------------</font></td>
+	                        <td><font size="1">----------------------------------</font></td>
+	                        <td><font size="1">--------------------------------</font></td>
+	                        <td><font size="1">--------------</font></td>
+	                        <td><font size="1">---------------------------------------------------------------------------------------</font></td>
+	                        <td><font size="1">--------------</font></td>
+	                        <td><font size="1">--------------</font></td>
+	                        <td align='center' class='hrs'><font size="1"><b>{{o.total.total_horas_dia}}</b></font></td>
                         </tr>
        {% endfor %}
+                        <tr>
+	                        <td colspan=5>&nbsp;</td>
+	                        <td colspan=3 align="center"><font size="1"><b>Total Horas do Periodo</b></font></td>
+	                        <td align='center' ><font size="1"><b>{{alocacao_mensal.total_horas_mes}}</b></font></td>
+                        </tr>
+       
       </table>
 
 

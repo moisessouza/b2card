@@ -1,16 +1,5 @@
 from datetime import datetime
 import locale
-from demandas.models import Demanda, Proposta, Observacao, Ocorrencia, Orcamento,\
-    FaseAtividade, Atividade, AtividadeProfissional, OrcamentoFase, ItemFase,\
-    OrcamentoAtividade, PerfilAtividade, Despesa
-from faturamento.models import Parcela, ParcelaFase, Medicao
-from demandas.serializers import DemandaSerializer, PropostaSerializer,\
-    ObservacaoSerializer, OcorrenciaSerializer, FaseAtividadeSerializer,\
-    AtividadeSerializer, AtividadeProfissionalSerializer, OrcamentoSerializer,\
-    ItemFaseSerializer, OrcamentoFaseSerializer, OrcamentoAtividadeSerializer,\
-    DespesaSerializer
-from faturamento.serializers import ParcelaSerializer, ParcelaFaseSerializer,\
-    MedicaoSerializer
 import re
 
 def formatar_data(data):
@@ -54,4 +43,19 @@ def converter_string_para_float(float_string):
         return float(float_string);
     else:
         return None
+    
+def transformar_mili_para_horas(milisegundos):
+    x = milisegundos / 1000 / 60
+    minutos = int(x % 60)
+    x /= 60
+    horas = int(x)
+    
+    if horas < 10:
+        horas = "0{0}".format(horas)
+        
+    if minutos < 10:
+        minutos = "0{0}".format(minutos)
+    
+    return "%s:%s" % (horas, minutos)
+    
 
