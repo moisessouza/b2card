@@ -97,7 +97,7 @@ WSGI_APPLICATION = 'b2card.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'b2card',
+        'NAME': 'gestao_2',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
