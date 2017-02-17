@@ -153,49 +153,65 @@ relatorio_lancamentos.controller('RelatorioLancamentosController', function (Rel
 	
 	$ctrl.salvar = () => {
 		
-		if (!$ctrl.data) {
-			alert('Informe data.')
-			return;
-		}
+		let data = CommonsService.dataparaurl($ctrl.data);
 		
-		if (!$ctrl.hora_inicio){
-			alert('Informe hora inicio.');
-			return;
-		}
-		
-		if(!$ctrl.hora_fim) {
-			alert('Informe hora fim.');
-			return;
-		}
-		
-		var hora_inicio = $ctrl.hora_inicio.split(':');
-		var hora_fim = $ctrl.hora_fim.split(':');
-		
-		hora_inicio = new Date(0, 0, 0, hora_inicio[0], hora_inicio[1], 0, 0);
-		hora_fim = new Date(0,0,0,hora_fim[0], hora_fim[1], 0,0).getTime();
-		
-		if (hora_inicio >= hora_fim) {
-			alert('Hora inicio deve ser menor que hora fim.');
-			return;
-		}
-		
-		var milisegundos = hora_fim - hora_inicio
-		
-		if ($ctrl.data instanceof Date){
-			$ctrl.data = CommonsService.dataparastring($ctrl.data);
-		}
-	
-		var data = {
-			alocacao_id: alocacao.id,
-			horas_alocadas_milisegundos : milisegundos,
-			hora_inicio: $ctrl.hora_inicio,
-			hora_fim: $ctrl.hora_fim,
-			data_informada: $ctrl.data,
-			observacao: $ctrl.observacao
-		}	
+		RelatorioLancamentosService.validardatahora (alocacao.id, data, $ctrl.hora_inicio, $ctrl.hora_fim, function(result) {
+			
+			if(result.custo_prestador && !result.possui_alocacao) {
+			
+				if (!$ctrl.data) {
+					alert('Informe data.')
+					return;
+				}
+				
+				if (!$ctrl.hora_inicio){
+					alert('Informe hora inicio.');
+					return;
+				}
+				
+				if(!$ctrl.hora_fim) {
+					alert('Informe hora fim.');
+					return;
+				}
+				
+				var hora_inicio = $ctrl.hora_inicio.split(':');
+				var hora_fim = $ctrl.hora_fim.split(':');
+				
+				hora_inicio = new Date(0, 0, 0, hora_inicio[0], hora_inicio[1], 0, 0);
+				hora_fim = new Date(0,0,0,hora_fim[0], hora_fim[1], 0,0).getTime();
+				
+				if (hora_inicio >= hora_fim) {
+					alert('Hora inicio deve ser menor que hora fim.');
+					return;
+				}
+				
+				var milisegundos = hora_fim - hora_inicio
+				
+				if ($ctrl.data instanceof Date){
+					$ctrl.data = CommonsService.dataparastring($ctrl.data);
+				}
+			
+				var data = {
+					alocacao_id: alocacao.id,
+					horas_alocadas_milisegundos : milisegundos,
+					hora_inicio: $ctrl.hora_inicio,
+					hora_fim: $ctrl.hora_fim,
+					data_informada: $ctrl.data,
+					observacao: $ctrl.observacao
+				}	
 
-		RelatorioLancamentosService.salvaralocacaointerna(data, function (data) {
-			$uibModalInstance.close(data);
+				RelatorioLancamentosService.salvaralocacaointerna(data, function (data) {
+					$uibModalInstance.close(data);
+				});
+				
+			} else {
+				if (result.possui_alocacao){
+					alert('Você já possui alocação no horário especificado');
+				} else {
+					alert('Você não possui cadastro de custo prestador ou vigência para esta data, favor verificar!');
+				}
+			}
+			
 		});
 		
 	}

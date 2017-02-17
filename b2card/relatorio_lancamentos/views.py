@@ -237,7 +237,7 @@ def validar_data_hora(request, alocacao_id, data_informada, hora_inicio, hora_fi
         elif hora_fim > hora_inicio_aloc and hora_fim < hora_fim_aloc:
             result['possui_alocacao']  = True
             break
-        elif hora_inicio < hora_inicio_aloc and hora_fim > hora_fim_aloc:
+        elif hora_inicio <= hora_inicio_aloc and hora_fim >= hora_fim_aloc:
             result['possui_alocacao']  = True
             break
             
