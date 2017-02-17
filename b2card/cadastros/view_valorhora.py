@@ -5,13 +5,20 @@ from rest_framework.views import APIView
 from cadastros.models import ValorHora, Vigencia, CentroCusto, CentroResultado, ContaGerencial, NaturezaOperacao, \
     TipoHora
 from cadastros.serializers import ValorHoraSerializer, VigenciaSerializer
-from utils.utils import formatar_data, converter_string_para_float, converter_string_para_data
+from utils.utils import formatar_data, converter_string_para_float, converter_string_para_data,\
+    formatar_para_valor_monetario
 from rest_framework.decorators import api_view
 import datetime
 
 def index(request):
     
-    valor_horas = ValorHora.objects.all().order_by('descricao')
+    valor_horas = ValorHora.objects.all().order_by('centro_custo__nome','tipo_hora__descricao', 'descricao')
+    
+    for i in valor_horas:
+        vigencia = Vigencia.objects.filter(valor_hora=i, data_inicio__lte = datetime.date.today(), data_fim__gte = datetime.date.today())
+        if vigencia:
+            i.vigencia = vigencia[0]
+            i.vigencia.valor = formatar_para_valor_monetario(i.vigencia.valor)
     
     context = {
         'valor_horas': valor_horas

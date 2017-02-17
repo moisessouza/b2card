@@ -16,13 +16,21 @@ table tr {
 <table class="table table-hover">
     <thead>
       <tr>
+        <th>Centro de custo</th>
+        <th>Tipo hora</th>
         <th>Descrição</th>
+        <th>Centro de resultado</th>
+        <th>Valor</th>
       </tr>
     </thead>
     <tbody>
       {% for valor_hora in valor_horas %}
       <tr href="{% url 'cadastros:editar_valor_hora' valor_hora.id %}">
+      	<td>{{valor_hora.centro_custo.nome}}</td>
+      	<td>{{valor_hora.tipo_hora.descricao}}</td>
         <td>{{valor_hora.descricao}}</td>
+        <td>{{valor_hora.centro_resultado.nome}}</td>
+        <td>{{valor_hora.vigencia.valor}}
       </tr>
       {% endfor %}
     </tbody>
