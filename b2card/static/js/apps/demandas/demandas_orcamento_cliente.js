@@ -383,6 +383,11 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		}
 	});
 	
+	$ctrl.recarregarfases = () => {
+		$ctrl.share.demanda.orcamento.orcamento_fases = null;
+		$rootScope.$emit('incluirfasesorcamento');
+	}
+	
 	$ctrl.alteracaoorcamento = () => {
 		$rootScope.$emit('calculardesejado');
 		$rootScope.$emit('calcularprojetado');
