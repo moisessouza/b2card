@@ -50,11 +50,13 @@
 		  <table class="table table-responsive table-bordered table-striped table-highlight" ng-show="$ctrl.faselist">
 				<thead>
 				    <th>Fase</th>
+				    <th>Centro de resultado</th>
 				    <th></th>
 				</thead>
 				<tbody>
 				    <tr ng-repeat="fase in $ctrl.faselist">
-				        <td class="col-sm-12" ng-click="$ctrl.editar(fase);">{{fase.descricao}}</td>
+				        <td class="col-sm-6" ng-click="$ctrl.editar(fase);">{{fase.descricao}}</td>
+				        <td class="col-sm-6" ng-click="$ctrl.editar(fase);">{{fase.centro_resultado.nome}}</td>
 				        <td>
 				       		<button type="button" class="btn btn-default" ng-click="$ctrl.deletar(fase)">
 								<span class="glyphicon glyphicon-trash"></span>
