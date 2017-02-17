@@ -64,7 +64,7 @@ pesquisademanda.controller('PesquisaDemandaController', function (CommonsService
 	}
 	
 	$ctrl.ordenar = () => {
-		$ctrl.arguments.ordenar = !$ctrl.arguments.ordenar
+		$ctrl.arguments.ordenar = !$ctrl.arguments.ordenar;
 		$ctrl.pesquisar();
 	}
 	
@@ -99,11 +99,11 @@ pesquisademanda.controller('PesquisaDemandaController', function (CommonsService
 	}
 	
 	$ctrl.abrirdemanda = demanda => {
-		$window.location.href = BASE_URL + 'demandas/editar/' + demanda.id
+		$window.location.href = BASE_URL + 'demandas/editar/' + demanda.id;
 	}
 	
 	$ctrl.novo = () => {
-		$window.location.href = BASE_URL + 'demandas/novo/'
+		$window.location.href = BASE_URL + 'demandas/novo/';
 	}
 	
 	$ctrl.abrirdatainicio = () => {
