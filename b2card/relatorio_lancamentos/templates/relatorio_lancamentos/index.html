@@ -90,7 +90,7 @@
 					    	</select>
 						</div>
 					</div>
-					<div class="col-sm-6">
+					<div class="col-sm-5">
 						<div class="form-group">
 							<label>Demanda</label>
 							<md-autocomplete md-selected-item="$ctrl.arguments.demanda" md-search-text-change="$ctrl.buscardemandas($ctrl.demanda_descricao)" md-search-text="$ctrl.demanda_descricao" md-selected-item-change="$ctrl.limparlistademandas()" md-items="demanda in $ctrl.listademandas"  md-item-text="demanda.nome_demanda">
@@ -102,7 +102,13 @@
 					</div>
 					<button class="btn btn-sm btn-default margin" ng-click="$ctrl.pesquisar();" ng-disabled="pesquisa.$invalid">Pesquisar</button>
 					<button class="btn btn-sm btn-default margin" name="gerar_relatorio" ng-disabled="pesquisa.$invalid" value="gerar_relatorio" ng-click="$ctrl.gerar_relatorio('gerar_relatorio')">Gerar relatório</button>
-					<button class="btn btn-sm btn-default margin" name="gerar_relatorio_com_valor" ng-disabled="pesquisa.$invalid" value="gerar_relatorio_com_valor" ng-click="$ctrl.gerar_relatorio('gerar_relatorio_com_valor')" ng-if="$ctrl.eh_gestor">Gerar relatório com valor</button>
+					{%endverbatim%}
+					{% if user.is_superuser %}
+					{%verbatim%}
+						<button class="btn btn-sm btn-default margin" name="gerar_relatorio_com_valor" ng-disabled="pesquisa.$invalid" value="gerar_relatorio_com_valor" ng-click="$ctrl.gerar_relatorio('gerar_relatorio_com_valor')" ng-if="$ctrl.eh_gestor">Gerar relatório com valor</button>
+					{%endverbatim%}
+					{% endif %}
+					{%verbatim%}
 				</form>
 			</div>
 		</div>
