@@ -26,8 +26,10 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 						for (let fase of data) {
 							$ctrl.valorhoraporfasemap[fase.id] = [];
 							for (let valorhora of $ctrl.share.listavalorhora){
-								if (fase.centro_resultado.id == valorhora.centro_resultado.id){
-									$ctrl.valorhoraporfasemap[fase.id].push(valorhora);
+								if (fase.centro_resultado && valorhora.centro_resultado) {
+									if (fase.centro_resultado.id == valorhora.centro_resultado.id){
+										$ctrl.valorhoraporfasemap[fase.id].push(valorhora);
+									}
 								}
 							}
 						}
