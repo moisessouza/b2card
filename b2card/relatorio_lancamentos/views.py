@@ -250,7 +250,7 @@ def buscar_custo_prestador_vigencia_profissional(data_informada, profissional_id
 def calcular_valor_em_milisegundos(custo_prestador, milisegundos):
     minutos = milisegundos / 1000 / 60
     valor_por_minuto = (custo_prestador.valor * 1) / 60
-    return minutos * valor_por_minuto
+    return float("{0:.2f}".format(minutos * valor_por_minuto))
 
 def relatorio(request):
     
@@ -327,6 +327,9 @@ def relatorio(request):
     alocacao_mensal['total_horas_mes'] = transformar_mili_para_horas(alocacao_mensal['total_horas_mes'])
     alocacao_mensal['valor_total'] = formatar_para_valor_monetario(valor_total)
     context = {
+        'data_atual': datetime.date.today().strftime("%d/%m/%Y"),
+        'hora_atual': datetime.datetime.now().strftime("%H:%M"),
+        'periodo': request.POST['periodo'],
         'alocacao_mensal':alocacao_mensal,
         'lista': list_total
     }
