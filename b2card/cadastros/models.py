@@ -43,6 +43,7 @@ class UnidadeAdministrativa(models.Model):
     margem_risco = models.FloatField(default = None, null = True)
     imposto_devidos = models.FloatField(default = None, null = True)
     lucro_desejado = models.FloatField(default = None, null = True)
+    custo_operacao_hora = models.FloatField(default = None, null = True)
     
 
 TIPO = (

@@ -220,6 +220,9 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 			})
 		}
 	});
+	
+	share.listaunidadeadministrativas = $ctrl.listaunidadeadministrativas;
+	
 	$ctrl.listanaturezademanda = NaturezaDemandaService.buscarnaturezademandas();
 	
 	var abas = ['#dadosdemanda', '#orcamento', '#atividades', 

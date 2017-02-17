@@ -2,18 +2,26 @@
 
 var centrocusto = angular.module('unidadeadministrativa', ['unidadeadministrativa-services', 'commons', 'ui.bootstrap', 'ui.mask']);
 
-centrocusto.controller('UnidadeAdministrativaController', function ($scope, $window, UnidadeAdministrativaService){
+centrocusto.controller('UnidadeAdministrativaController', function ($scope, $window, CommonsService, UnidadeAdministrativaService){
 	var $ctrl = this;
 	
 	$ctrl.unidadeadministrativa = {}
 	
 	$ctrl.show =true;
 	
-	$ctrl.unidadeadministrativalist = UnidadeAdministrativaService.buscarunidadeadministrativas();
+	var formatar_dados = function(data) {
+		if (data) {
+			for (let i of data) {
+				i.custo_operacao_hora = CommonsService.formatarnumero(i.custo_operacao_hora);
+			}
+		}
+	};
+	
+	$ctrl.unidadeadministrativalist = UnidadeAdministrativaService.buscarunidadeadministrativas(formatar_dados);
 	
 	$ctrl.salvar = function () {
 		UnidadeAdministrativaService.salvar($ctrl.unidadeadministrativa, function () {
-			$ctrl.unidadeadministrativalist = UnidadeAdministrativaService.buscarunidadeadministrativas();
+			$ctrl.unidadeadministrativalist = UnidadeAdministrativaService.buscarunidadeadministrativas(formatar_dados);
 			$ctrl.unidadeadministrativa = {};
 		});
 	}

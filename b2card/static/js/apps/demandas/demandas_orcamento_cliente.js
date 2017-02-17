@@ -269,10 +269,33 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		return valor_total;
 	}
 	
+	var calcularcustooperacional = function () {
+		let unidadeadministrativa = null;
+		
+		if ($ctrl.share.demanda.unidade_administrativa){
+			if ($ctrl.share.listaunidadeadministrativas){
+				for(let u of $ctrl.share.listaunidadeadministrativas) {
+					if (u.id == $ctrl.share.demanda.unidade_administrativa.id) {
+						unidadeadministrativa = u;
+						break;
+					}
+				}
+			}
+		}
+		
+		let horas_totais = calcularatividadestotaishoras();
+		return (horas_totais + (horas_totais * ($ctrl.share.demanda.orcamento.margem_risco / 100))) * unidadeadministrativa ? unidadeadministrativa.custo_operacao_hora : 0;
+	};
+	
+	var calcularcustosemimposto = function (valor_total) {
+		let custo_operacional = calcularcustooperacional();
+		return (valor_total + custo_operacional) * (1 + ($ctrl.share.demanda.orcamento.margem_risco / 100))
+	};
+	
 	$rootScope.$on('calculardesejado', function (event, data) {
 
 		let valor_total = calcularatividadestotais();
-		let custo_sem_imposto = valor_total * (1 + ($ctrl.share.demanda.orcamento.margem_risco / 100))
+		let custo_sem_imposto = calcularcustosemimposto(valor_total);
 		
 		if (($ctrl.share.demanda.orcamento.lucro_desejado || $ctrl.share.demanda.orcamento.lucro_desejado == 0) && $ctrl.share.demanda.orcamento.imposto_devidos) {
 
@@ -296,7 +319,7 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 	$rootScope.$on('calcularprojetado', function (event, data){
 		
 		let valor_total = calcularatividadestotais();
-		let custo_sem_imposto = valor_total * (1 + ($ctrl.share.demanda.orcamento.margem_risco / 100))
+		let custo_sem_imposto = calcularcustosemimposto(valor_total);
 		
 		if ($ctrl.share.demanda.orcamento.valor_hora_orcamento && $ctrl.share.demanda.orcamento.valor_hora_orcamento.id) {
 			let valor_hora = buscarvalorhora($ctrl.share.demanda.orcamento.valor_hora_orcamento.id);
@@ -351,7 +374,7 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 	$rootScope.$on('calcularproposto', function(event, data) {
 		
 		let valor_total = selecionarfaseorcamentostotais();
-		let custo_sem_imposto = calcularatividadestotais() * (1 + ($ctrl.share.demanda.orcamento.margem_risco / 100))
+		let custo_sem_imposto = calcularcustosemimposto(calcularatividadestotais());
 		
 		let horas_total = selecionarfaseorcamentostotaishoras()
 		

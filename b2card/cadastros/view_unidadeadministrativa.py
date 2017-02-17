@@ -3,6 +3,7 @@ from cadastros.models import UnidadeAdministrativa
 from cadastros import serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from utils.utils import converter_string_para_float
 
 def index(request):
     return render(request, 'unidade_administrativa/index.html');
@@ -17,6 +18,7 @@ class UnidadeAdministrativaDetail(APIView):
     def post(self, request, format=None):
         
         unidade_administrativa = UnidadeAdministrativa(**request.data)
+        unidade_administrativa.custo_operacao_hora = converter_string_para_float(unidade_administrativa.custo_operacao_hora)
         unidade_administrativa.save()
                 
         serializer = serializers.UnidadeAdministrativaSerializer(unidade_administrativa)

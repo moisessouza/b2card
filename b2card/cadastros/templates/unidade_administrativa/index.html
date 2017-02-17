@@ -53,6 +53,10 @@
 			    <label for="nome">% Lucro desejado</label>
 			    <input type="number" class="form-control" ng-model="$ctrl.unidadeadministrativa.lucro_desejado" placeholder="% Lucro desejado" maxlength="30" required>
 			  </div>
+			  <div class="form-group col-sm-2">
+			    <label for="nome">Custo de operacao por hora</label>
+			    <input type="text" class="form-control" ng-model="$ctrl.unidadeadministrativa.custo_operacao_hora" gb-money placeholder="Custo de operacao por hora" maxlength="30" required>
+			  </div>
 		  </div>
 		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.salvar()" ng-disabled="unidadeadministrativa.$invalid">Salvar</button>
 		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.novo()" ng-show="$ctrl.unidadeadministrativa.id">Novo</button>
@@ -64,15 +68,17 @@
 				    <th>% Margem de risco</th>
 				    <th>% Imposto devidos</th>
 				    <th>% Lucro desejado</th>
+				    <th>Custo de operacao por hora</th>
 				    <th></th>
 				</thead>
 				<tbody>
 				    <tr ng-repeat="unidadeadministrativa in $ctrl.unidadeadministrativalist">
 				    	<td class="col-sm-1" ng-click="$ctrl.editar(unidadeadministrativa);">{{unidadeadministrativa.codigo}}</td>
-				        <td class="col-sm-5" ng-click="$ctrl.editar(unidadeadministrativa);">{{unidadeadministrativa.nome}}</td>
+				        <td class="col-sm-3" ng-click="$ctrl.editar(unidadeadministrativa);">{{unidadeadministrativa.nome}}</td>
 				        <td class="col-sm-2" ng-click="$ctrl.editar(unidadeadministrativa);">{{unidadeadministrativa.margem_risco}}</td>
 				        <td class="col-sm-2" ng-click="$ctrl.editar(unidadeadministrativa);">{{unidadeadministrativa.imposto_devidos}}</td>
 				        <td class="col-sm-2" ng-click="$ctrl.editar(unidadeadministrativa);">{{unidadeadministrativa.lucro_desejado}}</td>
+				        <td class="col-sm-2" ng-click="$ctrl.editar(unidadeadministrativa);">{{unidadeadministrativa.custo_operacao_hora}}</td>
 				        <td>
 				       		<button type="button" class="btn btn-default" ng-click="$ctrl.deletar(unidadeadministrativa)">
 								<span class="glyphicon glyphicon-trash"></span>
