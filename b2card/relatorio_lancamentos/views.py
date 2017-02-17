@@ -293,8 +293,9 @@ def relatorio(request):
             'atividade_profissional__atividade__fase_atividade__demanda__cliente__nome_fantasia',
             'atividade_profissional__atividade__fase_atividade__demanda__codigo_demanda',
             'atividade_profissional__atividade__descricao',
-            'hora_fim').annotate(horas_alocadas = Sum('horas_alocadas_milisegundos'))
-    alocacao_total = alocacao_horas.values('data_informada').annotate(total_horas_dia = Sum('horas_alocadas_milisegundos'))
+            'hora_fim').annotate(horas_alocadas = Sum('horas_alocadas_milisegundos')).order_by('hora_inicio')
+        
+    alocacao_total = alocacao_horas.values('data_informada').annotate(total_horas_dia = Sum('horas_alocadas_milisegundos')).order_by('data_informada')
     
     alocacao_mensal = alocacao_horas.aggregate(total_horas_mes = Sum('horas_alocadas_milisegundos'))
     
