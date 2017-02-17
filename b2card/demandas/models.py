@@ -49,6 +49,7 @@ class Demanda(models.Model):
     data_fim = models.DateField(default=None, null=True)
     percentual_calculado = models.IntegerField(default = None, null = True)
     percentual_concluido = models.IntegerField(default = None, null = True)
+    recorrente = models.NullBooleanField(default = None, null = True)
 
 class FaseAtividade(models.Model):
     demanda = models.ForeignKey(Demanda, default = None)
