@@ -9,11 +9,9 @@ from django.db.models import Q
 from cadastros.models import TipoAlocacao, Prestador, CustoPrestador
 from demandas.models import AlocacaoHoras, AtividadeProfissional, Atividade, \
     FaseAtividade, Demanda
-from demandas.serializers import AlocacaoHorasSerializer, \
-    RelatorioAlocacaoHorasSerializer, AtividadeProfissionalSerializer
+from demandas.serializers import RelatorioAlocacaoHorasSerializer, AtividadeProfissionalSerializer
 from utils.utils import converter_string_para_data, formatar_data,\
     serializar_data, converter_data_url, transformar_mili_para_horas
-from django.template.context_processors import request
 from django.db.models.aggregates import Sum
 
 
@@ -263,7 +261,7 @@ def relatorio(request):
         
         if 'profissional_id' in request.POST and request.POST['profissional_id']:
             profissional_id = request.POST['profissional_id']
-            alocacao_horas = alocacao_horas.filter(atividade_profissional__pessoa_fisica__prestador__usuario__id=profissional_id)
+            alocacao_horas = alocacao_horas.filter(atividade_profissional__pessoa_fisica__id=profissional_id)
 
         if 'cliente_id' in request.POST and request.POST['cliente_id']:
             cliente_id = request.POST['cliente_id']

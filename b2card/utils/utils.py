@@ -45,17 +45,19 @@ def converter_string_para_float(float_string):
         return None
     
 def transformar_mili_para_horas(milisegundos):
-    x = milisegundos / 1000 / 60
-    minutos = int(x % 60)
-    x /= 60
-    horas = int(x)
     
-    if horas < 10:
-        horas = "0{0}".format(horas)
+    if milisegundos:
+        x = milisegundos / 1000 / 60
+        minutos = int(x % 60)
+        x /= 60
+        horas = int(x)
         
-    if minutos < 10:
-        minutos = "0{0}".format(minutos)
+        if horas < 10:
+            horas = "0{0}".format(horas)
+            
+        if minutos < 10:
+            minutos = "0{0}".format(minutos)
+        
+        return "%s:%s" % (horas, minutos)
+        
     
-    return "%s:%s" % (horas, minutos)
-    
-
