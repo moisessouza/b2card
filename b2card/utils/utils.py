@@ -2,6 +2,8 @@ from datetime import datetime
 import locale
 import re
 
+locale.setlocale(locale.LC_ALL, '')
+
 def formatar_data(data):
     if data is not None:
         iso = data.isoformat()
@@ -59,5 +61,8 @@ def transformar_mili_para_horas(milisegundos):
             minutos = "0{0}".format(minutos)
         
         return "%s:%s" % (horas, minutos)
+    
+def formatar_para_valor_monetario(numero):
+    return locale.currency(numero, symbol=False, grouping=True)
         
     

@@ -11,7 +11,8 @@ from demandas.models import AlocacaoHoras, AtividadeProfissional, Atividade, \
     FaseAtividade, Demanda
 from demandas.serializers import RelatorioAlocacaoHorasSerializer, AtividadeProfissionalSerializer
 from utils.utils import converter_string_para_data, formatar_data,\
-    serializar_data, converter_data_url, transformar_mili_para_horas
+    serializar_data, converter_data_url, transformar_mili_para_horas,\
+    formatar_para_valor_monetario
 from django.db.models.aggregates import Sum
 
 
@@ -243,74 +244,95 @@ def verificar_tipo_demanda(request, alocacao_id, format=None):
     context = {'tipo_demanda': demanda.tipo_demanda}
     return Response(context)
 
+def buscar_custo_prestador_vigencia_profissional(data_informada, profissional_id):
+    return CustoPrestador.objects.filter(pessoa_fisica__id = profissional_id, data_inicio__lte = data_informada, data_fim__gte = data_informada)[0]
+
+def calcular_valor_em_milisegundos(custo_prestador, milisegundos):
+    minutos = milisegundos / 1000 / 60
+    valor_por_minuto = (custo_prestador.valor * 1) / 60
+    return minutos * valor_por_minuto
+
 def relatorio(request):
     
-    gestor = verificar_gestor(request)
-    
     tipo_relatorio = request.POST['tipo_relatorio']
+
+    alocacao_horas = AlocacaoHoras.objects.all()
+    if not request.user.is_superuser:
+        alocacao_horas = alocacao_horas.filter(atividade_profissional__pessoa_fisica__prestador__usuario__id=request.user.id)
+        
+    periodo = request.POST['periodo']
+    periodo = converter_string_para_data(periodo)
+    alocacao_horas = alocacao_horas.filter(data_informada__month=periodo.month, data_informada__year=periodo.year)
     
+    if 'profissional_id' in request.POST and request.POST['profissional_id']:
+        profissional_id = request.POST['profissional_id']
+        alocacao_horas = alocacao_horas.filter(atividade_profissional__pessoa_fisica__id=profissional_id)
+
+    if 'cliente_id' in request.POST and request.POST['cliente_id']:
+        cliente_id = request.POST['cliente_id']
+        alocacao_horas = alocacao_horas.filter(atividade_profissional__atividade__fase_atividade__demanda__cliente__id=cliente_id)
+        
+    if 'status_demanda' in request.POST and request.POST['status_demanda']:
+        status_demanda = request.POST['status_demanda']
+        alocacao_horas = alocacao_horas.filter(atividade_profissional__atividade__fase_atividade__demanda__status_demanda=status_demanda)
+        
+    if 'demanda_id' in request.POST and request.POST['demanda_id']:
+        demanda_id = request.POST['demanda_id']
+        alocacao_horas = alocacao_horas.filter(atividade_profissional__atividade__fase_atividade__demanda__id=demanda_id)
+        
+    alocacao_horas_profissional = alocacao_horas.values('id', 'observacao', 
+            'atividade_profissional__pessoa_fisica__id',
+            'data_informada', 'atividade_profissional__pessoa_fisica__pessoa__nome_razao_social', 
+            'hora_inicio',
+            'atividade_profissional__atividade__fase_atividade__demanda__cliente__nome_fantasia',
+            'atividade_profissional__atividade__fase_atividade__demanda__codigo_demanda',
+            'atividade_profissional__atividade__descricao',
+            'hora_fim').annotate(horas_alocadas = Sum('horas_alocadas_milisegundos'))
+    alocacao_total = alocacao_horas.values('data_informada').annotate(total_horas_dia = Sum('horas_alocadas_milisegundos'))
+    
+    alocacao_mensal = alocacao_horas.aggregate(total_horas_mes = Sum('horas_alocadas_milisegundos'))
+    
+    list_total = []
+    valor_total = 0;
+    
+    for total in alocacao_total:
+        total_dict = {'total': total}
+        total['total_horas_dia'] = transformar_mili_para_horas(total['total_horas_dia'])
+        list_alocacao_prof = []
+        total_valor_dia = 0
+        for profissional in alocacao_horas_profissional:
+            
+            if total['data_informada'] == profissional['data_informada']:
+                
+                valor_profissional = None
+                if tipo_relatorio == 'gerar_relatorio_com_valor':
+                    custo_prestador = buscar_custo_prestador_vigencia_profissional(profissional['data_informada'], profissional['atividade_profissional__pessoa_fisica__id'])
+                    valor_profissional = calcular_valor_em_milisegundos(custo_prestador, profissional['horas_alocadas'])
+                    valor_total+=valor_profissional
+                    total_valor_dia += valor_profissional
+                
+                if valor_profissional:
+                    profissional['valor_profissional'] = formatar_para_valor_monetario(valor_profissional)
+                                        
+                profissional['data_informada'] = formatar_data(profissional['data_informada'])
+                profissional['horas_alocadas'] = transformar_mili_para_horas(profissional['horas_alocadas'])
+                profissional['observacao'] = profissional['observacao'] if profissional['observacao'] else '' 
+                
+                list_alocacao_prof.append(profissional)
+            
+        total_dict['list_alocacao_prof'] = list_alocacao_prof
+        total_dict['total_valor_dia'] = formatar_para_valor_monetario(total_valor_dia)
+        list_total.append(total_dict)
+    
+    alocacao_mensal['total_horas_mes'] = transformar_mili_para_horas(alocacao_mensal['total_horas_mes'])
+    alocacao_mensal['valor_total'] = formatar_para_valor_monetario(valor_total)
+    context = {
+        'alocacao_mensal':alocacao_mensal,
+        'lista': list_total
+    }
+        
     if tipo_relatorio == 'gerar_relatorio':
-
-        alocacao_horas = AlocacaoHoras.objects.all()
-        if not gestor:
-            alocacao_horas = alocacao_horas.filter(atividade_profissional__pessoa_fisica__prestador__usuario__id=request.user.id)
-            
-        periodo = request.POST['periodo']
-        periodo = converter_string_para_data(periodo)
-        alocacao_horas = alocacao_horas.filter(data_informada__month=periodo.month, data_informada__year=periodo.year)
-        
-        if 'profissional_id' in request.POST and request.POST['profissional_id']:
-            profissional_id = request.POST['profissional_id']
-            alocacao_horas = alocacao_horas.filter(atividade_profissional__pessoa_fisica__id=profissional_id)
-
-        if 'cliente_id' in request.POST and request.POST['cliente_id']:
-            cliente_id = request.POST['cliente_id']
-            alocacao_horas = alocacao_horas.filter(atividade_profissional__atividade__fase_atividade__demanda__cliente__id=cliente_id)
-            
-        if 'status_demanda' in request.POST and request.POST['status_demanda']:
-            status_demanda = request.POST['status_demanda']
-            alocacao_horas = alocacao_horas.filter(atividade_profissional__atividade__fase_atividade__demanda__status_demanda=status_demanda)
-            
-        if 'demanda_id' in request.POST and request.POST['demanda_id']:
-            demanda_id = request.POST['demanda_id']
-            alocacao_horas = alocacao_horas.filter(atividade_profissional__atividade__fase_atividade__demanda__id=demanda_id)
-            
-        alocacao_horas_profissional = alocacao_horas.values('id', 'observacao', 
-                'data_informada', 'atividade_profissional__pessoa_fisica__pessoa__nome_razao_social', 
-                'hora_inicio',
-                'atividade_profissional__atividade__fase_atividade__demanda__cliente__nome_fantasia',
-                'atividade_profissional__atividade__fase_atividade__demanda__codigo_demanda',
-                'atividade_profissional__atividade__descricao',
-                'hora_fim').annotate(horas_alocadas = Sum('horas_alocadas_milisegundos'))
-        alocacao_total = alocacao_horas.values('data_informada').annotate(total_horas_dia = Sum('horas_alocadas_milisegundos'))
-        
-        alocacao_mensal = alocacao_horas.aggregate(total_horas_mes = Sum('horas_alocadas_milisegundos'))
-        
-        list_total = []
-        
-        for total in alocacao_total:
-            total_dict = {'total': total}
-            total['total_horas_dia'] = transformar_mili_para_horas(total['total_horas_dia'])
-            list_alocacao_prof = []
-            for profissional in alocacao_horas_profissional:
-                
-                if total['data_informada'] == profissional['data_informada']:
-                    profissional['data_informada'] = formatar_data(profissional['data_informada'])
-                    profissional['horas_alocadas'] = transformar_mili_para_horas(profissional['horas_alocadas'])
-                    profissional['observacao'] = profissional['observacao'] if profissional['observacao'] else '' 
-                    list_alocacao_prof.append(profissional)
-                
-            total_dict['list_alocacao_prof'] = list_alocacao_prof
-            list_total.append(total_dict)
-        
-        alocacao_mensal['total_horas_mes'] = transformar_mili_para_horas(alocacao_mensal['total_horas_mes'])
-        context = {
-            'alocacao_mensal':alocacao_mensal,
-            'lista': list_total
-        }
-        
         return render(request, 'relatorio_lancamentos/relatorio_sem_valor.html', context)
-    
     elif tipo_relatorio == 'gerar_relatorio_com_valor':
-        return render(request, 'relatorio_lancamentos/relatorio_com_valor.html')
+        return render(request, 'relatorio_lancamentos/relatorio_com_valor.html', context)
     
