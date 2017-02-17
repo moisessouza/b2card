@@ -125,6 +125,7 @@ relatorio_lancamentos.controller('RelatorioLancamentosController', function (Rel
 	$ctrl.data = CommonsService.stringparadata(alocacao.data_informada);
 	$ctrl.hora_inicio = alocacao.hora_inicio;
 	$ctrl.hora_fim = alocacao.hora_fim;
+	$ctrl.observacao = alocacao.observacao;
 	
 	$scope.today = function() {
 		$ctrl.data =new Date();
@@ -190,6 +191,7 @@ relatorio_lancamentos.controller('RelatorioLancamentosController', function (Rel
 			hora_inicio: $ctrl.hora_inicio,
 			hora_fim: $ctrl.hora_fim,
 			data_informada: $ctrl.data,
+			observacao: $ctrl.observacao
 		}	
 
 		RelatorioLancamentosService.salvaralocacaointerna(data, function (data) {

@@ -84,6 +84,12 @@ def alocar_horas_internas(request, format=None):
     alocacao_horas.data_informada = converter_string_para_data(request.data['data_informada'])
     alocacao_horas.hora_inicio = request.data['hora_inicio']
     alocacao_horas.hora_fim= request.data['hora_fim']
+    
+    if 'observacao' in request.data and request.data['observacao']:
+        alocacao_horas.observacao = request.data['observacao']
+    else:
+        alocacao_horas.observacao = None
+    
     alocacao_horas.data_alocacao = datetime.datetime.now()
     alocacao_horas.percentual_concluido = 0
     alocacao_horas.save();

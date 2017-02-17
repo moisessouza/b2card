@@ -206,6 +206,7 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 				hora_inicio: $ctrl.hora_inicio,
 				hora_fim: $ctrl.hora_fim,
 				data_informada: $ctrl.data,
+				observacao: $ctrl.observacao
 			}
 		} else {
 			var data = {
@@ -214,6 +215,7 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 				hora_inicio: $ctrl.hora_inicio,
 				hora_fim: $ctrl.hora_fim,
 				data_informada: $ctrl.data,
+				observacao: $ctrl.observacao
 			}	
 		}
 		
