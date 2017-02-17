@@ -6,8 +6,6 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 	
 	$ctrl.valorhoraporfasemap = {}
 	
-	
-	
 	$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card();
 	
 	
