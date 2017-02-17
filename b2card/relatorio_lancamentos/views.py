@@ -329,7 +329,7 @@ def relatorio(request):
     context = {
         'data_atual': datetime.date.today().strftime("%d/%m/%Y"),
         'hora_atual': datetime.datetime.now().strftime("%H:%M"),
-        'periodo': request.POST['periodo'],
+        'periodo': periodo.strftime("%m/%Y"),
         'alocacao_mensal':alocacao_mensal,
         'lista': list_total
     }
