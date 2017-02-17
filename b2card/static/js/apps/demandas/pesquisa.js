@@ -69,6 +69,30 @@ pesquisademanda.controller('PesquisaDemandaController', function (CommonsService
 	}
 	
 	$ctrl.pesquisar = () => {
+		
+		if ($ctrl.arguments.data_inicio && $ctrl.arguments.data_fim) {
+			
+			let data_inicio;
+			let data_fim;
+			
+			if ($ctrl.arguments.data_inicio instanceof Date) {
+				data_inicio = $ctrl.arguments.data_inicio;
+			} else {
+				data_inicio = CommonsService.stringparadata($ctrl.arguments.data_inicio);
+			}
+			
+			if ($ctrl.arguments.data_fim instanceof Date) {
+				data_fim = $ctrl.arguments.data_fim;
+			} else {
+				data_fim = CommonsService.stringparadata($ctrl.arguments.data_fim);
+			}
+			
+			if (data_inicio >= data_fim) {
+				alert("Data fim deve ser maior que data inicio.");
+				return;
+			}
+		}
+		
 		$ctrl.arguments.status = $ctrl.status;
 		$ctrl.arguments.responsaveis = $ctrl.responsavel;
 		PesquisaDemandaService.buscarcentroresultadoshora($ctrl.arguments, configurarresultado);
