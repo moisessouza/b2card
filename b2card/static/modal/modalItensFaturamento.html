@@ -67,12 +67,14 @@
 			<div class="col-sm-8">
 				<form name="parcelas" style="height: 75%; overflow-y: scroll; overflow-x: scroll;">
 					
-					<table class="table table-sm table-bordered table-striped table-highlight" style="width: 1200px">
+					<table class="table table-sm table-bordered table-striped table-highlight" style="width: 1250px">
 						<thead>
 							<tr class="active">
+								<th ng-show="$ctrl.lote_faturamento"></th>
+								<th>LoteFat</th>
 								<th width="6%">Parcela</th>
 								<th width="9%">Data</th>
-								<th width="8%">Fase</th>
+								<th width="9%">Fase</th>
 								<th width="18%">Perfil</th>
 								<th width="5%">Horas</th>
 								<th width="10%">Valor</th>
@@ -87,6 +89,11 @@
 						</thead>
 						<tbody>
 							<tr ng-repeat="parcela in $ctrl.parcelas">
+								<td ng-show="$ctrl.lote_faturamento">
+									<input type="checkbox">
+								</td>
+								<td>
+								</td>
 								<td>
 									<input type="text" ng-model="parcela.descricao" class="form-control"/>
 								</td>
@@ -140,6 +147,7 @@
 			</div>
 		</div>
 	</div>
-	<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.gravarparcelas()" ng-disabled="parcelas.$invalid">Gravar</button>
+	<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.gravarparcelas()" ng-disabled="parcelas.$invalid" ng-if="!$ctrl.lote_faturamento">Gravar</button>
+	<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.selecionarparcelas()" ng-if="$ctrl.lote_faturamento">Selecionar</button>
 	<button type="button" class="btn btn-sm btn-primary"  ng-click="$ctrl.fechar()">Sair</button>	
 </div>

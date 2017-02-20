@@ -247,7 +247,7 @@ def buscar_orcamento_demanda_id(request, demanda_id, format=None):
     fases = OrcamentoFaseSerializer(fases, many=True).data
     
     for i in fases:
-        itensfase = ItemFase.objects.filter(fase__id = i['id'])
+        itensfase = ItemFase.objects.filter(orcamento_fase__id = i['id'])
         itensfase = ItemFaseSerializer(itensfase, many=True).data
         i['itensfase'] = itensfase
     

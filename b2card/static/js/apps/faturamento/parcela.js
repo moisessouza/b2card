@@ -2,13 +2,14 @@
 
 var parcela = angular.module('parcela', ['valorhora-services', 'parcela-services', 'commons', 'ui.bootstrap', 'ui.mask']);
 
-parcela.controller('ModalParcelasController', function ($scope, $window, $uibModalInstance, demanda, listavalorhora, CommonsService, ParcelaService){
+parcela.controller('ModalParcelasController', function ($scope, $window, $uibModalInstance, demanda, listavalorhora, lote_faturamento, CommonsService, ParcelaService){
 	var $ctrl = this;
 	
 	$ctrl.demanda = demanda;
 	$ctrl.total_orcamento = demanda.orcamento.total_orcamento;
 	$ctrl.listavalorhora = listavalorhora;
 	$ctrl.listafases = demanda.orcamento.orcamento_fases;
+	$ctrl.lote_faturamento = lote_faturamento;
 	
 	var configurarparcelas = function (parcelas) {
 		for ( var i in parcelas) {

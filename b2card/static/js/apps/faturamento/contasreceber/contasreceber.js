@@ -70,8 +70,8 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 						},
 						listavalorhora: function () {
 							return listavalorhora;
-						}
-						
+						},
+						lote_faturamento: true
 					}
 				});
 					
