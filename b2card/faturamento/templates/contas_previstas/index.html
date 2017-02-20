@@ -4,6 +4,7 @@
 {% block script %}
 	<script src="/static/js/apps/faturamento/contasreceber/contasreceber.js"></script>
 	<script src="/static/js/apps/faturamento/contasreceber/contasreceber-service.js"></script>
+	<script src="/static/js/apps/cadastros/pessoa/pessoa-services.js"></script>
 	<script src="/static/js/apps/demandas/demandas-services.js"></script>
 	<script src="/static/js/apps/faturamento/parcela.js"></script>
 	<script src="/static/js/apps/faturamento/parcela-services.js"></script>
@@ -48,47 +49,21 @@ button.margin {
 	<div class="panel panel-primary form-group-sm">
 		<div class="panel-body">
 			<form name="arguments">
-				<div class="col-sm-1">
-					<div class="form-group">
-						<label for="total_orcamento">Demanda ID</label>
-						<input type="number" ng-model="$ctrl.arguments.demanda_id" class="form-control"/>
-					</div>
-				</div>
-				<div class="col-sm-2">
-					<div class="form-group">
-						<label for="mes">Mês</label>
-						<input type="text" id="mes" name="mes" ng-model="$ctrl.arguments.mes" ui-mask="99/9999" model-view-value="true"  class="form-control"/>
-					</div>
-				</div>
-				<div class="col-sm-2">
-					<div class="form-group">
-						<label for="cliente">Cliente</label>
-						<select type="text" id="cliente" name="cliente" ng-model="$ctrl.arguments.cliente_id" class="form-control" ng-options="c.id as c.razao_social for c in $ctrl.listaclientes">
-							<option value="">Selecione...</option>
-						</select>
-					</div>
-				</div>
-				<div class="col-sm-2">
-					<div class="form-group">
-						<label for="status">Status</label>
-						<select type="text" id="status" name="status" ng-model="$ctrl.arguments.status" class="form-control">
-							<option value="">Selecione...</option>
-							<option value="PE">Previsto</option>
-							<option value="PA">Pendente aprovação</option>
-							<option value="PF">Pendente faturamento</option>
-							<option value="FA">Faturado</option>
-							<option value="PA">Pago</option>
-						</select>
-					</div>
+				<div class="form-group">
+					<label for="cliente">Cliente</label>
+					<select type="text" id="cliente" name="cliente" ng-model="$ctrl.arguments.cliente_id" class="form-control" ng-options="c.id as c.pessoa.nome_razao_social for c in $ctrl.listaclientes">
+						<option value="">Selecione...</option>
+					</select>
 				</div>
 				<button type="button" class="btn btn-sm btn-default margin" ng-click="$ctrl.pesquisar();">Pesquisar</button>
 			</form>
 		</div>
 	</div>
 	
-	<table class="table table-sm table-bordered table-striped table-highlight">
+	<div class="col-sm-6">
+	<table class="table table-sm">
 		<thead>
-			<tr class="active">
+			<tr>
 				<th>Cliente</th>
 				<th>Demanda</th>
 				<th>Data</th>
@@ -136,7 +111,30 @@ button.margin {
 			</tr>
 		</tbody>
 	</table>
-
+	</div>
+	<div class="col-sm-6">
+		<table class="table table-sm">
+			<thead>
+				<tr>
+					<th></th>
+					<th>Nome do cliente</th>
+					<th>Parcela</th>
+					<th>Dt.Prev.Fat</th>
+					<th>Fase</th>
+					<th>Perfil</th>
+					<th>Horas</th>
+					<th>Valor</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<div class="glyphicon glyphicon-remove" style="cursor: pointer;" ng-click="$ctrl.removeritemfaturamento();"></div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>
 
 {%endverbatim%}
