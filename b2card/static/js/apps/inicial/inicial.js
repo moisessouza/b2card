@@ -272,6 +272,12 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 		$uibModalInstance.close();
 	}
 	
+	$ctrl.validarpercentualconclusao = function () {
+		if ($ctrl.percentual_conclusao > 100) {
+			$ctrl.percentual_conclusao = 100;
+		}
+	}
+	
 	$ctrl.salvar = () => {
 		
 		let data = CommonsService.dataparaurl($ctrl.data);

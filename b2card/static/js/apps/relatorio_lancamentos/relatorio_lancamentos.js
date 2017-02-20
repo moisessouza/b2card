@@ -252,6 +252,12 @@ relatorio_lancamentos.controller('RelatorioLancamentosController', function (Rel
 		$uibModalInstance.close();
 	}
 	
+	$ctrl.validarpercentualconclusao = function () {
+		if ($ctrl.percentual_conclusao > 100) {
+			$ctrl.percentual_conclusao = 100;
+		}
+	}
+	
 	$ctrl.excluir = () => {
 		if (confirm(MESSAGE_EXCLUIR)) {
 			RelatorioLancamentosService.excluiralocacao(alocacao.id, function (result) {

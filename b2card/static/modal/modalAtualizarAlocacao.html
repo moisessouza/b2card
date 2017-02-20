@@ -29,7 +29,7 @@
 			<div class="col-sm-2" style="width: 110px">
 				<div class="form-group">
 					<label class="control-label">% Concluído</label>
-					<input class="form-control" ng-model="$ctrl.percentual_conclusao" mask="999" restrict="reject" style="width: 60px;" ng-disabled="$ctrl.atividade_fechada"/>
+					<input class="form-control" ng-model="$ctrl.percentual_conclusao" mask="999" restrict="reject" style="width: 60px;" ng-change="$ctrl.validarpercentualconclusao();" ng-disabled="$ctrl.atividade_fechada"/>
 				</div>
 			</div>
 			<div class="col-sm-2" style="width: 179px" ng-show="$ctrl.atividade_fechada">
