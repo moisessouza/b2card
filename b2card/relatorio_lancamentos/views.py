@@ -151,6 +151,7 @@ def calcular_horas_percentual_atividade(atividade_profissional):
     fase_atividade.percentual_calculado = percentual_calculado
     fase_atividade.percentual_concluido = percentual_concluido
     fase_atividade.save()
+    # calcular demanda
     demanda = Demanda.objects.filter(faseatividade=fase_atividade)[0]
     fase_atividades = FaseAtividade.objects.filter(demanda=demanda)
     percentual_calculado = sum((a.percentual_calculado if a.percentual_calculado else 0) for a in fase_atividades) / len(fase_atividades)

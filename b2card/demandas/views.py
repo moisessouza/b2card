@@ -411,6 +411,63 @@ class DemandaDetail(APIView):
                     orcamento_atividade = OrcamentoAtividade.objects.get(pk=i['id'])
                     orcamento_atividade.delete();
     
+    def calcular_estatisticas_demanda(self, demanda):
+        
+        atividade_profissionais = AtividadeProfissional.objects.filter(atividade__fase_atividade__demanda = demanda)
+        
+        for atividade_profissional in atividade_profissionais:
+            
+            alocacoes_horas = AlocacaoHoras.objects.filter(atividade_profissional = atividade_profissional)
+            if alocacoes_horas:
+                total_milisegundos = 0
+    
+                for i in alocacoes_horas:
+                    total_milisegundos += i.horas_alocadas_milisegundos
+                        
+                ultimo_percentual = alocacoes_horas[len(alocacoes_horas) - 1].percentual_concluido if alocacoes_horas[len(alocacoes_horas) - 1].percentual_concluido else 0;
+                
+                atividade_profissional.horas_alocadas_milisegundos = total_milisegundos
+                quantidade_horas_milisegundos = atividade_profissional.quantidade_horas * 60 * 60 * 1000
+                percentual_calculado = (atividade_profissional.horas_alocadas_milisegundos * 100) / quantidade_horas_milisegundos
+                if percentual_calculado > 100:
+                    percentual_calculado = 100
+                atividade_profissional.percentual_calculado = percentual_calculado
+                atividade_profissional.percentual_concluido = ultimo_percentual
+                atividade_profissional.save()
+                
+        #Calcular percentual atividade
+        atividades = Atividade.objects.filter(fase_atividade__demanda=demanda)
+        if atividades:
+            for atividade in atividades:
+                atividades_profissionais = AtividadeProfissional.objects.filter(atividade=atividade)
+                if atividades_profissionais:
+                    percentual_calculado = sum((a.percentual_calculado if a.percentual_calculado else 0) for a in atividades_profissionais) / len(atividades_profissionais)
+                    percentual_concluido = sum((a.percentual_concluido if a.percentual_concluido else 0) for a in atividades_profissionais) / len(atividades_profissionais)
+                    atividade.percentual_calculado = percentual_calculado
+                    atividade.percentual_concluido = percentual_concluido
+                    atividade.save()
+                    
+        #calcular percentual fase_atividade
+        fase_atividades = FaseAtividade.objects.filter(demanda=demanda)
+        if fase_atividades:
+            for fase_atividade in fase_atividades:
+                atividades = Atividade.objects.filter(fase_atividade=fase_atividade)
+                if atividades:
+                    percentual_calculado = sum((a.percentual_calculado if a.percentual_calculado else 0) for a in atividades) / len(atividades)
+                    percentual_concluido = sum((a.percentual_concluido if a.percentual_concluido else 0) for a in atividades) / len(atividades)
+                    fase_atividade.percentual_calculado = percentual_calculado
+                    fase_atividade.percentual_concluido = percentual_concluido
+                    fase_atividade.save()
+                
+                
+        fase_atividades = FaseAtividade.objects.filter(demanda=demanda)
+        if fase_atividades:
+            percentual_calculado = sum((a.percentual_calculado if a.percentual_calculado else 0) for a in fase_atividades) / len(fase_atividades)
+            percentual_concluido = sum((a.percentual_concluido if a.percentual_concluido else 0) for a in fase_atividades) / len(fase_atividades)
+            demanda.percentual_calculado = percentual_calculado
+            demanda.percentual_concluido = percentual_concluido
+            demanda.save()    
+    
     def salvar_fase_atividades(self, fase_atividades, demanda):
         
         if fase_atividades:
@@ -647,6 +704,9 @@ class DemandaDetail(APIView):
         self.salvar_ocorrencias(ocorrencias, demanda)
         self.salvar_orcamento(orcamento, demanda)
         self.salvar_fase_atividades(fase_atividades, demanda)
+        
+        if demanda.tipo_demanda != 'I':
+            self.calcular_estatisticas_demanda(demanda)
         
         return Response(serializarDemanda(demanda.id))
     
