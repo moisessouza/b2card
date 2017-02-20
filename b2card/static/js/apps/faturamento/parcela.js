@@ -482,6 +482,19 @@ parcela.controller('ModalParcelasController', function ($scope, $window, $uibMod
 		
 	}
 	
+	$ctrl.selecionarparcelas = function () {
+		let array = [];
+		
+		for (let parcela of $ctrl.parcelas) {
+			if (parcela.selecionado) {
+				array.push(parcela);
+			}
+		}
+		
+		$uibModalInstance.close(array);
+		
+	}
+	
 	$ctrl.fechar = function (){
 		$uibModalInstance.close()	
 	}

@@ -14,7 +14,7 @@ pesquisademandaservices.config(['$httpProvider', function($httpProvider) {
 
 pesquisademandaservices.service('PesquisaDemandaService', function($resource){
 	return {
-		buscarcentroresultadoshora: function(argumentos, callback){
+		buscardemandas: function(argumentos, callback){
 			var Demandas = $resource(BASE_URL + 'demandas/api/query/', {}, {
 				'set': {method:'POST'}
 			});

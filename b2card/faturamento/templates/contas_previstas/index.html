@@ -60,7 +60,7 @@ button.margin {
 		</div>
 	</div>
 	
-	<div class="col-sm-6">
+	<div class="col-sm-4">
 	<table class="table table-sm">
 		<thead>
 			<tr>
@@ -112,24 +112,68 @@ button.margin {
 		</tbody>
 	</table>
 	</div>
-	<div class="col-sm-6">
+	<div class="col-sm-8">
 		<table class="table table-sm">
 			<thead>
 				<tr>
 					<th></th>
-					<th>Nome do cliente</th>
+					<th>Cliente</th>
 					<th>Parcela</th>
 					<th>Dt.Prev.Fat</th>
 					<th>Fase</th>
 					<th>Perfil</th>
 					<th>Horas</th>
 					<th>Valor</th>
+					<th>Valor total</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
+				<tr ng-repeat="itemfaturamento in $ctrl.listaitensfaturamento">
 					<td>
 						<div class="glyphicon glyphicon-remove" style="cursor: pointer;" ng-click="$ctrl.removeritemfaturamento();"></div>
+					</td>
+					<td>
+						{{itemfaturamento.demanda.cliente.pessoa.nome_razao_social}}
+					</td>
+					<td>
+						{{itemfaturamento.descricao}}
+					</td>
+					<td>
+						{{itemfaturamento.data_previsto_parcela}}
+					</td>
+					<td>
+						<div ng-repeat="parcelafase in itemfaturamento.parcelafases">
+							<select ng-model="parcelafase.fase.id" ng-options="f.id as f.fase.descricao for f in $ctrl.listafases" ng-change="$ctrl.verificarduplicidadefase(parcela, parcelafase, {{ parcelafase.fase && parcelafase.fase.id ? parcelafase.fase.id : 'null' }})" class="form-control">
+						    	<option value="">Selecione...</option>
+						    </select>
+					    	<div ng-repeat="n in [].constructor(parcelafase.medicoes.length - 1)" style="height: 26px;">&nbsp;</div>
+						</div>
+					</td>
+					<td>
+						<span ng-repeat="parcelafase in itemfaturamento.parcelafases">
+							<span ng-repeat="medicao in parcelafase.medicoes">
+								<select id="valorhora" name="valorhora" ng-model="medicao.valor_hora.id" class="form-control" ng-change="$ctrl.verificarduplicidade(parcelafase, medicao, {{ medicao.valor_hora && medicao.valor_hora.id ? medicao.valor_hora.id : 'null' }}); $ctrl.changevalorhora(medicao); $ctrl.changequantidadehoras(medicao);" ng-options="v.id as v.descricao for v in $ctrl.valorhoraobject[parcelafase.fase.id]">
+						    		<option value="">Selecione um tipo...</option>
+						    	</select>
+							</span>
+						</span>	
+					</td>
+					<td>
+						<span ng-repeat="parcelafase in itemfaturamento.parcelafases">
+							<span ng-repeat="medicao in parcelafase.medicoes">
+								<input type="text" id="quantidade_horas" ng-model="medicao.quantidade_horas" ng-change="$ctrl.changequantidadehoras(medicao)" gb-number name="quantidade_horas" class="form-control"/>
+							</span>
+						</span>
+					</td>
+					<td>
+						<span ng-repeat="parcelafase in itemfaturamento.parcelafases">
+							<span ng-repeat="medicao in parcelafase.medicoes">
+								<input type="text" id="valor_total" name="valor_total" ng-model="medicao.valor_total" ng-change="$ctrl.calcularhorasmedicoes()" gb-money class="form-control"/>
+							</span>
+						</span>
+					</td>
+					<td>
+						<input type="text" id="valor_parcela" name="valor_parcela" ng-model="itemfaturamento.valor_parcela" class="form-control" disabled/>
 					</td>
 				</tr>
 			</tbody>

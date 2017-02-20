@@ -38,6 +38,8 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 		});	
 	}
 	
+	$ctrl.listaitensfaturamento = [];
+	
 	$ctrl.abrircontasreceber = function (contareceber) {
 		
 		ParcelaService.buscarorcamentopordemandaid(contareceber.demanda.id, function(data){
@@ -76,9 +78,8 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 				});
 					
 				modalInstance.result.then(function(data) {
-					$ctrl.pesquisar();
+					$ctrl.listaitensfaturamento = $ctrl.listaitensfaturamento.concat(data);
 				}, function() {
-					$ctrl.pesquisar();
 				});
 				
 			});

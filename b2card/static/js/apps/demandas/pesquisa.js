@@ -53,7 +53,7 @@ pesquisademanda.controller('PesquisaDemandaController', function (CommonsService
 		$ctrl.pesquisar();
 	}
 	
-	$ctrl.resultado = PesquisaDemandaService.buscarcentroresultadoshora($ctrl.arguments, configurarresultado);
+	$ctrl.resultado = PesquisaDemandaService.buscardemandas($ctrl.arguments, configurarresultado);
 	
 	$ctrl.abrirmodalstatus = () => {
 		$ctrl.showmodal = !$ctrl.showmodal; 
@@ -95,7 +95,7 @@ pesquisademanda.controller('PesquisaDemandaController', function (CommonsService
 		
 		$ctrl.arguments.status = $ctrl.status;
 		$ctrl.arguments.responsaveis = $ctrl.responsavel;
-		PesquisaDemandaService.buscarcentroresultadoshora($ctrl.arguments, configurarresultado);
+		PesquisaDemandaService.buscardemandas($ctrl.arguments, configurarresultado);
 	}
 	
 	$ctrl.abrirdemanda = demanda => {
