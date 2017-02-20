@@ -190,7 +190,9 @@ parcela.controller('ModalParcelasController', function ($scope, $window, $uibMod
 						var valor_medicao = parseFloat(CommonsService.arredondar(CommonsService.stringparafloat(itemfase.valor_total) / $ctrl.numero_vezes));
 						var horas = CommonsService.arredondar(valor_medicao * itemfase.quantidade_horas / CommonsService.stringparafloat(itemfase.valor_total));
 						var medicao = {
-							valor_hora: itemfase.valor_hora,
+							valor_hora: {
+								id: itemfase.valor_hora.id
+							},
 							valor_total: CommonsService.formatarnumero(valor_medicao),
 							quantidade_horas: horas							
 						};
