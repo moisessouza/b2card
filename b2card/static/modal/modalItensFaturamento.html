@@ -49,17 +49,17 @@
 			<div class="col-sm-8" style="margin-bottom: 5px;">
 				<div class="col-sm-3">
 					<div class="input-group">
-					    <input type="number" ng-model="$ctrl.numero_vezes" class="form-control" ng-disabled="$ctrl.parcelas.length > 0"/>
-					    <span class="input-group-addon" for="tipo">Vezes</span>
+					    <input type="number" ng-model="$ctrl.numero_vezes" class="form-control" ng-disabled="$ctrl.parcelas.length > 0" ng-if="!$ctrl.lote_faturamento"/>
+					    <span class="input-group-addon" for="tipo" ng-if="!$ctrl.lote_faturamento">Vezes</span>
 					</div>
 				</div>
 				<div class="col-sm-2">
-					<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.gerarparcelas()" ng-disabled="!$ctrl.numero_vezes || $ctrl.parcelas.length > 0">
+					<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.gerarparcelas()" ng-disabled="!$ctrl.numero_vezes || $ctrl.parcelas.length > 0" ng-if="!$ctrl.lote_faturamento">
 			  			<span class="glyphicon"></span> Gerar parcelas
 					</button>
 				</div>
 				<div class="col-sm-1">
-					<button type="button" class="btn btn-sm btn-default" ng-click="$ctrl.adicionarparcela()">
+					<button type="button" class="btn btn-sm btn-default" ng-click="$ctrl.adicionarparcela()" ng-if="!$ctrl.lote_faturamento">
 						<span class="glyphicon glyphicon-plus"></span> Adicionar parcela
 					</button>
 				</div>
@@ -73,6 +73,7 @@
 								<th ng-show="$ctrl.lote_faturamento"></th>
 								<th>LoteFat</th>
 								<th width="6%">Parcela</th>
+								<th>Status</th>
 								<th width="9%">Data</th>
 								<th width="9%">Fase</th>
 								<th width="18%">Perfil</th>
@@ -97,6 +98,7 @@
 								<td>
 									<input type="text" ng-model="parcela.descricao" class="form-control"/>
 								</td>
+								<td></td>
 								<td>
 									<input type="text" class="form-control" ng-model="parcela.data_previsto_parcela" ui-mask="99/99/9999" model-view-value="true" ng-required="!parcela.remover"/>
 								</td>
