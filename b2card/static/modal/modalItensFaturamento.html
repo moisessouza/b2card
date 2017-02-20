@@ -87,38 +87,39 @@
 								<td>
 									<input type="text" class="form-control" ng-model="parcela.data_previsto_parcela" ui-mask="99/99/9999" model-view-value="true" ng-required="!parcela.remover"/>
 								</td>
-								<td colspan="4">
-									<table class="table nested">
-										<tbody>
-											<tr ng-repeat="parcelafase in parcela.parcelafases">
-												<td width="26%">
-													<select ng-model="parcelafase.fase.id" ng-options="f.id as f.fase.descricao for f in $ctrl.listafases" ng-change="$ctrl.verificarduplicidadefase(parcela, parcelafase, {{ parcelafase.fase && parcelafase.fase.id ? parcelafase.fase.id : 'null' }})" class="form-control">
-												    	<option value="">Selecione...</option>
-												    </select>
-												</td>
-												<td>
-													<table>
-														<tr ng-repeat="medicao in parcelafase.medicoes">
-															<td width="53%">
-																<select id="valorhora" name="valorhora" ng-model="medicao.valor_hora.id" class="form-control" ng-change="$ctrl.verificarduplicidade(parcelafase, medicao, {{ medicao.valor_hora && medicao.valor_hora.id ? medicao.valor_hora.id : 'null' }}); $ctrl.changevalorhora(medicao); $ctrl.changequantidadehoras(medicao);" ng-options="v.id as v.descricao for v in $ctrl.valorhoraobject[parcelafase.fase.id]">
-														    		<option value="">Selecione um tipo...</option>
-														    	</select>
-															</td>
-															<td width="21%">
-																<input type="text" id="quantidade_horas" ng-model="medicao.quantidade_horas" ng-change="$ctrl.changequantidadehoras(medicao)" gb-number name="quantidade_horas" class="form-control"/>
-															</td>
-															<td>
-																<input type="text" id="valor_total" name="valor_total" ng-model="medicao.valor_total" ng-change="$ctrl.calcularhorasmedicoes()" gb-money class="form-control"/>
-															</td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-										</tbody>
-									</table>
+								<td>
+									<div ng-repeat="parcelafase in parcela.parcelafases">
+										<select ng-model="parcelafase.fase.id" ng-options="f.id as f.fase.descricao for f in $ctrl.listafases" ng-change="$ctrl.verificarduplicidadefase(parcela, parcelafase, {{ parcelafase.fase && parcelafase.fase.id ? parcelafase.fase.id : 'null' }})" class="form-control">
+									    	<option value="">Selecione...</option>
+									    </select>
+								    	<div ng-repeat="n in [].constructor(parcelafase.medicoes.length - 1)" style="height: 26px;">&nbsp;</div>
+									</div>
 								</td>
 								<td>
-									<input type="text" id="descricao" name="descricao" ng-model="parcela.valor_parcela" class="form-control" disabled/>
+									<span ng-repeat="parcelafase in parcela.parcelafases">
+										<span ng-repeat="medicao in parcelafase.medicoes">
+											<select id="valorhora" name="valorhora" ng-model="medicao.valor_hora.id" class="form-control" ng-change="$ctrl.verificarduplicidade(parcelafase, medicao, {{ medicao.valor_hora && medicao.valor_hora.id ? medicao.valor_hora.id : 'null' }}); $ctrl.changevalorhora(medicao); $ctrl.changequantidadehoras(medicao);" ng-options="v.id as v.descricao for v in $ctrl.valorhoraobject[parcelafase.fase.id]">
+									    		<option value="">Selecione um tipo...</option>
+									    	</select>
+										</span>
+									</span>
+								</td>
+								<td>
+									<span ng-repeat="parcelafase in parcela.parcelafases">
+										<span ng-repeat="medicao in parcelafase.medicoes">
+											<input type="text" id="quantidade_horas" ng-model="medicao.quantidade_horas" ng-change="$ctrl.changequantidadehoras(medicao)" gb-number name="quantidade_horas" class="form-control"/>
+										</span>
+									</span>
+								</td>
+								<td>
+									<span ng-repeat="parcelafase in parcela.parcelafases">
+										<span ng-repeat="medicao in parcelafase.medicoes">
+											<input type="text" id="valor_total" name="valor_total" ng-model="medicao.valor_total" ng-change="$ctrl.calcularhorasmedicoes()" gb-money class="form-control"/>
+										</span>
+									</span>
+								</td>
+								<td>
+									<input type="text" id="valor_parcela" name="valor_parcela" ng-model="parcela.valor_parcela" class="form-control" disabled/>
 								</td>
 							</tr>
 						</tbody>

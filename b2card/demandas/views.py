@@ -352,7 +352,7 @@ class DemandaDetail(APIView):
                                     item_fase.delete()
                                 
                 elif 'id' in f:
-                    orcamento_fase = Fase.objects.get(pk=f['id'])
+                    orcamento_fase = OrcamentoFase.objects.get(pk=f['id'])
                     orcamento_fase.delete()
     
     def salvar_despesas(self, despesas, orcamento):

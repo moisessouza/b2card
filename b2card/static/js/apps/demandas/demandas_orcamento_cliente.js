@@ -65,7 +65,7 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 			animation : $ctrl.animationsEnabled,
 			ariaLabelledBy : 'modal-title',
 			ariaDescribedBy : 'modal-body',
-			templateUrl : '/static/modal/modalContasReceber.html?bust=' + Math.random().toString(36).slice(2),
+			templateUrl : '/static/modal/modalItensFaturamento.html?bust=' + Math.random().toString(36).slice(2),
 			controller : 'ModalParcelasController',
 			controllerAs : '$ctrl',
 			//size : 'lg'
@@ -407,7 +407,11 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 	});
 	
 	$ctrl.recarregarfases = () => {
-		$ctrl.share.demanda.orcamento.orcamento_fases = null;
+		if ($ctrl.share.demanda.orcamento.orcamento_fases) {
+			for (let o of $ctrl.share.demanda.orcamento.orcamento_fases){
+				o.remover = true;
+			}
+		}
 		$rootScope.$emit('incluirfasesorcamento');
 	}
 	

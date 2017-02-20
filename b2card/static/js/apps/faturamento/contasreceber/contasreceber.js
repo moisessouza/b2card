@@ -59,7 +59,7 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 					animation : $ctrl.animationsEnabled,
 					ariaLabelledBy : 'modal-title',
 					ariaDescribedBy : 'modal-body',
-					templateUrl : '/static/modal/modalContasReceber.html?bust=' + Math.random().toString(36).slice(2),
+					templateUrl : '/static/modal/modalItensFaturamento.html?bust=' + Math.random().toString(36).slice(2),
 					controller : 'ModalParcelasController',
 					controllerAs : '$ctrl',
 					//size : 'lg'
