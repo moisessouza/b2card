@@ -1,8 +1,8 @@
 "use strict";
 
-var contasreceber = angular.module('contasreceber', ['contasreceber-service', 'parcela-services', 'pessoa-services', 'demandas-services', 'valorhora-services', 'parcela', 'commons', 'ui.bootstrap', 'ui.mask']);
+var contasreceber = angular.module('contasreceber', ['contasreceber-service', 'parcela-services', 'pessoa-services', 'demandas-services', 'pesquisademanda-services', 'valorhora-services', 'parcela', 'commons', 'ui.bootstrap', 'ui.mask']);
 
-contasreceber.controller('ContasReceberController', function ($scope, $window, $uibModal, DemandaService, PessoaService, ContasReceberService, ValorHoraService, ParcelaService, CommonsService){
+contasreceber.controller('ContasReceberController', function ($scope, $window, $uibModal, DemandaService, PessoaService, PesquisaDemandaService,ContasReceberService, ValorHoraService, ParcelaService, CommonsService){
 	var $ctrl = this;
 	
 	$ctrl.show = true;
@@ -14,11 +14,16 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 	$ctrl.listaclientes= PessoaService.buscarpessoasjuridicas();
 	
 	$ctrl.arguments = {
-		'mes': mes
+		'mes': mes,
+		'ordenar':false,
+		'pagina': 1,
 	}
 	
 	$ctrl.pesquisar = function () {
-		ContasReceberService.pesquisarcontasreceber($ctrl.arguments,function (data) {
+		PesquisaDemandaService.buscardemandas($ctrl.arguments, function (data) {
+			$ctrl.resultados = data.demandas;
+		});
+		/*ContasReceberService.pesquisarcontasreceber($ctrl.arguments,function (data) {
 			$ctrl.resultados = data;
 			
 			if (data.length <= 0) {
@@ -35,15 +40,15 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 				}
 			}
 			
-		});	
+		});	*/
 	}
 	
 	$ctrl.listaitensfaturamento = [];
 	
-	$ctrl.abrircontasreceber = function (contareceber) {
+	$ctrl.abrirparcelas = function (demanda) {
 		
-		ParcelaService.buscarorcamentopordemandaid(contareceber.demanda.id, function(data){
-			contareceber.demanda.orcamento = data;
+		ParcelaService.buscarorcamentopordemandaid(demanda.id, function(data){
+			demanda.orcamento = data;
 			
 			for (let fase of data.fases) {
 				for (let itemfase of fase.itensfase) {
@@ -51,11 +56,11 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 				}
 			}
 			
-			ValorHoraService.buscarvalorhoraporcliente(contareceber.demanda.cliente.id, function (data) {
+			ValorHoraService.buscarvalorhoraporcliente(demanda.cliente.id, function (data) {
 				
 				var listavalorhora = data;
 				
-				contareceber.demanda.orcamento.total_orcamento = CommonsService.formatarnumero(contareceber.demanda.orcamento.total_orcamento);
+				demanda.orcamento.total_orcamento = CommonsService.formatarnumero(demanda.orcamento.total_orcamento);
 				
 				var modalInstance = $uibModal.open({
 					animation : $ctrl.animationsEnabled,
@@ -68,7 +73,7 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 					windowClass: 'app-modal-window',
 					resolve : {
 						demanda : function() {
-							return contareceber.demanda;
+							return demanda;
 						},
 						listavalorhora: function () {
 							return listavalorhora;

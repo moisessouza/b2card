@@ -5,6 +5,7 @@
 	<script src="/static/js/apps/faturamento/contasreceber/contasreceber.js"></script>
 	<script src="/static/js/apps/faturamento/contasreceber/contasreceber-service.js"></script>
 	<script src="/static/js/apps/cadastros/pessoa/pessoa-services.js"></script>
+	<script src="/static/js/apps/demandas/pesquisa-services.js"></script>
 	<script src="/static/js/apps/demandas/demandas-services.js"></script>
 	<script src="/static/js/apps/faturamento/parcela.js"></script>
 	<script src="/static/js/apps/faturamento/parcela-services.js"></script>
@@ -49,13 +50,15 @@ button.margin {
 	<div class="panel panel-primary form-group-sm">
 		<div class="panel-body">
 			<form name="arguments">
+				<div class="col-sm-3">
 				<div class="form-group">
 					<label for="cliente">Cliente</label>
-					<select type="text" id="cliente" name="cliente" ng-model="$ctrl.arguments.cliente_id" class="form-control" ng-options="c.id as c.pessoa.nome_razao_social for c in $ctrl.listaclientes">
+					<select type="text" id="cliente" name="cliente" ng-model="$ctrl.arguments.cliente_id" class="form-control" ng-options="c.id as c.pessoa.nome_razao_social for c in $ctrl.listaclientes" required>
 						<option value="">Selecione...</option>
 					</select>
 				</div>
-				<button type="button" class="btn btn-sm btn-default margin" ng-click="$ctrl.pesquisar();">Pesquisar</button>
+				</div>
+				<button type="button" class="btn btn-sm btn-default margin" ng-click="$ctrl.pesquisar();" ng-disabled="arguments.$invalid">Pesquisar</button>
 			</form>
 		</div>
 	</div>
@@ -66,47 +69,15 @@ button.margin {
 			<tr>
 				<th>Cliente</th>
 				<th>Demanda</th>
-				<th>Data</th>
-				<th></th>
-				<th>Total</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-repeat="contareceber in $ctrl.resultados" ng-click="$ctrl.abrircontasreceber(contareceber);">
+			<tr ng-repeat="demanda in $ctrl.resultados" ng-click="$ctrl.abrirparcelas(demanda);">
 				<td>
-					{{contareceber.demanda.cliente.razao_social}}
+					{{demanda.cliente.pessoa.nome_razao_social}}
 				</td>
 				<td>
-					{{contareceber.demanda.nome_demanda}}
-				</td>
-				<td>
-					{{contareceber.data_previsto_parcela}}
-				</td>
-				<td>
-					<table class="table table-sm">	
-						<thead>
-							<tr>
-								<th>
-									Fase
-								</th>
-								<th>
-									Valor
-								</th>
-							</tr>					
-						<tbody>
-							<tr ng-repeat="parcelafase in contareceber.parcelafases">
-								<td>
-									{{parcelafase.fase.descricao}}
-								</td>
-								<td>
-									{{parcelafase.valor}}
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</td>
-				<td>
-					{{contareceber.valor_parcela}}
+					{{demanda.nome_demanda}}
 				</td>
 			</tr>
 		</tbody>
