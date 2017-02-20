@@ -8,7 +8,7 @@ from cadastros.models import ValorHora
 # Create your models here.
 
 STATUS = (
-    ('PE', 'Previsto'),
+    ('PE', 'Pendente'),
     ('PA', 'Pendente aprovação'),
     ('PF', 'Pendente faturamento'),
     ('FA', 'Faturado'),
