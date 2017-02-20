@@ -65,18 +65,24 @@
 				</div>
 			</div>
 			<div class="col-sm-8">
-				<form name="parcelas" style="height: 75%; overflow-y: scroll;">
+				<form name="parcelas" style="height: 75%; overflow-y: scroll; overflow-x: scroll;">
 					
-					<table class="table table-sm table-bordered table-striped table-highlight">
+					<table class="table table-sm table-bordered table-striped table-highlight" style="width: 1200px">
 						<thead>
 							<tr class="active">
-								<th width="9%">Parcela</th>
-								<th>Data</th>
-								<th width="18%">Fase</th>
-								<th width="27%">Perfil</th>
-								<th width="10%">Horas</th>
-								<th width="14%">Valor</th>
-								<th>Valor total</th>
+								<th width="6%">Parcela</th>
+								<th width="9%">Data</th>
+								<th width="8%">Fase</th>
+								<th width="18%">Perfil</th>
+								<th width="5%">Horas</th>
+								<th width="10%">Valor</th>
+								<th width="10%">Valor total</th>
+								<th>Dt.Env.Aprov</th>
+								<th>Dt.Aprov.Fat</th>
+								<th>Dt.Prev.Pagto</th>
+								<th width="9%">Dt.Fat.</th>
+								<th width="9%">Dt.Pagto</th>
+								<th width="9%">NF</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -121,6 +127,12 @@
 								<td>
 									<input type="text" id="valor_parcela" name="valor_parcela" ng-model="parcela.valor_parcela" class="form-control" disabled/>
 								</td>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
 							</tr>
 						</tbody>
 					</table>
