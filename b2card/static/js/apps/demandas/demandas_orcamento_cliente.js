@@ -77,7 +77,10 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 				listavalorhora: function () {
 					return share.listavalorhora;
 				},
-				lote_faturamento : false
+				lote_faturamento : false,
+				listaitensfaturamento: function () {
+					return [];
+				}
 			}
 		});
 			

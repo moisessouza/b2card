@@ -14,6 +14,11 @@ STATUS = (
     ('FA', 'Faturado'),
     ('PA', 'Pago')
 )
+
+class LoteFaturamento(models.Model):
+    data_criacao = models.DateField(default=None)
+    valor_total = models.FloatField(default=None)
+    total_horas = models.IntegerField(default=None)
     
 class Parcela(models.Model):
     descricao = models.CharField(max_length = 200)
@@ -21,6 +26,7 @@ class Parcela(models.Model):
     status = models.CharField(max_length=2, choices=STATUS, null=True)
     data_previsto_parcela = models.DateField(null=True)
     demanda = models.ForeignKey(Demanda, null=True)
+    lote_faturamento = models.ForeignKey(LoteFaturamento, null = True, default = None)
     
 class ParcelaFase(models.Model):
     parcela = models.ForeignKey(Parcela)

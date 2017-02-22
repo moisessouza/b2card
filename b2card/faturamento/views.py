@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from faturamento.models import Parcela, Medicao, ParcelaFase
+from faturamento.models import Parcela, Medicao, ParcelaFase, LoteFaturamento
 from faturamento.serializers import ParcelaSerializer, MedicaoSerializer, ParcelaFaseSerializer
 from rest_framework.response import Response
 from utils.utils import converter_string_para_float, converter_string_para_data, formatar_data
@@ -254,5 +254,35 @@ def buscar_orcamento_demanda_id(request, demanda_id, format=None):
     data['fases'] = fases
     
     return Response(data);
+
+@api_view(['POST'])
+def criar_lote_faturamento(request, format=None):
     
+    valor_total = request.data['valor_total']
+    total_horas = request.data['total_horas']
     
+    if 'id' in request.data and request.data['id']:
+        lote_faturamento = LoteFaturamento.objects.get(pk=request.data['id'])
+        parcelas = Parcela.objects.filter(lote_faturamento = lote_faturamento)
+        
+        if parcelas:
+            for i in parcelas:
+                i.lote_faturamento = None
+                i.save()
+        
+    else:
+        lote_faturamento = LoteFaturamento()
+        lote_faturamento.valor_total = valor_total
+        lote_faturamento.total_horas = total_horas
+        lote_faturamento.save()
+
+    lista_itens = request.data['lista_itens']
+    
+    if lista_itens:
+        for i in lista_itens:
+            if 'id' in i and i['id']:
+                parcela = Parcela.objects.filter(pk=i['id'])
+                parcela.lote_faturamento = lote_faturamento
+                parcela.save()
+                
+    return Response(LoteFaturamento(lote_faturamento).data)
