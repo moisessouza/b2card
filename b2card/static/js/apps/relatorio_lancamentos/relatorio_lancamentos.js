@@ -235,6 +235,7 @@ relatorio_lancamentos.controller('RelatorioLancamentosController', function (Rel
 	$ctrl.hora_fim = alocacao.hora_fim;
 	$ctrl.percentual_conclusao = alocacao.percentual_concluido;
 	$ctrl.tipo_alocacao = alocacao.tipo_alocacao;
+	$ctrl.observacao = alocacao.observacao;
 	
 	$scope.today = function() {
 		$ctrl.data =new Date();
