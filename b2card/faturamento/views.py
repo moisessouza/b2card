@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from faturamento.models import Parcela, Medicao, ParcelaFase, LoteFaturamento
-from faturamento.serializers import ParcelaSerializer, MedicaoSerializer, ParcelaFaseSerializer
+from faturamento.serializers import ParcelaSerializer, MedicaoSerializer, ParcelaFaseSerializer,\
+    LoteFaturamentoSerializer
 from rest_framework.response import Response
 from utils.utils import converter_string_para_float, converter_string_para_data, formatar_data
 from demandas.models import Demanda, Orcamento, ItemFase, OrcamentoFase
-from cadastros.models import ValorHora, TipoHora, Vigencia
+from cadastros.models import ValorHora, TipoHora, Vigencia, PessoaFisica
 from rest_framework.decorators import api_view
 from demandas.serializers import OrcamentoFaseSerializer, OrcamentoSerializer,\
     ItemFaseSerializer
@@ -255,11 +256,27 @@ def buscar_orcamento_demanda_id(request, demanda_id, format=None):
     
     return Response(data);
 
+@api_view(['GET'])
+def buscar_lote_faturamento_usuario(request, format=None):
+    pessoa_fisica = PessoaFisica.objects.filter(prestador__usuario__id = request.user.id)[0]
+    lote_faturamento = LoteFaturamento.objects.filter(pessoa_fisica=pessoa_fisica).order_by('-pk')[0]
+    lista_itens = Parcela.objects.filter(lote_faturamento = lote_faturamento)
+    
+    lote_faturamento = LoteFaturamentoSerializer(lote_faturamento).data
+    
+    lista_itens = ParcelaSerializer(lista_itens, many=True).data
+    
+    lote_faturamento['lista_itens'] = lista_itens
+    
+    return Response(lote_faturamento)
+
 @api_view(['POST'])
 def criar_lote_faturamento(request, format=None):
     
     valor_total = request.data['valor_total']
     total_horas = request.data['total_horas']
+    
+    pessoa_fisica = PessoaFisica.objects.filter(prestador__usuario__id = request.user.id)[0]
     
     if 'id' in request.data and request.data['id']:
         lote_faturamento = LoteFaturamento.objects.get(pk=request.data['id'])
@@ -272,9 +289,12 @@ def criar_lote_faturamento(request, format=None):
         
     else:
         lote_faturamento = LoteFaturamento()
-        lote_faturamento.valor_total = valor_total
-        lote_faturamento.total_horas = total_horas
-        lote_faturamento.save()
+    
+    lote_faturamento.pessoa_fisica = pessoa_fisica
+    lote_faturamento.valor_total = valor_total
+    lote_faturamento.total_horas = total_horas
+    lote_faturamento.data_criacao = datetime.datetime.date()
+    lote_faturamento.save()
 
     lista_itens = request.data['lista_itens']
     

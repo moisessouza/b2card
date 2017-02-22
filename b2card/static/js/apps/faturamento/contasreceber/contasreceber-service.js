@@ -22,6 +22,10 @@ contasreceberservice.service('ContasReceberService', function($resource){
 				}
 			 });
 			return Parcela.search({}, args, callback);
+		},
+		gerarlotefaturamento: function (data, callback) {
+			var LoteFaturamento = $resource(BASE_URL + 'faturamento/api/lotefaturamento/');
+			return LoteFaturamento.save({}, data, callback);
 		}
 	}
 });

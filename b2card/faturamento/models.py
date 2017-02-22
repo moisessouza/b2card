@@ -16,6 +16,7 @@ STATUS = (
 )
 
 class LoteFaturamento(models.Model):
+    pessoa_fisica = models.ForeignKey(default = None)
     data_criacao = models.DateField(default=None)
     valor_total = models.FloatField(default=None)
     total_horas = models.IntegerField(default=None)

@@ -129,4 +129,22 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 		}
 	}
 	
+	$ctrl.enviarparaaprovacao = () => {
+		
+		var data = {
+			'id': $ctrl.lote_faturamento_id,
+			'valor_total': $ctrl.valor_total,
+			'total_horas': $ctrl.total_horas,
+			'lista_itens': $ctrl.listaitensfaturamento
+		}
+		
+		ContasReceberService.gerarlotefaturamento(data, function (data) {
+			$ctrl.lote_faturamento_id = data.id;
+		});
+	}
+	
+	$ctrl.enviarparafaturamento = () => {
+		alert('enviar para faturamento');
+	}
+	
 });
