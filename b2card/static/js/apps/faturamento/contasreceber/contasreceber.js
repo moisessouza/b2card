@@ -27,10 +27,38 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 	
 	$ctrl.listaitensfaturamento = [];
 	
-	var verificarsejaselecionado = lista_selecionada => {
+	var verificarsejaselecionado = selecionado => {
+		if ($ctrl.listaitensfaturamento && selecionado) {
+			for (let itensfaturamento of $ctrl.listaitensfaturamento) {
+				if (selecionado.id == itensfaturamento.id) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	$ctrl.calculartotal = () => {
+		
+		$ctrl.totalhoras = 0;
+		$ctrl.totalvalor = 0;
+		
 		if ($ctrl.listaitensfaturamento) {
-			
-		} 
+			for (let itemfaturamento of $ctrl.listaitensfaturamento) {
+				if (itemfaturamento.parcelafases) {
+					for (let parcelafase of itemfaturamento.parcelafases){
+						if (parcelafase.medicoes){
+							for(let medicao of parcelafase.medicoes){
+								$ctrl.totalhoras+=medicao.quantidade_horas;
+							}
+						}
+					}
+				}
+				$ctrl.totalvalor+=CommonsService.stringparafloat(itemfaturamento.valor_parcela);
+			}
+		}
+		
+		$ctrl.totalvalor = CommonsService.formatarnumero($ctrl.totalvalor);
 	}
 	
 	$ctrl.abrirparcelas = function (demanda) {
@@ -68,19 +96,37 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 						listavalorhora: function () {
 							return listavalorhora;
 						},
-						lote_faturamento: true
+						lote_faturamento: function () {
+							return true;
+						},
+						listaitensfaturamento: function () {
+							return $ctrl.listaitensfaturamento;
+						}
 					}
 				});
 					
 				modalInstance.result.then(function(data) {
-					$ctrl.listaitensfaturamento = $ctrl.listaitensfaturamento.concat(data);
+					if (data) {
+						for (let selecionado of data) {
+							if (!verificarsejaselecionado(selecionado)) {
+								$ctrl.listaitensfaturamento.push(selecionado);
+							}
+						}
+						$ctrl.calculartotal();
+					}
 				}, function() {
 				});
 				
 			});
 			
 		});
-		
+	}
+	
+	$ctrl.remover = parcela =>{
+		if ($ctrl.listaitensfaturamento) {
+			$ctrl.listaitensfaturamento.splice($ctrl.listaitensfaturamento.indexOf(parcela), 1);
+			$ctrl.calculartotal();
+		}
 	}
 	
 });

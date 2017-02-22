@@ -102,7 +102,7 @@ button.margin {
 				<tbody>
 					<tr ng-repeat="itemfaturamento in $ctrl.listaitensfaturamento">
 						<td>
-							<div class="glyphicon glyphicon-remove" style="cursor: pointer;" ng-click="$ctrl.removeritemfaturamento();"></div>
+							<div class="glyphicon glyphicon-remove" style="cursor: pointer;" ng-click="$ctrl.remover(itemfaturamento);"></div>
 						</td>
 						<td>
 							<div>
@@ -155,8 +155,23 @@ button.margin {
 						</td>
 					</tr>
 				</tbody>
+				<tfoot>
+					<tr>
+						<th>Total</th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th>{{$ctrl.totalhoras}}</th>
+						<th></th>
+						<th>{{$ctrl.totalvalor}}</th>
+					</tr>
+				</tfoot>
 			</table>
 		</div>
+		<button class="btn btn-primary" ng-show="$ctrl.listaitensfaturamento.length > 0">Enviar para aprovação</button>
+		<button class="btn btn-primary pull-right" ng-show="$ctrl.listaitensfaturamento.length > 0">Enviar para faturamento</button>
 	</div>
 </div>
 
