@@ -284,12 +284,12 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		}
 		
 		let horas_totais = calcularatividadestotaishoras();
-		return (horas_totais + (horas_totais * ($ctrl.share.demanda.orcamento.margem_risco / 100))) * unidadeadministrativa ? unidadeadministrativa.custo_operacao_hora : 0;
+		return (horas_totais + (horas_totais * ($ctrl.share.demanda.orcamento.margem_risco / 100))) * (unidadeadministrativa ? unidadeadministrativa.custo_operacao_hora : 0);
 	};
 	
 	var calcularcustosemimposto = function (valor_total) {
 		let custo_operacional = calcularcustooperacional();
-		return (valor_total + custo_operacional) * (1 + ($ctrl.share.demanda.orcamento.margem_risco / 100))
+		return (valor_total * (1 + ($ctrl.share.demanda.orcamento.margem_risco / 100)))  + custo_operacional;
 	};
 	
 	$rootScope.$on('calculardesejado', function (event, data) {
@@ -297,7 +297,7 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 		let valor_total = calcularatividadestotais();
 		let custo_sem_imposto = calcularcustosemimposto(valor_total);
 		
-		if (($ctrl.share.demanda.orcamento.lucro_desejado || $ctrl.share.demanda.orcamento.lucro_desejado == 0) && $ctrl.share.demanda.orcamento.imposto_devidos) {
+		if (($ctrl.share.demanda.orcamento.lucro_desejado || $ctrl.share.demanda.orcamento.lucro_desejado == 0) && ($ctrl.share.demanda.orcamento.imposto_devidos || $ctrl.share.demanda.orcamento.imposto_devidos == 0)) {
 
 			$ctrl.share.demanda.orcamento.valor_desejado = (custo_sem_imposto / (1 - (($ctrl.share.demanda.orcamento.lucro_desejado / 100) + ($ctrl.share.demanda.orcamento.imposto_devidos / 100)))) + CommonsService.stringparafloat($ctrl.share.demanda.orcamento.total_despesas ? $ctrl.share.demanda.orcamento.total_despesas : 0);
 			
