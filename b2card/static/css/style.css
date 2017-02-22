@@ -106,11 +106,11 @@ div.classe_modal {
 	left: 23px;
  }
  
- select.disabled_select {
+.disabled_select {
  	height: 26px;
     border: 0px solid;
     text-overflow: "";
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-color: #fff;
+    background-color: transparent;
  }

@@ -23,24 +23,6 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 		PesquisaDemandaService.buscardemandas($ctrl.arguments, function (data) {
 			$ctrl.resultados = data.demandas;
 		});
-		/*ContasReceberService.pesquisarcontasreceber($ctrl.arguments,function (data) {
-			$ctrl.resultados = data;
-			
-			if (data.length <= 0) {
-				$ctrl.messagem = 'Nenhum registro foi encontrado!';
-			} else {
-				$ctrl.messagem = null;
-				for (let parcela of data) {
-					parcela.valor_parcela = CommonsService.formatarnumero(parcela.valor_parcela);
-					if (parcela.parcelafases){
-						for (let parcelafase of parcela.parcelafases) {
-							parcelafase.valor = CommonsService.formatarnumero(parcelafase.valor);
-						}
-					}
-				}
-			}
-			
-		});	*/
 	}
 	
 	$ctrl.listaitensfaturamento = [];
@@ -49,6 +31,7 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 		
 		ParcelaService.buscarorcamentopordemandaid(demanda.id, function(data){
 			demanda.orcamento = data;
+			$ctrl.listafases = data.fases;
 			
 			for (let fase of data.fases) {
 				for (let itemfase of fase.itensfase) {
@@ -59,6 +42,7 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 			ValorHoraService.buscarvalorhoraporcliente(demanda.cliente.id, function (data) {
 				
 				var listavalorhora = data;
+				$ctrl.listavalorhora = data;
 				
 				demanda.orcamento.total_orcamento = CommonsService.formatarnumero(demanda.orcamento.total_orcamento);
 				
