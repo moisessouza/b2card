@@ -84,7 +84,7 @@ def serializarDemandaObject(demanda):
             i['data_observacao'] = serializar_data(i['data_observacao'])
         
     ocorrencias_list = OcorrenciaSerializer(ocorrencias, many=True).data
-    for i in ocorrencias:
+    for i in ocorrencias_list:
         if 'data_solicitacao' in i:
             i['data_solicitacao'] = serializar_data(i['data_solicitacao'])
         if 'data_prevista_conclusao' in i:
