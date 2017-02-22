@@ -27,6 +27,12 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 	
 	$ctrl.listaitensfaturamento = [];
 	
+	var verificarsejaselecionado = lista_selecionada => {
+		if ($ctrl.listaitensfaturamento) {
+			
+		} 
+	}
+	
 	$ctrl.abrirparcelas = function (demanda) {
 		
 		ParcelaService.buscarorcamentopordemandaid(demanda.id, function(data){
