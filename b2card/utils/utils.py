@@ -38,11 +38,14 @@ def converter_data_url(data_string):
 
     return None
         
-    
+
 def converter_string_para_float(float_string):
     if float_string is not None and float_string != '':
-        float_string = float_string.replace('.', '').replace(',', '.')
-        return float(float_string);
+        if isinstance(float_string, str):
+            float_string = float_string.replace('.', '').replace(',', '.')
+            return float(float_string)
+        else:
+            return float_string
     else:
         return None
     
