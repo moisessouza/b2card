@@ -30,6 +30,10 @@ contasreceberservice.service('ContasReceberService', function($resource){
 		buscarpacoteitensclienteid: function (cliente_id, callback) {
 			var PacoteItens = $resource(BASE_URL + 'faturamento/api/buscarpacoteitens/:id/');
 			return PacoteItens.get({'id': cliente_id}, callback);
+		},
+		enviarparaaprovacao: function(data, callback) {
+			var PacoteItens = $resource(BASE_URL + 'faturamento/api/enviaraprovacao/');
+			return PacoteItens.save(data, callback);
 		}
 	}
 });

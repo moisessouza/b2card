@@ -91,7 +91,7 @@
 						<tbody>
 							<tr ng-repeat="parcela in $ctrl.parcelas">
 								<td ng-show="$ctrl.lote_faturamento">
-									<input type="checkbox" ng-model="parcela.selecionado" ng-disabled="parcela.lote_faturamento.id">
+									<input type="checkbox" ng-model="parcela.selecionado" ng-disabled="parcela.pacote_itens.id">
 								</td>
 								<td>
 									{{parcela.lote.id}}
@@ -104,7 +104,7 @@
 									{{parcela.status == 'PA' ? 'Pendente aprovação' : ''}}
 									{{parcela.status == 'PF' ? 'Pendente faturamento' : ''}}
 									{{parcela.status == 'FA' ? 'Faturado' : ''}}
-									{{parcela.status == 'PA' ? 'Pago' : ''}}
+									{{parcela.status == 'PG' ? 'Pago' : ''}}
 								</td>
 								<td>
 									<input type="text" class="form-control" ng-model="parcela.data_previsto_parcela" ui-mask="99/99/9999" model-view-value="true" ng-required="!parcela.remover"/>

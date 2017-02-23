@@ -119,12 +119,15 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 						
 						$ctrl.calculartotal($ctrl.listaitensfaturamento);
 						
+						let listaitens = $ctrl.listaitensfaturamento;
+						$ctrl.listaitensfaturamento = [];
+						
 						let context = {
 							'id': $ctrl.pacote_itens ? $ctrl.pacote_itens.id : null,
 							'cliente_id': $ctrl.arguments.cliente_id,		
 							'valor_total': $ctrl.totalvalor,
 							'total_horas': $ctrl.totalhoras,
-							'lista_itens': $ctrl.listaitensfaturamento
+							'lista_itens': listaitens
 						}
 						
 						$ctrl.pacote_itens = ContasReceberService.gerarpacoteitens(context, function () {
@@ -150,16 +153,17 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 			
 			let context = {
 				'id': $ctrl.pacote_itens ? $ctrl.pacote_itens.id : null,
+				'cliente_id': $ctrl.arguments.cliente_id,	
 				'valor_total': $ctrl.totalvalor,
 				'total_horas': $ctrl.totalhoras,
 				'lista_itens': $ctrl.listaitensfaturamento
 			}
 				
 			$ctrl.pacote_itens = ContasReceberService.gerarpacoteitens(context, function () {
-				ContasReceberService.buscarpacoteitensusuario(function (result){
-					$ctrl.pacote_itens = result;
-					$ctrl.listaitensfaturamento = result.lista_itens;
-					$ctrl.calculartotal(result.lista_itens);
+				ContasReceberService.buscarpacoteitensclienteid($ctrl.arguments.cliente_id, function (data){
+					$ctrl.pacote_itens = data;
+					$ctrl.listaitensfaturamento = data.lista_itens;
+					$ctrl.calculartotal(data.lista_itens);
 				});
 			});
 		}
@@ -168,11 +172,16 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 	$ctrl.enviarparaaprovacao = () => {
 		
 		var data = {
-			'id': $ctrl.pacote_itens_id,
-			'valor_total': $ctrl.valor_total,
-			'total_horas': $ctrl.total_horas,
-			'lista_itens': $ctrl.listaitensfaturamento
+			'id': $ctrl.pacote_itens ? $ctrl.pacote_itens.id : null,
 		}
+		
+		ContasReceberService.enviarparaaprovacao(data, function () {
+			ContasReceberService.buscarpacoteitensclienteid($ctrl.arguments.cliente_id, function (data){
+				$ctrl.pacote_itens = data;
+				$ctrl.listaitensfaturamento = data.lista_itens;
+				$ctrl.calculartotal(data.lista_itens);
+			});
+		});
 	}
 	
 	$ctrl.enviarparafaturamento = () => {

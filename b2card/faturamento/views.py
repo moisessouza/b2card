@@ -261,7 +261,13 @@ def buscar_orcamento_demanda_id(request, demanda_id, format=None):
 @api_view(['GET'])
 def buscar_pacote_itens_cliente(request, cliente_id, format=None):
 
-    pacote_itens = PacoteItens.objects.filter(cliente__id = cliente_id).order_by('-pk')[0]
+    try:
+        pacote_itens = PacoteItens.objects.filter(cliente__id = cliente_id).order_by('-pk')[0]
+    except IndexError:
+        return Response({})
+    except:
+        raise
+    
     lista_itens = Parcela.objects.filter(pacote_itens = pacote_itens)
     
     pacote_itens = PacoteItensSerializer(pacote_itens).data
@@ -305,6 +311,7 @@ def criar_pacote_itens(request, format=None):
         if parcelas:
             for i in parcelas:
                 i.pacote_itens = None
+                i.status = 'PE'
                 i.save()
         
     else:
@@ -323,7 +330,21 @@ def criar_pacote_itens(request, format=None):
         for i in lista_itens:
             if 'id' in i and i['id']:
                 parcela = Parcela.objects.get(pk=i['id'])
+                parcela.status = i['status']
                 parcela.pacote_itens = pacote_itens
                 parcela.save()
                 
+    return Response(PacoteItensSerializer(pacote_itens).data)
+
+@api_view(['POST'])
+def enviar_para_aprovacao(request):
+    
+    pacote_itens = PacoteItens.objects.get(pk=request.data['id'])
+    parcelas = Parcela.objects.filter(pacote_itens = pacote_itens)
+    
+    if parcelas:
+        for i in parcelas:
+            i.status = 'PA'
+            i.save()
+    
     return Response(PacoteItensSerializer(pacote_itens).data)

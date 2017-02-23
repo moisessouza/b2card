@@ -84,14 +84,16 @@ button.margin {
 			</tbody>
 		</table>
 	</div>
-	<div class="col-sm-6">
+	<div class="col-sm-8">
 		<div class="row">
 			<table class="table">
 				<thead>
 					<tr>
 						<th></th>
-						<th><div style="width: 150px">Cliente</div></th>
+						<th><div>Cliente</div></th>
+						<th><div>Demanda</div>
 						<th>Parcela</th>
+						<th>Status</th>
 						<th>Dt.Prev.Fat</th>
 						<th>Fase</th>
 						<th>Perfil</th>
@@ -107,17 +109,31 @@ button.margin {
 						</td>
 						<td>
 							<div>
-							{{itemfaturamento.demanda.cliente.pessoa.nome_razao_social}}
+								{{itemfaturamento.demanda.cliente.pessoa.nome_razao_social}}
 							</div>
 						</td>
 						<td>
 							<div>
-							{{itemfaturamento.descricao}}
+								{{itemfaturamento.demanda.nome_demanda}}
 							</div>
 						</td>
 						<td>
 							<div>
-							{{itemfaturamento.data_previsto_parcela}}
+								{{itemfaturamento.descricao}}
+							</div>
+						</td>
+						<td>
+							<div>
+								{{itemfaturamento.status == 'PE' ? 'Pendente' : ''}}
+								{{itemfaturamento.status == 'PA' ? 'Pendente aprovação' : ''}}
+								{{itemfaturamento.status == 'PF' ? 'Pendente faturamento' : ''}}
+								{{itemfaturamento.status == 'FA' ? 'Faturado' : ''}}
+								{{itemfaturamento.status == 'PG' ? 'Pago' : ''}}
+							</div>
+						</td>
+						<td>
+							<div>
+								{{itemfaturamento.data_previsto_parcela}}
 							</div>
 						</td>
 						<td>
@@ -145,20 +161,22 @@ button.margin {
 							</div>
 						</td>
 						<td>
-							<span ng-repeat="parcelafase in itemfaturamento.parcelafases">
+							<span ng-repeat="parcelafase in itemfaturamento.parcelafases" style="width: 20px">
 								<span ng-repeat="medicao in parcelafase.medicoes">
-									<input type="text" id="valor_total" name="valor_total" ng-model="medicao.valor_total" ng-change="$ctrl.calcularhorasmedicoes()" gb-money class="disabled_select" disabled/>
+									<input type="text" id="valor_total" name="valor_total" ng-model="medicao.valor_total" ng-change="$ctrl.calcularhorasmedicoes()" gb-money class="disabled_select" style="width: 50px" disabled/>
 								</span>
 							</span>
 						</td>
 						<td>
-							<input type="text" id="valor_parcela" name="valor_parcela" ng-model="itemfaturamento.valor_parcela" class="disabled_select" disabled/>
+							<input type="text" id="valor_parcela" name="valor_parcela" ng-model="itemfaturamento.valor_parcela" class="disabled_select" style="width: 60px" disabled/>
 						</td>
 					</tr>
 				</tbody>
 				<tfoot>
 					<tr>
 						<th>Total</th>
+						<th></th>
+						<th></th>
 						<th></th>
 						<th></th>
 						<th></th>

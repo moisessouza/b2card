@@ -28,7 +28,8 @@ urlpatterns = [
     url(r'^api/contasreceber/search/$', views.search_contas_receber),
     url(r'^api/orcamento/(?P<demanda_id>[0-9]+)/$', views.buscar_orcamento_demanda_id),
     url(r'^api/buscarpacoteitens/(?P<cliente_id>[0-9]+)/$', views.buscar_pacote_itens_cliente),
-    url(r'^api/pacoteitens/$', views.criar_pacote_itens)
+    url(r'^api/pacoteitens/$', views.criar_pacote_itens),
+    url(r'^api/enviaraprovacao/$', views.enviar_para_aprovacao)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

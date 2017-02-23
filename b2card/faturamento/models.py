@@ -13,7 +13,7 @@ STATUS = (
     ('PA', 'Pendente aprovação'),
     ('PF', 'Pendente faturamento'),
     ('FA', 'Faturado'),
-    ('PA', 'Pago')
+    ('PG', 'Pago')
 )
 
 class PacoteItens(models.Model):
