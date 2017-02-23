@@ -34,6 +34,10 @@ contasreceberservice.service('ContasReceberService', function($resource){
 		enviarparaaprovacao: function(data, callback) {
 			var PacoteItens = $resource(BASE_URL + 'faturamento/api/enviaraprovacao/');
 			return PacoteItens.save(data, callback);
+		},
+		enviarparafaturamento: function (data, callback) {
+			var PacoteItens = $resource(BASE_URL + 'faturamento/api/enviarfaturamento/');
+			return PacoteItens.save(data, callback);
 		}
 	}
 });

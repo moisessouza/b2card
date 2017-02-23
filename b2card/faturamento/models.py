@@ -16,11 +16,23 @@ STATUS = (
     ('PG', 'Pago')
 )
 
+class LoteFaturamento(models.Model):
+    data_criacao = models.DateField(default=None)
+    
+STATUS_PACOTE = (
+    ('P', 'Pendente'),
+    ('E', 'Enviado'),
+    ('A', 'Aceito'),
+    ('R', 'Recusado'),
+    ('D', 'Deletado')
+)
 class PacoteItens(models.Model):
     cliente = models.ForeignKey(PessoaJuridica, default = None, null = True)
     data_criacao = models.DateField(default=None)
-    valor_total = models.FloatField(default=None)
-    total_horas = models.FloatField(default=None)
+    valor_total = models.FloatField(default=None, null=True)
+    total_horas = models.FloatField(default=None, null=True)
+    status = models.CharField(max_length=1, choices=STATUS, null=True)
+    lote_faturamento = models.ForeignKey(LoteFaturamento, default = None, null = True)
     
 class Parcela(models.Model):
     descricao = models.CharField(max_length = 200)

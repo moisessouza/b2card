@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from faturamento.models import Parcela, Medicao, ParcelaFase, PacoteItens
+from faturamento.models import Parcela, Medicao, ParcelaFase, PacoteItens,\
+    LoteFaturamento
 from faturamento.serializers import ParcelaSerializer, MedicaoSerializer, ParcelaFaseSerializer,\
     PacoteItensSerializer
 from rest_framework.response import Response
@@ -262,18 +263,35 @@ def buscar_orcamento_demanda_id(request, demanda_id, format=None):
 def buscar_pacote_itens_cliente(request, cliente_id, format=None):
 
     try:
-        pacote_itens = PacoteItens.objects.filter(cliente__id = cliente_id).order_by('-pk')[0]
+        pacote_itens = PacoteItens.objects.filter(cliente__id=cliente_id, status='P').order_by('-pk')[0]
     except IndexError:
-        return Response({})
+        pacote_itens = PacoteItens()
+        pacote_itens.cliente = PessoaJuridica.objects.get(pk=cliente_id)
+        pacote_itens.status = 'P'
+        pacote_itens.data_criacao = datetime.date.today()
+        pacote_itens.save()
+    except:
+        raise
+    
+    #buscar por pacotes recusados
+    try:
+        recusados = PacoteItens.objects.filter(cliente__id = cliente_id, status='R')
+        if recusados:
+            for r in recusados:
+                parcelas_recusadas = Parcela.objects.filter(pacote_itens = r)
+                if parcelas_recusadas:
+                    for pr in parcelas_recusadas:
+                        pr.pacote_itens = pacote_itens
+                        pr.save()
+                r.status = 'D'
     except:
         raise
     
     lista_itens = Parcela.objects.filter(pacote_itens = pacote_itens)
-    
     pacote_itens = PacoteItensSerializer(pacote_itens).data
     
-    lista_itens = ParcelaSerializer(lista_itens, many=True).data
     if lista_itens:
+        lista_itens = ParcelaSerializer(lista_itens, many=True).data
         for i in lista_itens:
             
             i['valor_parcela'] = formatar_para_valor_monetario(i['valor_parcela'])
@@ -293,7 +311,7 @@ def buscar_pacote_itens_cliente(request, cliente_id, format=None):
                     p['medicoes'] = medicoes
             i['parcelafases'] = parcela_fases
     
-    pacote_itens['lista_itens'] = lista_itens
+            pacote_itens['lista_itens'] = lista_itens
     
     return Response(pacote_itens)
 
@@ -318,6 +336,8 @@ def criar_pacote_itens(request, format=None):
         pacote_itens = PacoteItens()
         pessoa_juridica = PessoaJuridica.objects.get(pk = cliente_id)
         pacote_itens.cliente = pessoa_juridica
+        pacote_itens.data_criacao = datetime.date.today()
+        pacote_itens.status = 'P'
         
     pacote_itens.valor_total = converter_string_para_float(valor_total)
     pacote_itens.total_horas = total_horas
@@ -348,3 +368,27 @@ def enviar_para_aprovacao(request):
             i.save()
     
     return Response(PacoteItensSerializer(pacote_itens).data)
+
+@api_view(['POST'])
+def enviar_para_faturamento(request):
+    
+    pacote_itens = PacoteItens.objects.get(pk = request.data['id'])
+    pacote_itens.status = 'E'
+    pacote_itens.save()
+    
+    parcelas = Parcela.objects.filter(pacote_itens = pacote_itens)
+    if parcelas:
+        lote_faturamento = LoteFaturamento()
+        lote_faturamento.data_criacao = datetime.date.today()
+        lote_faturamento.save()
+        
+        for p in parcelas:
+            p.lote_faturamento = lote_faturamento
+            p.status ='PF'
+            p.save()
+            
+    return Response(PacoteItensSerializer(pacote_itens).data)
+    
+    
+     
+    

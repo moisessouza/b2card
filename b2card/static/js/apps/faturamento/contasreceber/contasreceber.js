@@ -111,6 +111,10 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 				modalInstance.result.then(function(data) {
 					if (data) {
 						
+						if (!$ctrl.listaitensfaturamento){
+							$ctrl.listaitensfaturamento = [];
+						}
+						
 						for (let item of data){
 							if (item.pacote_itens == null || !item.pacote_itens && !item.pacote_itens.id) {
 								$ctrl.listaitensfaturamento.push(item);
@@ -185,7 +189,17 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 	}
 	
 	$ctrl.enviarparafaturamento = () => {
-		alert('enviar para faturamento');
+		var data = {
+			'id': $ctrl.pacote_itens ? $ctrl.pacote_itens.id : null,
+		}
+		
+		ContasReceberService.enviarparafaturamento(data, function () {
+			ContasReceberService.buscarpacoteitensclienteid($ctrl.arguments.cliente_id, function (data){
+				$ctrl.pacote_itens = data;
+				$ctrl.listaitensfaturamento = data.lista_itens;
+				$ctrl.calculartotal(data.lista_itens);
+			});
+		});
 	}
 	
 });
