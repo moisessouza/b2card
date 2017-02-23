@@ -91,7 +91,7 @@
 						<tbody>
 							<tr ng-repeat="parcela in $ctrl.parcelas">
 								<td ng-show="$ctrl.lote_faturamento">
-									<input type="checkbox" ng-model="parcela.selecionado">
+									<input type="checkbox" ng-model="parcela.selecionado" ng-disabled="parcela.lote_faturamento.id">
 								</td>
 								<td>
 									{{parcela.lote.id}}

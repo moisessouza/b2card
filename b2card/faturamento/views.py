@@ -5,7 +5,7 @@ from faturamento.serializers import ParcelaSerializer, MedicaoSerializer, Parcel
     LoteFaturamentoSerializer
 from rest_framework.response import Response
 from utils.utils import converter_string_para_float, converter_string_para_data, formatar_data,\
-    formatar_para_valor_monetario
+    formatar_para_valor_monetario, serializar_data
 from demandas.models import Demanda, Orcamento, ItemFase, OrcamentoFase
 from cadastros.models import ValorHora, TipoHora, Vigencia, PessoaFisica
 from rest_framework.decorators import api_view
@@ -270,6 +270,7 @@ def buscar_lote_faturamento_usuario(request, format=None):
         for i in lista_itens:
             
             i['valor_parcela'] = formatar_para_valor_monetario(i['valor_parcela'])
+            i['data_previsto_parcela'] = serializar_data(i['data_previsto_parcela'])
             
             parcela_fases = ParcelaFase.objects.filter(parcela__id = i['id'])
             parcela_fases = ParcelaFaseSerializer(parcela_fases, many=True).data

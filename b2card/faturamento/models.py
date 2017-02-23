@@ -19,7 +19,7 @@ class LoteFaturamento(models.Model):
     pessoa_fisica = models.ForeignKey(PessoaFisica, default = None)
     data_criacao = models.DateField(default=None)
     valor_total = models.FloatField(default=None)
-    total_horas = models.IntegerField(default=None)
+    total_horas = models.FloatField(default=None)
     
 class Parcela(models.Model):
     descricao = models.CharField(max_length = 200)

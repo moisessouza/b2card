@@ -15,9 +15,10 @@ class LoteFaturamentoSerializer(serializers.ModelSerializer):
 
 class ParcelaSerializer(serializers.ModelSerializer):
     demanda = DemandaSerializer()
+    lote_faturamento = LoteFaturamentoSerializer()
     class Meta:
         model = Parcela
-        fields = ('id', 'descricao', 'valor_parcela', 'status', 'data_previsto_parcela', 'demanda')
+        fields = ('id', 'descricao', 'valor_parcela', 'status', 'data_previsto_parcela', 'demanda', 'lote_faturamento')
         
 class MedicaoSerializer(serializers.ModelSerializer):
     valor_hora = ValorHoraSerializer()

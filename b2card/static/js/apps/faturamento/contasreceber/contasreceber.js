@@ -35,7 +35,6 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 		$ctrl.lote_faturamento = data;
 		$ctrl.listaitensfaturamento = data.lista_itens;
 		$ctrl.calculartotal(data.lista_itens);
-		
 	});
 	
 	$ctrl.listaitensfaturamento = [];
@@ -61,6 +60,7 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 		}
 		
 		$ctrl.totalvalor = CommonsService.formatarnumero($ctrl.totalvalor);
+		$ctrl.totalhoras = CommonsService.arredondar($ctrl.totalhoras);
 	}
 	
 	$ctrl.abrirparcelas = function (demanda) {
@@ -110,18 +110,27 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 				modalInstance.result.then(function(data) {
 					if (data) {
 						
-						$ctrl.calculartotal(data);
+						for (let item of data){
+							if (!item.lote_faturamento && !item.lote_faturamento.id) {
+								$ctrl.listaitensfaturamento.push(item);
+							}
+						}
+						
+						$ctrl.calculartotal($ctrl.listaitensfaturamento);
 						
 						let context = {
 							'id': $ctrl.lote_faturamento ? $ctrl.lote_faturamento.id : null,
 							'valor_total': $ctrl.totalvalor,
 							'total_horas': $ctrl.totalhoras,
-							'lista_itens': data
+							'lista_itens': $ctrl.listaitensfaturamento
 						}
 						
-						$ctrl.lote_faturamento = ContasReceberService.gerarlotefaturamento(context, function (data){
-							$ctrl.lote_faturamento = data;
-							$ctrl.listaitensfaturamento = data.lista_itens;
+						$ctrl.lote_faturamento = ContasReceberService.gerarlotefaturamento(context, function () {
+							ContasReceberService.buscarlotefaturamentousuario(function (result){
+								$ctrl.lote_faturamento = result;
+								$ctrl.listaitensfaturamento = result.lista_itens;
+								$ctrl.calculartotal(result.lista_itens);
+							});
 						});
 					}
 				}, function() {
@@ -135,7 +144,22 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 	$ctrl.remover = parcela =>{
 		if ($ctrl.listaitensfaturamento) {
 			$ctrl.listaitensfaturamento.splice($ctrl.listaitensfaturamento.indexOf(parcela), 1);
-			$ctrl.calculartotal();
+			$ctrl.calculartotal($ctrl.listaitensfaturamento);
+			
+			let context = {
+				'id': $ctrl.lote_faturamento ? $ctrl.lote_faturamento.id : null,
+				'valor_total': $ctrl.totalvalor,
+				'total_horas': $ctrl.totalhoras,
+				'lista_itens': $ctrl.listaitensfaturamento
+			}
+				
+			$ctrl.lote_faturamento = ContasReceberService.gerarlotefaturamento(context, function () {
+				ContasReceberService.buscarlotefaturamentousuario(function (result){
+					$ctrl.lote_faturamento = result;
+					$ctrl.listaitensfaturamento = result.lista_itens;
+					$ctrl.calculartotal(result.lista_itens);
+				});
+			});
 		}
 	}
 	
@@ -148,9 +172,8 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 			'lista_itens': $ctrl.listaitensfaturamento
 		}
 		
-		ContasReceberService.gerarlotefaturamento(data, function (data) {
-			$ctrl.lote_faturamento_id = data.id;
-		});
+		//$ctrl.lote_faturamento = ContasReceberService.gerarlotefaturamento(data);
+		
 	}
 	
 	$ctrl.enviarparafaturamento = () => {
