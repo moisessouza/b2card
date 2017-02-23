@@ -147,3 +147,19 @@ def buscar_valor_hora_b2card(request):
             valor_hora_list.append(valor_hora_data)
     
     return Response(valor_hora_list)    
+
+@api_view(['GET'])
+def buscar_valor_horas(request):
+    
+    valor_horas = ValorHora.objects.all(); 
+    
+    valor_hora_list = []
+    for i in valor_horas:
+        vigencia = Vigencia.objects.filter(valor_hora=i, data_inicio__lte = datetime.date.today(), data_fim__gte = datetime.date.today())
+        if vigencia:
+            valor_hora_data = ValorHoraSerializer(i).data    
+            valor_hora_data['vigencia'] = VigenciaSerializer(vigencia[0]).data
+            valor_hora_list.append(valor_hora_data)
+
+    return Response(valor_hora_list)
+    

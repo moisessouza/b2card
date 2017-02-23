@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from demandas.models import Demanda, OrcamentoFase
-from cadastros.models import ValorHora
+from cadastros.models import ValorHora, PessoaFisica
 
 # Create your models here.
 
@@ -16,7 +16,7 @@ STATUS = (
 )
 
 class LoteFaturamento(models.Model):
-    pessoa_fisica = models.ForeignKey(default = None)
+    pessoa_fisica = models.ForeignKey(PessoaFisica, default = None)
     data_criacao = models.DateField(default=None)
     valor_total = models.FloatField(default=None)
     total_horas = models.IntegerField(default=None)

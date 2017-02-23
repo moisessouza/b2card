@@ -26,6 +26,10 @@ contasreceberservice.service('ContasReceberService', function($resource){
 		gerarlotefaturamento: function (data, callback) {
 			var LoteFaturamento = $resource(BASE_URL + 'faturamento/api/lotefaturamento/');
 			return LoteFaturamento.save({}, data, callback);
+		},
+		buscarlotefaturamentousuario: function (callback) {
+			var LoteFaturamento = $resource(BASE_URL + 'faturamento/api/buscarlotefaturamento/');
+			return LoteFaturamento.get({}, callback);
 		}
 	}
 });

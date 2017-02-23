@@ -4,6 +4,7 @@
 {% block script %}
 	<script src="/static/js/apps/faturamento/contasreceber/contasreceber.js"></script>
 	<script src="/static/js/apps/faturamento/contasreceber/contasreceber-service.js"></script>
+	<script src="/static/js/apps/cadastros/fase/fase-services.js"></script>
 	<script src="/static/js/apps/cadastros/pessoa/pessoa-services.js"></script>
 	<script src="/static/js/apps/demandas/pesquisa-services.js"></script>
 	<script src="/static/js/apps/demandas/demandas-services.js"></script>
@@ -53,7 +54,7 @@ button.margin {
 				<div class="col-sm-3">
 				<div class="form-group">
 					<label for="cliente">Cliente</label>
-					<select type="text" id="cliente" name="cliente" ng-model="$ctrl.arguments.cliente_id" class="form-control" ng-options="c.id as c.pessoa.nome_razao_social for c in $ctrl.listaclientes" required>
+					<select type="text" id="cliente" name="cliente" ng-model="$ctrl.arguments.cliente_id" ng-change="$ctrl.buscarvalorhoracliente();" class="form-control" ng-options="c.id as c.pessoa.nome_razao_social for c in $ctrl.listaclientes" required>
 						<option value="">Selecione...</option>
 					</select>
 				</div>
@@ -121,7 +122,7 @@ button.margin {
 						</td>
 						<td>
 							<div ng-repeat="parcelafase in itemfaturamento.parcelafases">
-								<select ng-model="parcelafase.fase.id" class="disabled_select"  ng-options="f.id as f.fase.descricao for f in $ctrl.listafases" ng-change="$ctrl.verificarduplicidadefase(parcela, parcelafase, {{ parcelafase.fase && parcelafase.fase.id ? parcelafase.fase.id : 'null' }})" disabled>
+								<select ng-model="parcelafase.fase.fase.id" class="disabled_select"  ng-options="f.id as f.descricao for f in $ctrl.listafases" ng-change="$ctrl.verificarduplicidadefase(parcela, parcelafase, {{ parcelafase.fase && parcelafase.fase.id ? parcelafase.fase.id : 'null' }})" disabled>
 							    	<option value="">Selecione...</option>
 							    </select>
 						    	<div ng-repeat="n in [].constructor(parcelafase.medicoes.length - 1)" style="height: 26px;">&nbsp;</div>

@@ -34,5 +34,9 @@ valorhoraservice.service('ValorHoraService', function($resource){
 			var CentroCusto = $resource(BASE_URL + 'cadastros/valorhora/api/b2card/');
 			return CentroCusto.query(callback);
 		},
+		buscarvalorhoras: function(callback) {
+			var ValorHora = $resource(BASE_URL + 'cadastros/valorhora/api/');
+			return ValorHora.query({}, callback);
+		}
 	}
 });

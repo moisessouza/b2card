@@ -66,6 +66,9 @@ def transformar_mili_para_horas(milisegundos):
         return "%s:%s" % (horas, minutos)
     
 def formatar_para_valor_monetario(numero):
-    return locale.currency(numero, symbol=False, grouping=True)
+    if numero:
+        return locale.currency(numero, symbol=False, grouping=True)
+    else:
+        return None
         
     

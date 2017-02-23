@@ -1,8 +1,8 @@
 "use strict";
 
-var contasreceber = angular.module('contasreceber', ['contasreceber-service', 'parcela-services', 'pessoa-services', 'demandas-services', 'pesquisademanda-services', 'valorhora-services', 'parcela', 'commons', 'ui.bootstrap', 'ui.mask']);
+var contasreceber = angular.module('contasreceber', ['contasreceber-service', 'parcela-services', 'pessoa-services', 'demandas-services', 'fase-services', 'pesquisademanda-services', 'valorhora-services', 'parcela', 'commons', 'ui.bootstrap', 'ui.mask']);
 
-contasreceber.controller('ContasReceberController', function ($scope, $window, $uibModal, DemandaService, PessoaService, PesquisaDemandaService,ContasReceberService, ValorHoraService, ParcelaService, CommonsService){
+contasreceber.controller('ContasReceberController', function ($scope, $window, $uibModal, DemandaService, PessoaService, PesquisaDemandaService,ContasReceberService, ValorHoraService, ParcelaService, FaseService, CommonsService){
 	var $ctrl = this;
 	
 	$ctrl.show = true;
@@ -19,32 +19,34 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 		'pagina': 1,
 	}
 	
+	FaseService.buscarfases(function (data) {
+		 $ctrl.listafases = data;	
+	});
+	
+	$ctrl.listavalorhora = ValorHoraService.buscarvalorhoras();
+	
 	$ctrl.pesquisar = function () {
 		PesquisaDemandaService.buscardemandas($ctrl.arguments, function (data) {
 			$ctrl.resultados = data.demandas;
 		});
 	}
 	
+	ContasReceberService.buscarlotefaturamentousuario(function (data){
+		$ctrl.lote_faturamento = data;
+		$ctrl.listaitensfaturamento = data.lista_itens;
+		$ctrl.calculartotal(data.lista_itens);
+		
+	});
+	
 	$ctrl.listaitensfaturamento = [];
 	
-	var verificarsejaselecionado = selecionado => {
-		if ($ctrl.listaitensfaturamento && selecionado) {
-			for (let itensfaturamento of $ctrl.listaitensfaturamento) {
-				if (selecionado.id == itensfaturamento.id) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	$ctrl.calculartotal = () => {
+	$ctrl.calculartotal = (data) => {
 		
 		$ctrl.totalhoras = 0;
 		$ctrl.totalvalor = 0;
 		
-		if ($ctrl.listaitensfaturamento) {
-			for (let itemfaturamento of $ctrl.listaitensfaturamento) {
+		if (data) {
+			for (let itemfaturamento of data) {
 				if (itemfaturamento.parcelafases) {
 					for (let parcelafase of itemfaturamento.parcelafases){
 						if (parcelafase.medicoes){
@@ -107,12 +109,20 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 					
 				modalInstance.result.then(function(data) {
 					if (data) {
-						for (let selecionado of data) {
-							if (!verificarsejaselecionado(selecionado)) {
-								$ctrl.listaitensfaturamento.push(selecionado);
-							}
+						
+						$ctrl.calculartotal(data);
+						
+						let context = {
+							'id': $ctrl.lote_faturamento ? $ctrl.lote_faturamento.id : null,
+							'valor_total': $ctrl.totalvalor,
+							'total_horas': $ctrl.totalhoras,
+							'lista_itens': data
 						}
-						$ctrl.calculartotal();
+						
+						$ctrl.lote_faturamento = ContasReceberService.gerarlotefaturamento(context, function (data){
+							$ctrl.lote_faturamento = data;
+							$ctrl.listaitensfaturamento = data.lista_itens;
+						});
 					}
 				}, function() {
 				});

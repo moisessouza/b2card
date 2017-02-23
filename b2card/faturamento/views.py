@@ -4,7 +4,8 @@ from faturamento.models import Parcela, Medicao, ParcelaFase, LoteFaturamento
 from faturamento.serializers import ParcelaSerializer, MedicaoSerializer, ParcelaFaseSerializer,\
     LoteFaturamentoSerializer
 from rest_framework.response import Response
-from utils.utils import converter_string_para_float, converter_string_para_data, formatar_data
+from utils.utils import converter_string_para_float, converter_string_para_data, formatar_data,\
+    formatar_para_valor_monetario
 from demandas.models import Demanda, Orcamento, ItemFase, OrcamentoFase
 from cadastros.models import ValorHora, TipoHora, Vigencia, PessoaFisica
 from rest_framework.decorators import api_view
@@ -265,6 +266,24 @@ def buscar_lote_faturamento_usuario(request, format=None):
     lote_faturamento = LoteFaturamentoSerializer(lote_faturamento).data
     
     lista_itens = ParcelaSerializer(lista_itens, many=True).data
+    if lista_itens:
+        for i in lista_itens:
+            
+            i['valor_parcela'] = formatar_para_valor_monetario(i['valor_parcela'])
+            
+            parcela_fases = ParcelaFase.objects.filter(parcela__id = i['id'])
+            parcela_fases = ParcelaFaseSerializer(parcela_fases, many=True).data
+            
+            if parcela_fases:
+                for p in parcela_fases:
+                    
+                    medicoes = Medicao.objects.filter(parcela_fase__id = p['id'])
+                    medicoes = MedicaoSerializer(medicoes, many=True).data
+                    if medicoes:
+                        for m in medicoes:
+                            m['valor_total'] = formatar_para_valor_monetario(m['valor_total'])
+                    p['medicoes'] = medicoes
+            i['parcelafases'] = parcela_fases
     
     lote_faturamento['lista_itens'] = lista_itens
     
@@ -291,9 +310,9 @@ def criar_lote_faturamento(request, format=None):
         lote_faturamento = LoteFaturamento()
     
     lote_faturamento.pessoa_fisica = pessoa_fisica
-    lote_faturamento.valor_total = valor_total
+    lote_faturamento.valor_total = converter_string_para_float(valor_total)
     lote_faturamento.total_horas = total_horas
-    lote_faturamento.data_criacao = datetime.datetime.date()
+    lote_faturamento.data_criacao = datetime.date.today()
     lote_faturamento.save()
 
     lista_itens = request.data['lista_itens']
@@ -301,8 +320,8 @@ def criar_lote_faturamento(request, format=None):
     if lista_itens:
         for i in lista_itens:
             if 'id' in i and i['id']:
-                parcela = Parcela.objects.filter(pk=i['id'])
+                parcela = Parcela.objects.get(pk=i['id'])
                 parcela.lote_faturamento = lote_faturamento
                 parcela.save()
                 
-    return Response(LoteFaturamento(lote_faturamento).data)
+    return Response(LoteFaturamentoSerializer(lote_faturamento).data)
