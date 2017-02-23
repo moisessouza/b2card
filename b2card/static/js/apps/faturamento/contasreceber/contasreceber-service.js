@@ -23,13 +23,13 @@ contasreceberservice.service('ContasReceberService', function($resource){
 			 });
 			return Parcela.search({}, args, callback);
 		},
-		gerarlotefaturamento: function (data, callback) {
-			var LoteFaturamento = $resource(BASE_URL + 'faturamento/api/lotefaturamento/');
-			return LoteFaturamento.save({}, data,  callback);
+		gerarpacoteitens: function (data, callback) {
+			var PacoteItens = $resource(BASE_URL + 'faturamento/api/pacoteitens/');
+			return PacoteItens.save({}, data,  callback);
 		},
-		buscarlotefaturamentousuario: function (callback) {
-			var LoteFaturamento = $resource(BASE_URL + 'faturamento/api/buscarlotefaturamento/');
-			return LoteFaturamento.get({}, callback);
+		buscarpacoteitensclienteid: function (cliente_id, callback) {
+			var PacoteItens = $resource(BASE_URL + 'faturamento/api/buscarpacoteitens/:id/');
+			return PacoteItens.get({'id': cliente_id}, callback);
 		}
 	}
 });

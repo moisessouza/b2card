@@ -27,8 +27,8 @@ urlpatterns = [
     url(r'^api/parcela/fase/tipohora/(?P<demanda_id>[0-9]+)/$', views.buscar_tipo_hora_por_fases),
     url(r'^api/contasreceber/search/$', views.search_contas_receber),
     url(r'^api/orcamento/(?P<demanda_id>[0-9]+)/$', views.buscar_orcamento_demanda_id),
-    url(r'^api/buscarlotefaturamento/$', views.buscar_lote_faturamento_usuario),
-    url(r'^api/lotefaturamento/$', views.criar_lote_faturamento)
+    url(r'^api/buscarpacoteitens/(?P<cliente_id>[0-9]+)/$', views.buscar_pacote_itens_cliente),
+    url(r'^api/pacoteitens/$', views.criar_pacote_itens)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

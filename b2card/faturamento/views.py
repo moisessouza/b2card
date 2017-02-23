@@ -1,13 +1,14 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from faturamento.models import Parcela, Medicao, ParcelaFase, LoteFaturamento
+from faturamento.models import Parcela, Medicao, ParcelaFase, PacoteItens
 from faturamento.serializers import ParcelaSerializer, MedicaoSerializer, ParcelaFaseSerializer,\
-    LoteFaturamentoSerializer
+    PacoteItensSerializer
 from rest_framework.response import Response
 from utils.utils import converter_string_para_float, converter_string_para_data, formatar_data,\
     formatar_para_valor_monetario, serializar_data
 from demandas.models import Demanda, Orcamento, ItemFase, OrcamentoFase
-from cadastros.models import ValorHora, TipoHora, Vigencia, PessoaFisica
+from cadastros.models import ValorHora, TipoHora, Vigencia, PessoaFisica,\
+    PessoaJuridica
 from rest_framework.decorators import api_view
 from demandas.serializers import OrcamentoFaseSerializer, OrcamentoSerializer,\
     ItemFaseSerializer
@@ -258,12 +259,12 @@ def buscar_orcamento_demanda_id(request, demanda_id, format=None):
     return Response(data);
 
 @api_view(['GET'])
-def buscar_lote_faturamento_usuario(request, format=None):
-    pessoa_fisica = PessoaFisica.objects.filter(prestador__usuario__id = request.user.id)[0]
-    lote_faturamento = LoteFaturamento.objects.filter(pessoa_fisica=pessoa_fisica).order_by('-pk')[0]
-    lista_itens = Parcela.objects.filter(lote_faturamento = lote_faturamento)
+def buscar_pacote_itens_cliente(request, cliente_id, format=None):
+
+    pacote_itens = PacoteItens.objects.filter(cliente__id = cliente_id).order_by('-pk')[0]
+    lista_itens = Parcela.objects.filter(pacote_itens = pacote_itens)
     
-    lote_faturamento = LoteFaturamentoSerializer(lote_faturamento).data
+    pacote_itens = PacoteItensSerializer(pacote_itens).data
     
     lista_itens = ParcelaSerializer(lista_itens, many=True).data
     if lista_itens:
@@ -286,35 +287,35 @@ def buscar_lote_faturamento_usuario(request, format=None):
                     p['medicoes'] = medicoes
             i['parcelafases'] = parcela_fases
     
-    lote_faturamento['lista_itens'] = lista_itens
+    pacote_itens['lista_itens'] = lista_itens
     
-    return Response(lote_faturamento)
+    return Response(pacote_itens)
 
 @api_view(['POST'])
-def criar_lote_faturamento(request, format=None):
+def criar_pacote_itens(request, format=None):
     
     valor_total = request.data['valor_total']
     total_horas = request.data['total_horas']
-    
-    pessoa_fisica = PessoaFisica.objects.filter(prestador__usuario__id = request.user.id)[0]
+    cliente_id = request.data['cliente_id']
     
     if 'id' in request.data and request.data['id']:
-        lote_faturamento = LoteFaturamento.objects.get(pk=request.data['id'])
-        parcelas = Parcela.objects.filter(lote_faturamento = lote_faturamento)
+        pacote_itens = PacoteItens.objects.get(pk=request.data['id'])
+        parcelas = Parcela.objects.filter(pacote_itens = pacote_itens)
         
         if parcelas:
             for i in parcelas:
-                i.lote_faturamento = None
+                i.pacote_itens = None
                 i.save()
         
     else:
-        lote_faturamento = LoteFaturamento()
-    
-    lote_faturamento.pessoa_fisica = pessoa_fisica
-    lote_faturamento.valor_total = converter_string_para_float(valor_total)
-    lote_faturamento.total_horas = total_horas
-    lote_faturamento.data_criacao = datetime.date.today()
-    lote_faturamento.save()
+        pacote_itens = PacoteItens()
+        pessoa_juridica = PessoaJuridica.objects.get(pk = cliente_id)
+        pacote_itens.cliente = pessoa_juridica
+        
+    pacote_itens.valor_total = converter_string_para_float(valor_total)
+    pacote_itens.total_horas = total_horas
+    pacote_itens.data_criacao = datetime.date.today()
+    pacote_itens.save()
 
     lista_itens = request.data['lista_itens']
     
@@ -322,7 +323,7 @@ def criar_lote_faturamento(request, format=None):
         for i in lista_itens:
             if 'id' in i and i['id']:
                 parcela = Parcela.objects.get(pk=i['id'])
-                parcela.lote_faturamento = lote_faturamento
+                parcela.pacote_itens = pacote_itens
                 parcela.save()
                 
-    return Response(LoteFaturamentoSerializer(lote_faturamento).data)
+    return Response(PacoteItensSerializer(pacote_itens).data)

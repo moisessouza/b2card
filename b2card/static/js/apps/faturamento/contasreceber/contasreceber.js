@@ -31,11 +31,13 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 		});
 	}
 	
-	ContasReceberService.buscarlotefaturamentousuario(function (data){
-		$ctrl.lote_faturamento = data;
-		$ctrl.listaitensfaturamento = data.lista_itens;
-		$ctrl.calculartotal(data.lista_itens);
-	});
+	$ctrl.buscarpacotecliente = () => {
+		ContasReceberService.buscarpacoteitensclienteid($ctrl.arguments.cliente_id, function (data){
+			$ctrl.pacote_itens = data;
+			$ctrl.listaitensfaturamento = data.lista_itens;
+			$ctrl.calculartotal(data.lista_itens);
+		});
+	};
 	
 	$ctrl.listaitensfaturamento = [];
 	
@@ -67,7 +69,6 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 		
 		ParcelaService.buscarorcamentopordemandaid(demanda.id, function(data){
 			demanda.orcamento = data;
-			$ctrl.listafases = data.fases;
 			
 			for (let fase of data.fases) {
 				for (let itemfase of fase.itensfase) {
@@ -111,7 +112,7 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 					if (data) {
 						
 						for (let item of data){
-							if (!item.lote_faturamento && !item.lote_faturamento.id) {
+							if (item.pacote_itens == null || !item.pacote_itens && !item.pacote_itens.id) {
 								$ctrl.listaitensfaturamento.push(item);
 							}
 						}
@@ -119,15 +120,16 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 						$ctrl.calculartotal($ctrl.listaitensfaturamento);
 						
 						let context = {
-							'id': $ctrl.lote_faturamento ? $ctrl.lote_faturamento.id : null,
+							'id': $ctrl.pacote_itens ? $ctrl.pacote_itens.id : null,
+							'cliente_id': $ctrl.arguments.cliente_id,		
 							'valor_total': $ctrl.totalvalor,
 							'total_horas': $ctrl.totalhoras,
 							'lista_itens': $ctrl.listaitensfaturamento
 						}
 						
-						$ctrl.lote_faturamento = ContasReceberService.gerarlotefaturamento(context, function () {
-							ContasReceberService.buscarlotefaturamentousuario(function (result){
-								$ctrl.lote_faturamento = result;
+						$ctrl.pacote_itens = ContasReceberService.gerarpacoteitens(context, function () {
+							ContasReceberService.buscarpacoteitensclienteid($ctrl.arguments.cliente_id, function (result){
+								$ctrl.pacote_itens = result;
 								$ctrl.listaitensfaturamento = result.lista_itens;
 								$ctrl.calculartotal(result.lista_itens);
 							});
@@ -147,15 +149,15 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 			$ctrl.calculartotal($ctrl.listaitensfaturamento);
 			
 			let context = {
-				'id': $ctrl.lote_faturamento ? $ctrl.lote_faturamento.id : null,
+				'id': $ctrl.pacote_itens ? $ctrl.pacote_itens.id : null,
 				'valor_total': $ctrl.totalvalor,
 				'total_horas': $ctrl.totalhoras,
 				'lista_itens': $ctrl.listaitensfaturamento
 			}
 				
-			$ctrl.lote_faturamento = ContasReceberService.gerarlotefaturamento(context, function () {
-				ContasReceberService.buscarlotefaturamentousuario(function (result){
-					$ctrl.lote_faturamento = result;
+			$ctrl.pacote_itens = ContasReceberService.gerarpacoteitens(context, function () {
+				ContasReceberService.buscarpacoteitensusuario(function (result){
+					$ctrl.pacote_itens = result;
 					$ctrl.listaitensfaturamento = result.lista_itens;
 					$ctrl.calculartotal(result.lista_itens);
 				});
@@ -166,14 +168,11 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 	$ctrl.enviarparaaprovacao = () => {
 		
 		var data = {
-			'id': $ctrl.lote_faturamento_id,
+			'id': $ctrl.pacote_itens_id,
 			'valor_total': $ctrl.valor_total,
 			'total_horas': $ctrl.total_horas,
 			'lista_itens': $ctrl.listaitensfaturamento
 		}
-		
-		//$ctrl.lote_faturamento = ContasReceberService.gerarlotefaturamento(data);
-		
 	}
 	
 	$ctrl.enviarparafaturamento = () => {

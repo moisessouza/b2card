@@ -59,7 +59,7 @@ parcela.controller('ModalParcelasController', function ($scope, $window, $uibMod
 			
 			if (lote_faturamento && data) {
 				for (let parcela of data) {
-					if (parcela.lote_faturamento && parcela.lote_faturamento.id) {
+					if (parcela.pacote_itens && parcela.pacote_itens.id) {
 						parcela.selecionado = true;
 					} else {
 						for (let itemfaturamento of listaitensfaturamento) {

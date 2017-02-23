@@ -54,7 +54,7 @@ button.margin {
 				<div class="col-sm-3">
 				<div class="form-group">
 					<label for="cliente">Cliente</label>
-					<select type="text" id="cliente" name="cliente" ng-model="$ctrl.arguments.cliente_id" ng-change="$ctrl.buscarvalorhoracliente();" class="form-control" ng-options="c.id as c.pessoa.nome_razao_social for c in $ctrl.listaclientes" required>
+					<select type="text" id="cliente" name="cliente" ng-model="$ctrl.arguments.cliente_id" ng-change="$ctrl.buscarpacotecliente();" class="form-control" ng-options="c.id as c.pessoa.nome_razao_social for c in $ctrl.listaclientes" required>
 						<option value="">Selecione...</option>
 					</select>
 				</div>
