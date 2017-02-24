@@ -32,6 +32,7 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 	}
 	
 	$ctrl.buscarpacotecliente = () => {
+		$ctrl.resultados = [];
 		ContasReceberService.buscarpacoteitensclienteid($ctrl.arguments.cliente_id, function (data){
 			$ctrl.pacote_itens = data;
 			$ctrl.listaitensfaturamento = data.lista_itens;

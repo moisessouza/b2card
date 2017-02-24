@@ -339,13 +339,14 @@ class DemandaDetail(APIView):
                                     if 'valor_hora' in i:
                                         valor_hora = ValorHora.objects.get(pk=i['valor_hora']['id'])
                                         del i['valor_hora']
-                                        
-                                    item_fase = ItemFase(**i)
-                                    item_fase.valor_selecionado = converter_string_para_float(item_fase.valor_selecionado)
-                                    item_fase.valor_total = converter_string_para_float(item_fase.valor_total)
-                                    item_fase.valor_hora = valor_hora
-                                    item_fase.orcamento_fase = orcamento_fase
-                                    item_fase.save()
+                                    
+                                    if valor_hora:
+                                        item_fase = ItemFase(**i)
+                                        item_fase.valor_selecionado = converter_string_para_float(item_fase.valor_selecionado)
+                                        item_fase.valor_total = converter_string_para_float(item_fase.valor_total)
+                                        item_fase.valor_hora = valor_hora
+                                        item_fase.orcamento_fase = orcamento_fase
+                                        item_fase.save()
                                     
                                 elif 'id' in i:
                                     item_fase = ItemFase.objects.get(pk=i['id'])
