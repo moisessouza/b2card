@@ -26,7 +26,7 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 	$ctrl.listavalorhora = ValorHoraService.buscarvalorhoras();
 	
 	$ctrl.pesquisar = function () {
-		PesquisaDemandaService.buscardemandas($ctrl.arguments, function (data) {
+		PesquisaDemandaService.buscardemandaunidadeadministrativa($ctrl.arguments, function (data) {
 			$ctrl.resultados = data.demandas;
 		});
 	}

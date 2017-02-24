@@ -228,6 +228,11 @@ def search_contas_receber(request, format=None):
     
     if 'status' in data:
         argumentos['status'] = data['status']
+        
+    if not request.user.is_superuser:
+        pessoa_fisica = PessoaFisica.objects.filter(prestador__usuario__id=request.user.id)[0]
+        unidade_administrativas = pessoa_fisica.unidade_administrativas.all()
+        argumentos['demanda__unidade_administrativa__in']=unidade_administrativas
     
     parcelas = Parcela.objects.filter(**argumentos);
     

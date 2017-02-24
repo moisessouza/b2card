@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^api/(?P<demanda_id>[0-9]+)/orcamento/totalhoras/$', views.buscar_total_horas_orcamento),
     url(r'^api/(?P<demanda_id>[0-9]+)/orcamento/totalhoras/valorhora/$', views.buscar_total_horas_por_valor_hora),
     url(r'^api/query/$', views.buscar_lista_por_parametro),
+    url(r'^api/unidade_administrativa/$', views.buscar_lista_por_unidade_administrativa),
     url(r'^api/profissionalatividade/(?P<atividade_profissional_id>[0-9]+)/possuialocacao/$', views.atividade_profissional_possui_alocacao),
     url(r'^api/atividade/(?P<atividade_id>[0-9]+)/possuialocacao/$', views.atividade_possui_alocacao),
     url(r'^api/texto/(?P<texto>[a-z]+)/$', views.buscar_lista_por_texto),

@@ -25,6 +25,7 @@ from faturamento.serializers import ParcelaSerializer, MedicaoSerializer, Parcel
 from utils.utils import converter_string_para_data, formatar_data, converter_string_para_float,\
     serializar_data
 from django.db.models.functions.base import Coalesce
+from cadastros.serializers import UnidadeAdministrativaSerializer
 
 
 # Create your views here.
@@ -740,6 +741,28 @@ def buscar_total_horas_por_valor_hora(request, demanda_id, format=None):
     return Response(resultado)
 
 REGISTROS_POR_PAGINA = 14
+
+@api_view(['POST'])
+def buscar_lista_por_unidade_administrativa(request, format=None):
+    
+    unidade_administrativas = None
+    if not request.user.is_superuser:
+        pessoa_fisica = PessoaFisica.objects.filter(prestador__usuario__id= request.user.id)[0]
+        unidade_administrativas = pessoa_fisica.unidade_administrativas.all()
+
+    demandas = Demanda.objects.filter(cliente__id = request.data['cliente_id'])
+    
+    if unidade_administrativas:
+        demandas = demandas.filter(unidade_administrativa__in = unidade_administrativas)
+    
+    demandas = DemandaSerializer(demandas, many=True).data
+    
+    dict = {
+       'demandas': demandas,
+       'total_paginas': 1 
+    }
+    
+    return Response(dict)
 
 @api_view(['POST'])
 def buscar_lista_por_parametro(request, format=None):

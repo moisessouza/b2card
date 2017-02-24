@@ -19,6 +19,12 @@ pesquisademandaservices.service('PesquisaDemandaService', function($resource){
 				'set': {method:'POST'}
 			});
 			return Demandas.set({}, argumentos, callback);
+		},
+		buscardemandaunidadeadministrativa: function (argumentos, callback) {
+			var Demandas = $resource(BASE_URL + 'demandas/api/unidade_administrativa/', {}, {
+				'set': {method:'POST'}
+			});
+			return Demandas.set({}, argumentos, callback);
 		}
 	}
 });
