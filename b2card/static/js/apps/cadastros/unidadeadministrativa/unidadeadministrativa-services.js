@@ -18,6 +18,10 @@ centrocustoservices.service('UnidadeAdministrativaService', function($resource){
 			var UnidadeAdministrativa = $resource(BASE_URL + 'cadastros/unidadeadministrativa/api/list/');
 			return UnidadeAdministrativa.query(callback);
 		},
+		buscarunidadeadministrativaporpessoa: function (callback) {
+			var UnidadeAdministrativa = $resource(BASE_URL + 'cadastros/unidadeadministrativa/api/pessoa/');
+			return UnidadeAdministrativa.query(callback);
+		},
 		salvar: function(data, callback) {
 			var UnidadeAdministrativa = $resource(BASE_URL + 'cadastros/unidadeadministrativa/api/detail/');
 			return UnidadeAdministrativa.save(data, callback);

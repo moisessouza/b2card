@@ -211,7 +211,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 	share.listafuncionarios = $ctrl.listafuncionarios;
 	
 	$ctrl.listacentroresultados = CentroResultadoService.buscarcentroresultados();
-	$ctrl.listaunidadeadministrativas = UnidadeAdministrativaService.buscarunidadeadministrativas(function () {
+	$ctrl.listaunidadeadministrativas = UnidadeAdministrativaService.buscarunidadeadministrativaporpessoa(function () {
 		if ($ctrl.demanda.$promise) {
 			$ctrl.demanda.$promise.then(function (){
 				if (!$ctrl.demanda.orcamento.margem_risco || !$ctrl.demanda.orcamento.lucro_desejado || !$ctrl.demanda.orcamento.imposto_devidos) {
