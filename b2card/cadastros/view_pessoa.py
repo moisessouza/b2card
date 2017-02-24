@@ -19,6 +19,7 @@ from recursos.models import Cargo
 from utils.utils import converter_string_para_data, formatar_data, \
     converter_string_para_float
 from rest_framework.decorators import api_view
+from cadastros.serializers import UnidadeAdministrativaSerializer
 
 
 def index(request):
@@ -171,9 +172,14 @@ class PessoaDetail(APIView):
             data['data_emicao_pis'] = formatar_data(pessoa_fisica[0].data_emicao_pis)
             data['prestadores'] = self.serializar_prestador(pessoa_fisica[0])
             data['custos_prestador'] = self.serializar_custos_prestador(pessoa_fisica[0])
+            data['unidade_administrativas'] = self.serializar_unidade_administrativas(pessoa_fisica[0])
             return data
         
         return None
+    
+    def serializar_unidade_administrativas(self, pessoa_fisica):
+        unidade_administrativas = pessoa_fisica.unidade_administrativas.all()
+        return UnidadeAdministrativaSerializer(unidade_administrativas, many=True).data
     
     def serializar_custos_prestador(self, pessoa_fisica):
         custos_prestador = CustoPrestador.objects.filter(pessoa_fisica = pessoa_fisica)
@@ -295,6 +301,11 @@ class PessoaDetail(APIView):
             custos_prestador = pf['custos_prestador']
             del pf['custos_prestador']
         
+        unidade_administrativas = None
+        if 'unidade_administrativas' in pf:
+            unidade_administrativas = pf['unidade_administrativas']
+            del pf['unidade_administrativas']
+        
         pessoa_fisica = PessoaFisica(**pf)
 
         pessoa_fisica.pessoa = pessoa
@@ -306,6 +317,23 @@ class PessoaDetail(APIView):
         
         self.gravar_prestador(prestadores, pessoa_fisica)
         self.gravar_custo_prestador(custos_prestador, pessoa_fisica)
+        self.gravar_unidade_administrativas(unidade_administrativas, pessoa_fisica)
+    
+    def gravar_unidade_administrativas(self, unidade_administrativas, pessoa_fisica):
+        
+        unidades_administrativas_related = pessoa_fisica.unidade_administrativas.all()
+        if unidades_administrativas_related:
+            for r in unidades_administrativas_related:
+                pessoa_fisica.unidade_administrativas.remove(r)
+            pessoa_fisica.save()
+        
+        if unidade_administrativas:
+            for u in unidade_administrativas:
+                if 'id' in u:
+                    unidade = UnidadeAdministrativa.objects.get(pk=u['id'])
+                    pessoa_fisica.unidade_administrativas.add(unidade)
+        
+        pessoa_fisica.save()
     
     def gravar_custo_prestador(self, custos_prestador, pessoa_fisica):
         if custos_prestador:

@@ -124,6 +124,7 @@ class PessoaFisica(models.Model):
     secao = models.CharField(max_length=4, default=None)
     doc_militar = models.CharField(max_length = 30, default = None)
     categoria_doc_militar = models.CharField(max_length = 10, default = None)
+    unidade_administrativas = models.ManyToManyField(UnidadeAdministrativa, default = None)
     
 class PessoaJuridica(models.Model):
     pessoa = models.ForeignKey(Pessoa, default = None)

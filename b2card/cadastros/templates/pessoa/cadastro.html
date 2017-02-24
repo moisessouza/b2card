@@ -5,6 +5,7 @@
 	<script src="/static/js/apps/cadastros/pessoa/pessoa.js"></script>
 	<script src="/static/js/apps/cadastros/pessoa/pessoa-services.js"></script>
 	<script src="/static/js/apps/cadastros/centrocusto/centrocusto-services.js"></script>
+	<script src="/static/js/apps/cadastros/unidadeadministrativa/unidadeadministrativa-services.js"></script>
 	<script src="/static/js/apps/cadastros/centroresultado/centroresultado-services.js"></script>
 	<script src="/static/js/apps/cadastros/contagerencial/contagerencial-services.js"></script>
 	<script src="/static/js/apps/cadastros/naturezaoperacao/naturezaoperacao-services.js"></script>
@@ -55,6 +56,7 @@ button.exclude {
 		  <li ng-show="$ctrl.pessoa.tipo=='F' && $ctrl.verificardisponibilidadeaba('#dadosprestador')"><a data-toggle="tab" href="#dadosprestador">Prestador</a></li>
 		  <li ng-show="$ctrl.verificardisponibilidadeaba('#apropriacoes')"><a data-toggle="tab" href="#apropriacoes">Apropriação</a></li>
 		  <li ng-show="$ctrl.pessoa.tipo=='F'  && $ctrl.verificardisponibilidadeaba('#custoprestador')"><a data-toggle="tab" href="#custoprestador">Custo prestador</a></li>
+		  <li ng-show="$ctrl.pessoa.tipo=='F'  && $ctrl.verificardisponibilidadeaba('#unidadeadministrativa')"><a data-toggle="tab" href="#unidadeadministrativa">Unidades administrativas</a></li>
 		</ul>
 		<div class="tab-content">
 			<div id="dadoscadastro" ng-if="$ctrl.verificardisponibilidadeaba('#dadoscadastro')" class="tab-pane in active">
@@ -793,6 +795,28 @@ button.exclude {
 						</tbody>
 					</table>
 				</div>
+			</div>
+			<div id="unidadeadministrativa" ng-if="$ctrl.verificardisponibilidadeaba('#unidadeadministrativa')" class="tab-pane">
+				
+				<table class="table" style="width: 400px; margin-top: 20px;">
+					<thead>
+						<tr>
+							<th></th>
+							<th>Unidade administrativa</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="unidade_administrativa in $ctrl.listaunidadeadministrativas">
+							<td>
+								<input type="checkbox" ng-model="unidade_administrativa.selecionado">
+							</td>
+							<td>
+								{{unidade_administrativa.nome}}
+							<td/>
+						</tr>
+					</tbody>
+				</table>
+			
 			</div>
 		</div>
 		<div class="col-sm-12" style="margin-bottom: 15px; padding-left: 0px">

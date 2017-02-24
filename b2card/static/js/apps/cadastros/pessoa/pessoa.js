@@ -1,6 +1,6 @@
 "use strict";
 
-var pessoa = angular.module('pessoa', ['pessoa-services', 'centrocusto-services','centroresultado-services', 
+var pessoa = angular.module('pessoa', ['pessoa-services', 'centrocusto-services','centroresultado-services', 'unidadeadministrativa-services',
     'contagerencial-services',	'naturezaoperacao-services', 'recursos-services', 'commons', 'ui.bootstrap', 'ui.mask']);
 
 pessoa.run(function (uiMaskConfig) {
@@ -57,7 +57,8 @@ pessoa.config(['$httpProvider', 'CommonsServiceProvider', function($httpProvider
 }]);
 
 pessoa.controller('PessoaController', function ($scope, $window, $uibModal, PessoaService, CentroCustoService, 
-		CentroResultadoService, ContaGerencialService, NaturezaOperacaoService, AutenticationService, MessageService, CommonsService, RecursosService){
+		CentroResultadoService, ContaGerencialService, NaturezaOperacaoService, AutenticationService, MessageService, CommonsService, RecursosService,
+		UnidadeAdministrativaService){
 	var $ctrl = this;
 	
 	if (pessoa_id) {
@@ -77,6 +78,19 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 							custo_prestador.valor = CommonsService.formatarnumero(custo_prestador.valor);
 						}
 					}
+					
+					UnidadeAdministrativaService.buscarunidadeadministrativas(function (data){
+						 $ctrl.listaunidadeadministrativas = data;
+						 if (pessoa.pessoa_fisica.unidade_administrativas) {
+							 for (let u of $ctrl.listaunidadeadministrativas) {
+								 for (let pu of pessoa.pessoa_fisica.unidade_administrativas){
+									 if (u.id == pu.id){
+										 u.selecionado = true;
+									 }
+								 }
+							 }
+						 }
+					});
 				}
 			});
 		});
@@ -97,8 +111,10 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 	$ctrl.listacentrocusto = CentroCustoService.buscarcentrocustos();
 	$ctrl.listapessoasjuridicas = PessoaService.buscarpessoasjuridicas();
 	
+	
 	var abas = ['#dadoscadastro', '#endereco', '#telefone', '#dadosbancarios', 
-		'#telefonecontato', '#dadosprestador', '#apropriacoes', '#custoprestador']
+		'#telefonecontato', '#dadosprestador', '#apropriacoes', '#custoprestador',
+		'#unidadeadministrativa']
 	
 	$ctrl.listaabasautorizadas = AutenticationService.buscarabasautorizadas(abas, function (){
 		$ctrl.show = true;
@@ -169,6 +185,19 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 	
 	$ctrl.salvar = function () {
 		MessageService.clear();
+		
+		if ($ctrl.pessoa.pessoa_fisica) {
+			$ctrl.pessoa.pessoa_fisica.unidade_administrativas = [];
+			
+			if ($ctrl.listaunidadeadministrativas) {
+				for (let unidade of $ctrl.listaunidadeadministrativas) {
+					if (unidade.selecionado) {
+						$ctrl.pessoa.pessoa_fisica.unidade_administrativas.push(unidade)
+					}
+				}
+			}
+		}
+		
 		$ctrl.pessoa = PessoaService.salvarpessoa($ctrl.pessoa, function (pessoa) {
 			if (pessoa.pessoa_fisica){
 				if (pessoa.pessoa_fisica.custos_prestador){
