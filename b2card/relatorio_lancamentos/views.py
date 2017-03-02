@@ -264,7 +264,9 @@ def relatorio(request):
     tipo_relatorio = request.POST['tipo_relatorio']
 
     alocacao_horas = AlocacaoHoras.objects.all()
-    if not request.user.is_superuser:
+    eh_gestor = verificar_gestor(request)
+    
+    if not request.user.is_superuser and not eh_gestor:
         alocacao_horas = alocacao_horas.filter(atividade_profissional__pessoa_fisica__prestador__usuario__id=request.user.id)
         
     periodo = request.POST['periodo']
