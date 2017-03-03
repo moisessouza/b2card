@@ -122,8 +122,8 @@ class PessoaFisica(models.Model):
     num_titulo_eleitoral = models.CharField(max_length=30, default=None)
     zona = models.CharField(max_length=4, default = None)
     secao = models.CharField(max_length=4, default=None)
-    doc_militar = models.CharField(max_length = 30, default = None)
-    categoria_doc_militar = models.CharField(max_length = 10, default = None)
+    doc_militar = models.CharField(max_length = 30, default = None, null=True)
+    categoria_doc_militar = models.CharField(max_length = 10, default = None, null=True)
     unidade_administrativas = models.ManyToManyField(UnidadeAdministrativa, default = None)
     
 class PessoaJuridica(models.Model):
