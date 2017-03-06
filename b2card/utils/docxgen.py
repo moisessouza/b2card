@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from _io import BytesIO, TextIOWrapper, StringIO
+from io import BytesIO
 import zipfile
 from xml.etree import ElementTree as ET
 from xml.etree.ElementTree import Element, SubElement, Comment, tostring
@@ -8,7 +8,7 @@ from demandas.models import Orcamento, OrcamentoFase, ItemFase
 
 def realizar_replace_docx(demanda_id, template_docx):
     
-    arquivo_gerado = 'C:/b2card/arquivos_gerados/demo4.docx'
+    arquivo_gerado = BytesIO()
     
     id_pad = formatar_id(int(demanda_id))
     

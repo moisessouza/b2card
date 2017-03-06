@@ -402,10 +402,8 @@ def gerar_arquivo_faturamento(request, demanda_id):
     arquivo_template = 'C:/b2card/arquivos_template/proposta_tecnica.docx'
     
     arquivo_gerado = realizar_replace_docx(demanda_id, arquivo_template)
-    
-    f = open(arquivo_gerado, mode='rb')
 
-    response = HttpResponse(f, content_type='application/force-download')
+    response = HttpResponse(arquivo_gerado.getvalue(), content_type='application/force-download')
     response['Content-Disposition'] = 'attachment; filename="foo1.docx"'
     return response
     
