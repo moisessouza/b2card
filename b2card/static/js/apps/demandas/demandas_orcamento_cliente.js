@@ -1,6 +1,6 @@
 "use strict";
 
-demandas.controller('OrcamentoClienteController', function($rootScope, ValorHoraService, $uibModal, FaseService, CommonsService, share){
+demandas.controller('OrcamentoClienteController', function($rootScope, $window, ValorHoraService, $uibModal, FaseService, CommonsService, share){
 	var $ctrl = this;
 	$ctrl.share = share;
 	
@@ -59,6 +59,10 @@ demandas.controller('OrcamentoClienteController', function($rootScope, ValorHora
 			}				
 		}
 	});
+	
+	$ctrl.gerararquivoproposta = () => {
+		$window.open(BASE_URL + 'faturamento/gerar_arquivo_faturamento/' + share.demanda.id, '_blank');
+	}
 	
 	$ctrl.modalprevisaofaturamento = function (){
 		var modalInstance = $uibModal.open({
