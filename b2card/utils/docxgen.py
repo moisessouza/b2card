@@ -104,12 +104,88 @@ def gerar_tabela(demanda_id):
     
     for l in linhas:
         adicionar_linha_tabela(tbl, l)
+        
+    adicionar_rodape(tbl, orcamento)
     
     xml_string = tostring(tbl)
     xml_string = xml_string.decode()
     
     return xml_string
 
+def adicionar_rodape(tbl, orcamento):
+    
+    tr = SubElement(tbl, 'w:tr', attrib = {'w:rsidR': "00492691", 'w:rsidTr':"00492691"})
+    trPr = SubElement(tr, 'w:trPr')
+    SubElement(trPr, 'w:trHeight', attrib = {'w:val':"270"})
+    
+    adicionar_coluna_rodape(tr, 'Total')
+    adicionar_coluna_rodape(tr, None)
+    adicionar_coluna_rodape(tr, None)
+    adicionar_coluna_rodape(tr, '0')
+    adicionar_coluna_rodape(tr, '0')
+    adicionar_coluna_rodape(tr, '0')
+    adicionar_coluna_rodape(tr, None)
+    
+
+def adicionar_coluna_rodape(tr, coluna):
+    
+    tc = SubElement(tr, 'w:tc')
+    
+    tcPr = SubElement(tc, 'w:tcPr')
+    SubElement(tcPr, 'w:tcW', attrib={'w:w':"2380", 'w:type':"dxa"})
+    #SubElement(tcPr, 'w:vMerge', attrib={'w:val':"restart"})
+    tcBorders = SubElement(tcPr, 'w:tcBorders')
+    SubElement(tcBorders, 'w:top', attrib = { 'w:val':"nil"})
+    SubElement(tcBorders, 'w:left', attrib = {'w:val':"single", 'w:sz':"8", 'w:space':"0", 'w:color':"auto"})
+    SubElement(tcBorders, 'w:bottom', attrib = {'w:val':"single", 'w:sz':"8", 'w:space':"0", 'w:color':"auto"})
+    SubElement(tcBorders, 'w:right', attrib = {'w:val':"single", 'w:sz':"8", 'w:space':"0", 'w:color':"auto"})
+    SubElement(tcPr,'w:shd', attrib= { 'w:val':"clear", 'w:color':"000000", 'w:fill':"808080"})
+    SubElement(tcPr, 'w:vAlign', attrib = {'w:val':"center"}) 
+    SubElement(tcPr, 'w:hideMark')
+    
+    if coluna:
+    
+        p = SubElement(tc, 'w:p', attrib= { 'w:rsidR':"002C6851", 'w:rsidRDefault':"002C6851"})
+        pPr = SubElement(p, 'w:pPr')
+        SubElement(pPr, 'w:jc', attrib={'w:val':"center"})
+        rPr = SubElement(pPr, 'w:rPr')
+        SubElement(rPr, 'w:rFonts',  attrib ={ 'w:ascii':"Calibri", 'w:hAnsi':"Calibri", 'w:cs':"Arial" })
+        SubElement(rPr, 'w:b')
+        SubElement(rPr, 'w:bCs')
+        SubElement(rPr, 'w:color', attrib= {'w:val':"000000"})
+        SubElement(rPr, 'w:sz', attrib= {'w:val':"20"})
+        SubElement(rPr, 'w:szCs', attrib= {'w:val':"20"})
+        
+        r = SubElement(p, 'w:r')
+        pPr = SubElement(r, 'w:pPr')
+        SubElement(pPr, 'w:jc', attrib = {'w:val':"center"})
+        rPr = SubElement(pPr, 'w:rPr')
+        SubElement(rPr, 'w:rFonts', attrib = {'w:ascii': "Calibri", 'w:hAnsi':"Calibri", 'w:cs':"Arial"})
+        SubElement(rPr, 'w:color', attrib = {'w:val':"000000"})
+        SubElement(rPr, 'w:sz', attrib = {'w:val':"20"})
+        SubElement(rPr, 'w:szCs', attrib = {'w:val':"20"})
+        
+        t = SubElement(r, 'w:t')
+        t.text = str(coluna)
+    else:
+        tcPr = SubElement(tc, 'w:tcPr')
+        SubElement(tcPr, 'w:tcW', attrib = {'w:w':"2380", 'w:type':"dxa"})
+        tcBorders = SubElement(tcPr, 'w:tcBorders')
+        SubElement(tcBorders, 'w:top', attrib = {'w:val': 'nil'})
+        SubElement(tcBorders, 'w:left', attrib = {'w:val': "single",'w:sz':"8", 'w:space':"0", 'w:color':"auto"})
+        SubElement(tcBorders, 'w:bottom', attrib = {'w:val':"single", 'w:sz':"8", 'w:space':"0", 'w:color':"000000"})
+        SubElement(tcBorders, 'w:right', attrib = {'w:val':"single", 'w:sz':"8", 'w:space':"0", 'w:color':"auto"})
+        SubElement(tcPr, 'w:vAlign', attrib = {'w:val':"center"})
+        SubElement(tcPr, 'w:hideMark')
+        
+        p = SubElement(tc, 'w:p', attrib = { 'w:rsidR':"00492691", 'w:rsidRDefault':"00492691"})
+        pPr = SubElement(p, 'w:pPr')
+        rPr = SubElement(pPr, 'w:rPr')
+        SubElement(rPr, 'w:rFonts', attrib = {'w:ascii': "Calibri", 'w:hAnsi':"Calibri", 'w:cs':"Arial"})
+        SubElement(rPr, 'w:color', attrib = {'w:val':"000000"})
+        SubElement(rPr, 'w:sz', attrib = {'w:val':"20"})
+        SubElement(rPr, 'w:szCs', attrib = {'w:val':"20"})
+    
 def buscar_total_horas_orcamento_fase(item_fases):
     soma = 0;
     
