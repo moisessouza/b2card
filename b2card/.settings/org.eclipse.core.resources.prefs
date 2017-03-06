@@ -11,3 +11,5 @@ encoding//faturamento/models.py=utf-8
 encoding//gestor/views.py=utf-8
 encoding//inicial/views.py=utf-8
 encoding//relatorio_lancamentos/views.py=utf-8
+encoding//utils/docxgen.py=utf-8
+encoding/teste.py=utf-8

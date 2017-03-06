@@ -3,34 +3,22 @@ from _io import BytesIO, TextIOWrapper, StringIO
 import zipfile
 from xml.etree import ElementTree as ET
 from xml.etree.ElementTree import Element, SubElement, Comment, tostring
+from utils.utils import formatar_id
+from demandas.models import Orcamento, OrcamentoFase, ItemFase
 
-def realizar_replace_docx(arquivo_docx):
+def realizar_replace_docx(demanda_id, template_docx):
     
-    arquivo_media = 'demo4.docx'
+    arquivo_gerado = 'demo4.docx'
     
-    zin = zipfile.ZipFile (arquivo_docx, 'r')
-    zout = zipfile.ZipFile (arquivo_media, 'w')
+    id_pad = formatar_id(demanda_id)
+    
+    zin = zipfile.ZipFile (template_docx, 'r')
+    zout = zipfile.ZipFile (arquivo_gerado, 'w')
     
     document_xml = zin.read('word/document.xml').decode()
-    document_xml = document_xml.replace('###CODIGODEMANDA###', 'realizou o replace')
+    document_xml = document_xml.replace('###CODIGODEMANDA###', id_pad)
     
-    tbl = criar_tabela()
-    cab = adicionar_cabecalho(tbl)
-    
-    adicionar_coluna_cabecalho(cab, ["Fase"])
-    adicionar_coluna_cabecalho(cab, ["Perfil"])
-    adicionar_coluna_cabecalho(cab, ["Vlr Hora"])
-    adicionar_coluna_cabecalho(cab, ["Esforço", "(Horas)"])
-    adicionar_coluna_cabecalho(cab, ["Esforço", "(Horas P/Fase)"])
-    adicionar_coluna_cabecalho(cab, ["Valor", "(P/Perfil)"])
-    adicionar_coluna_cabecalho(cab, ["Prazo", "(Dias)"])
-    
-    adicionar_linha_tabela(tbl, ['TSD', 'Consultor', 'R$ 94,14', '30', '50', 'R$ 0,00', '1'])
-    adicionar_linha_tabela(tbl, [None, 'Documentação', 'R$ 86,61', '20', None, None, None])
-    adicionar_linha_tabela(tbl, ['Desenvolvimento e Testes unitários', 'Analista Sr.', 'R$ 86,61', '0', '0', 'R$ 0,00', '1'])
-    
-    xml_string = tostring(tbl)
-    xml_string = xml_string.decode()
+    xml_string = gerar_tabela()
     
     document_xml = document_xml.replace('###TABELA###', xml_string)
     
@@ -46,7 +34,7 @@ def realizar_replace_docx(arquivo_docx):
             header = zin.read('word/header{0}.xml'.format(count)).decode()
             list_files.append('word/header{0}.xml'.format(count))
             if header:
-                header = header.replace('###CODIGODEMANDA###', 'fez no cabecalho')
+                header = header.replace('###CODIGODEMANDA###', id_pad)
                 zout.writestr('word/header{0}.xml'.format(count), header)
             else:
                 exists = False    
@@ -65,8 +53,70 @@ def realizar_replace_docx(arquivo_docx):
     zin.close()
     zout.close()
     
-    return arquivo_media
-  
+    return arquivo_gerado
+
+def gerar_tabela(demanda_id):
+
+    orcamento = Orcamento.objects.get(demanda__id = demanda_id)
+    
+    orcamento_fases = OrcamentoFase.objects.filter(orcamento = orcamento)
+    
+    linhas = [];
+    
+    for orcamento_fase in orcamento_fases:
+        
+        item_fases = ItemFase.objects.filter(orcamento_fase = orcamento_fase)
+        
+        eh_primeiro = True
+        
+        for i in item_fases:
+            linha = []
+            if eh_primeiro:
+                linha.append(orcamento_fase.fase.descricao)
+                linha.append(i.valor_hora.centro_resultado.nome)
+                linha.append(i.valor_selecionado)
+                linha.append(i.quantidade_horas)
+                linha.append(buscar_total_horas_orcamento_fase(item_fases))
+                linha.append(orcamento_fase.valor_total)
+                linha.append('0')
+            else:
+                linha.append(None)
+                linha.append(i.valor_hora.centro_resultado.nome)
+                linha.append(i.valor_selecionado)
+                linha.append(i.quantidade_horas)
+                linha.append(None)
+                linha.append(None)
+                linha.append(None)
+            linhas.append(linha)
+
+    tbl = criar_tabela()
+    
+    cab = adicionar_cabecalho(tbl)
+    
+    adicionar_coluna_cabecalho(cab, ["Fase"])
+    adicionar_coluna_cabecalho(cab, ["Perfil"])
+    adicionar_coluna_cabecalho(cab, ["Vlr Hora"])
+    adicionar_coluna_cabecalho(cab, ["Esforço", "(Horas)"])
+    adicionar_coluna_cabecalho(cab, ["Esforço", "(Horas P/Fase)"])
+    adicionar_coluna_cabecalho(cab, ["Valor", "(P/Fase)"])
+    adicionar_coluna_cabecalho(cab, ["Prazo", "(Dias)"])
+    
+    for l in linhas:
+        adicionar_linha_tabela(tbl, l)
+    
+    xml_string = tostring(tbl)
+    xml_string = xml_string.decode()
+    
+    return xml_string
+
+def buscar_total_horas_orcamento_fase(item_fases):
+    soma = 0;
+    
+    for i in item_fases:
+        soma += i.quantidade_horas
+    
+    return soma
+
 def criar_tabela():
     
     ET.register_namespace('w', 'http://schemas.openxmlformats.org/wordprocessingml/2006/main')
@@ -229,5 +279,3 @@ def adicionar_coluna(tr, coluna):
         SubElement(rPr, 'w:color', attrib = {'w:val':"000000"})
         SubElement(rPr, 'w:sz', attrib = {'w:val':"20"})
         SubElement(rPr, 'w:szCs', attrib = {'w:val':"20"})
-
-realizar_replace_docx('proposta_tecnica.docx')

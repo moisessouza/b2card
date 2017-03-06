@@ -70,5 +70,8 @@ def formatar_para_valor_monetario(numero):
         return locale.currency(numero, symbol=False, grouping=True)
     else:
         return None
+    
+def formatar_id (id):
+    return format(id, '04d')
         
     
