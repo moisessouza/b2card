@@ -31,7 +31,8 @@ urlpatterns = [
     url(r'^api/pacoteitens/$', views.criar_pacote_itens),
     url(r'^api/enviaraprovacao/$', views.enviar_para_aprovacao),
     url(r'^api/enviarfaturamento/$', views.enviar_para_faturamento),
-    url(r'^gerar_arquivo_faturamento/(?P<demanda_id>[0-9]+)/$', views.gerar_arquivo_faturamento)
+    url(r'^gerar_arquivo_faturamento/(?P<demanda_id>[0-9]+)/$', views.gerar_arquivo_faturamento),
+    url(r'^gerar_arquivo_faturamento_comercial/(?P<demanda_id>[0-9]+)/$', views.gerar_arquivo_faturamento_comercial)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

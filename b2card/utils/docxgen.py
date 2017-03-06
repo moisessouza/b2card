@@ -4,11 +4,13 @@ import zipfile
 from xml.etree import ElementTree as ET
 from xml.etree.ElementTree import Element, SubElement, Comment, tostring
 from utils.utils import formatar_id, formatar_para_valor_monetario_com_simbolo
-from demandas.models import Orcamento, OrcamentoFase, ItemFase
+from demandas.models import Orcamento, OrcamentoFase, ItemFase, Demanda
 
-def realizar_replace_docx(demanda_id, template_docx):
+def realizar_replace_docx(demanda_id, template_docx, tipo_proposta):
     
     arquivo_gerado = BytesIO()
+    
+    demanda = Demanda.objects.get(pk=demanda_id)
     
     id_pad = formatar_id(int(demanda_id))
     
@@ -16,11 +18,20 @@ def realizar_replace_docx(demanda_id, template_docx):
     zout = zipfile.ZipFile (arquivo_gerado, 'w')
     
     document_xml = zin.read('word/document.xml').decode()
-    document_xml = document_xml.replace('###CODIGODEMANDA###', id_pad)
+    document_xml = document_xml.replace('#iddemanda#', id_pad)
+    document_xml = document_xml.replace('#codigo_no_cliente#', demanda.codigo_demanda)
+    document_xml = document_xml.replace('#descricao_da_demanda#', demanda.descricao)
     
-    xml_string = gerar_tabela(demanda_id)
+    if tipo_proposta == 'T':
+        document_xml = document_xml.replace('#tipoproposta#', 'Técnica')
+        document_xml = document_xml.replace('#tipo_informacoes#', 'Comerciais')
+    else:
+        document_xml = document_xml.replace('#tipoproposta#', 'Comercial')
+        document_xml = document_xml.replace('#tipo_informacoes#', 'Orçamentárias')
+       
+    xml_string = gerar_tabela(demanda_id, tipo_proposta)
     
-    document_xml = document_xml.replace('###TABELA###', xml_string)
+    document_xml = document_xml.replace('#TABELA#', xml_string)
     
     zout.writestr('word/document.xml',document_xml)
     
@@ -34,7 +45,17 @@ def realizar_replace_docx(demanda_id, template_docx):
             header = zin.read('word/header{0}.xml'.format(count)).decode()
             list_files.append('word/header{0}.xml'.format(count))
             if header:
-                header = header.replace('###CODIGODEMANDA###', id_pad)
+                header = header.replace('#iddemanda#', id_pad)
+                header = header.replace('#codigo_no_cliente#', demanda.codigo_demanda)
+                header = header.replace('#descricao_da_demanda#', demanda.descricao)
+                
+                if tipo_proposta == 'T':
+                    header = header.replace('#tipoproposta#', 'Técnica')
+                    header = header.replace('#tipo_informacoes#', 'Comerciais')
+                else:
+                    header = header.replace('#tipoproposta#', 'Comercial')
+                    header = header.replace('#tipo_informacoes#', 'Orçamentárias')
+                    
                 zout.writestr('word/header{0}.xml'.format(count), header)
             else:
                 exists = False    
@@ -55,7 +76,7 @@ def realizar_replace_docx(demanda_id, template_docx):
     
     return arquivo_gerado
 
-def gerar_tabela(demanda_id):
+def gerar_tabela(demanda_id, tipo_proposta):
 
     orcamento = Orcamento.objects.get(demanda__id = demanda_id)
     
@@ -73,17 +94,20 @@ def gerar_tabela(demanda_id):
             linha = []
             if eh_primeiro:
                 linha.append(orcamento_fase.fase.descricao)
-                linha.append(i.valor_hora.centro_resultado.nome)
-                linha.append(formatar_para_valor_monetario_com_simbolo(i.valor_selecionado))
+                linha.append(i.valor_hora.descricao)
+                if tipo_proposta == 'C':
+                    linha.append(formatar_para_valor_monetario_com_simbolo(i.valor_selecionado))
                 linha.append(int(round(i.quantidade_horas)))
                 linha.append(int(round(buscar_total_horas_orcamento_fase(item_fases))))
-                linha.append(formatar_para_valor_monetario_com_simbolo(orcamento_fase.valor_total))
+                if tipo_proposta == 'C':
+                    linha.append(formatar_para_valor_monetario_com_simbolo(orcamento_fase.valor_total))
                 linha.append('0')
                 eh_primeiro = False
             else:
                 linha.append(None)
-                linha.append(i.valor_hora.centro_resultado.nome)
-                linha.append(formatar_para_valor_monetario_com_simbolo(i.valor_selecionado))
+                linha.append(i.valor_hora.descricao)
+                if tipo_proposta == 'C':
+                    linha.append(formatar_para_valor_monetario_com_simbolo(i.valor_selecionado))
                 linha.append(int(round(i.quantidade_horas)))
                 linha.append(None)
                 linha.append(None)
@@ -96,23 +120,25 @@ def gerar_tabela(demanda_id):
     
     adicionar_coluna_cabecalho(cab, ["Fase"])
     adicionar_coluna_cabecalho(cab, ["Perfil"])
-    adicionar_coluna_cabecalho(cab, ["Vlr Hora"])
+    if tipo_proposta == 'C':
+        adicionar_coluna_cabecalho(cab, ["Vlr Hora"])
     adicionar_coluna_cabecalho(cab, ["Esforço", "(Horas)"])
     adicionar_coluna_cabecalho(cab, ["Esforço", "(Horas P/Fase)"])
-    adicionar_coluna_cabecalho(cab, ["Valor (P/Fase)"])
+    if tipo_proposta == 'C':
+        adicionar_coluna_cabecalho(cab, ["Valor (P/Fase)"])
     adicionar_coluna_cabecalho(cab, ["Prazo", "(Dias)"])
     
     for l in linhas:
         adicionar_linha_tabela(tbl, l)
         
-    adicionar_rodape(tbl, orcamento)
+    adicionar_rodape(tbl, orcamento, tipo_proposta)
     
     xml_string = tostring(tbl)
     xml_string = xml_string.decode()
     
     return xml_string
 
-def adicionar_rodape(tbl, orcamento):
+def adicionar_rodape(tbl, orcamento, tipo_proposta):
     
     tr = SubElement(tbl, 'w:tr', attrib = {'w:rsidR': "00492691", 'w:rsidTr':"00492691"})
     trPr = SubElement(tr, 'w:trPr')
@@ -135,12 +161,14 @@ def adicionar_rodape(tbl, orcamento):
     adicionar_coluna_rodape(tr, 'Total')
     adicionar_coluna_rodape(tr, None)
     adicionar_coluna_rodape(tr, None)
-    adicionar_coluna_rodape(tr, None)
+    if tipo_proposta == 'C':
+        adicionar_coluna_rodape(tr, None)
     
     total_horas, total_preco = buscar_total_horas_orcamento(orcamento)
     
     adicionar_coluna_rodape(tr, int(round(total_horas)))
-    adicionar_coluna_rodape(tr, formatar_para_valor_monetario_com_simbolo(total_preco))
+    if tipo_proposta == 'C':
+        adicionar_coluna_rodape(tr, formatar_para_valor_monetario_com_simbolo(total_preco))
     adicionar_coluna_rodape(tr, None)
     
 

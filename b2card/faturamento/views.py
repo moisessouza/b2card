@@ -399,12 +399,22 @@ def enviar_para_faturamento(request):
 
 def gerar_arquivo_faturamento(request, demanda_id):
     
-    arquivo_template = 'C:/b2card/arquivos_template/proposta_tecnica.docx'
+    arquivo_template = 'C:/b2card/arquivos_template/template.docx'
     
-    arquivo_gerado = realizar_replace_docx(demanda_id, arquivo_template)
+    arquivo_gerado = realizar_replace_docx(demanda_id, arquivo_template, 'T')
 
     response = HttpResponse(arquivo_gerado.getvalue(), content_type='application/force-download')
-    response['Content-Disposition'] = 'attachment; filename="foo1.docx"'
+    response['Content-Disposition'] = 'attachment; filename="proposta_tecnica.docx"'
+    return response
+
+def gerar_arquivo_faturamento_comercial(request, demanda_id):
+    
+    arquivo_template = 'C:/b2card/arquivos_template/template.docx'
+    
+    arquivo_gerado = realizar_replace_docx(demanda_id, arquivo_template, 'C')
+
+    response = HttpResponse(arquivo_gerado.getvalue(), content_type='application/force-download')
+    response['Content-Disposition'] = 'attachment; filename="proposta_comercial.docx"'
     return response
     
     
