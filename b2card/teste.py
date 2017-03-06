@@ -151,8 +151,11 @@ def adicionar_cabecalho(tbl):
     adicionar_coluna_cabecalho(tr, ["Valor", "(P/Perfil)"])
     adicionar_coluna_cabecalho(tr, ["Prazo", "(Dias)"])
     
+    adicionar_linha_tabela(tbl, ['TSD', 'Consultor', 'R$ 94,14', '30', '50', 'R$ 0,00', '1'])
+    adicionar_linha_tabela(tbl, [None, 'Documentação', 'R$ 86,61', '20', None, None, None])
     
-def adicionar_coluna_cabecalho(tr, linhas):
+    
+def adicionar_coluna_cabecalho(tr, linhas_na_coluna):
     
     tc = SubElement(tr, 'w:tc')
     tcPr = SubElement(tc, 'w:tcPr')
@@ -178,7 +181,7 @@ def adicionar_coluna_cabecalho(tr, linhas):
     SubElement(rPr, 'w:szCs', attrib= {'w:val':"20"})
     
     primeira_linha = True
-    for linha in linhas:
+    for linha in linhas_na_coluna:
         r = SubElement(p, 'w:r')
         rPr = SubElement(r, 'w:rPr')
         SubElement(rPr, 'w:rFonts',  attrib ={ 'w:ascii':"Calibri", 'w:hAnsi':"Calibri", 'w:cs':"Arial" })
@@ -195,5 +198,72 @@ def adicionar_coluna_cabecalho(tr, linhas):
         t = SubElement(r, 'w:t', attrib = {'xml:space':"preserve"})
         t.text = linha
         
+def adicionar_linha_tabela(tbl, colunas):
+    
+    tr = SubElement(tbl, 'w:tr', attrib = {'w:rsidR': "00492691", 'w:rsidTr':"00492691"})
+    trPr = SubElement(tr, 'w:trPr')
+    SubElement(trPr, 'w:trHeight', attrib = {'w:val':"255"})
+    
+    if colunas:
+        for c in colunas:
+            adicionar_coluna(tr, c)
+            
+def adicionar_coluna(tr, coluna):
+    
+    if coluna:
+        tc = SubElement(tr, 'w:tc')
+        tcPr = SubElement(tc, 'w:tcPr')
+        SubElement(tcPr, 'w:tcW', attrib = {'w:w':"2380", 'w:type':"dxa"})
+        SubElement(tcPr, 'w:vMerge', attrib = {'w:val':"restart"})
+        tcBorders = SubElement(tcPr, 'w:tcBorders')
+        SubElement(tcBorders, 'w:top', attrib = {'w:val': 'nil'})
+        SubElement(tcBorders, 'w:left', attrib = {'w:val': "single",'w:sz':"8", 'w:space':"0", 'w:color':"auto"})
+        SubElement(tcBorders, 'w:bottom', attrib = {'w:val':"single", 'w:sz':"8", 'w:space':"0", 'w:color':"000000"})
+        SubElement(tcBorders, 'w:right', attrib = {'w:val':"single", 'w:sz':"8", 'w:space':"0", 'w:color':"auto"})
+        SubElement(tcPr, 'w:shd', attrib = {'w:val':"clear", 'w:color':"000000", 'w:fill':"D9D9D9"})
+        SubElement(tcPr, 'w:vAlign', attrib = {'w:val':"center"})
+        SubElement(tcPr, 'w:hideMark')
         
+        p = SubElement(tc, 'w:p', attrib = { 'w:rsidR':"00492691", 'w:rsidRDefault':"00492691"})
+        pPr = SubElement(p, 'w:pPr')
+        SubElement(pPr, 'w:jc', attrib = {'w:val':"center"})
+        rPr = SubElement(pPr, 'w:rPr')
+        SubElement(rPr, 'w:rFonts', attrib = {'w:ascii': "Calibri", 'w:hAnsi':"Calibri", 'w:cs':"Arial"})
+        SubElement(rPr, 'w:color', attrib = {'w:val':"000000"})
+        SubElement(rPr, 'w:sz', attrib = {'w:val':"20"})
+        SubElement(rPr, 'w:szCs', attrib = {'w:val':"20"})
+        
+        r = SubElement(p, 'w:r')
+        pPr = SubElement(r, 'w:pPr')
+        SubElement(pPr, 'w:jc', attrib = {'w:val':"center"})
+        rPr = SubElement(pPr, 'w:rPr')
+        SubElement(rPr, 'w:rFonts', attrib = {'w:ascii': "Calibri", 'w:hAnsi':"Calibri", 'w:cs':"Arial"})
+        SubElement(rPr, 'w:color', attrib = {'w:val':"000000"})
+        SubElement(rPr, 'w:sz', attrib = {'w:val':"20"})
+        SubElement(rPr, 'w:szCs', attrib = {'w:val':"20"})
+        
+        t = SubElement(r, 'w:t')
+        t.text = coluna
+        
+    else:
+        tc = SubElement(tr, 'w:tc')
+        tcPr = SubElement(tc, 'w:tcPr')
+        SubElement(tcPr, 'w:tcW', attrib = {'w:w':"2380", 'w:type':"dxa"})
+        SubElement(tcPr, 'w:vMerge')
+        tcBorders = SubElement(tcPr, 'w:tcBorders')
+        SubElement(tcBorders, 'w:top', attrib = {'w:val': 'nil'})
+        SubElement(tcBorders, 'w:left', attrib = {'w:val': "single",'w:sz':"8", 'w:space':"0", 'w:color':"auto"})
+        SubElement(tcBorders, 'w:bottom', attrib = {'w:val':"single", 'w:sz':"8", 'w:space':"0", 'w:color':"000000"})
+        SubElement(tcBorders, 'w:right', attrib = {'w:val':"single", 'w:sz':"8", 'w:space':"0", 'w:color':"auto"})
+        SubElement(tcPr, 'w:vAlign', attrib = {'w:val':"center"})
+        SubElement(tcPr, 'w:hideMark')
+        
+        p = SubElement(tc, 'w:p', attrib = { 'w:rsidR':"00492691", 'w:rsidRDefault':"00492691"})
+        pPr = SubElement(p, 'w:pPr')
+        rPr = SubElement(pPr, 'w:rPr')
+        SubElement(rPr, 'w:rFonts', attrib = {'w:ascii': "Calibri", 'w:hAnsi':"Calibri", 'w:cs':"Arial"})
+        SubElement(rPr, 'w:color', attrib = {'w:val':"000000"})
+        SubElement(rPr, 'w:sz', attrib = {'w:val':"20"})
+        SubElement(rPr, 'w:szCs', attrib = {'w:val':"20"})
+
 criar_tabela_xml(realizar_replace_docx('proposta_tecnica.docx'))
