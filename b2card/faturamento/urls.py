@@ -30,7 +30,8 @@ urlpatterns = [
     url(r'^api/buscarpacoteitens/(?P<cliente_id>[0-9]+)/$', views.buscar_pacote_itens_cliente),
     url(r'^api/pacoteitens/$', views.criar_pacote_itens),
     url(r'^api/enviaraprovacao/$', views.enviar_para_aprovacao),
-    url(r'^api/enviarfaturamento/$', views.enviar_para_faturamento)
+    url(r'^api/enviarfaturamento/$', views.enviar_para_faturamento),
+    url(r'^gerar_arquivo_faturamento/(?P<demanda_id>[0-9]+)/$', views.gerar_arquivo_faturamento)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

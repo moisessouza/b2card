@@ -8,9 +8,9 @@ from demandas.models import Orcamento, OrcamentoFase, ItemFase
 
 def realizar_replace_docx(demanda_id, template_docx):
     
-    arquivo_gerado = 'demo4.docx'
+    arquivo_gerado = 'C:/b2card/arquivos_gerados/demo4.docx'
     
-    id_pad = formatar_id(demanda_id)
+    id_pad = formatar_id(int(demanda_id))
     
     zin = zipfile.ZipFile (template_docx, 'r')
     zout = zipfile.ZipFile (arquivo_gerado, 'w')
@@ -18,7 +18,7 @@ def realizar_replace_docx(demanda_id, template_docx):
     document_xml = zin.read('word/document.xml').decode()
     document_xml = document_xml.replace('###CODIGODEMANDA###', id_pad)
     
-    xml_string = gerar_tabela()
+    xml_string = gerar_tabela(demanda_id)
     
     document_xml = document_xml.replace('###TABELA###', xml_string)
     
@@ -220,7 +220,7 @@ def adicionar_linha_tabela(tbl, colunas):
     
     if colunas:
         for c in colunas:
-            adicionar_coluna(tr, c)
+            adicionar_coluna(tr, str(c))
             
 def adicionar_coluna(tr, coluna):
     

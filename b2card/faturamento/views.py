@@ -15,6 +15,9 @@ from demandas.serializers import OrcamentoFaseSerializer, OrcamentoSerializer,\
     ItemFaseSerializer
 from cadastros.serializers import TipoHoraSerializer, ValorHoraSerializer, VigenciaSerializer
 import datetime
+from django.http.response import HttpResponse
+from utils import docxgen
+from utils.docxgen import realizar_replace_docx
 
 # Create your views here.
 
@@ -393,6 +396,18 @@ def enviar_para_faturamento(request):
             p.save()
             
     return Response(PacoteItensSerializer(pacote_itens).data)
+
+def gerar_arquivo_faturamento(request, demanda_id):
+    
+    arquivo_template = 'C:/b2card/arquivos_template/proposta_tecnica.docx'
+    
+    arquivo_gerado = realizar_replace_docx(demanda_id, arquivo_template)
+    
+    f = open(arquivo_gerado, mode='rb')
+
+    response = HttpResponse(f, content_type='application/force-download')
+    response['Content-Disposition'] = 'attachment; filename="foo1.docx"'
+    return response
     
     
      
