@@ -79,6 +79,7 @@ def gerar_tabela(demanda_id):
                 linha.append(buscar_total_horas_orcamento_fase(item_fases))
                 linha.append(orcamento_fase.valor_total)
                 linha.append('0')
+                eh_primeiro = False
             else:
                 linha.append(None)
                 linha.append(i.valor_hora.centro_resultado.nome)
@@ -220,7 +221,7 @@ def adicionar_linha_tabela(tbl, colunas):
     
     if colunas:
         for c in colunas:
-            adicionar_coluna(tr, str(c))
+            adicionar_coluna(tr, c)
             
 def adicionar_coluna(tr, coluna):
     
@@ -257,7 +258,7 @@ def adicionar_coluna(tr, coluna):
         SubElement(rPr, 'w:szCs', attrib = {'w:val':"20"})
         
         t = SubElement(r, 'w:t')
-        t.text = coluna
+        t.text = str(coluna)
         
     else:
         tc = SubElement(tr, 'w:tc')

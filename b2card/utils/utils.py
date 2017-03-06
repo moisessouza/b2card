@@ -72,6 +72,6 @@ def formatar_para_valor_monetario(numero):
         return None
     
 def formatar_id (id):
-    return format(id, '04d')
+    return format(id, '05d')
         
     
