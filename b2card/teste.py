@@ -153,6 +153,7 @@ def adicionar_cabecalho(tbl):
     
     adicionar_linha_tabela(tbl, ['TSD', 'Consultor', 'R$ 94,14', '30', '50', 'R$ 0,00', '1'])
     adicionar_linha_tabela(tbl, [None, 'Documentação', 'R$ 86,61', '20', None, None, None])
+    adicionar_linha_tabela(tbl, ['Desenvolvimento e Testes unitários', 'Analista Sr.', 'R$ 86,61', '0', '0', 'R$ 0,00', '1'])
     
     
 def adicionar_coluna_cabecalho(tr, linhas_na_coluna):
