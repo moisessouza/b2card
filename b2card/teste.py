@@ -111,13 +111,10 @@ def criar_tabela():
     return tbl
 
 def adicionar_cabecalho(tbl):
-    
     tr = SubElement(tbl, 'w:tr', attrib={ 'w:rsidR':"00CD4609", 'w:rsidTr':"00CD4609" })
     trPr = SubElement(tr, 'w:trPr')
     SubElement(trPr, 'w:trHeight', attrib = {'w:val':'255'})
-    
     return tr
-    
     
 def adicionar_coluna_cabecalho(tr, linhas_na_coluna):
     
