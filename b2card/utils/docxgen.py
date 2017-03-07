@@ -5,6 +5,8 @@ from xml.etree import ElementTree as ET
 from xml.etree.ElementTree import Element, SubElement, Comment, tostring
 from utils.utils import formatar_id, formatar_para_valor_monetario_com_simbolo
 from demandas.models import Orcamento, OrcamentoFase, ItemFase, Demanda
+import re
+import sys
 
 def realizar_replace_docx(demanda_id, template_docx, tipo_proposta):
     
@@ -17,21 +19,31 @@ def realizar_replace_docx(demanda_id, template_docx, tipo_proposta):
     zin = zipfile.ZipFile (template_docx, 'r')
     zout = zipfile.ZipFile (arquivo_gerado, 'w')
     
+    valores = {
+        '#iddemanda#': id_pad, 
+        '#codigo_no_cliente#': demanda.codigo_demanda,
+        '#descricao_da_demanda#': demanda.descricao,
+        '#tipoproposta#': 'Técnica' if tipo_proposta == 'T' else 'Comerciais',
+        '#tipo_informacoes#': 'Comerciais' if tipo_proposta == 'T' else 'Orçamentárias'
+    }
+    
     document_xml = zin.read('word/document.xml').decode()
-    document_xml = document_xml.replace('#iddemanda#', id_pad)
-    document_xml = document_xml.replace('#codigo_no_cliente#', demanda.codigo_demanda)
-    document_xml = document_xml.replace('#descricao_da_demanda#', demanda.descricao)
+    variaveis = extrair_variaveis(document_xml)
     
-    if tipo_proposta == 'T':
-        document_xml = document_xml.replace('#tipoproposta#', 'Técnica')
-        document_xml = document_xml.replace('#tipo_informacoes#', 'Comerciais')
-    else:
-        document_xml = document_xml.replace('#tipoproposta#', 'Comercial')
-        document_xml = document_xml.replace('#tipo_informacoes#', 'Orçamentárias')
+    for i in valores:
+        valor = valores[i]
+        
+        if i in variaveis:
+            list = variaveis[i]
+            for token in list:
+                document_xml = document_xml.replace(token, valor)
        
-    xml_string = gerar_tabela(demanda_id, tipo_proposta)
-    
-    document_xml = document_xml.replace('#TABELA#', xml_string)
+    if '#TABELA#' in variaveis:
+        xml_string = gerar_tabela(demanda_id, tipo_proposta)
+        
+        list = variaveis['#TABELA#']
+        for token in list:
+            document_xml = document_xml.replace(token, xml_string)
     
     zout.writestr('word/document.xml',document_xml)
     
@@ -45,22 +57,20 @@ def realizar_replace_docx(demanda_id, template_docx, tipo_proposta):
             header = zin.read('word/header{0}.xml'.format(count)).decode()
             list_files.append('word/header{0}.xml'.format(count))
             if header:
-                header = header.replace('#iddemanda#', id_pad)
-                header = header.replace('#codigo_no_cliente#', demanda.codigo_demanda)
-                header = header.replace('#descricao_da_demanda#', demanda.descricao)
-                
-                if tipo_proposta == 'T':
-                    header = header.replace('#tipoproposta#', 'Técnica')
-                    header = header.replace('#tipo_informacoes#', 'Comerciais')
-                else:
-                    header = header.replace('#tipoproposta#', 'Comercial')
-                    header = header.replace('#tipo_informacoes#', 'Orçamentárias')
+                variaveis = extrair_variaveis(header)
+                for i in valores:
+                    valor = valores[i]
+                    if i in variaveis:
+                        list = variaveis[i]
+                        for token in list:
+                            header = header.replace(token, valor)
                     
                 zout.writestr('word/header{0}.xml'.format(count), header)
             else:
                 exists = False    
             count+=1
         except:
+            #print (str(sys.exc_info()[0]))
             exists = False
     
     for item in zin.infolist():
@@ -76,6 +86,58 @@ def realizar_replace_docx(demanda_id, template_docx, tipo_proposta):
     
     return arquivo_gerado
 
+def extrair_variaveis (arquivo):
+
+    variaveis = {}
+
+    contem_token = True
+
+    while contem_token:
+    
+        if '#' not in arquivo:
+            contem_token = False
+        else:
+            inicio = arquivo.index('#') + 1
+            arquivo = arquivo[inicio:]
+            if '#' in arquivo:
+                fim = arquivo.index('#')
+                variavel = arquivo[:fim]
+                
+                if len(arquivo) > fim:
+                    arquivo = arquivo[(fim + 1):]
+                
+                token = '#' + variavel + '#'
+                
+                variavel = regularizar_variavel(variavel)
+                if variavel in ['iddemanda', 'codigo_no_cliente', 'descricao_da_demanda', 'tipoproposta', 'tipo_informacoes', 'TABELA']:
+                    variavel = '#' + variavel + '#'
+                    if variavel in variaveis:
+                        variaveis[variavel].append(token)
+                    else:
+                        variaveis[variavel] = [token]
+            else:
+                contem_token = False
+    
+    return variaveis
+    
+def regularizar_variavel(variavel):
+    
+    variavel = re.sub('<w:t>', '', variavel)
+    variavel = re.sub('<\/w:t>', '', variavel)
+    variavel = re.sub('<w:r>', '', variavel)
+    variavel = re.sub('<\/w:r>', '', variavel)
+    variavel = re.sub('<w:r\s*[\w|:|=|"|\n]*\s*[\w|:|=|"|\n]*>', '', variavel)
+    variavel = re.sub('<w:color\s*[\w|:|=|"|\n]*\s*[\w|:|=|"|\n|\/]*>', '', variavel)
+    variavel = re.sub('<w:rPr>', '', variavel)
+    variavel = re.sub('<\/w:rPr>', '', variavel)
+    variavel = re.sub('<w:rFonts\s*[\w|:|=|"|\n]*\s*[\w|:|=|"|\n|\/]*>', '', variavel)
+    variavel = re.sub('<w:sz\s*[\w|:|=|"|\n]*\s*[\w|:|=|"|\n|\/]*>', '', variavel)
+    variavel = re.sub('<w:b/>', '', variavel)
+    variavel = re.sub('<w:bookmarkStart\s*[\w|:|=|"|\n]*\s*[\w|:|=|"|\n|\/]*>', '', variavel)
+    variavel = re.sub('<w:bookmarkEnd\s*[\w|:|=|"|\n]*\s*[\w|:|=|"|\n|\/]*>', '', variavel)
+    
+    return variavel
+    
 def gerar_tabela(demanda_id, tipo_proposta):
 
     orcamento = Orcamento.objects.get(demanda__id = demanda_id)
