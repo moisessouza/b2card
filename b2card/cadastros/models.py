@@ -133,6 +133,7 @@ class PessoaJuridica(models.Model):
     inscricao_estadual = models.CharField(max_length=20, default = None, null=True)
     inscricao_municipal = models.CharField(max_length=20, default = None, null=True)
     forma_pagamento = models.TextField(default = None, null = True)
+    particularidade_proposta = models.TextField(default = None, null = True)
     
 TIPO_ENDERECO = (
     ('RE', 'RESIDENCIAL'),

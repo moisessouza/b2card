@@ -24,7 +24,9 @@ def realizar_replace_docx(demanda_id, template_docx, tipo_proposta):
         '#codigo_no_cliente#': demanda.codigo_demanda,
         '#descricao_da_demanda#': demanda.descricao,
         '#tipoproposta#': 'Técnica' if tipo_proposta == 'T' else 'comercial',
-        '#tipo_informacoes#': 'Comerciais' if tipo_proposta == 'T' else 'Orçamentárias'
+        '#tipo_informacoes#': 'Comerciais' if tipo_proposta == 'T' else 'Orçamentárias',
+        '#forma_pagamento#': demanda.cliente.forma_pagamento if demanda.cliente.forma_pagamento else '',
+        '#particularidade_proposta#': demanda.cliente.particularidade_proposta if demanda.cliente.particularidade_proposta else ''
     }
     
     document_xml = zin.read('word/document.xml').decode()
@@ -36,7 +38,7 @@ def realizar_replace_docx(demanda_id, template_docx, tipo_proposta):
         if i in variaveis:
             list = variaveis[i]
             for token in list:
-                document_xml = document_xml.replace(token, valor)
+                document_xml = document_xml.replace(token, normalizar_valor(valor))
        
     if '#TABELA#' in variaveis:
         xml_string = gerar_tabela(demanda_id, tipo_proposta)
@@ -63,7 +65,7 @@ def realizar_replace_docx(demanda_id, template_docx, tipo_proposta):
                     if i in variaveis:
                         list = variaveis[i]
                         for token in list:
-                            header = header.replace(token, valor)
+                            header = header.replace(token, normalizar_valor(valor))
                     
                 zout.writestr('word/header{0}.xml'.format(count), header)
             else:
@@ -86,6 +88,34 @@ def realizar_replace_docx(demanda_id, template_docx, tipo_proposta):
     
     return arquivo_gerado
 
+def normalizar_valor(valor):
+    
+    if '\n' in valor:
+        novo_valor = ''
+        split = valor.split('\n')
+        
+        for s in split:
+            novo_valor += """<w:p w:rsidR="00367E05" w:rsidRDefault="00F1681A" w:rsidP="00613C71">
+                                 <w:pPr>
+                                    <w:spacing w:line="360" w:lineRule="auto" />
+                                    <w:jc w:val="both" />
+                                    <w:rPr>
+                                       <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cs="Arial" />
+                                       <w:color w:val="767171" />
+                                    </w:rPr>
+                                 </w:pPr>
+                                 <w:r>
+                                    <w:rPr>
+                                       <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cs="Arial" />
+                                       <w:color w:val="767171" />
+                                    </w:rPr>
+                                    <w:t xml:space="preserve">""" + s + """</w:t>
+                                 </w:r>
+                              </w:p>"""
+        valor = novo_valor
+        
+    return valor
+
 def extrair_variaveis (arquivo):
 
     variaveis = {}
@@ -106,7 +136,7 @@ def extrair_variaveis (arquivo):
                 token = '#' + variavel + '#'
                 
                 variavel = regularizar_variavel(variavel)
-                if variavel in ['iddemanda', 'codigo_no_cliente', 'descricao_da_demanda', 'tipoproposta', 'tipo_informacoes', 'TABELA']:
+                if variavel in ['iddemanda', 'codigo_no_cliente', 'descricao_da_demanda', 'tipoproposta', 'tipo_informacoes', 'TABELA', 'forma_pagamento', 'particularidade_proposta']:
                     variavel = '#' + variavel + '#'
                     if variavel in variaveis:
                         variaveis[variavel].append(token)
