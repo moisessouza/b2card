@@ -103,9 +103,6 @@ def extrair_variaveis (arquivo):
                 fim = arquivo.index('#')
                 variavel = arquivo[:fim]
                 
-                if len(arquivo) > fim:
-                    arquivo = arquivo[(fim + 1):]
-                
                 token = '#' + variavel + '#'
                 
                 variavel = regularizar_variavel(variavel)
@@ -115,6 +112,8 @@ def extrair_variaveis (arquivo):
                         variaveis[variavel].append(token)
                     else:
                         variaveis[variavel] = [token]
+                    if len(arquivo) > fim:
+                        arquivo = arquivo[(fim + 1):]
             else:
                 contem_token = False
     
@@ -130,11 +129,13 @@ def regularizar_variavel(variavel):
     variavel = re.sub('<w:color\s*[\w|:|=|"|\n]*\s*[\w|:|=|"|\n|\/]*>', '', variavel)
     variavel = re.sub('<w:rPr>', '', variavel)
     variavel = re.sub('<\/w:rPr>', '', variavel)
-    variavel = re.sub('<w:rFonts\s*[\w|:|=|"|\n]*\s*[\w|:|=|"|\n|\/]*>', '', variavel)
+    variavel = re.sub('<w:rFonts\s*[\w|:|=|"|\n]*\s*[\w|:|=|"|\n|\/]*\s*[\w|:|=|"|\n|\/]*>', '', variavel)
     variavel = re.sub('<w:sz\s*[\w|:|=|"|\n]*\s*[\w|:|=|"|\n|\/]*>', '', variavel)
     variavel = re.sub('<w:b/>', '', variavel)
     variavel = re.sub('<w:bookmarkStart\s*[\w|:|=|"|\n]*\s*[\w|:|=|"|\n|\/]*>', '', variavel)
     variavel = re.sub('<w:bookmarkEnd\s*[\w|:|=|"|\n]*\s*[\w|:|=|"|\n|\/]*>', '', variavel)
+    variavel = re.sub('<w:proofErr\s*[\w|:|=|"|\n]*\s*[\w|:|=|"|\n|\/]*>', '', variavel)
+    variavel = re.sub('<w:i\s*[\w|:|=|"|\n]*\s*[\w|:|=|"|\n|\/]*>', '', variavel)
     
     return variavel
     
