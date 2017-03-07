@@ -25,8 +25,8 @@ def realizar_replace_docx(demanda_id, template_docx, tipo_proposta):
         '#descricao_da_demanda#': demanda.descricao,
         '#tipoproposta#': 'Técnica' if tipo_proposta == 'T' else 'comercial',
         '#tipo_informacoes#': 'Comerciais' if tipo_proposta == 'T' else 'Orçamentárias',
-        '#forma_pagamento#': demanda.cliente.forma_pagamento if demanda.cliente.forma_pagamento else '',
-        '#particularidade_proposta#': demanda.cliente.particularidade_proposta if demanda.cliente.particularidade_proposta else ''
+        '#forma_pagamento#': demanda.forma_pagamento if demanda.forma_pagamento else (demanda.cliente.forma_pagamento if demanda.cliente.forma_pagamento else ''),
+        '#particularidade_proposta#': demanda.particularidade_proposta if demanda.particularidade_proposta else (demanda.cliente.particularidade_proposta if demanda.cliente.particularidade_proposta else '')
     }
     
     document_xml = zin.read('word/document.xml').decode()

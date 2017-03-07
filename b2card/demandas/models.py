@@ -50,6 +50,8 @@ class Demanda(models.Model):
     percentual_calculado = models.IntegerField(default = None, null = True)
     percentual_concluido = models.IntegerField(default = None, null = True)
     recorrente = models.NullBooleanField(default = None, null = True)
+    forma_pagamento = models.TextField(default = None, null = True)
+    particularidade_proposta = models.TextField(default = None, null = True)
 
 class FaseAtividade(models.Model):
     demanda = models.ForeignKey(Demanda, default = None)
