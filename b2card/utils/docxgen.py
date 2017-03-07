@@ -23,7 +23,7 @@ def realizar_replace_docx(demanda_id, template_docx, tipo_proposta):
         '#iddemanda#': id_pad, 
         '#codigo_no_cliente#': demanda.codigo_demanda,
         '#descricao_da_demanda#': demanda.descricao,
-        '#tipoproposta#': 'Técnica' if tipo_proposta == 'T' else 'Comerciais',
+        '#tipoproposta#': 'Técnica' if tipo_proposta == 'T' else 'comercial',
         '#tipo_informacoes#': 'Comerciais' if tipo_proposta == 'T' else 'Orçamentárias'
     }
     
@@ -121,21 +121,8 @@ def extrair_variaveis (arquivo):
     
 def regularizar_variavel(variavel):
     
-    variavel = re.sub('<w:t>', '', variavel)
-    variavel = re.sub('<\/w:t>', '', variavel)
-    variavel = re.sub('<w:r>', '', variavel)
-    variavel = re.sub('<\/w:r>', '', variavel)
-    variavel = re.sub('<w:r\s*[\w|:|=|"|\n]*\s*[\w|:|=|"|\n]*>', '', variavel)
-    variavel = re.sub('<w:color\s*[\w|:|=|"|\n]*\s*[\w|:|=|"|\n|\/]*>', '', variavel)
-    variavel = re.sub('<w:rPr>', '', variavel)
-    variavel = re.sub('<\/w:rPr>', '', variavel)
-    variavel = re.sub('<w:rFonts\s*[\w|:|=|"|\n]*\s*[\w|:|=|"|\n|\/]*\s*[\w|:|=|"|\n|\/]*>', '', variavel)
-    variavel = re.sub('<w:sz\s*[\w|:|=|"|\n]*\s*[\w|:|=|"|\n|\/]*>', '', variavel)
-    variavel = re.sub('<w:b/>', '', variavel)
-    variavel = re.sub('<w:bookmarkStart\s*[\w|:|=|"|\n]*\s*[\w|:|=|"|\n|\/]*>', '', variavel)
-    variavel = re.sub('<w:bookmarkEnd\s*[\w|:|=|"|\n]*\s*[\w|:|=|"|\n|\/]*>', '', variavel)
-    variavel = re.sub('<w:proofErr\s*[\w|:|=|"|\n]*\s*[\w|:|=|"|\n|\/]*>', '', variavel)
-    variavel = re.sub('<w:i\s*[\w|:|=|"|\n]*\s*[\w|:|=|"|\n|\/]*>', '', variavel)
+    variavel = re.sub('<\w*:\w*\s*[\w|:|=|\"]*\s*[\w|:|=|\"]*\s*[\w|:|=|\"|/]*\s*[\w|:|=|\"|/]*\s*[\w|:|=|\"|/]*\s*[\w|:|=|\"|/]*>', '', variavel)
+    variavel = re.sub('</\w*:(\w*)>', '', variavel)
     
     return variavel
     
