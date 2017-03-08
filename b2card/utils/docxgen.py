@@ -35,13 +35,13 @@ def realizar_replace_docx(demanda_id, template_docx, tipo_proposta):
     for i in valores:
         valor = valores[i]
         
-        if i in variaveis:
+        if valor and i in variaveis:
             list = variaveis[i]
             for token in list:
                 document_xml = document_xml.replace(token, normalizar_valor(valor))
        
     if '#TABELA#' in variaveis:
-        xml_string = gerar_tabela(demanda_id, tipo_proposta)
+        xml_string = gerar_tabela(demanda, tipo_proposta)
         
         list = variaveis['#TABELA#']
         for token in list:
@@ -90,7 +90,7 @@ def realizar_replace_docx(demanda_id, template_docx, tipo_proposta):
 
 def normalizar_valor(valor):
     
-    if '\n' in valor:
+    if valor and '\n' in valor:
         novo_valor = ''
         split = valor.split('\n')
         
@@ -156,11 +156,18 @@ def regularizar_variavel(variavel):
     
     return variavel
     
-def gerar_tabela(demanda_id, tipo_proposta):
+def gerar_tabela(demanda, tipo_proposta):
 
-    orcamento = Orcamento.objects.get(demanda__id = demanda_id)
+    orcamento = Orcamento.objects.get(demanda__id = demanda.id)
     
-    orcamento_fases = OrcamentoFase.objects.filter(orcamento = orcamento)
+    orcamento_fases = []
+    orcamento_fases.extend(OrcamentoFase.objects.filter(orcamento = orcamento))
+    
+    demandas_complementares = demanda.demandas_complementares.all()
+    
+    if demandas_complementares:
+        for dc in demandas_complementares:
+            orcamento_fases.extend(OrcamentoFase.objects.filter(orcamento__demanda = dc))
     
     linhas = [];
     
@@ -211,24 +218,32 @@ def gerar_tabela(demanda_id, tipo_proposta):
     for l in linhas:
         adicionar_linha_tabela(tbl, l)
         
-    adicionar_rodape(tbl, orcamento, tipo_proposta)
+    adicionar_rodape(tbl, demanda, orcamento, tipo_proposta)
     
     xml_string = tostring(tbl)
     xml_string = xml_string.decode()
     
     return xml_string
 
-def adicionar_rodape(tbl, orcamento, tipo_proposta):
+def adicionar_rodape(tbl, demanda, orcamento, tipo_proposta):
     
     tr = SubElement(tbl, 'w:tr', attrib = {'w:rsidR': "00492691", 'w:rsidTr':"00492691"})
     trPr = SubElement(tr, 'w:trPr')
     SubElement(trPr, 'w:trHeight', attrib = {'w:val':"270"})
     
-    def buscar_total_horas_orcamento(orcamento):
+    def buscar_total_horas_orcamento(demanda, orcamento):
         total_horas = 0
         total_preco = 0
         
-        orcamento_fases = OrcamentoFase.objects.filter(orcamento = orcamento)
+        orcamento_fases = []
+        orcamento_fases.extend(OrcamentoFase.objects.filter(orcamento = orcamento))
+        
+        demandas_complementares = demanda.demandas_complementares.all()
+    
+        if demandas_complementares:
+            for dc in demandas_complementares:
+                orcamento_fases.extend(OrcamentoFase.objects.filter(orcamento__demanda = dc))
+        
         
         for of in orcamento_fases:
             item_fases = ItemFase.objects.filter(orcamento_fase = of)
@@ -244,7 +259,7 @@ def adicionar_rodape(tbl, orcamento, tipo_proposta):
     if tipo_proposta == 'C':
         adicionar_coluna_rodape(tr, None)
     
-    total_horas, total_preco = buscar_total_horas_orcamento(orcamento)
+    total_horas, total_preco = buscar_total_horas_orcamento(demanda, orcamento)
     
     adicionar_coluna_rodape(tr, int(round(total_horas)))
     if tipo_proposta == 'C':
