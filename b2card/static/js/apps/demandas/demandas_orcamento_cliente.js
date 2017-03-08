@@ -64,6 +64,10 @@ demandas.controller('OrcamentoClienteController', function($rootScope, $window, 
 		$window.open(BASE_URL + 'faturamento/gerar_arquivo_faturamento/' + share.demanda.id, '_blank');
 	}
 	
+	$ctrl.gerararquivopropostaorcamento = () => {
+		$window.open(BASE_URL + 'faturamento/gerar_arquivo_faturamento_comercial/' + share.demanda.id, '_blank');
+	}
+	
 	$ctrl.modalprevisaofaturamento = function (){
 		var modalInstance = $uibModal.open({
 			animation : $ctrl.animationsEnabled,
