@@ -226,7 +226,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 	$ctrl.listanaturezademanda = NaturezaDemandaService.buscarnaturezademandas();
 	
 	var abas = ['#dadosdemanda', '#orcamento', '#atividades', 
-		'#proposta', '#tarefas', '#observacoes', '#ocorrencias', '#resumo']
+		'#proposta', '#tarefas', '#observacoes', '#ocorrencias', '#resumo', '#demandascomplementares']
 	
 	$ctrl.listaabasautorizadas = AutenticationService.buscarabasautorizadas(abas);
 	
@@ -297,6 +297,32 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		
 		return false;
 		
+	}
+	
+	$ctrl.adicionardemandacomplementar = () => {
+		if (!$ctrl.demanda.demandas_complementares){
+			$ctrl.demanda.demandas_complementares = [];
+		}
+		
+		$ctrl.demanda.demandas_complementares.push({
+			'nome_demanda': ''
+		});
+		
+	}
+	
+	$ctrl.buscardemandas = (texto) => {
+		DemandaService.buscardemandaportexto(texto, function (data) {
+			for(let demanda of data) {
+				demanda.nome_demanda = CommonsService.pad(demanda.id, 5) + ' - ' + demanda.nome_demanda;
+			}
+			$ctrl.listademandas = data;
+		});	
+	}
+	
+	$ctrl.buscardemandaid = (demanda_complementar) => {
+		DemandaService.buscardemandaminimo(demanda_complementar.demanda.id, function (data) {
+			demanda_complementar.demanda = data;
+		});
 	}
 	
 }).controller('AtividadeController', function($rootScope, ValorHoraService, DemandaService, FaseService, CommonsService, PessoaService, share){

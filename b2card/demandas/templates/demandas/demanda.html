@@ -117,6 +117,7 @@
 	  <li ng-show="$ctrl.verificardisponibilidadeaba('#proposta')" ng-click="$ctrl.tabselecionada('#proposta');"><a data-toggle="tab" href="#proposta">Proposta</a></li>
 	  <li ng-show="$ctrl.verificardisponibilidadeaba('#observacoes')" ng-click="$ctrl.tabselecionada('#observacoes');"><a data-toggle="tab" href="#observacoes">Observações</a></li>
 	  <li ng-show="$ctrl.verificardisponibilidadeaba('#ocorrencias')" ng-click="$ctrl.tabselecionada('#ocorrencias');"><a data-toggle="tab" href="#ocorrencias">Ocorrências</a></li>
+	  <li ng-show="$ctrl.verificardisponibilidadeaba('#demandascomplementares')" ng-click="$ctrl.tabselecionada('#demandascomplementares');"><a data-toggle="tab" href="#demandascomplementares">Demandas complementares</a></li>
 	</ul>
 	<div class="tab-content">
 		<div id="dadosdemanda" ng-if="$ctrl.verificardisponibilidadeaba('#dadosdemanda')" class="tab-pane in active">
@@ -456,6 +457,28 @@
 					</div>
 				</div>
 			</form>
+		</div>
+		<div id="demandascomplementares" ng-if="$ctrl.verificardisponibilidadeaba('#demandascomplementares')" class="tab-pane">
+		
+			<button type="button" class="btn btn-primary margin" ng-click="$ctrl.adicionardemandacomplementar()">
+		  		<span class="glyphicon glyphicon-plus"></span> Adicionar demanda
+			</button>
+			
+			<div class="row" ng-repeat="demanda_complementar in $ctrl.demanda.demandas_complementares">
+				<div class="col-sm-6">
+					<div class="col-sm-2">
+				    	<input type="number" class="input-sm form-control" ng-model="demanda_complementar.demanda.id" ng-blur="$ctrl.buscardemandaid(demanda_complementar)" style="margin: 5px 0 0 0;"/>
+				    </div>
+				    <div class="col-sm-10">
+						<md-autocomplete md-selected-item="demanda_complementar.demanda" md-search-text-change="$ctrl.buscardemandas($ctrl.buscademandamap[demanda_complementar.$$hashKey].demanda_descricao)" md-search-text="$ctrl.buscademandamap[demanda_complementar.$$hashKey].demanda_descricao" md-selected-item-change="$ctrl.limparlistademandas()" md-items="demanda in $ctrl.listademandas"  md-item-text="demanda.nome_demanda">
+			    			<md-item-template>
+				    			<span md-highlight-text="searchText">{{demanda.nome_demanda}}</span>
+				  			</md-item-template>
+						</md-autocomplete>
+					</div>
+				</div>
+			</div>
+			
 		</div>
 	</div>
 	

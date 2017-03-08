@@ -52,6 +52,7 @@ class Demanda(models.Model):
     recorrente = models.NullBooleanField(default = None, null = True)
     forma_pagamento = models.TextField(default = None, null = True)
     particularidade_proposta = models.TextField(default = None, null = True)
+    demandas_complementares = models.ManyToManyField('Demanda', default = None)
 
 class FaseAtividade(models.Model):
     demanda = models.ForeignKey(Demanda, default = None)

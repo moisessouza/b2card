@@ -55,6 +55,10 @@ demandasservices.service('DemandaService', function($resource){
 		buscaratividadesdemanda: function(demanda_id, callback){
 			var Atividades = $resource(BASE_URL + 'demandas/api/:id/atividades/');
 			return Atividades.query({id:demanda_id}, callback);
+		},
+		buscardemandaminimo: function (demanda_id, callback) {
+			var Demandas = $resource(BASE_URL + 'demandas/api/minimo/:id/');
+			return Demandas.get({id: demanda_id}, callback);
 		}
 	}
 });

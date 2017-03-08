@@ -63,6 +63,7 @@ def serializarDemandaObject(demanda):
     orcamentos = Orcamento.objects.filter(demanda__id=demanda.id)
     #fase_atividades = FaseAtividade.objects.filter(demanda__id=demanda.id)
     parcelas = Parcela.objects.filter(demanda__id=demanda.id)
+    demandas_complementares = demanda.demandas_complementares
     
     data = DemandaSerializer(demanda).data
     
@@ -108,6 +109,12 @@ def serializarDemandaObject(demanda):
             medicao_list = MedicaoSerializer(medicoes, many=True).data
             pf['medicoes'] = medicao_list
         i['parcelafases'] = parcelafaseserializer_list
+        
+    demandas_complementares_list = []
+    if demandas_complementares:
+        demanda_inicial_serializer = DemandaInicialSerializer(demandas_complementares, many=True).data
+        for d in demanda_inicial_serializer:
+            demandas_complementares_list.append({'demanda': d})
 
     data['propostas'] = propostas_list
     data['observacoes'] = observacoes_list
@@ -115,6 +122,7 @@ def serializarDemandaObject(demanda):
     data['orcamento'] = orcamento_dict
     #data['fase_atividades'] = fase_atividade_list
     data['parcelas'] = parcelas_list
+    data['demandas_complementares'] = demandas_complementares_list
    
     return data
 
@@ -623,6 +631,17 @@ class DemandaDetail(APIView):
                     medicao.delete()
          
         return medicao_list   
+    
+    def salvar_demandas_complementares(self, demandas_complementares, demanda):
+        
+        if demandas_complementares:
+
+            demanda.demandas_complementares.clear()
+            for dc in demandas_complementares:
+                if 'remover' not in dc or dc['remover'] == False:
+                    if 'demanda' in dc and 'id' in dc['demanda']:
+                        demanda.demandas_complementares.add(Demanda.objects.get(pk=dc['demanda']['id']))
+                
         
     def post(self, request, format=None):
         
@@ -668,6 +687,11 @@ class DemandaDetail(APIView):
         if 'parcelas' in data:
             del data['parcelas']
         
+        demandas_complementares = None    
+        if 'demandas_complementares' in data:
+            demandas_complementares = data['demandas_complementares']
+            del data['demandas_complementares']
+        
         del data['cliente']
         del data['propostas']
         del data['observacoes']
@@ -706,6 +730,7 @@ class DemandaDetail(APIView):
         self.salvar_ocorrencias(ocorrencias, demanda)
         self.salvar_orcamento(orcamento, demanda)
         self.salvar_fase_atividades(fase_atividades, demanda)
+        self.salvar_demandas_complementares(demandas_complementares, demanda)
         
         if demanda.tipo_demanda != 'I':
             self.calcular_estatisticas_demanda(demanda)
@@ -872,10 +897,17 @@ def atividade_possui_alocacao(request, atividade_id, format=None):
     
     return Response(context)
 
-
-
 @api_view(['GET'])
 def buscar_lista_por_texto(request, texto, format=None):
     demandas = Demanda.objects.filter(nome_demanda__icontains=texto)[:10]
     demandas = DemandaInicialSerializer(demandas, many=True).data
     return Response(demandas)
+
+@api_view(['GET'])
+def buscar_demanda_minimo(request, demanda_id, format=None):
+    demanda = Demanda.objects.filter(pk = demanda_id)
+    if demanda:
+        demanda = DemandaInicialSerializer(demanda[0]).data
+        return Response(demanda)
+    else:
+        return Response({})
