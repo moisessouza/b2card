@@ -12,7 +12,7 @@ pessoaservices.config(['$httpProvider', function($httpProvider) {
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 }]);
 
-pessoaservices.service('PessoaService', function($resource){
+pessoaservices.service('PessoaService', function($resource, $http){
 	return {
 		buscarpessoas: function () {
 			var Pessoa = $resource(BASE_URL + 'cadastros/pessoa/api/list');
@@ -45,6 +45,26 @@ pessoaservices.service('PessoaService', function($resource){
 		buscargestores: function(callback) {
 			var Pessoa = $resource(BASE_URL + 'cadastros/pessoa/api/gestores/');
 			return Pessoa.query(callback)
+		},
+		uploadfile: function(pessoa_juridica_id, callback) {
+			
+			var formData = new FormData();
+			var file = document.getElementById('file');
+            formData.append('file', file.files[0], file.files[0].name);
+            
+            $http({
+                url: BASE_URL + 'cadastros/pessoa/api/pessoajuridica/uploadarquivo/' + pessoa_juridica_id + '/',
+                method: "POST",
+                data: formData,
+                headers: {'Content-Type': undefined}
+            }).success(function (response) {
+                callback(response);
+            });
+            
+		},
+		removerarquivo: function(pessoa_juridica_id, callback) {
+			var Arquivo = $resource(BASE_URL + 'cadastros/pessoa/api/pessoajuridica/removerarquivo/:pessoa_juridica_id/')
+			return Arquivo.get({'pessoa_juridica_id': pessoa_juridica_id}, callback)
 		}
 	}
 });

@@ -18,6 +18,8 @@ import datetime
 from django.http.response import HttpResponse
 from utils import docxgen
 from utils.docxgen import realizar_replace_docx
+import importlib
+import os
 
 # Create your views here.
 
@@ -397,9 +399,22 @@ def enviar_para_faturamento(request):
             
     return Response(PacoteItensSerializer(pacote_itens).data)
 
+PASTA_ARQUIVOS = importlib.import_module(os.environ['DJANGO_SETTINGS_MODULE']).PASTA_ARQUIVOS
+
+def buscar_arquivo_template(demanda_id):
+    
+    pessoa_juridica = PessoaJuridica.objects.filter(demanda__id=demanda_id).order_by('-id')[0]
+    
+    if pessoa_juridica.arquivo:
+        arquivo_template = pessoa_juridica.arquivo.path_arquivo
+    else: 
+        arquivo_template = PASTA_ARQUIVOS + 'template.docx'
+        
+    return arquivo_template
+
 def gerar_arquivo_faturamento(request, demanda_id):
     
-    arquivo_template = 'C:/b2card/arquivos_template/template.docx'
+    arquivo_template = buscar_arquivo_template(demanda_id)
     
     arquivo_gerado = realizar_replace_docx(demanda_id, arquivo_template, 'T')
 
@@ -409,7 +424,7 @@ def gerar_arquivo_faturamento(request, demanda_id):
 
 def gerar_arquivo_faturamento_comercial(request, demanda_id):
     
-    arquivo_template = 'C:/b2card/arquivos_template/template.docx'
+    arquivo_template = buscar_arquivo_template(demanda_id)
     
     arquivo_gerado = realizar_replace_docx(demanda_id, arquivo_template, 'C')
 

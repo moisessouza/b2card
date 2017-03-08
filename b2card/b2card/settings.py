@@ -19,6 +19,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 URL_PER = ['/inicial/','/autenticacao/']
 BASE_URL = '/'
 
+PASTA_ARQUIVOS = 'C:/b2card/arquivos_template/'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 

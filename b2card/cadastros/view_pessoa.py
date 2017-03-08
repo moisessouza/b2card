@@ -8,18 +8,22 @@ from cadastros.models import TipoHora, CentroCusto, Pessoa, TelefonePessoa, \
     EnderecoPessoa, DadosBancariosPessoa, PessoaFisica, Prestador, \
     PessoaJuridica, Contato, TelefoneContato, CentroResultado, \
     UnidadeAdministrativa, ContaGerencial, Apropriacao, NaturezaOperacao, \
-    CustoPrestador
+    CustoPrestador, Arquivo
 from cadastros.serializers_pessoa import PessoaSerializer, \
     EnderecoPessoaSerializer, TelefonePessoaSerializer, \
     DadosBancariosPessoaSerializer, PessoaFisicaSerializer, PrestadorSerializer, \
     PessoaJuridicaSerializer, ContatoSerializer, TelefoneContatoSerializer, \
     ApropriacaoSerializer, CustoPrestadorSerializer,\
-    PessoaJuridicaComPessoaSerializer, PessoaFisicaComPessoaSerializer
+    PessoaJuridicaComPessoaSerializer, PessoaFisicaComPessoaSerializer,\
+    ArquivoSerializer
 from recursos.models import Cargo
 from utils.utils import converter_string_para_data, formatar_data, \
     converter_string_para_float
 from rest_framework.decorators import api_view
 from cadastros.serializers import UnidadeAdministrativaSerializer
+import importlib
+import os
+from django.http.response import HttpResponse
 
 
 def index(request):
@@ -357,12 +361,35 @@ class PessoaDetail(APIView):
             contatos = pj['contatos']
             del pj['contatos']
         
+        arquivo = None
+        if 'arquivo' in pj:
+            arquivo = pj['arquivo']
+            del pj['arquivo']
+        
         pessoa_juridica = PessoaJuridica(**pj)
         pessoa_juridica.pessoa = pessoa
+       
+        self.gravar_arquivo(arquivo, pessoa_juridica)
+        
         pessoa_juridica.save()
         
         self.gravar_contatos(contatos, pessoa_juridica)
       
+    def gravar_arquivo(self, arquivo, pessoa_juridica):
+        
+        if arquivo:
+            if 'remover' not in arquivo or arquivo['remover'] is False:
+                
+                arquivo = Arquivo(**arquivo)
+                pessoa_juridica.arquivo = arquivo
+                arquivo.save()
+                
+            elif 'id' in arquivo:
+                arquivo = Arquivo.objects.get(pk=arquivo[id])
+                pessoa_juridica.arquivo = None
+                pessoa_juridica.save()
+                arquivo.delete()
+        
     def gravar_contatos(self, contatos, pessoa_juridica):
         if contatos:
             for i in contatos:
@@ -501,5 +528,76 @@ def buscar_gestores(request, format=None):
     pessoas = PessoaFisica.objects.filter(prestador__cargo__gestor=True).order_by('pessoa__nome_razao_social')
     data = PessoaFisicaComPessoaSerializer(pessoas, many=True).data
     return Response(data)
+
+@api_view(['GET'])
+def remover_arquivo(request, pessoa_juridica_id, format=None):
     
+    pj = PessoaJuridica.objects.get(pk=pessoa_juridica_id)
     
+    arquivo = pj.arquivo
+    
+    pj.arquivo = None
+    pj.save()
+    
+    if arquivo:
+        path_arquivo = arquivo.path_arquivo
+        os.remove(path_arquivo)
+        arquivo.delete()
+        
+    return Response(ArquivoSerializer(arquivo).data)
+
+@api_view(['POST'])
+def upload_arquivo(request, pessoa_juridica_id):    
+    
+    f = request.FILES['file']
+
+    pj = PessoaJuridica.objects.get(pk=pessoa_juridica_id)
+    
+    arquivo = pj.arquivo
+    
+    pj.arquivo = None
+    pj.save()
+    
+    if arquivo:
+        path_arquivo = arquivo.path_arquivo
+        os.remove(path_arquivo)
+        arquivo.delete()
+        
+    nome_arquivo = f.name
+    content_type = f.content_type
+    tamanho = f.size
+    
+    path = criar_arquivo_diretorio(f, pessoa_juridica_id)
+    
+    arquivo = Arquivo(nome_arquivo = nome_arquivo, 
+                      content_type = content_type,tamanho = tamanho, path_arquivo = path )
+        
+    arquivo.save()
+    
+    pj.arquivo = arquivo
+    pj.save()
+    
+    return Response(ArquivoSerializer(arquivo).data)
+
+PASTA_ARQUIVOS = importlib.import_module(os.environ['DJANGO_SETTINGS_MODULE']).PASTA_ARQUIVOS
+
+def criar_arquivo_diretorio(f, pessoa_juridica_id):
+    
+    arquivo = PASTA_ARQUIVOS + pessoa_juridica_id + '/' + f.name
+    
+    os.makedirs(os.path.dirname(arquivo), exist_ok=True)
+    
+    with open(arquivo, 'wb+') as destino:
+        for chunk in f.chunks():
+            destino.write(chunk)
+            
+    return arquivo
+
+def baixar_arquivo(request, pessoa_juridica_id):
+    
+    arquivo = Arquivo.objects.filter(pessoajuridica__id = pessoa_juridica_id).order_by('-id')[0]
+    
+    with open(arquivo.path_arquivo, mode='rb') as arquivo_template:
+        response = HttpResponse(arquivo_template, content_type='application/force-download')
+        response['Content-Disposition'] = 'attachment; filename=' + arquivo.nome_arquivo
+        return response

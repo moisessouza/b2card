@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from cadastros.models import Pessoa, EnderecoPessoa, TelefonePessoa,\
     DadosBancariosPessoa, PessoaFisica, Prestador, PessoaJuridica, Contato,\
-    TelefoneContato, Apropriacao, CustoPrestador
+    TelefoneContato, Apropriacao, CustoPrestador, Arquivo
 from cadastros.serializers import CentroCustoSerializer,\
     UnidadeAdministrativaSerializer, CentroResultadoSerializer,\
     ContaGerencialSerializer, NaturezaOperacaoSerializer
@@ -43,10 +43,16 @@ class PessoaFisicaComPessoaSerializer(serializers.ModelSerializer):
         fields = ('id', 'cpf', 'rg', 'orgao_emissor', 'data_expedicao', 'email', 'data_nascimento', 'estado_civil', 'naturalidade', 'nacionalidade', 'sexo',
                   'grau_instrucao', 'nome_pai', 'nome_mae', 'deficiencia', 'num_pis', 'data_emicao_pis', 'num_titulo_eleitoral', 'zona', 'secao', 'doc_militar', 'categoria_doc_militar', 'pessoa')
 
+class ArquivoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Arquivo
+        fields = ('id',  'nome_arquivo', 'content_type', 'tamanho', 'path_arquivo')
+
 class PessoaJuridicaSerializer(serializers.ModelSerializer):
+    arquivo = ArquivoSerializer()
     class Meta:
         model = PessoaJuridica
-        fields = ('id', 'cnpj', 'nome_fantasia', 'inscricao_estadual', 'inscricao_municipal', 'forma_pagamento', 'particularidade_proposta')
+        fields = ('id', 'cnpj', 'nome_fantasia', 'inscricao_estadual', 'inscricao_municipal', 'forma_pagamento', 'particularidade_proposta', 'arquivo')
                 
 class PessoaJuridicaComPessoaSerializer(serializers.ModelSerializer):
     pessoa = PessoaSerializer()
@@ -91,5 +97,6 @@ class ApropriacaoSerializer(serializers.ModelSerializer):
         
 class CustoPrestadorSerializer(serializers.ModelSerializer):
     class Meta:
-        model=CustoPrestador
+        model = CustoPrestador
         fields = ('id', 'data_inicio', 'data_fim', 'valor')
+        

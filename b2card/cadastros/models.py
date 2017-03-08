@@ -125,6 +125,12 @@ class PessoaFisica(models.Model):
     doc_militar = models.CharField(max_length = 30, default = None, null=True)
     categoria_doc_militar = models.CharField(max_length = 10, default = None, null=True)
     unidade_administrativas = models.ManyToManyField(UnidadeAdministrativa, default = None)
+
+class Arquivo(models.Model):
+    nome_arquivo = models.CharField(max_length=300)
+    content_type = models.CharField(max_length=300)
+    tamanho = models.BigIntegerField()
+    path_arquivo = models.CharField(max_length=300)
     
 class PessoaJuridica(models.Model):
     pessoa = models.ForeignKey(Pessoa, default = None)
@@ -134,6 +140,7 @@ class PessoaJuridica(models.Model):
     inscricao_municipal = models.CharField(max_length=20, default = None, null=True)
     forma_pagamento = models.TextField(default = None, null = True)
     particularidade_proposta = models.TextField(default = None, null = True)
+    arquivo = models.ForeignKey(Arquivo, default = None, null = True)
     
 TIPO_ENDERECO = (
     ('RE', 'RESIDENCIAL'),

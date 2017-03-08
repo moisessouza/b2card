@@ -399,6 +399,27 @@ pessoa.controller('PessoaController', function ($scope, $window, $uibModal, Pess
 		
 	}
 	
+	$ctrl.uploadfile = function () {
+		let pessoa_juridica_id = $ctrl.pessoa.pessoa_juridica.id;
+		PessoaService.uploadfile(pessoa_juridica_id, function (data) {
+			$ctrl.pessoa.pessoa_juridica.arquivo= data;
+			MessageService.messagesuccess('Arquivo enviado com sucesso!');
+		});
+	}
+	
+	$ctrl.removerarquivo = function () {
+		if (confirm('Tem certeza que deseja deletar arquivo?')) {
+			let pessoa_juridica_id = $ctrl.pessoa.pessoa_juridica.id;
+			PessoaService.removerarquivo(pessoa_juridica_id, function (data) {
+				delete $ctrl.pessoa.pessoa_juridica['arquivo'];
+				MessageService.messagesuccess('Arquivo removido com sucesso!');
+			});
+		}
+	}
+	
+	$ctrl.baixararquivo = function () {
+		$window.open(BASE_URL + 'cadastros/pessoa/api/pessoajuridica/baixararquivo/' + $ctrl.pessoa.pessoa_juridica.id + '/', '_blank');
+	}
 	
 }).controller('ListPessoaController', function ($scope, $window, PessoaService){
 	var $ctrl = this;
