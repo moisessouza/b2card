@@ -638,8 +638,8 @@ class DemandaDetail(APIView):
 
             demanda.demandas_complementares.clear()
             for dc in demandas_complementares:
-                if 'remover' not in dc or dc['remover'] == False:
-                    if 'demanda' in dc and 'id' in dc['demanda']:
+                if dc and 'remover' not in dc or dc['remover'] == False:
+                    if 'demanda' in dc and dc['demanda'] and 'id' in dc['demanda']:
                         demanda.demandas_complementares.add(Demanda.objects.get(pk=dc['demanda']['id']))
                 
         
