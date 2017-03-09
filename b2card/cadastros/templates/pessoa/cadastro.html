@@ -316,7 +316,7 @@ button.exclude {
 						<div class="col-sm-1" style="width: 149px">
 							<div class="form-group">
 								<label class="control-label" for="id">Nome fantasia</label>
-								<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_juridica.nome_fantasia" maxlength="30"/>
+								<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_juridica.nome_fantasia" maxlength="30" ng-required="$ctrl.pessoa.tipo=='J'"/>
 							</div>
 						</div>
 						<div class="col-sm-1" style="width: 149px">
