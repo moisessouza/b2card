@@ -836,13 +836,15 @@ def buscar_lista_por_parametro(request, format=None):
                             | Q(nome_demanda__icontains=palavra_chave)
                             | Q(faseatividade__atividade__descricao__icontains=palavra_chave)
                             | Q(descricao__icontains=palavra_chave)
-                            | Q(cliente__pessoa__nome_razao_social__icontains=palavra_chave)).distinct()
+                            | Q(cliente__pessoa__nome_razao_social__icontains=palavra_chave)
+                            | Q(codigo_demanda__icontains=palavra_chave)).distinct()
             else:
                 palavra_chave = request.data['palavra_chave']
                 demandas = demandas.filter(Q(nome_demanda__icontains=palavra_chave)
                             | Q(faseatividade__atividade__descricao__icontains=palavra_chave)
                             | Q(descricao__icontains=palavra_chave)
-                            | Q(cliente__pessoa__nome_razao_social__icontains=palavra_chave)).distinct()
+                            | Q(cliente__pessoa__nome_razao_social__icontains=palavra_chave)
+                            | Q(codigo_demanda__icontains=palavra_chave)).distinct()
         
         if request.data['ordenar'] is False:
             demandas = demandas.order_by('pk')
