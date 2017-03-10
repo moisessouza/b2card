@@ -11,7 +11,7 @@ f.id AS FASE_ID,
 cr.id AS CENTRO_RESULTADO_ID,
 responsavelfase.id AS ID_RESPONSAVEL_TECNICO,
 profissional.id AS PROFISSIONAL_ID,
-ah.id AS ALOCACAO_HORAS_ID,
+-- ah.id AS ALOCACAO_HORAS_ID,
 cp.id AS CUSTO_PRESTADOR_ID,
 sd.descricao AS STATUS_DEMANDA,
 0 AS VALOR_DESPESA_ORCADA,
@@ -22,10 +22,17 @@ d.data_criacao AS DATA_ABERTURA_DEMANDA,
 0 AS HORAS_PREVISTAS,
 0 AS VALOR_HORAS_PREVISTAS,
 0 AS VALOR_ADMINISTRATIVO_PREVISTO,
-TRUNCATE((ah.horas_alocadas_milisegundos / 1000 / 60 / 60 ), 2) AS HORAS_ALOCADAS,
-TRUNCATE((cp.valor * TRUNCATE((ah.horas_alocadas_milisegundos / 1000 / 60 / 60 ), 2)), 2) AS VALOR_HORAS_ALOCADAS,
-TRUNCATE((un.custo_operacao_hora * TRUNCATE((ah.horas_alocadas_milisegundos / 1000 / 60 / 60 ), 2)), 2) AS VALOR_ADMINISTRATIVO_ALOCADO,
-ah.data_informada AS DATA_INFORMADA_LANCAMENTO,
+-- TRUNCATE((ah.horas_alocadas_milisegundos / 1000 / 60 / 60 ), 2) AS HORAS_ALOCADAS,
+ROUND(SUM(ah.horas_alocadas_milisegundos / 1000 / 60 / 60 ), 2) AS HORAS_ALOCADAS,
+(CASE 
+	WHEN SUBSTRING(cp.valor * ROUND(SUM(ah.horas_alocadas_milisegundos / 1000 / 60 / 60 ), 2), LENGTH(cp.valor * ROUND(SUM(ah.horas_alocadas_milisegundos / 1000 / 60 / 60 ), 2)) - 2, LENGTH(cp.valor * ROUND(SUM(ah.horas_alocadas_milisegundos / 1000 / 60 / 60 ), 2))) <= 50 THEN
+		ROUND (cp.valor * ROUND(SUM(ah.horas_alocadas_milisegundos / 1000 / 60 / 60), 2), 2)
+	ELSE
+		TRUNCATE(cp.valor * ROUND(SUM(ah.horas_alocadas_milisegundos / 1000 / 60 / 60), 2), 2)
+	END)
+AS VALOR_HORAS_ALOCADAS,
+ROUND(un.custo_operacao_hora * SUM(ah.horas_alocadas_milisegundos / 1000 / 60 / 60 ), 2) AS VALOR_ADMINISTRATIVO_ALOCADO,
+STR_TO_DATE(CONCAT( '01', '/', LPAD(MONTH(ah.data_informada), 2, '0'), '/', YEAR(ah.data_informada)), '%d/%m/%Y')  AS DATA_INFORMADA_LANCAMENTO,
 0 AS VALOR_DESPESA,
 0 AS TIPO_DESPESA
 FROM demandas_demanda AS d
@@ -47,6 +54,7 @@ JOIN demandas_alocacaohoras ah ON (ah.atividade_profissional_id = ap.id)
 LEFT OUTER JOIN cadastros_custoprestador cp ON (cp.pessoa_fisica_id = profissional.id)
 JOIN STATUS_DEMANDA sd ON (sd.codigo = d.status_demanda)
 WHERE cp.data_inicio <= ah.data_informada AND (cp.data_fim IS NULL OR cp.data_fim >= ah.data_informada)
+GROUP BY a.id, STR_TO_DATE(CONCAT( '01', '/', LPAD(MONTH(ah.data_informada), 2, '0'), '/', YEAR(ah.data_informada)), '%d/%m/%Y')
 UNION ALL
 SELECT 
 'Previsto' AS TIPO,
@@ -60,7 +68,7 @@ f.id AS FASE_ID,
 cr.id AS CENTRO_RESULTADO_ID,
 responsavelfase.id AS ID_RESPONSAVEL_TECNICO,
 profissional.id AS PROFISSIONAL_ID,
-0 AS ALOCACAO_HORAS_ID,
+-- 0 AS ALOCACAO_HORAS_ID,
 cp.id AS CUSTO_PRESTADOR_ID,
 sd.descricao AS STATUS_DEMANDA,
 0 AS VALOR_DESPESA_ORCADA,
@@ -69,8 +77,8 @@ d.data_criacao AS DATA_ABERTURA_DEMANDA,
 0 AS VALOR_HORAS_ORCADAS,
 0 AS VALOR_ADMINISTRATIVO_ORCADO,
 ap.quantidade_horas AS HORAS_PREVISTAS,
-TRUNCATE(cp.valor * ap.quantidade_horas, 2) AS VALOR_HORAS_PREVISTAS,
-TRUNCATE(un.custo_operacao_hora * ap.quantidade_horas, 2) AS VALOR_ADMINISTRATIVO_PREVISTO,
+ROUND(cp.valor * ap.quantidade_horas, 2) AS VALOR_HORAS_PREVISTAS,
+ROUND(un.custo_operacao_hora * ap.quantidade_horas, 2) AS VALOR_ADMINISTRATIVO_PREVISTO,
 0 AS HORAS_ALOCADAS,
 0 AS VALOR_HORAS_ALOCADAS,
 0 AS VALOR_ADMINISTRATIVO_ALOCADO,
@@ -109,7 +117,7 @@ f.id AS FASE_ID,
 cr.id AS CENTRO_RESULTADO_ID,
 0 AS ID_RESPONSAVEL_TECNICO,
 0 AS PROFISSIONAL_ID,
-0 AS ALOCACAO_HORAS_ID,
+-- 0 AS ALOCACAO_HORAS_ID,
 0 AS CUSTO_PRESTADOR_ID,
 sd.descricao AS STATUS_DEMANDA,
 orc.total_despesas AS VALOR_DESPESA_ORCADA,
