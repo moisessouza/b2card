@@ -174,6 +174,10 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 		}
 	}
 	
+	$ctrl.abrirarquivoaprovacao = pacote_itens_id => {
+		$window.open(BASE_URL + 'faturamento/gerar_arquivo_aprovacao/' + pacote_itens_id, '_blank');
+	}
+	
 	$ctrl.enviarparaaprovacao = () => {
 		
 		var data = {
@@ -182,6 +186,7 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 		
 		ContasReceberService.enviarparaaprovacao(data, function () {
 			ContasReceberService.buscarpacoteitensclienteid($ctrl.arguments.cliente_id, function (data){
+				$ctrl.abrirarquivoaprovacao(data.id);
 				$ctrl.pacote_itens = data;
 				$ctrl.listaitensfaturamento = data.lista_itens;
 				$ctrl.calculartotal(data.lista_itens);

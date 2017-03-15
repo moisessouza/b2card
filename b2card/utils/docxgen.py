@@ -496,3 +496,76 @@ def adicionar_coluna(tr, coluna):
         SubElement(rPr, 'w:color', attrib = {'w:val':"000000"})
         SubElement(rPr, 'w:sz', attrib = {'w:val':"20"})
         SubElement(rPr, 'w:szCs', attrib = {'w:val':"20"})
+        
+        
+        
+def gerar_arquivo_aprovacao(arquivo_docx, parcela_fase):
+    
+    tbl = criar_tabela()
+    
+    tr = adicionar_cabecalho(tbl)
+    
+    adicionar_coluna_cabecalho(tr, ["Demanda"])
+    adicionar_coluna_cabecalho(tr, ["Fase"])
+    adicionar_coluna_cabecalho(tr, ["Perfil"])
+    adicionar_coluna_cabecalho(tr, ["Qtd", "HH", "Contratada"])
+    adicionar_coluna_cabecalho(tr, ["Qtd", "HH", "Já" ,"Faturadas"])
+    adicionar_coluna_cabecalho(tr, ["Saldo", "HH", "a", "Faturar"])
+    adicionar_coluna_cabecalho(tr, ["Horas", "a", "Faturar"])
+    adicionar_coluna_cabecalho(tr, ["Valor/HH"])
+    adicionar_coluna_cabecalho(tr, ["Valor", "a", "faturar"])
+    
+    
+    for m in parcela_fase:
+        
+        nome_demanda = m['parcela__demanda__nome_demanda']
+        codigo_demanda = m['parcela__demanda__codigo_demanda']
+        fase_descricao = m['parcela__parcelafase__fase__fase__descricao']
+        valor_hora_descricao = m['parcela__parcelafase__medicao__valor_hora__descricao'] 
+        horas_contratadas = m['horas_contratadas']
+        horas_ja_faturadas = m['horas_ja_faturadas']
+        saldo_a_faturar = m['saldo_a_faturar']
+        valor_por_hora = m['valor_por_hora']
+        
+        valor_por_hora = formatar_para_valor_monetario_com_simbolo(valor_por_hora)
+        
+        horas_a_faturar = m['horas_a_faturar'] 
+        valor_a_faturar = m['valor_a_faturar']
+        
+        valor_a_faturar = formatar_para_valor_monetario_com_simbolo(valor_a_faturar)
+        
+        adicionar_linha_tabela(tbl, [codigo_demanda + ' - ' + nome_demanda, fase_descricao, 
+                                     valor_hora_descricao, horas_contratadas, horas_ja_faturadas if horas_ja_faturadas else '0', saldo_a_faturar, horas_a_faturar, valor_por_hora, valor_a_faturar])
+        
+    
+    arquivo_gerado = BytesIO()
+    
+    zin = zipfile.ZipFile (arquivo_docx, 'r')
+    zout = zipfile.ZipFile (arquivo_gerado, 'w')
+    
+    document_xml = zin.read('word/document.xml').decode()
+    variaveis = extrair_variaveis(document_xml)
+    
+    xml_string = tostring(tbl)
+    xml_string = xml_string.decode()
+       
+    if '#TABELA#' in variaveis:
+        list = variaveis['#TABELA#']
+        for token in list:
+            document_xml = document_xml.replace(token, xml_string)
+    
+    zout.writestr('word/document.xml',document_xml)
+    
+    for item in zin.infolist():
+        buffer = zin.read(item.filename)
+        if (item.filename[-12:] != 'document.xml'):
+            try:
+                zout.writestr(item, buffer)
+            except:
+                pass
+    
+    zin.close()
+    zout.close()
+    
+    return arquivo_gerado
+    
