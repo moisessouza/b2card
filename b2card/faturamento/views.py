@@ -68,7 +68,14 @@ class ParcelaList(APIView):
                     parcelafase_list = i['parcelafases']
                     del i['parcelafases']
                     
-                if 'pacote_itens' in i:
+                if 'selecionado' in i:
+                    del i['selecionado']
+                
+                pacote_itens = None
+                selecionado = None
+                if 'pacote_itens' in i and i['pacote_itens']:
+                    pacote_itens = PacoteItens.objects.get(pk=i['pacote_itens']['id'])
+                    selecionado = True
                     del i['pacote_itens']
                 
                 parcela = Parcela(**i)
@@ -79,6 +86,7 @@ class ParcelaList(APIView):
                 parcela.data_previsto_pagamento = converter_string_para_data(parcela.data_previsto_pagamento)
                 parcela.data_faturamento = converter_string_para_data(parcela.data_faturamento)
                 parcela.data_pagamento = converter_string_para_data(parcela.data_pagamento)
+                parcela.pacote_itens = pacote_itens
                 parcela.demanda = demanda
                 parcela.save()
                 
@@ -91,6 +99,7 @@ class ParcelaList(APIView):
                 serializer['data_previsto_pagamento'] = formatar_data(parcela.data_previsto_pagamento)
                 serializer['data_faturamento'] = formatar_data(parcela.data_faturamento)
                 serializer['data_pagamento'] = formatar_data(parcela.data_pagamento)
+                serializer['selecionado'] = selecionado
                 serializer['parcelafases'] = parcelafase_resp
                 
                 parcela_resp.append(serializer)

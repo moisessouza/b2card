@@ -290,6 +290,21 @@ parcela.controller('ModalParcelasController', function ($scope, $window, $uibMod
 				if (data) {
 					$ctrl.parcelas = data;
 					configurarparcelas($ctrl.parcelas);
+					
+					if (lote_faturamento && data) {
+						for (let parcela of data) {
+							if (parcela.pacote_itens && parcela.pacote_itens.id) {
+								parcela.selecionado = true;
+							} else {
+								for (let itemfaturamento of listaitensfaturamento) {
+									if (parcela.id == itemfaturamento.id) {
+										parcela.selecionado = true;
+									}
+								}	
+							}
+						}
+					}
+					
 					$ctrl.calcularvalortotalparcelas();
 					$ctrl.calcularvalorrestante();
 					$ctrl.calcularhorasrestantesparcela();
