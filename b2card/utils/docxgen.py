@@ -515,6 +515,11 @@ def gerar_arquivo_aprovacao(arquivo_docx, parcela_fase):
     adicionar_coluna_cabecalho(tr, ["Valor/HH"])
     adicionar_coluna_cabecalho(tr, ["Valor", "a", "faturar"])
     
+    total_horas_contratadas = 0
+    total_horas_ja_faturadas = 0
+    total_horas_a_faturar = 0
+    total_saldo_a_faturar = 0
+    total_valor_a_faturar = 0
     
     for m in parcela_fase:
         
@@ -527,16 +532,39 @@ def gerar_arquivo_aprovacao(arquivo_docx, parcela_fase):
         saldo_a_faturar = m['saldo_a_faturar']
         valor_por_hora = m['valor_por_hora']
         
+        total_horas_contratadas += horas_contratadas
+        total_horas_ja_faturadas += horas_ja_faturadas if horas_ja_faturadas else 0
+        total_saldo_a_faturar += saldo_a_faturar
+        
+        
         valor_por_hora = formatar_para_valor_monetario_com_simbolo(valor_por_hora)
         
         horas_a_faturar = m['horas_a_faturar'] 
         valor_a_faturar = m['valor_a_faturar']
+        
+        total_horas_a_faturar += horas_a_faturar
+        total_valor_a_faturar += valor_a_faturar
         
         valor_a_faturar = formatar_para_valor_monetario_com_simbolo(valor_a_faturar)
         
         adicionar_linha_tabela(tbl, [codigo_demanda + ' - ' + nome_demanda, fase_descricao, 
                                      valor_hora_descricao, horas_contratadas, horas_ja_faturadas if horas_ja_faturadas else '0', saldo_a_faturar, horas_a_faturar, valor_por_hora, valor_a_faturar])
         
+    
+    
+    tr = SubElement(tbl, 'w:tr', attrib = {'w:rsidR': "00492691", 'w:rsidTr':"00492691"})
+    trPr = SubElement(tr, 'w:trPr')
+    SubElement(trPr, 'w:trHeight', attrib = {'w:val':"270"})
+    
+    adicionar_coluna_rodape(tr, "Total")
+    adicionar_coluna_rodape(tr, None)
+    adicionar_coluna_rodape(tr, None)
+    adicionar_coluna_rodape(tr, total_horas_contratadas)
+    adicionar_coluna_rodape(tr, total_horas_ja_faturadas)
+    adicionar_coluna_rodape(tr, total_saldo_a_faturar)
+    adicionar_coluna_rodape(tr, round(total_horas_a_faturar, 2))
+    adicionar_coluna_rodape(tr, None)
+    adicionar_coluna_rodape(tr, total_valor_a_faturar)
     
     arquivo_gerado = BytesIO()
     
