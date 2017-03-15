@@ -62,20 +62,23 @@ class ParcelaList(APIView):
                 
                 if 'demanda' in i:
                     del i['demanda']
-                
-                data_previsto_parcela = None
-                if 'data_previsto_parcela' in i:
-                    data_previsto_parcela = converter_string_para_data(i['data_previsto_parcela'])
-                    del i['data_previsto_parcela']
-                
+               
                 parcelafase_list = []
                 if 'parcelafases' in i:
                     parcelafase_list = i['parcelafases']
                     del i['parcelafases']
+                    
+                if 'pacote_itens' in i:
+                    del i['pacote_itens']
                 
                 parcela = Parcela(**i)
                 parcela.valor_parcela = valor_parcela
-                parcela.data_previsto_parcela = data_previsto_parcela
+                parcela.data_previsto_parcela = converter_string_para_data(parcela.data_previsto_parcela)
+                parcela.data_envio_aprovacao = converter_string_para_data(parcela.data_envio_aprovacao)
+                parcela.data_aprovacao_faturamento = converter_string_para_data(parcela.data_aprovacao_faturamento)
+                parcela.data_previsto_pagamento = converter_string_para_data(parcela.data_previsto_pagamento)
+                parcela.data_faturamento = converter_string_para_data(parcela.data_faturamento)
+                parcela.data_pagamento = converter_string_para_data(parcela.data_pagamento)
                 parcela.demanda = demanda
                 parcela.save()
                 
@@ -83,7 +86,13 @@ class ParcelaList(APIView):
 
                 serializer = ParcelaSerializer(parcela).data
                 serializer['data_previsto_parcela'] = formatar_data(parcela.data_previsto_parcela)
+                serializer['data_envio_aprovacao'] = formatar_data(parcela.data_envio_aprovacao)
+                serializer['data_aprovacao_faturamento'] = formatar_data(parcela.data_aprovacao_faturamento)
+                serializer['data_previsto_pagamento'] = formatar_data(parcela.data_previsto_pagamento)
+                serializer['data_faturamento'] = formatar_data(parcela.data_faturamento)
+                serializer['data_pagamento'] = formatar_data(parcela.data_pagamento)
                 serializer['parcelafases'] = parcelafase_resp
+                
                 parcela_resp.append(serializer)
                 
             elif 'id' in i:
@@ -173,6 +182,11 @@ def buscar_parcela_por_demanda_id(request, demanda_id, format=None):
         parcela_data = ParcelaSerializer(i).data
         parcela_data['parcelafases'] = []
         parcela_data['data_previsto_parcela'] = formatar_data(i.data_previsto_parcela)
+        parcela_data['data_envio_aprovacao'] = formatar_data(i.data_envio_aprovacao)
+        parcela_data['data_aprovacao_faturamento'] = formatar_data(i.data_aprovacao_faturamento)
+        parcela_data['data_previsto_pagamento'] = formatar_data(i.data_previsto_pagamento)
+        parcela_data['data_faturamento'] = formatar_data(i.data_faturamento)
+        parcela_data['data_pagamento'] = formatar_data(i.data_pagamento)
         parcelas_list.append(parcela_data)
         
         parcelafases_list = ParcelaFase.objects.filter(parcela = i)

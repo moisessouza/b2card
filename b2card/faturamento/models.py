@@ -38,9 +38,14 @@ class Parcela(models.Model):
     descricao = models.CharField(max_length = 200)
     valor_parcela = models.FloatField(max_length=30, null=True)
     status = models.CharField(max_length=2, choices=STATUS, null=True)
-    data_previsto_parcela = models.DateField(null=True)
     demanda = models.ForeignKey(Demanda, null=True)
     pacote_itens = models.ForeignKey(PacoteItens, null = True, default = None)
+    data_previsto_parcela = models.DateField(null=True, default = None)
+    data_envio_aprovacao = models.DateField(null=True, default = None)
+    data_aprovacao_faturamento = models.DateField(null=True, default = None)
+    data_previsto_pagamento = models.DateField(null=True, default = None)
+    data_faturamento = models.DateField(null=True, default = None)
+    data_pagamento = models.DateField(null=True, default = None)
     
 class ParcelaFase(models.Model):
     parcela = models.ForeignKey(Parcela)
