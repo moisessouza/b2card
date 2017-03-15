@@ -18,7 +18,8 @@ class ParcelaSerializer(serializers.ModelSerializer):
     pacote_itens = PacoteItensSerializer()
     class Meta:
         model = Parcela
-        fields = ('id', 'descricao', 'valor_parcela', 'status', 'data_previsto_parcela', 'demanda', 'pacote_itens')
+        fields = ('id', 'descricao', 'valor_parcela', 'status', 'demanda', 'pacote_itens', 'data_previsto_parcela', 
+                  'data_envio_aprovacao', 'data_aprovacao_faturamento', 'data_previsto_pagamento', 'data_faturamento', 'data_pagamento')
         
 class MedicaoSerializer(serializers.ModelSerializer):
     valor_hora = ValorHoraSerializer()

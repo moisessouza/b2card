@@ -67,13 +67,13 @@
 			<div class="col-sm-8">
 				<form name="parcelas" style="height: 75%; overflow-y: scroll; overflow-x: scroll;">
 					
-					<table class="table table-sm table-bordered table-striped table-highlight" style="width: 1250px">
+					<table class="table table-sm table-bordered table-striped table-highlight" style="width: 1400px">
 						<thead>
 							<tr class="active">
 								<th ng-show="$ctrl.lote_faturamento"></th>
 								<th>LoteFat</th>
 								<th width="6%">Parcela</th>
-								<th>Status</th>
+								<th width="15%">Status</th>
 								<th width="9%">Data</th>
 								<th width="9%">Fase</th>
 								<th width="18%">Perfil</th>
@@ -100,11 +100,14 @@
 									<input type="text" ng-model="parcela.descricao" class="form-control"/>
 								</td>
 								<td>
-									{{parcela.status == 'PE' ? 'Pendente' : ''}}
-									{{parcela.status == 'PA' ? 'Pendente aprovação' : ''}}
-									{{parcela.status == 'PF' ? 'Pendente faturamento' : ''}}
-									{{parcela.status == 'FA' ? 'Faturado' : ''}}
-									{{parcela.status == 'PG' ? 'Pago' : ''}}
+									<select ng-model="parcela.status" class="form-control">
+										<option value="">Selecione...</option>
+										<option value="PE">Pendente</option>
+										<option value="PA">Pendente aprovação</option>
+										<option value="PF">Pendente faturamento</option>
+										<option value="FA">Faturado</option>
+										<option value="PG">Pago</option>
+									</select>
 								</td>
 								<td>
 									<input type="text" class="form-control" ng-model="parcela.data_previsto_parcela" ui-mask="99/99/9999" model-view-value="true" ng-required="!parcela.remover"/>
@@ -143,12 +146,22 @@
 								<td>
 									<input type="text" id="valor_parcela" name="valor_parcela" ng-model="parcela.valor_parcela" class="form-control" disabled/>
 								</td>
-								<th></th>
-								<th></th>
-								<th></th>
-								<th></th>
-								<th></th>
-								<th></th>
+								<td>
+									<input type="text" class="form-control" ng-model="parcela.data_envio_aprovacao" ui-mask="99/99/9999" model-view-value="true"/>
+								</td>
+								<td>
+									<input type="text" class="form-control" ng-model="parcela.data_aprovacao_faturamento" ui-mask="99/99/9999" model-view-value="true"/>
+								</td>
+								<td>
+									<input type="text" class="form-control" ng-model="parcela.data_previsto_pagamento" ui-mask="99/99/9999" model-view-value="true"/>
+								</td>
+								<td>
+									<input type="text" class="form-control" ng-model="parcela.data_faturamento" ui-mask="99/99/9999" model-view-value="true"/>
+								</td>
+								<td>
+									<input type="text" class="form-control" ng-model="parcela.data_pagamento" ui-mask="99/99/9999" model-view-value="true"/>
+								</td>
+								<td></td>
 							</tr>
 						</tbody>
 					</table>
@@ -156,7 +169,7 @@
 			</div>
 		</div>
 	</div>
-	<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.gravarparcelas()" ng-disabled="parcelas.$invalid">Gravar</button>
+	<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.gravarparcelas()" ng-disabled="parcelas.$invalid || $ctrl.valor_restante != '0,00'">Gravar</button>
 	<button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.selecionarparcelas()" ng-if="$ctrl.lote_faturamento">Selecionar</button>
 	<button type="button" class="btn btn-sm btn-primary"  ng-click="$ctrl.fechar()">Sair</button>	
 </div>

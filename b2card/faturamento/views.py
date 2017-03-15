@@ -62,20 +62,23 @@ class ParcelaList(APIView):
                 
                 if 'demanda' in i:
                     del i['demanda']
-                
-                data_previsto_parcela = None
-                if 'data_previsto_parcela' in i:
-                    data_previsto_parcela = converter_string_para_data(i['data_previsto_parcela'])
-                    del i['data_previsto_parcela']
-                
+               
                 parcelafase_list = []
                 if 'parcelafases' in i:
                     parcelafase_list = i['parcelafases']
                     del i['parcelafases']
+                    
+                if 'pacote_itens' in i:
+                    del i['pacote_itens']
                 
                 parcela = Parcela(**i)
                 parcela.valor_parcela = valor_parcela
-                parcela.data_previsto_parcela = data_previsto_parcela
+                parcela.data_previsto_parcela = converter_string_para_data(parcela.data_previsto_parcela)
+                parcela.data_envio_aprovacao = converter_string_para_data(parcela.data_envio_aprovacao)
+                parcela.data_aprovacao_faturamento = converter_string_para_data(parcela.data_aprovacao_faturamento)
+                parcela.data_previsto_pagamento = converter_string_para_data(parcela.data_previsto_pagamento)
+                parcela.data_faturamento = converter_string_para_data(parcela.data_faturamento)
+                parcela.data_pagamento = converter_string_para_data(parcela.data_pagamento)
                 parcela.demanda = demanda
                 parcela.save()
                 
