@@ -474,10 +474,10 @@ def gerar_arquivo_aprovacao(request, pacote_itens_id):
         horas_ja_faturadas = ParcelaFase.objects.filter(parcela__status__in = ['FA', 'PG'], 
                                 parcela__demanda__id = demanda_id,parcela__parcelafase__medicao__valor_hora__id=valor_hora_id, parcela__parcelafase__fase__fase__id=fase__id).aggregate(horas_ja_faturadas= Sum('parcela__parcelafase__medicao__quantidade_horas'))['horas_ja_faturadas']
                                 
-        saldo_a_faturar = ParcelaFase.objects.filter(parcela__status__in = ['PA', 'FA', 'PG'], 
-                                parcela__demanda__id = demanda_id,parcela__parcelafase__medicao__valor_hora__id=valor_hora_id, parcela__parcelafase__fase__fase__id=fase__id).aggregate(saldo_a_faturar= Sum('parcela__parcelafase__medicao__quantidade_horas'))['saldo_a_faturar']
+        #saldo_a_faturar = ParcelaFase.objects.filter(parcela__status__in = ['PA', 'FA', 'PG'], 
+        #                       parcela__demanda__id = demanda_id,parcela__parcelafase__medicao__valor_hora__id=valor_hora_id, parcela__parcelafase__fase__fase__id=fase__id).aggregate(saldo_a_faturar= Sum('parcela__parcelafase__medicao__quantidade_horas'))['saldo_a_faturar']
         
-        saldo_a_faturar = round(saldo_a_faturar - horas_ja_faturadas, 2)
+        saldo_a_faturar = round(horas_contratadas - (horas_ja_faturadas if horas_ja_faturadas else 0), 2)
         
         valor_por_hora = ParcelaFase.objects.filter(parcela__status__in = ['PA'],
                                 parcela__demanda__id = demanda_id,parcela__parcelafase__medicao__valor_hora__id=valor_hora_id).annotate(valor_por_hora=F('parcela__parcelafase__medicao__valor_total')/F('parcela__parcelafase__medicao__quantidade_horas'))[0].valor_por_hora
