@@ -564,7 +564,7 @@ def gerar_arquivo_aprovacao(arquivo_docx, parcela_fase):
     adicionar_coluna_rodape(tr, total_saldo_a_faturar)
     adicionar_coluna_rodape(tr, round(total_horas_a_faturar, 2))
     adicionar_coluna_rodape(tr, None)
-    adicionar_coluna_rodape(tr, total_valor_a_faturar)
+    adicionar_coluna_rodape(tr, formatar_para_valor_monetario_com_simbolo(total_valor_a_faturar))
     
     arquivo_gerado = BytesIO()
     
