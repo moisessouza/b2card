@@ -775,7 +775,7 @@ def buscar_lista_por_unidade_administrativa(request, format=None):
         pessoa_fisica = PessoaFisica.objects.filter(prestador__usuario__id= request.user.id)[0]
         unidade_administrativas = pessoa_fisica.unidade_administrativas.all()
 
-    demandas = Demanda.objects.filter(cliente__id = request.data['cliente_id'])
+    demandas = Demanda.objects.filter(cliente__id = request.data['cliente_id'], parcela__status__in=['PE', 'PA']).distinct()
     
     if unidade_administrativas:
         demandas = demandas.filter(unidade_administrativa__in = unidade_administrativas)
