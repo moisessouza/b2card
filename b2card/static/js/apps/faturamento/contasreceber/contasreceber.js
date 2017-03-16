@@ -11,7 +11,7 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 	
 	var mes = (date.getMonth() + 1) + "/" + date.getFullYear();
 	
-	$ctrl.listaclientes= PessoaService.buscarpessoasjuridicas();
+	$ctrl.listaclientes= PessoaService.buscarclientes();
 	
 	$ctrl.arguments = {
 		'mes': mes,

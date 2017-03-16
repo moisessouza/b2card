@@ -34,6 +34,10 @@ pessoaservices.service('PessoaService', function($resource, $http){
 			var PessoaJuridica = $resource(BASE_URL + 'cadastros/pessoa/api/pessoajuridica/list/');
 			return PessoaJuridica.query(callback);
 		},
+		buscarclientes: function (callback){
+			var PessoaJuridica = $resource(BASE_URL + 'cadastros/pessoa/api/pessoajuridica/clientes/');
+			return PessoaJuridica.query(callback);
+		},
 		buscarprofissionais: function(callback){
 			var Pessoa = $resource(BASE_URL + 'cadastros/pessoa/api/pessoafisica/list/');
 			return Pessoa.query(callback);
