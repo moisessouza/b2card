@@ -10,7 +10,7 @@ pesquisademanda.controller('PesquisaDemandaController', function (CommonsService
 		$ctrl.resultado = resultado;
 		if (resultado.demandas) {
 			for(let demanda of resultado.demandas) {
-				demanda.descricao = CommonsService.pad(demanda.id, 5) + ' - ' + demanda.cliente.nome_fantasia + ' - ' + demanda.codigo_demanda + ' - ' + demanda.nome_demanda;
+				demanda.descricao = CommonsService.pad(demanda.id, 5) + ' - ' + (demanda.unidade_administrativa ? demanda.unidade_administrativa.codigo : 'Sem UN') + ' - ' + demanda.cliente.nome_fantasia + ' - ' + demanda.codigo_demanda + ' - ' + demanda.nome_demanda;
 			}
 		}
 	}
