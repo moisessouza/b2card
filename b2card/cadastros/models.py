@@ -46,13 +46,13 @@ class UnidadeAdministrativa(models.Model):
     custo_operacao_hora = models.FloatField(default = None, null = True)
     
 
-TIPO = (
+TIPO_PESSOA = (
     ('C', 'CLIENTE'),
     ('F', 'FORNECEDOR'),
     ('A','AMBOS')
 )
 
-TIPO_PESSOA = (
+TIPO = (
     ('F', 'FISICA'),
     ('J', 'JURIDICA')
 )

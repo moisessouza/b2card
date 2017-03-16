@@ -601,3 +601,10 @@ def baixar_arquivo(request, pessoa_juridica_id):
         response = HttpResponse(arquivo_template, content_type='application/force-download')
         response['Content-Disposition'] = 'attachment; filename=' + arquivo.nome_arquivo
         return response
+    
+@api_view(['GET'])
+def buscar_pessoa_juridica_clientes(request):
+    pessoas = PessoaJuridica.objects.filter(pessoa__tipo__in ='J', pessoa__tipo_pessoa__in = ['C', 'A'])
+    data = PessoaJuridicaComPessoaSerializer(pessoas, many=True).data
+    return Response(data)
+    

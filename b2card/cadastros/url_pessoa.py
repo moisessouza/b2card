@@ -17,4 +17,5 @@ urlpatterns = [
     url(r'^api/pessoajuridica/uploadarquivo/(?P<pessoa_juridica_id>[0-9]+)/$', view_pessoa.upload_arquivo),
     url(r'^api/pessoajuridica/removerarquivo/(?P<pessoa_juridica_id>[0-9]+)/$', view_pessoa.remover_arquivo),
     url(r'^api/pessoajuridica/baixararquivo/(?P<pessoa_juridica_id>[0-9]+)/$', view_pessoa.baixar_arquivo),
+    url(r'^api/pessoajuridica/clientes/$', view_pessoa.buscar_pessoa_juridica_clientes),
 ]
