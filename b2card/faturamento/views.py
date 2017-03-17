@@ -460,20 +460,20 @@ def gerar_arquivo_faturamento_comercial(request, demanda_id):
 def gerar_arquivo_aprovacao(request, pacote_itens_id):
     
     pacote_itens = PacoteItens.objects.filter(pk=pacote_itens_id).values('parcela__demanda__id', 'parcela__demanda__nome_demanda', 'parcela__demanda__codigo_demanda', 
-                           'parcela__parcelafase__fase__fase__descricao', 'parcela__parcelafase__fase__fase__id', 'parcela__parcelafase__medicao__id',
+                           'parcela__parcelafase__fase__fase__descricao', 'parcela__parcelafase__fase__fase__id',
                            'parcela__parcelafase__medicao__valor_hora__id', 'parcela__parcelafase__medicao__valor_hora__descricao').distinct()
     
     for v in pacote_itens:
         
         valor_hora_id = v['parcela__parcelafase__medicao__valor_hora__id']
         demanda_id = v['parcela__demanda__id']
-        medicao_id = v['parcela__parcelafase__medicao__id']
+        #parcelafase_id = v['parcela__parcelafase__id']
         fase__id = v['parcela__parcelafase__fase__fase__id']
         
         horas_contratadas = ParcelaFase.objects.filter(parcela__demanda__id = demanda_id,
                                 medicao__valor_hora__id=valor_hora_id, fase__fase__id=fase__id).distinct().aggregate(horas_contratadas= Sum('medicao__quantidade_horas'))['horas_contratadas']
-        horas_ja_faturadas = ParcelaFase.objects.filter(parcela__status__in = ['FA', 'PG'], medicao__id = medicao_id,
-                                parcela__demanda__id = demanda_id,parcela__parcelafase__medicao__valor_hora__id=valor_hora_id, parcela__parcelafase__fase__fase__id=fase__id).aggregate(horas_ja_faturadas= Sum('parcela__parcelafase__medicao__quantidade_horas'))['horas_ja_faturadas']
+                                
+        horas_ja_faturadas = Medicao.objects.filter(parcela_fase__parcela__status__in = ['FA', 'PG'], parcela_fase__parcela__demanda__id = demanda_id, valor_hora__id=valor_hora_id, parcela_fase__fase__fase__id = fase__id).distinct().aggregate(quantidade_horas = Sum('quantidade_horas'))['quantidade_horas']
                                 
         #saldo_a_faturar = ParcelaFase.objects.filter(parcela__status__in = ['PA', 'FA', 'PG'], 
         #                       parcela__demanda__id = demanda_id,parcela__parcelafase__medicao__valor_hora__id=valor_hora_id, parcela__parcelafase__fase__fase__id=fase__id).aggregate(saldo_a_faturar= Sum('parcela__parcelafase__medicao__quantidade_horas'))['saldo_a_faturar']
@@ -483,10 +483,9 @@ def gerar_arquivo_aprovacao(request, pacote_itens_id):
         valor_por_hora = ParcelaFase.objects.filter(parcela__status__in = ['PA'],
                                 parcela__demanda__id = demanda_id,parcela__parcelafase__medicao__valor_hora__id=valor_hora_id).annotate(valor_por_hora=F('parcela__parcelafase__medicao__valor_total')/F('parcela__parcelafase__medicao__quantidade_horas'))[0].valor_por_hora
                                 
-        horas_a_faturar = ParcelaFase.objects.filter(parcela__status__in = ['PA'], medicao__id = medicao_id,
-                                parcela__demanda__id = demanda_id,parcela__parcelafase__medicao__valor_hora__id=valor_hora_id).distinct().aggregate(quantidade_horas = Sum('parcela__parcelafase__medicao__quantidade_horas'))['quantidade_horas']                       
+        horas_a_faturar = Medicao.objects.filter(parcela_fase__parcela__status__in = ['PA'], parcela_fase__parcela__demanda__id = demanda_id, valor_hora__id=valor_hora_id, parcela_fase__fase__fase__id = fase__id).distinct().aggregate(quantidade_horas = Sum('quantidade_horas'))['quantidade_horas']                       
         
-        valor_a_faturar = ParcelaFase.objects.filter(parcela__status__in = ['PA'], medicao__id = medicao_id,
+        valor_a_faturar = ParcelaFase.objects.filter(parcela__status__in = ['PA'],
                                 parcela__demanda__id = demanda_id,parcela__parcelafase__medicao__valor_hora__id=valor_hora_id).distinct().aggregate(valor_total = Sum('parcela__parcelafase__medicao__valor_total'))['valor_total']
     
         v['horas_contratadas'] = horas_contratadas

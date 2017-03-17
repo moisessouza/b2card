@@ -542,8 +542,8 @@ def gerar_arquivo_aprovacao(arquivo_docx, parcela_fase):
         horas_a_faturar = m['horas_a_faturar'] 
         valor_a_faturar = m['valor_a_faturar']
         
-        total_horas_a_faturar += horas_a_faturar
-        total_valor_a_faturar += valor_a_faturar
+        total_horas_a_faturar += horas_a_faturar if horas_a_faturar else 0
+        total_valor_a_faturar += valor_a_faturar if valor_a_faturar else 0
         
         valor_a_faturar = formatar_para_valor_monetario_com_simbolo(valor_a_faturar)
         
@@ -561,7 +561,7 @@ def gerar_arquivo_aprovacao(arquivo_docx, parcela_fase):
     adicionar_coluna_rodape(tr, None)
     adicionar_coluna_rodape(tr, total_horas_contratadas)
     adicionar_coluna_rodape(tr, total_horas_ja_faturadas)
-    adicionar_coluna_rodape(tr, total_saldo_a_faturar)
+    adicionar_coluna_rodape(tr, round(total_saldo_a_faturar, 2))
     adicionar_coluna_rodape(tr, round(total_horas_a_faturar, 2))
     adicionar_coluna_rodape(tr, None)
     adicionar_coluna_rodape(tr, formatar_para_valor_monetario_com_simbolo(total_valor_a_faturar))
