@@ -3,10 +3,12 @@ from io import BytesIO
 import zipfile
 from xml.etree import ElementTree as ET
 from xml.etree.ElementTree import Element, SubElement, Comment, tostring
-from utils.utils import formatar_id, formatar_para_valor_monetario_com_simbolo
+from utils.utils import formatar_id, formatar_para_valor_monetario_com_simbolo,\
+    formatar_data_completa
 from demandas.models import Orcamento, OrcamentoFase, ItemFase, Demanda
 import re
 import sys
+from django.db.models.aggregates import Sum
 
 def realizar_replace_docx(demanda_id, template_docx, tipo_proposta):
     
@@ -19,14 +21,22 @@ def realizar_replace_docx(demanda_id, template_docx, tipo_proposta):
     zin = zipfile.ZipFile (template_docx, 'r')
     zout = zipfile.ZipFile (arquivo_gerado, 'w')
     
+    orcamento = Orcamento.objects.get(demanda__id = demanda.id)
+    
+    total_horas_orcadas = ItemFase.objects.filter(orcamento_fase__orcamento = orcamento).aggregate(total_horas_orcadas = Sum('quantidade_horas'))['total_horas_orcadas']
+    
     valores = {
         '#iddemanda#': id_pad, 
+        '#nome_da_demanda#': demanda.nome_demanda,
         '#codigo_no_cliente#': demanda.codigo_demanda,
         '#descricao_da_demanda#': demanda.descricao,
         '#tipoproposta#': 'Técnica' if tipo_proposta == 'T' else 'comercial',
         '#tipo_informacoes#': 'Comerciais' if tipo_proposta == 'T' else 'Orçamentárias',
         '#forma_pagamento#': demanda.forma_pagamento if demanda.forma_pagamento else (demanda.cliente.forma_pagamento if demanda.cliente.forma_pagamento else ''),
-        '#particularidade_proposta#': demanda.particularidade_proposta if demanda.particularidade_proposta else (demanda.cliente.particularidade_proposta if demanda.cliente.particularidade_proposta else '')
+        '#particularidade_proposta#': demanda.particularidade_proposta if demanda.particularidade_proposta else (demanda.cliente.particularidade_proposta if demanda.cliente.particularidade_proposta else ''),
+        '#total_orcamento#': formatar_para_valor_monetario_com_simbolo(orcamento.total_orcamento),
+        '#total_horas_orcadas#': str(total_horas_orcadas),
+        '#data_de_abertura#': formatar_data_completa(demanda.data_criacao)
     }
     
     document_xml = zin.read('word/document.xml').decode()
@@ -136,7 +146,10 @@ def extrair_variaveis (arquivo):
                 token = '#' + variavel + '#'
                 
                 variavel = regularizar_variavel(variavel)
-                if variavel in ['iddemanda', 'codigo_no_cliente', 'descricao_da_demanda', 'tipoproposta', 'tipo_informacoes', 'TABELA', 'forma_pagamento', 'particularidade_proposta']:
+                if variavel in ['iddemanda', 'codigo_no_cliente', 'descricao_da_demanda', 
+                                'tipoproposta', 'tipo_informacoes', 'TABELA', 'forma_pagamento', 
+                                'particularidade_proposta', 'total_orcamento', 'total_horas_orcadas', 'data_de_abertura',
+                                'nome_da_demanda']:
                     variavel = '#' + variavel + '#'
                     if variavel in variaveis:
                         variaveis[variavel].append(token)

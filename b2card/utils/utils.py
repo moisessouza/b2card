@@ -79,5 +79,14 @@ def formatar_para_valor_monetario_com_simbolo(numero):
     
 def formatar_id (id):
     return format(id, '05d')
+
+def formatar_data_completa(data):
+    
+    if data is not None:
+        return data.strftime('%d de %B de %Y')
+    else:
+        return None
+    
+    
         
     
