@@ -822,6 +822,9 @@ def buscar_lista_por_parametro(request, format=None):
                     list_responsaveis.append(k);
         
         demandas = Demanda.objects.filter(**arguments)
+        
+        if not request.user.is_superuser:
+            demandas = demandas.filter(unidade_administrativa__pessoafisica__prestador__usuario__id = request.user.id)
             
         if list_status:
             demandas = demandas.filter(status_demanda__in=list_status)
@@ -864,6 +867,10 @@ def buscar_lista_por_parametro(request, format=None):
             
     else:
         demandas = Demanda.objects.all().order_by('-id')
+        
+        if not request.user.is_superuser:
+            demandas = demandas.filter(unidade_administrativa__pessoafisica__prestador__usuario__id = request.user.id)
+        
         paginator = Paginator(demandas, REGISTROS_POR_PAGINA)
         demandas = paginator.page(1)
         total_paginas = paginator.num_pages
