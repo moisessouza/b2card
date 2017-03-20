@@ -40,12 +40,14 @@ def pesquisar_alocacoes_horas(request, format=None):
         
     if 'demanda' in request.data and request.data['demanda']:
         alocacao_horas = alocacao_horas.filter(atividade_profissional__atividade__fase_atividade__demanda__id=request.data['demanda']['id'])
-        
+    
     if not request.user.is_superuser:
         eh_gestor = Prestador.objects.filter(Q(data_fim__isnull=True) | Q(data_fim__gte = datetime.datetime.now()), Q(cargo__gestor=True), Q(usuario__id = request.user.id))
     
         if len(eh_gestor) <= 0:
             alocacao_horas = alocacao_horas.filter(atividade_profissional__pessoa_fisica__prestador__usuario__id = request.user.id)
+        else:
+            alocacao_horas = alocacao_horas.filter(atividade_profissional__atividade__fase_atividade__demanda__unidade_administrativa__pessoafisica__prestador__usuario__id = request.user.id)
         
     alocacao_hora_list = RelatorioAlocacaoHorasSerializer(alocacao_horas, many=True).data
     
@@ -268,6 +270,8 @@ def relatorio(request):
     
     if not request.user.is_superuser and not eh_gestor:
         alocacao_horas = alocacao_horas.filter(atividade_profissional__pessoa_fisica__prestador__usuario__id=request.user.id)
+    elif not request.user.is_superuser:
+        alocacao_horas = alocacao_horas.filter(atividade_profissional__atividade__fase_atividade__demanda__unidade_administrativa__pessoafisica__prestador__usuario__id = request.user.id)
         
     periodo = request.POST['periodo']
     periodo = converter_string_para_data(periodo)
