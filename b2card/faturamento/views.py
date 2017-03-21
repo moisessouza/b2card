@@ -511,7 +511,7 @@ def gerar_lote_despesas(request, format=None):
         if 'id' in request.data['demanda'] and request.data['demanda']['id']:
             demanda = Demanda.objects.get(pk=request.data['demanda']['id'])
         del request.data['demanda']
-            
+        
     if 'pessoa' in request.data:
         del request.data['pessoa']
 
