@@ -8,6 +8,7 @@ encoding//demandas/migrations/0028_auto_20170208_1458.py=utf-8
 encoding//demandas/models.py=utf-8
 encoding//demandas/views.py=utf-8
 encoding//faturamento/migrations/0007_auto_20170223_1504.py=utf-8
+encoding//faturamento/migrations/0014_lotedespesa_valor_total.py=utf-8
 encoding//faturamento/models.py=utf-8
 encoding//gestor/views.py=utf-8
 encoding//inicial/views.py=utf-8

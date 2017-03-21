@@ -189,6 +189,16 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 		$ctrl.lote_despesa.item_despesas.push({});
 	};
 	
+	$ctrl.calcularvalortotal = () =>{
+		
+		let valor_total = 0;
+		for (let i of $ctrl.lote_despesa.item_despesas){
+			valor_total += CommonsService.stringparafloat(i.valor)
+		}
+		
+		$ctrl.lote_despesa.valor_total = CommonsService.formatarnumero(valor_total);
+	};
+	
 	$ctrl.remover = (despesa) => {
 		despesa.remover = true;
 	};

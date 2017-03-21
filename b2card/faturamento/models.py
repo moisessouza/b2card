@@ -68,6 +68,7 @@ class LoteDespesa(models.Model):
     demanda = models.ForeignKey(Demanda, default = None)
     pessoa = models.ForeignKey(Pessoa, default = None)
     status = models.CharField(max_length=2, choices=STATUS_PACOTE, default=None)
+    valor_total = models.FloatField(default = None, null = True)
     data = models.DateField(default = None)
     
 class ItemDespesa(models.Model):

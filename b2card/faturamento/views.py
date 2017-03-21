@@ -527,6 +527,7 @@ def gerar_lote_despesas(request, format=None):
     lote_despesa.pessoa = pessoa
     lote_despesa.status = 'PE'
     lote_despesa.data = datetime.datetime.now().date()
+    lote_despesa.valor_total = converter_string_para_float(lote_despesa.valor_total)
     lote_despesa.save()
     
     item_despesa_list = []
@@ -572,6 +573,9 @@ def buscar_lote_despesas_abertos(request, demanda_id, format=None):
     if lote_despesas:
         lote_despesa_list = LoteDespesaSerializer(lote_despesas, many=True).data;
         for l in lote_despesa_list:
+            
+            l['valor_total'] = formatar_para_valor_monetario(l['valor_total'])
+            
             item_despesa = ItemDespesa.objects.filter(lote_despesa__id = l['id'])
             
             item_despesa_list = ItemDespesaSerializer(item_despesa, many=True).data

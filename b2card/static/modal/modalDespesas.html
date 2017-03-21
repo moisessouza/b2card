@@ -33,7 +33,7 @@
 							<input type="text" class="form-control" ng-model="despesa.num_documento" style="width: 90px" ng-required="!despesa.remover">
 						</td>
 						<td>
-							<input type="text" class="form-control" ng-model="despesa.valor" gb-money style="width: 90px" ng-required="!despesa.remover">
+							<input type="text" class="form-control" ng-model="despesa.valor" gb-money ng-change="$ctrl.calcularvalortotal();" style="width: 90px" ng-required="!despesa.remover">
 						</td>
 						<td>
 							<input type="text" ui-mask="99/99/9999" model-view-value="true" ng-model="despesa.data" class="form-control" ng-required="!despesa.remover">
@@ -51,6 +51,16 @@
 						</td>
 					</tr>
 				</tbody>
+				<tfoot>
+					<tr>
+						<td>
+							<b>Total</b>
+						</td>
+						<td>
+							<b>{{$ctrl.lote_despesa.valor_total}}</b>
+						</td>
+					</tr>
+				</tfoot>
 			</table>
 		</div>
 	</div>
