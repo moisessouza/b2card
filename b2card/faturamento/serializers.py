@@ -4,9 +4,12 @@ Created on 14 de set de 2016
 @author: moi09
 '''
 from rest_framework import serializers
-from faturamento.models import Parcela, Medicao, ParcelaFase, PacoteItens
+from faturamento.models import Parcela, Medicao, ParcelaFase, PacoteItens,\
+    LoteDespesa, ItemDespesa
 from cadastros.serializers import ValorHoraSerializer
-from demandas.serializers import OrcamentoFaseSerializer, DemandaSerializer
+from demandas.serializers import OrcamentoFaseSerializer, DemandaSerializer,\
+    DemandaInicialSerializer
+from cadastros.serializers_pessoa import PessoaSerializer
 
 class PacoteItensSerializer(serializers.ModelSerializer):
     class Meta:
@@ -33,3 +36,15 @@ class ParcelaFaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = ParcelaFase
         fields = ('id', 'parcela', 'fase', 'valor')
+        
+class LoteDespesaSerializer(serializers.ModelSerializer):
+    demanda = DemandaInicialSerializer()
+    pessoa = PessoaSerializer()
+    class Meta:
+        model = LoteDespesa
+        fields = ('id', 'demanda', 'pessoa', 'data')
+        
+class ItemDespesaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ItemDespesa
+        fields = ('id', 'num_documento', 'valor', 'data', 'tipo_despesa', 'descricao')

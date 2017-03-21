@@ -20,8 +20,8 @@ class TipoAlocacaoDetail(APIView):
         serializer = serializers.TipoAlocacaoSerializer(tipo_alocacao)
         return Response(serializer.data)
     
-    def delete(self, request, tipohora_id, format=None):
-        tipo_alocacao = TipoAlocacao.objects.get(pk=tipohora_id)
+    def delete(self, request, tipoalocacao_id, format=None):
+        tipo_alocacao = TipoAlocacao.objects.get(pk=tipoalocacao_id)
         tipo_alocacao.delete()
         serializer = serializers.TipoAlocacaoSerializer(tipo_alocacao)
         return Response(serializer.data)    

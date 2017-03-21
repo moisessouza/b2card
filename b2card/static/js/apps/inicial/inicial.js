@@ -143,6 +143,47 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 		
 	}
 	
+	
+	$ctrl.abrirmodaldespesas = demanda => {
+		
+		var modalInstance = $uibModal.open({
+			animation : $ctrl.animationsEnabled,
+			ariaLabelledBy : 'modal-title',
+			ariaDescribedBy : 'modal-body',
+			templateUrl : '/static/modal/modalDespesas.html?bust=' + Math.random().toString(36).slice(2),
+			controller : 'ModalDespesaController',
+			controllerAs : '$ctrl',
+			size : 'lg',
+			windowClass: 'app-modal-window',
+			resolve : {
+		    	  demanda: demanda
+			}
+		});
+			
+		modalInstance.result.then(function(data) {
+		}, function() {
+		});
+	}
+	
+}).controller('ModalDespesaController', function (demanda, InicialService, CommonsService, TipoAlocacaoService, $uibModalInstance, $scope, $window) {
+	var $ctrl = this;
+	
+	$ctrl.demanda = demanda;
+	
+	$ctrl.despesaslist = [];
+	
+	$ctrl.adicionar = () => {
+		$ctrl.despesaslist.push({});
+	};
+	
+	$ctrl.remover = (despesa) => {
+		despesa.remover = true;
+	};
+	
+	$ctrl.cancelar= function (){
+		$uibModalInstance.close();
+	};
+	
 }).controller('ModalAlocacaoInternaController', function (atividade, InicialService, CommonsService, TipoAlocacaoService, $uibModalInstance, $scope, $window) {
 	
 	var $ctrl = this;

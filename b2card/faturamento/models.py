@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 
-from cadastros.models import ValorHora, PessoaJuridica
+from cadastros.models import ValorHora, PessoaJuridica, Pessoa, TipoDespesa
 from demandas.models import Demanda, OrcamentoFase
 
 
@@ -57,3 +57,17 @@ class Medicao(models.Model):
     valor_hora = models.ForeignKey(ValorHora, default=None)
     quantidade_horas = models.FloatField()
     valor_total = models.FloatField()
+    
+class LoteDespesa(models.Model):
+    demanda = models.ForeignKey(Demanda, default = None)
+    pessoa = models.ForeignKey(Pessoa, default = None)
+    data = models.DateField(default = None)
+    
+class ItemDespesa(models.Model):
+    lote_despesa = models.ForeignKey(LoteDespesa, default = None)
+    num_documento = models.CharField(max_length=100, default = None)
+    valor = models.FloatField(default = None)
+    data = models.DateField(default = None)
+    tipo_despesa = models.ForeignKey(TipoDespesa, default = None, on_delete=models.PROTECT)
+    descricao = models.TextField(default = None, null = True)
+    

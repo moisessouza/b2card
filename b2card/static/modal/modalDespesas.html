@@ -1,0 +1,54 @@
+<meta charset="utf-8">
+<div class="modal-body" id="modal-body">
+	<div class="panel panel-primary form-group-sm margin-top">
+		<div class="panel-heading">
+			{{$ctrl.demanda.nome_demanda}}
+		</div>
+		<div class="panel-body">
+		
+			<button class="btn btn-primary" type="button" ng-click="$ctrl.adicionar();">Adicionar</button>
+			
+			<table class="table">
+				<thead>
+					<tr>
+						<th>N°Documento</th>
+						<th>Valor</th>
+						<th>Data</th>
+						<th>Tipo</th>
+						<th>Descrição</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="despesa in $ctrl.despesaslist" ng-show="!despesa.remover">
+						<td>
+							<input type="text" class="form-control" ng-model="despesa.num_documento" style="width: 90px">
+						</td>
+						<td>
+							<input type="text" class="form-control" ng-model="despesa.valor" style="width: 90px">
+						</td>
+						<td>
+							<input type="text" ui-mask="99/99/9999" model-view-value="true" ng-model="despesa.data" class="form-control">
+						</td>
+						<td>
+							<select class="form-control" ng-model="despesa.tipo_despesa.id">
+								<option value="">Selecione...</option>
+							</select>
+						</td>
+						<td>
+							<input type="text" class="form-control" ng-model="despesa.descricao" style="width: 470px">
+						</td>
+						<td>
+							<button class="glyphicon glyphicon-trash" style="top: 0; background-color: transparent; border: 0; padding: 7px;" ng-click="$ctrl.remover(despesa);"></button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+ <div class="modal-footer">
+     <button class="btn btn-primary" type="button" ng-click="$ctrl.salvar()">Salvar</button>
+     <button class="btn btn-warning" type="button" ng-click="$ctrl.cancelar()">Cancelar</button>
+ </div>
+	
