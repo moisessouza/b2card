@@ -6,9 +6,11 @@
 			{{$ctrl.lote_despesa.demanda.nome_demanda}}
 		</div>
 		<div class="panel-body" ng-show="$ctrl.lotes_abertos.length > 0 && !$ctrl.lote_despesa">
-			<div ng-repeat="l in $ctrl.lotes_abertos">
-				<a href="#" ng-click="$ctrl.selecionarlote(l);">{{l.id}}</a>
-			</div>
+			<ul>
+				<li ng-repeat="l in $ctrl.lotes_abertos">
+					<a href="#" ng-click="$ctrl.selecionarlote(l);">{{l.id}}</a>
+				</li>
+			</ul>
 		</div>
 		<div class="panel-body" ng-show="$ctrl.lote_despesa">
 		
