@@ -6,7 +6,7 @@ Created on 14 de set de 2016
 from rest_framework import serializers
 from faturamento.models import Parcela, Medicao, ParcelaFase, PacoteItens,\
     LoteDespesa, ItemDespesa
-from cadastros.serializers import ValorHoraSerializer
+from cadastros.serializers import ValorHoraSerializer, TipoDespesaSerializer
 from demandas.serializers import OrcamentoFaseSerializer, DemandaSerializer,\
     DemandaInicialSerializer
 from cadastros.serializers_pessoa import PessoaSerializer
@@ -45,6 +45,7 @@ class LoteDespesaSerializer(serializers.ModelSerializer):
         fields = ('id', 'demanda', 'pessoa', 'data')
         
 class ItemDespesaSerializer(serializers.ModelSerializer):
+    tipo_despesa = TipoDespesaSerializer()
     class Meta:
         model = ItemDespesa
         fields = ('id', 'num_documento', 'valor', 'data', 'tipo_despesa', 'descricao')

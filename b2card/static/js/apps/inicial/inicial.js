@@ -1,6 +1,6 @@
 "use strict";
 
-var inicial = angular.module('inicial', ['inicial-services', 'tipoalocacao-services', 'commons', 'ui.bootstrap', 'ui.mask', 'ngMaterial', 'ngMessages']);
+var inicial = angular.module('inicial', ['inicial-services', 'tipoalocacao-services', 'tipodespesa-services', 'commons', 'ui.bootstrap', 'ui.mask', 'ngMaterial', 'ngMessages']);
 
 inicial.controller('InicialController', function (InicialService, CommonsService, $scope, $window, $uibModal, $mdDialog){
 	var $ctrl = this;
@@ -165,15 +165,18 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 		});
 	}
 	
-}).controller('ModalDespesaController', function (demanda, InicialService, CommonsService, TipoAlocacaoService, $uibModalInstance, $scope, $window) {
+}).controller('ModalDespesaController', function (demanda, InicialService, TipoDespesaService, CommonsService, TipoAlocacaoService, $uibModalInstance, $scope, $window) {
 	var $ctrl = this;
 	
-	$ctrl.demanda = demanda;
+	$ctrl.lote_despesa = {
+		demanda: demanda,
+		item_despesas: []
+	};
 	
-	$ctrl.despesaslist = [];
+	$ctrl.tipo_despesas = TipoDespesaService.buscartipodespesas();
 	
 	$ctrl.adicionar = () => {
-		$ctrl.despesaslist.push({});
+		$ctrl.lote_despesa.item_despesas.push({});
 	};
 	
 	$ctrl.remover = (despesa) => {
@@ -182,6 +185,10 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 	
 	$ctrl.cancelar= function (){
 		$uibModalInstance.close();
+	};
+	
+	$ctrl.salvar = () => {
+		$ctrl.lote_despesa = InicialService.salvarlotedespesa($ctrl.lote_despesa);
 	};
 	
 }).controller('ModalAlocacaoInternaController', function (atividade, InicialService, CommonsService, TipoAlocacaoService, $uibModalInstance, $scope, $window) {
