@@ -1,15 +1,15 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from faturamento.models import Parcela, Medicao, ParcelaFase, PacoteItens,\
-    LoteFaturamento
+    LoteFaturamento, LoteDespesa, ItemDespesa
 from faturamento.serializers import ParcelaSerializer, MedicaoSerializer, ParcelaFaseSerializer,\
-    PacoteItensSerializer
+    PacoteItensSerializer, LoteDespesaSerializer, ItemDespesaSerializer
 from rest_framework.response import Response
 from utils.utils import converter_string_para_float, converter_string_para_data, formatar_data,\
     formatar_para_valor_monetario, serializar_data
 from demandas.models import Demanda, Orcamento, ItemFase, OrcamentoFase
 from cadastros.models import ValorHora, TipoHora, Vigencia, PessoaFisica,\
-    PessoaJuridica
+    PessoaJuridica, Pessoa, TipoDespesa
 from rest_framework.decorators import api_view
 from demandas.serializers import OrcamentoFaseSerializer, OrcamentoSerializer,\
     ItemFaseSerializer
@@ -502,3 +502,64 @@ def gerar_arquivo_aprovacao(request, pacote_itens_id):
     response = HttpResponse(arquivo_gerado.getvalue(), content_type='application/force-download')
     response['Content-Disposition'] = 'attachment; filename="tabela_aprovacao.docx"'
     return response
+
+@api_view(['POST'])
+def gerar_lote_despesas(request, format=None):
+     
+    demanda = None
+    if 'demanda' in request.data:
+        if 'id' in request.data['demanda'] and request.data['demanda']['id']:
+            demanda = Demanda.objects.get(pk=request.data['demanda']['id'])
+        del request.data['demanda']
+            
+    pessoa = None
+    if 'pessoa' in request.data:
+        if 'id' in request.data['pessoa'] and request.data['pessoa']['id']:
+            pessoa = Pessoa.objects.get(pk=request.data['pessoa']['id'])
+        del request.data['pessoa']
+        
+    item_despesas = []
+    if 'item_despesas' in request.data:
+        item_despesas = request.data['item_despesas']
+        del request.data['item_despesas']
+        
+    lote_despesa = LoteDespesa(request.data)
+    lote_despesa.demanda = demanda
+    lote_despesa.pessoa = pessoa
+    lote_despesa.save()
+    
+    item_despesa_list = []
+    for i in item_despesas:
+        if 'remover' not in i or i['remover'] is False:
+            
+            tipo_despesa = None
+            if 'tipo_despesa' in i:
+                if 'id' in i['tipo_despesa'] and i['tipo_despesa']['id']:
+                    tipo_despesa = TipoDespesa.objects.get(pk=i['tipo_despesa']['id'])
+                del i['tipo_despesa']
+            
+            item_despesa = ItemDespesa(i)
+            item_despesa.lote_despesa = lote_despesa
+            item_despesa.tipo_despesa = tipo_despesa
+            item_despesa.data = converter_string_para_data(item_despesa.data)
+            item_despesa.valor = converter_string_para_float(item_despesa.valor)
+            item_despesa.save()
+            
+            item_despesa_list.append(item_despesa)
+            
+        elif 'id' in i:
+            item_despesa = ItemDespesa.objects.get(pk=i['id'])
+            item_despesa.delete()
+    
+    data = LoteDespesaSerializer(lote_despesa).data
+    
+    item_despesa_list = ItemDespesaSerializer(item_despesa_list, many=True).data
+    
+    for i in item_despesa_list:
+        i['valor'] = formatar_para_valor_monetario(i['valor'])
+        i['data'] = serializar_data(i['data'])
+    
+    data['item_despesas'] =  item_despesa_list
+    
+    return Response(data)
+    

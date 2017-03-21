@@ -53,6 +53,10 @@ inicialservices.service('InicialService', function($resource){
 		validardatahora: function(data, hora_inicio, hora_fim, callback) {
 			var CustoPrestador = $resource(BASE_URL + 'inicial/api/validar_data_hora/:data_informada/:hora_inicio/:hora_fim/');
 			return CustoPrestador.get({'data_informada': data, 'hora_inicio': hora_inicio, 'hora_fim': hora_fim}, callback);
+		},
+		salvarlotedespesa: function(data, callback) {
+			var LoteDespesa = $resource(BASE_URL + 'faturamento/api/lotedespesas/new/');
+			return LoteDespesa.save({}, data, callback);
 		}
 	}
 });
