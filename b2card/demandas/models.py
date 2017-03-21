@@ -2,7 +2,7 @@
 from django.db import models
 from datetime import datetime
 from cadastros.models import CentroCusto, ValorHora, CentroResultado, UnidadeAdministrativa,\
-    Fase, PessoaFisica, PessoaJuridica, NaturezaDemanda, TipoAlocacao
+    Fase, PessoaFisica, PessoaJuridica, NaturezaDemanda, TipoAlocacao, Pessoa
 import faturamento
 import cadastros
 

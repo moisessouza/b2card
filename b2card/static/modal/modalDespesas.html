@@ -1,0 +1,36 @@
+<meta charset="utf-8">
+<div class="modal-body" id="modal-body">
+	<div class="panel panel-primary form-group-sm margin-top">
+		<div class="panel-heading">
+			{{$ctrl.demanda.nome_demanda}}
+		</div>
+		<div class="panel-body">
+			<div class="col-sm-4">
+				<label class="input-label">Data</label>
+				<div class="input-group">
+					<input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true" ng-model="$ctrl.data" is-open="$ctrl.aberto" ng-required="true" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-default" ng-click="$ctrl.abrir()"><i class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+				</div>
+			</div>
+			<div class="form-group col-sm-12">
+				<label class="control-label">Tipo</label>
+				<textarea class="form-control" ng-model="$ctrl.descricao"></textarea>
+			</div>
+			<div class="form-group col-sm-12">
+				<label class="control-label">Descrição</label>
+				<textarea class="form-control" ng-model="$ctrl.descricao"></textarea>
+			</div>
+			<div class="form-group col-sm-12">
+				<label class="control-label">Valor</label>
+				<textarea class="form-control" ng-model="$ctrl.valor"></textarea>
+			</div>
+		</div>
+	</div>
+</div>
+ <div class="modal-footer">
+     <button class="btn btn-primary" type="button" ng-click="$ctrl.salvar()">Salvar</button>
+     <button class="btn btn-warning" type="button" ng-click="$ctrl.cancelar()">Cancelar</button>
+ </div>
+	

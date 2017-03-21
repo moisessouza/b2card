@@ -83,6 +83,11 @@
 							Tipo de alocação
 						</a>
 						{%endcheck_permittion%}
+						{% check_permittion 'cadastros:tipodespesa' %}
+						<a href="{% url 'cadastros:tipodespesa' %}">
+							Tipo de despesa
+						</a>
+						{%endcheck_permittion%}
 					</li>
         		</ul>
 			</li>

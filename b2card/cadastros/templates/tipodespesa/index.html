@@ -1,0 +1,62 @@
+<meta charset="utf-8">
+{% extends "base_page.html" %}
+
+{% block script %}
+	<script src="/static/js/apps/cadastros/tipodespesa/tipodespesa.js"></script>
+	<script src="/static/js/apps/cadastros/tipodespesa/tipodespesa-services.js"></script>
+	<script src="/static/js/commons/commons.js"></script>
+	<script src="/static/js/angular/ui-bootstrap-tpls-2.2.0.min.js"></script>
+	<script src="/static/js/jquery/priceformat/jquery.priceformat.min.js"></script>
+{% endblock %}
+
+{%block content%}
+
+{%verbatim%}
+
+<style>
+	table tr {
+    	cursor: pointer;
+	}
+	button.margin {
+		margin-bottom: 1em;
+	}
+	span.red { 
+   		color:red;
+  	}
+</style>
+
+<h1>Tipo de despesa</h1>
+
+<form  name="tipodespesa" ng-app="tipodespesa" ng-controller="TipoDespesaController as $ctrl" ng-show="$ctrl.show" class="ng-hide">
+  <div class="panel panel-default form-group-sm" >
+	  <div class="panel-body">
+		  <div class="form-group">
+		    <label for="descricao">Tipo de despesa</label>
+		    <input type="text" class="form-control" id="descricao" name="descricao" ng-model="$ctrl.tipodespesa.descricao" maxlength="30" placeholder="Tipo de despesa" required>
+		  </div>
+		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.salvar()" ng-disabled="tipodespesa.$invalid">Salvar</button>
+		  <button type="button" class="btn btn-default margin" ng-click="$ctrl.novo()" ng-show="$ctrl.tipodespesa.id">Novo</button>
+		  
+		  <table class="table table-responsive table-bordered table-striped table-highlight" ng-show="$ctrl.tipodespesalist">
+				<thead>
+				    <th>Tipo de despesa</th>
+				    <th></th>
+				</thead>
+				<tbody>
+				    <tr ng-repeat="tipodespesa in $ctrl.tipodespesalist">
+				        <td class="col-sm-12" ng-click="$ctrl.editar(tipodespesa);">{{tipodespesa.descricao}}</td>
+				        <td>
+				       		<button type="button" class="btn btn-default" ng-click="$ctrl.deletar(tipodespesa)">
+								<span class="glyphicon glyphicon-trash"></span>
+							</button>
+				        </td>
+				    </tr>
+				</tbody>
+		   </table>
+	 </div>
+  </div>
+</form>
+
+{%endverbatim%}
+
+{%endblock%}

@@ -243,3 +243,6 @@ class NaturezaDemanda(models.Model):
     
 class TipoAlocacao(models.Model):
     descricao = models.CharField(max_length=100)
+    
+class TipoDespesa(models.Model):
+    descricao = models.CharField(max_length=100)
