@@ -511,7 +511,7 @@ def gerar_lote_despesas(request, format=None):
         if 'id' in request.data['demanda'] and request.data['demanda']['id']:
             demanda = Demanda.objects.get(pk=request.data['demanda']['id'])
         del request.data['demanda']
-            
+        
     if 'pessoa' in request.data:
         del request.data['pessoa']
 
@@ -525,6 +525,7 @@ def gerar_lote_despesas(request, format=None):
     lote_despesa = LoteDespesa(**request.data)
     lote_despesa.demanda = demanda
     lote_despesa.pessoa = pessoa
+    lote_despesa.status = 'PE'
     lote_despesa.data = datetime.datetime.now().date()
     lote_despesa.save()
     
@@ -562,4 +563,25 @@ def gerar_lote_despesas(request, format=None):
     data['item_despesas'] =  item_despesa_list
     
     return Response(data)
+
+@api_view(['GET'])
+def buscar_lote_despesas_abertos(request, demanda_id, format=None):
+    
+    lote_despesas = LoteDespesa.objects.filter(pessoa__pessoafisica__prestador__usuario__id = request.user.id, status='PE', demanda__id = demanda_id)
+    
+    if lote_despesas:
+        lote_despesa_list = LoteDespesaSerializer(lote_despesas, many=True).data;
+        for l in lote_despesa_list:
+            item_despesa = ItemDespesa.objects.filter(lote_despesa__id = l['id'])
+            
+            item_despesa_list = ItemDespesaSerializer(item_despesa, many=True).data
+            for i in item_despesa_list:
+                i['valor'] = formatar_para_valor_monetario(i['valor'])
+                i['data'] = serializar_data(i['data'])
+                
+            l['item_despesas'] = item_despesa_list
+        
+        return Response(lote_despesa_list)
+    
+    return Response([])
     

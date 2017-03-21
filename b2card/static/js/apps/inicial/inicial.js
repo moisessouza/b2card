@@ -168,10 +168,18 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 }).controller('ModalDespesaController', function (demanda, InicialService, TipoDespesaService, CommonsService, TipoAlocacaoService, $uibModalInstance, $scope, $window) {
 	var $ctrl = this;
 	
-	$ctrl.lote_despesa = {
-		demanda: demanda,
-		item_despesas: []
+	$ctrl.selecionarlote = lote => {
+		$ctrl.lote_despesa = lote;
 	};
+	
+	$ctrl.lotes_abertos = InicialService.buscarlotesemaberto(demanda.id, data => {
+		if (data.length <= 0) {
+			$ctrl.lote_despesa = {
+				demanda: demanda,
+				item_despesas: []
+			};
+		}
+	});
 	
 	$ctrl.tipo_despesas = TipoDespesaService.buscartipodespesas();
 	
@@ -188,7 +196,9 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 	};
 	
 	$ctrl.salvar = () => {
-		$ctrl.lote_despesa = InicialService.salvarlotedespesa($ctrl.lote_despesa);
+		$ctrl.lote_despesa = InicialService.salvarlotedespesa($ctrl.lote_despesa, function (data) {
+			$uibModalInstance.close(data);
+		});
 	};
 	
 }).controller('ModalAlocacaoInternaController', function (atividade, InicialService, CommonsService, TipoAlocacaoService, $uibModalInstance, $scope, $window) {

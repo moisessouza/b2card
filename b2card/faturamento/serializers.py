@@ -42,7 +42,7 @@ class LoteDespesaSerializer(serializers.ModelSerializer):
     pessoa = PessoaSerializer()
     class Meta:
         model = LoteDespesa
-        fields = ('id', 'demanda', 'pessoa', 'data')
+        fields = ('id', 'demanda', 'pessoa', 'data', 'status')
         
 class ItemDespesaSerializer(serializers.ModelSerializer):
     tipo_despesa = TipoDespesaSerializer()

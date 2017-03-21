@@ -57,10 +57,17 @@ class Medicao(models.Model):
     valor_hora = models.ForeignKey(ValorHora, default=None)
     quantidade_horas = models.FloatField()
     valor_total = models.FloatField()
-    
+
+STATUS_LOTE = (
+    ('PE', 'Pendente'),
+    ('AP', 'Aprovado'),
+    ('PG', 'Pago')
+)    
+
 class LoteDespesa(models.Model):
     demanda = models.ForeignKey(Demanda, default = None)
     pessoa = models.ForeignKey(Pessoa, default = None)
+    status = models.CharField(max_length=2, choices=STATUS_PACOTE, default=None)
     data = models.DateField(default = None)
     
 class ItemDespesa(models.Model):

@@ -35,6 +35,7 @@ urlpatterns = [
     url(r'^gerar_arquivo_faturamento_comercial/(?P<demanda_id>[0-9]+)/$', views.gerar_arquivo_faturamento_comercial),
     url(r'^gerar_arquivo_aprovacao/(?P<pacote_itens_id>[0-9]+)/$', views.gerar_arquivo_aprovacao),
     url(r'^api/lotedespesas/new/$', views.gerar_lote_despesas),
+    url(r'^api/lotedespesas/abertos/(?P<demanda_id>[0-9]+)/$', views.buscar_lote_despesas_abertos)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

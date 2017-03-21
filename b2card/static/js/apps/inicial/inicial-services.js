@@ -57,6 +57,10 @@ inicialservices.service('InicialService', function($resource){
 		salvarlotedespesa: function(data, callback) {
 			var LoteDespesa = $resource(BASE_URL + 'faturamento/api/lotedespesas/new/');
 			return LoteDespesa.save({}, data, callback);
+		},
+		buscarlotesemaberto: function(demanda_id, callback) {
+			var LoteDespesa = $resource(BASE_URL + 'faturamento/api/lotedespesas/abertos/:demanda_id/');
+			return LoteDespesa.query({'demanda_id':demanda_id}, callback);
 		}
 	}
 });
