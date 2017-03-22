@@ -14,7 +14,16 @@
 		</div>
 		<div class="panel-body" ng-show="$ctrl.lote_despesa">
 		
-			<button class="btn btn-primary" type="button" ng-click="$ctrl.adicionar();">Adicionar</button>
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label class="control-label" for="id">Motivo da despesa</label>
+						<input type="text" class="form-control" ng-model="$ctrl.lote_despesa.motivo_despesa" maxlength="30"/>
+					</div>
+				</div>
+			</div>
+			
+			<button class="btn btn-primary margin" type="button" ng-click="$ctrl.adicionar();">Adicionar</button>
 			
 			<table class="table">
 				<thead>

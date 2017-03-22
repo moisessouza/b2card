@@ -209,6 +209,7 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 	
 	$ctrl.salvar = () => {
 		$ctrl.lote_despesa = InicialService.salvarlotedespesa($ctrl.lote_despesa, function (data) {
+			$window.open(BASE_URL + 'faturamento/relatorio/relatorio_despesas/' + $ctrl.lote_despesa.id + '/', '_blank');
 			$uibModalInstance.close(data);
 		});
 	};
