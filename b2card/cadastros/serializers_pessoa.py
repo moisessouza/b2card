@@ -52,7 +52,8 @@ class PessoaJuridicaSerializer(serializers.ModelSerializer):
     arquivo = ArquivoSerializer()
     class Meta:
         model = PessoaJuridica
-        fields = ('id', 'cnpj', 'nome_fantasia', 'inscricao_estadual', 'inscricao_municipal', 'forma_pagamento', 'particularidade_proposta', 'arquivo')
+        fields = ('id', 'cnpj', 'nome_fantasia', 'inscricao_estadual', 'inscricao_municipal', 'forma_pagamento', 'particularidade_proposta', 'arquivo',
+                  'cliente_demanda')
                 
 class PessoaJuridicaComPessoaSerializer(serializers.ModelSerializer):
     pessoa = PessoaSerializer()
