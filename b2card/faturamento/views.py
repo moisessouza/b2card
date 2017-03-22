@@ -588,4 +588,25 @@ def buscar_lote_despesas_abertos(request, demanda_id, format=None):
         return Response(lote_despesa_list)
     
     return Response([])
+
+
+def relatorio_despesas(request, lote_despesa_id):
+    
+    lote_despesa = LoteDespesa.objects.get(pk=lote_despesa_id)
+    item_despesas = ItemDespesa.objects.filter(lote_despesa = lote_despesa)
+    
+    lote_despesa.valor_total = formatar_para_valor_monetario(lote_despesa.valor_total)
+    #lote_despesa.data = serializar_data(lote_despesa.data)
+    
+    for i in item_despesas:
+        
+        i.valor = formatar_para_valor_monetario(i.valor)
+       # i.data = serializar_data(i.data)
+    
+    context = {
+        'lote_despesa':lote_despesa,
+        'item_despesas': item_despesas
+    }
+    
+    return render(request, 'relatorio/relatorio_despesas.html', context)
     
