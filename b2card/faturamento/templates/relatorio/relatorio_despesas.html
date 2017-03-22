@@ -4,6 +4,28 @@
 {
   @page { margin: 0; }
   body  { margin: 1.6cm; }
+  
+  div.cabecalho {
+     position: relative;
+     overflow: hidden; /* this might not work well in all situations */
+  }
+  div.cabecalho:before {
+     content: '';
+     position: absolute;
+     top: 0;
+     right: 0;
+     left: 0;
+     bottom: 0;
+     /* and here it is, the background color */
+     border: 99999px #bbb solid;
+     z-index: 0; /* was required in my situation */
+  }
+  div.cabecalho * {
+    /* was required in my situation */
+    position: relative;
+    z-index: 1;
+  }
+  
 }
 
 * {
