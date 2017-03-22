@@ -178,10 +178,15 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 				demanda: demanda,
 				item_despesas: []
 			};
-		} else if (data.length == 1) {
-			$ctrl.lote_despesa = data[0];
 		}
 	});
+	
+	$ctrl.novo = () => {
+		$ctrl.lote_despesa = {
+			demanda: demanda,
+			item_despesas: []
+		};
+	}
 	
 	$ctrl.tipo_despesas = TipoDespesaService.buscartipodespesas();
 	

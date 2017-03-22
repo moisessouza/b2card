@@ -8,9 +8,10 @@
 		<div class="panel-body" ng-show="$ctrl.lotes_abertos.length > 0 && !$ctrl.lote_despesa">
 			<ul>
 				<li ng-repeat="l in $ctrl.lotes_abertos">
-					<a href="#" ng-click="$ctrl.selecionarlote(l);">{{l.id}}</a>
+					<a href="#" ng-click="$ctrl.selecionarlote(l);">{{("00000"+l.id).slice(-6)}} - {{l.motivo_despesa}}</a>
 				</li>
 			</ul>
+			<button class="btn btn-primary margin" type="button" ng-click="$ctrl.novo();">Adicionar</button>
 		</div>
 		<div class="panel-body" ng-show="$ctrl.lote_despesa">
 		
