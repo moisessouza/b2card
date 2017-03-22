@@ -1,18 +1,139 @@
-
+<meta charset="utf-8">
 <style>
 @media print 
 {
   @page { margin: 0; }
   body  { margin: 1.6cm; }
 }
+
+* {
+	font-family: sans-serif;
+}
+
+div {
+	border: 1px solid;
+	margin: auto;
+}
+
+div.cabecalho {
+	background-color: #bbb;
+	-webkit-print-color-adjust: exact;
+	padding: 5px;
+}
+
+div.rodape {
+	text-align: center;
+	padding: 100px 20px 20px 5px;
+}
+
+div.nota_debito { 
+	padding: 20px
+}
+
+div.motivo_despesa {
+	padding: 20px
+}
+
+th, tfoot td {
+	background-color: #bbb;
+	-webkit-print-color-adjust: exact;
+}
+
+table {
+	border: 1px solid;
+	border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+    -webkit-print-color-adjust: exact;
+}
+
+td{
+	padding: 3px;
+}
+
+div.recurso {
+	padding: 20px
+}
+
+td.rigth {
+	text-align: right;
+}
+
+td.left {
+	text-align: left;
+}
+
+td.center {
+	text-align: center;
+}
+
 </style>
-<div>
-	{{lote_despesa.valor_total}}
-	{{lote_despesa.data|date:"d/m/Y"}}
+
+<div style="width: 680px">
+
+<div class="recurso">
+	<br>
+	<b>Nome do Recurso:</b> {{lote_despesa.pessoa.nome_razao_social}}
+	<br>
+	<b>Numero do CPF:</b> {{lote_despesa.pessoa.pessoafisica_set.first.cpf}}
+	<br>
+	<b>Endereço:</b> 
+		{% with lote_despesa.pessoa.enderecopessoa_set.first as endereco %}
+			{{endereco.logradouro}} {{endereco.numero}} {% if endereco.complemento %} {{endereco.complemento}} {%endif%}- {{endereco.bairro}} - {{endereco.cidade}}
+		{%endwith%}
+	<br>
+</div>
+<div class="cabecalho">
+	<b>Motivo da despesa</b>
+</div>
+<div class="motivo_despesa">
+	<b>Demanda Nr:</b> {{lote_despesa.demanda.id}} - {{lote_despesa.demanda.cliente.pessoa.nome_razao_social}} - {{lote_despesa.demanda.nome_demanda}}
+</div>
+<div class="cabecalho">
+	<b>Nota de Débito: {{lote_despesa.id|stringformat:"05d"}}</b>
+</div>
+<div class="nota_debito">
+	<b>Data de emissão:</b> {{lote_despesa.data|date:"d/m/Y"}}
+	<br>
+	<br>
+	<b>Data de pagamento:</b>
 </div>
 
-{%for i in item_despesas%}
-<div>
-{{i.valor}}
+<table width="100%">
+	<thead>
+		<tr>
+			<th width="10%">NF</th>
+			<th width="10%">Valor</th>
+			<th width="10%">Data</th>
+			<th width="70%">Descrição Lançamento</th>
+		</tr>
+	</thead>
+	<tbody>
+		{%for i in item_despesas%}
+		<tr>
+			<td class="left">{%if i.num_documento%}{{i.num_documento}}{%else%}&nbsp;{%endif%}</td>
+			<td class="rigth">{{i.valor}}</td>
+			<td class="center">{{i.data|date:"d/m/Y"}}</td>
+			<td class="left">{{i.descricao}}</td>
+		</tr>
+		{%endfor%}
+	</tbody>
+	<tfoot>
+		<tr>
+			<td class="center"><b>Total</b></td>
+			<td class="rigth"><b>{{lote_despesa.valor_total}}</b></td>
+			<td></td>
+			<td></td>
+		</tr>
+	</tfoot>
+</table>
+
+<div class="rodape">
+	<b>{{lote_despesa.pessoa.nome_razao_social}}</b>
+	<br>
+	<b>{{lote_despesa.pessoa.pessoafisica_set.first.cpf}}</b>
 </div>
-{%endfor%}
+
+</div>
