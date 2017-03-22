@@ -604,7 +604,7 @@ def baixar_arquivo(request, pessoa_juridica_id):
     
 @api_view(['GET'])
 def buscar_pessoa_juridica_clientes(request):
-    pessoas = PessoaJuridica.objects.filter(pessoa__tipo__in ='J', pessoa__tipo_pessoa__in = ['C', 'A'])
+    pessoas = PessoaJuridica.objects.filter(pessoa__tipo__in ='J', cliente_demanda = True)
     data = PessoaJuridicaComPessoaSerializer(pessoas, many=True).data
     return Response(data)
     

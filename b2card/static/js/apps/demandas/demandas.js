@@ -203,7 +203,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		}
 	}
 	
-	$ctrl.listaclientes= PessoaService.buscarpessoasjuridicas();
+	$ctrl.listaclientes= PessoaService.buscarclientes();
 	$ctrl.listafuncionarios = PessoaService.buscarprofissionais();
 	$ctrl.listagestores = PessoaService.buscargestores();
 	
