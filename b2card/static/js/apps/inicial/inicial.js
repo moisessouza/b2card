@@ -168,6 +168,8 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 }).controller('ModalDespesaController', function (demanda, InicialService, TipoDespesaService, CommonsService, TipoAlocacaoService, $uibModalInstance, $scope, $window) {
 	var $ctrl = this;
 	
+	$ctrl.demanda = demanda;
+	
 	$ctrl.selecionarlote = lote => {
 		$ctrl.lote_despesa = lote;
 	};
