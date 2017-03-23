@@ -61,6 +61,10 @@ inicialservices.service('InicialService', function($resource){
 		buscarlotesemaberto: function(demanda_id, callback) {
 			var LoteDespesa = $resource(BASE_URL + 'faturamento/api/lotedespesas/abertos/:demanda_id/');
 			return LoteDespesa.query({'demanda_id':demanda_id}, callback);
+		},
+		buscarresumododia: function(data, callback){
+			var AlocacaoHoras = $resource(BASE_URL + 'inicial/api/total_horas_lancadas_dia/:data_informada/');
+			return AlocacaoHoras.get({'data_informada': data}, callback)
 		}
 	}
 });

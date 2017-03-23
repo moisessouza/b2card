@@ -47,6 +47,11 @@ relatorio_lancamentos.service('RelatorioLancamentosService', function($resource)
 		excluiralocacaointerna: function (alocacao_id, callback) {
 			var AlocacaoHoras =  $resource(BASE_URL + 'relatorio_lancamentos/api/:alocacao_id/excluir_alocacao_interna/');
 			return AlocacaoHoras.remove({'alocacao_id': alocacao_id}, callback)
+		},
+		buscarresumododia: function(data, alocacao_id, callback){
+			var AlocacaoHoras = $resource(BASE_URL + 'relatorio_lancamentos/api/total_horas_lancadas_dia/:data_informada/:alocacao_id/');
+			return AlocacaoHoras.get({'data_informada': data, 'alocacao_id': alocacao_id}, callback)
 		}
+		
 	}
 });

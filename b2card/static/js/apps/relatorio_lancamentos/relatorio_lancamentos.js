@@ -48,7 +48,7 @@ relatorio_lancamentos.controller('RelatorioLancamentosController', function (Rel
 					templateUrl : '/static/modal/modalAtualizarAlocacao.html?bust=' + Math.random().toString(36).slice(2),
 					controller : 'ModalAlocacaoController',
 					controllerAs : '$ctrl',
-					//size : 'lg'
+					size : 'lg',
 					windowClass: 'app-modal-window',
 					resolve : {
 				    	  alocacao: alocacao
@@ -271,6 +271,22 @@ relatorio_lancamentos.controller('RelatorioLancamentosController', function (Rel
 			});
 		}
 	}
+	
+	$ctrl.buscarresumododia = () => {
+		$ctrl.resumo_dia = RelatorioLancamentosService.buscarresumododia(CommonsService.dataparaurl($ctrl.data), alocacao.id, function(data){
+			
+			$ctrl.resumo_dia.total.total_horas = CommonsService.milliparahoras($ctrl.resumo_dia.total.total_horas);
+			
+			if ($ctrl.resumo_dia.alocacao_horas) {
+				for (let i of $ctrl.resumo_dia.alocacao_horas) {
+					i.horas_alocadas = CommonsService.milliparahoras(i.horas_alocadas_milisegundos);
+				}
+			}
+			
+		});
+	};
+	
+	$ctrl.buscarresumododia();
 	
 	$ctrl.salvar = () => {
 		

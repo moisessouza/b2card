@@ -5,44 +5,80 @@
 			{{$ctrl.atividade.descricao}}
 		</div>
 		<div class="panel-body">
-			<div class="col-sm-4">
-				<label class="input-label">Data</label>
-				<div class="input-group">
-					<input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true" ng-model="$ctrl.data" is-open="$ctrl.aberto" ng-required="true" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
-					<span class="input-group-btn">
-						<button type="button" class="btn btn-default" ng-click="$ctrl.abrir()"><i class="glyphicon glyphicon-calendar"></i></button>
-					</span>
+			<div class="col-sm-7">
+				<div class="col-sm-4">
+					<label class="input-label">Data</label>
+					<div class="input-group">
+						<input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true" ng-model="$ctrl.data" ng-change="$ctrl.buscarresumododia()" is-open="$ctrl.aberto" ng-required="true" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default" ng-click="$ctrl.abrir()"><i class="glyphicon glyphicon-calendar"></i></button>
+						</span>
+					</div>
+				</div>
+				<div class="col-sm-2" style="width: 100px">
+					<div class="form-group">
+						<label class="control-label">Hora inicial</label>
+						<input class="form-control" type="text" ng-model="$ctrl.hora_inicio" ui-mask="99:99" model-view-value="true" style="width: 60px;"/>
+					</div>
+				</div>
+				<div class="col-sm-2" style="width: 100px">
+					<div class="form-group">
+						<label class="control-label">Hora final</label>
+						<input class="form-control" type="text" ng-model="$ctrl.hora_fim" ui-mask="99:99" model-view-value="true" style="width: 60px;"/>
+					</div>
+				</div>
+				<div class="col-sm-2" style="width: 110px">
+					<div class="form-group">
+						<label class="control-label">% Concluído</label>
+						<input class="form-control" ng-model="$ctrl.percentual_conclusao" mask="999" ng-change="$ctrl.validarpercentualconclusao();" restrict="reject" style="width: 60px;" ng-disabled="$ctrl.atividade_fechada"/>
+					</div>
+				</div>
+				<div class="col-sm-2" style="width: 179px" ng-show="$ctrl.atividade_fechada">
+					<div class="form-group">
+						<label class="control-label">Tipo de alocação</label>
+						<select class="form-control" ng-model="$ctrl.tipo_alocacao.id" ng-options="t.id as t.descricao for t in $ctrl.tipoalocacaolist">
+							<option value="">Selecione...</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group col-sm-12">
+					<label class="control-label">Observação</label>
+					<textarea class="form-control" ng-model="$ctrl.observacao"></textarea>
 				</div>
 			</div>
-			<div class="col-sm-2" style="width: 100px">
-				<div class="form-group">
-					<label class="control-label">Hora inicial</label>
-					<input class="form-control" type="text" ng-model="$ctrl.hora_inicio" ui-mask="99:99" model-view-value="true" style="width: 60px;"/>
-				</div>
-			</div>
-			<div class="col-sm-2" style="width: 100px">
-				<div class="form-group">
-					<label class="control-label">Hora final</label>
-					<input class="form-control" type="text" ng-model="$ctrl.hora_fim" ui-mask="99:99" model-view-value="true" style="width: 60px;"/>
-				</div>
-			</div>
-			<div class="col-sm-2" style="width: 110px">
-				<div class="form-group">
-					<label class="control-label">% Concluído</label>
-					<input class="form-control" ng-model="$ctrl.percentual_conclusao" mask="999" ng-change="$ctrl.validarpercentualconclusao();" restrict="reject" style="width: 60px;" ng-disabled="$ctrl.atividade_fechada"/>
-				</div>
-			</div>
-			<div class="col-sm-2" style="width: 179px" ng-show="$ctrl.atividade_fechada">
-				<div class="form-group">
-					<label class="control-label">Tipo de alocação</label>
-					<select class="form-control" ng-model="$ctrl.tipo_alocacao.id" ng-options="t.id as t.descricao for t in $ctrl.tipoalocacaolist">
-						<option value="">Selecione...</option>
-					</select>
-				</div>
-			</div>
-			<div class="form-group col-sm-12">
-				<label class="control-label">Observação</label>
-				<textarea class="form-control" ng-model="$ctrl.observacao"></textarea>
+			<div class="col-sm-5">
+				<table class="table table-striped">
+					<thead style="text-align: center;">
+						<tr>
+							<th>Atividade</th>
+							<th>Hora inicio</th>
+							<th>Hora fim</th>
+							<th>Horas</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="alocacao in $ctrl.resumo_dia.alocacao_horas" >
+							<td>{{alocacao.atividade_profissional__atividade__descricao}}</td>
+							<td style="text-align: center;">{{alocacao.hora_inicio}}</td>
+							<td style="text-align: center;">{{alocacao.hora_fim}}</td>
+							<td style="text-align: center;">{{alocacao.horas_alocadas}}</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr ng-show="$ctrl.resumo_dia.alocacao_horas && $ctrl.resumo_dia.alocacao_horas.length > 0">
+							<td>
+								<b>Total</b>
+							</td>
+							<td>
+							</td>
+							<td>
+							</td>
+							<td style="text-align: center;">
+								<b>{{$ctrl.resumo_dia.total.total_horas}}</b>
+							</td>
+						</tr>
+					</tfoot>
+				</table>
 			</div>
 		</div>
 	</div>

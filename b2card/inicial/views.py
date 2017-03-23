@@ -16,6 +16,7 @@ from utils.utils import formatar_data, converter_string_para_data,\
     converter_data_url
 import datetime
 from django.db.models import Q
+from django.db.models.aggregates import Sum
 
 # Create your views here.
 def index (request):
@@ -83,6 +84,23 @@ def buscar_atividades_internas(request, format=None):
             cliente_list.append(cliente_dict)
     
     return Response(cliente_list)
+
+@api_view(['GET'])
+def buscar_alocacao_dia(request, data_informada, format=None):
+    
+    data = converter_data_url(data_informada)
+    alocacao_horas = (AlocacaoHoras.objects.filter(data_informada = data, atividade_profissional__pessoa_fisica__prestador__usuario__id=request.user.id)
+        .values('hora_inicio', 'hora_fim', 'horas_alocadas_milisegundos', 'atividade_profissional__atividade__descricao'))
+    
+    total_horas = (AlocacaoHoras.objects.filter(data_informada = data, atividade_profissional__pessoa_fisica__prestador__usuario__id=request.user.id)
+        .aggregate(total_horas = Sum('horas_alocadas_milisegundos')))
+    
+    context = {
+        'alocacao_horas': alocacao_horas,
+        'total':total_horas
+    }
+    
+    return Response(context)
 
 @api_view(['GET'])
 def buscar_atividades_demanda(request, demanda_id, format=None):

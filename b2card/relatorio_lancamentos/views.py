@@ -353,3 +353,32 @@ def relatorio(request):
     elif tipo_relatorio == 'gerar_relatorio_com_valor':
         return render(request, 'relatorio_lancamentos/relatorio_com_valor.html', context)
     
+    
+@api_view(['GET'])
+def buscar_alocacao_dia(request, data_informada, alocacao_id, format=None):
+    
+    data = converter_data_url(data_informada)
+    alocacao_horas = (AlocacaoHoras.objects.filter(data_informada = data)
+        .values('hora_inicio', 'hora_fim', 'horas_alocadas_milisegundos', 'atividade_profissional__atividade__descricao'))
+    
+    gestor = verificar_gestor(request)
+    
+    total_horas = None
+    if not gestor:
+        alocacao_horas = alocacao_horas.filter( atividade_profissional__pessoa_fisica__prestador__usuario__id=request.user.id)
+        total_horas = AlocacaoHoras.objects.filter(data_informada = data, atividade_profissional__pessoa_fisica__prestador__usuario__id=request.user.id)
+    else:
+        usuario_id = AlocacaoHoras.objects.filter(id = alocacao_id).values('atividade_profissional__pessoa_fisica__prestador__usuario__id')[0]['atividade_profissional__pessoa_fisica__prestador__usuario__id']
+        alocacao_horas = alocacao_horas.filter( atividade_profissional__pessoa_fisica__prestador__usuario__id=usuario_id)
+        total_horas = AlocacaoHoras.objects.filter(data_informada = data, atividade_profissional__pessoa_fisica__prestador__usuario__id=usuario_id)
+        
+    total_horas = (total_horas.filter(data_informada = data)
+        .aggregate(total_horas = Sum('horas_alocadas_milisegundos')))
+    
+    context = {
+        'alocacao_horas': alocacao_horas,
+        'total':total_horas
+    }
+    
+    return Response(context)
+    
