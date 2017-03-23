@@ -11,6 +11,11 @@ relatorio_lancamentos.controller('RelatorioLancamentosController', function (Rel
 	$ctrl.listaclientes= PessoaService.buscarpessoasjuridicas();
 	$ctrl.listafuncionarios = PessoaService.buscarprofissionais();
 	
+	
+	$ctrl.arguments = {
+		periodo: new Date()
+	}
+	
 	RelatorioLancamentosService.ehgestor(function (data){
 		$ctrl.eh_gestor = data.gestor;
 	});
