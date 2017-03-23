@@ -5,9 +5,23 @@
   @page { margin: 0; }
   body  { margin: 1.6cm; }
   
-  div.cabecalho {
+  
+  
+}
+
+* {
+	font-family: sans-serif;
+	font-size: 12px;
+}
+
+div {
+	border: 1px solid;
+	margin: auto;
+}
+
+div.cabecalho {
      position: relative;
-     overflow: hidden; /* this might not work well in all situations */
+     overflow: hidden;  this might not work well in all situations */
   }
   div.cabecalho:before {
      content: '';
@@ -25,24 +39,6 @@
     position: relative;
     z-index: 1;
   }
-  
-}
-
-* {
-	font-family: sans-serif;
-	font-size: 12px;
-}
-
-div {
-	border: 1px solid;
-	margin: auto;
-}
-
-div.cabecalho {
-	background-color: #bbb;
-	-webkit-print-color-adjust: exact;
-	padding: 5px;
-}
 
 div.rodape {
 	text-align: center;
@@ -57,19 +53,59 @@ div.motivo_despesa {
 	padding: 20px
 }
 
-th, tfoot td {
-	background-color: #bbb;
-	-webkit-print-color-adjust: exact;
-}
-
 table {
-	border: 1px solid;
+	border: 2px solid;
 	border-collapse: collapse;
 }
 
 table, th, td {
     border: 1px solid black;
     -webkit-print-color-adjust: exact;
+}
+
+table thead th {
+     position: relative;
+     overflow: hidden;  this might not work well in all situations */
+}
+
+table thead th:before {
+     content: '';
+     position: absolute;
+     top: 0;
+     right: 0;
+     left: 0;
+     bottom: 0;
+     /* and here it is, the background color */
+     border: 99999px #bbb solid;
+     z-index: 0; /* was required in my situation */
+}
+  
+table thead th * {
+ 	position: relative;
+    z-index: 1;
+} 
+
+
+table tfoot td {
+     position: relative;
+     overflow: hidden;  this might not work well in all situations */
+}
+
+table tfoot td:before {
+     content: '';
+     position: absolute;
+     top: 0;
+     right: 0;
+     left: 0;
+     bottom: 0;
+     /* and here it is, the background color */
+     border: 99999px #bbb solid;
+     z-index: 0; /* was required in my situation */
+}
+  
+table tfoot td * {
+ 	position: relative;
+    z-index: 1;
 }
 
 td{
@@ -130,10 +166,10 @@ td.center {
 <table width="100%">
 	<thead>
 		<tr>
-			<th width="10%">NF</th>
-			<th width="10%">Valor</th>
-			<th width="10%">Data</th>
-			<th width="70%">Descrição Lançamento</th>
+			<th width="10%"><span>NF</span></th>
+			<th width="10%"><span>Valor</span></th>
+			<th width="10%"><span>Data</span></th>
+			<th width="70%"><span>Descrição Lançamento</span></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -148,8 +184,8 @@ td.center {
 	</tbody>
 	<tfoot>
 		<tr>
-			<td class="center"><b>Total</b></td>
-			<td class="rigth"><b>{{lote_despesa.valor_total}}</b></td>
+			<td class="center cabecalho"><b>Total</b></td>
+			<td class="rigth cabecalho"><b>{{lote_despesa.valor_total}}</b></td>
 			<td></td>
 			<td></td>
 		</tr>
