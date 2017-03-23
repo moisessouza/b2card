@@ -28,6 +28,7 @@ def pesquisar_alocacoes_horas(request, format=None):
     periodo = converter_string_para_data(periodo)
     
     alocacao_horas = AlocacaoHoras.objects.filter(data_informada__month=periodo.month, data_informada__year=periodo.year).order_by('data_informada', 'hora_inicio')
+    alocacao_horas = alocacao_horas.prefetch_related('atividade_profissional__pessoa_fisica__pessoa')
     
     if 'profissional_id' in request.data and request.data['profissional_id']:
         alocacao_horas = alocacao_horas.filter(atividade_profissional__pessoa_fisica__id=request.data['profissional_id'])
