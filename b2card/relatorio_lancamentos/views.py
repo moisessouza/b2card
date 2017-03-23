@@ -359,7 +359,7 @@ def buscar_alocacao_dia(request, data_informada, alocacao_id, format=None):
     
     data = converter_data_url(data_informada)
     alocacao_horas = (AlocacaoHoras.objects.filter(data_informada = data)
-        .values('hora_inicio', 'hora_fim', 'horas_alocadas_milisegundos', 'atividade_profissional__atividade__descricao'))
+        .values('hora_inicio', 'hora_fim', 'horas_alocadas_milisegundos', 'atividade_profissional__atividade__descricao')).order_by('hora_inicio')
     
     gestor = verificar_gestor(request)
     

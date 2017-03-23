@@ -89,7 +89,7 @@ def buscar_atividades_internas(request, format=None):
 def buscar_alocacao_dia(request, data_informada, format=None):
     
     data = converter_data_url(data_informada)
-    alocacao_horas = (AlocacaoHoras.objects.filter(data_informada = data, atividade_profissional__pessoa_fisica__prestador__usuario__id=request.user.id)
+    alocacao_horas = (AlocacaoHoras.objects.filter(data_informada = data, atividade_profissional__pessoa_fisica__prestador__usuario__id=request.user.id).order_by('hora_inicio')
         .values('hora_inicio', 'hora_fim', 'horas_alocadas_milisegundos', 'atividade_profissional__atividade__descricao'))
     
     total_horas = (AlocacaoHoras.objects.filter(data_informada = data, atividade_profissional__pessoa_fisica__prestador__usuario__id=request.user.id)
