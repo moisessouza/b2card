@@ -35,7 +35,7 @@ def realizar_replace_docx(demanda_id, template_docx, tipo_proposta):
         '#forma_pagamento#': demanda.forma_pagamento if demanda.forma_pagamento else (demanda.cliente.forma_pagamento if demanda.cliente.forma_pagamento else ''),
         '#particularidade_proposta#': demanda.particularidade_proposta if demanda.particularidade_proposta else (demanda.cliente.particularidade_proposta if demanda.cliente.particularidade_proposta else ''),
         '#total_orcamento#': formatar_para_valor_monetario_com_simbolo(orcamento.total_orcamento),
-        '#total_horas_orcadas#': str(total_horas_orcadas),
+        '#total_horas_orcadas#': str(int(total_horas_orcadas)),
         '#data_de_abertura#': formatar_data_completa(demanda.data_criacao)
     }
     
