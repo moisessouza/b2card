@@ -164,3 +164,45 @@ LEFT OUTER JOIN cadastros_centroresultado cr ON (f.centro_resultado_id = cr.id)
 JOIN STATUS_DEMANDA sd ON (sd.codigo = d.status_demanda)
 -- WHERE vi.data_inicio <= d.data_criacao AND (vi.data_fim IS NULL OR vi.data_fim >= d.data_criacao)
 GROUP BY orc.id, d.id
+UNION ALL
+SELECT 
+'Despesa' AS TIPO,
+d.id AS DEMANDA_ID,
+pj.id AS CLIENTE_ID,
+cc.id AS CENTRO_CUSTO_ID,
+un.id AS UN_ID,
+gestor.id AS GESTOR_ID,
+0 AS ATIVIDADE_ID,
+0 AS FASE_ID,
+0 AS CENTRO_RESULTADO_ID,
+0 AS ID_RESPONSAVEL_TECNICO,
+funcionario.id AS PROFISSIONAL_ID,
+-- ah.id AS ALOCACAO_HORAS_ID,
+0 AS CUSTO_PRESTADOR_ID,
+sd.descricao AS STATUS_DEMANDA,
+0 AS VALOR_DESPESA_ORCADA,
+d.data_criacao AS DATA_ABERTURA_DEMANDA,
+0 AS HORAS_ORCADAS,
+0 AS VALOR_HORAS_ORCADAS,
+0 AS VALOR_ADMINISTRATIVO_ORCADO,
+0 AS HORAS_PREVISTAS,
+0 AS VALOR_HORAS_PREVISTAS,
+0 AS VALOR_ADMINISTRATIVO_PREVISTO,
+0 AS HORAS_ALOCADAS,
+0 AS VALOR_HORAS_ALOCADAS,
+0 AS VALOR_ADMINISTRATIVO_ALOCADO,
+itd.data AS DATA_INFORMADA_LANCAMENTO,
+itd.valor AS VALOR_DESPESA,
+td.descricao AS TIPO_DESPESA
+FROM demandas_demanda AS d
+LEFT OUTER JOIN cadastros_pessoajuridica pj ON (d.cliente_id = pj.id)
+LEFT OUTER JOIN cadastros_pessoa p ON (p.id = pj.pessoa_id)
+LEFT OUTER JOIN cadastros_apropriacao ca ON (ca.pessoa_id = p.id)
+LEFT OUTER JOIN cadastros_centrocusto cc ON (ca.centro_custo_id = cc.id)
+LEFT OUTER JOIN cadastros_unidadeadministrativa un ON (d.unidade_administrativa_id = un.id)
+LEFT OUTER JOIN cadastros_pessoafisica gestor ON (d.responsavel_id = gestor.id)
+INNER JOIN faturamento_lotedespesa ld ON (d.id = ld.demanda_id)
+INNER JOIN faturamento_itemdespesa itd ON (ld.id = itd.lote_despesa_id)
+INNER JOIN cadastros_tipodespesa td ON (td.id = itd.tipo_despesa_id)
+INNER JOIN cadastros_pessoa funcionario ON (ld.pessoa_id = funcionario.id)
+JOIN STATUS_DEMANDA sd ON (sd.codigo = d.status_demanda)

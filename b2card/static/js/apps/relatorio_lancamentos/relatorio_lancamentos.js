@@ -122,6 +122,8 @@ relatorio_lancamentos.controller('RelatorioLancamentosController', function (Rel
 		});
 	}
 	
+	$ctrl.pesquisar();
+	
 }).controller('ModalAlocacaoInternaController', function (alocacao, RelatorioLancamentosService, CommonsService, TipoAlocacaoService, $uibModalInstance, $scope, $window) {
 	
 	var $ctrl = this;
