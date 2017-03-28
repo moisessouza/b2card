@@ -65,19 +65,25 @@
 
 	<div class="tab-content">
 		<div id="mensagens" class="tab-pane in active">
-			<div ng-controller="MensagensController as $ctrl">
-				<table>
+			<div class="col-sm-12" ng-controller="MensagensController as $ctrl">
+				<table class="table table-striped">
 					<thead>
 						<tr>
+							<th>Data</th>
 							<th>Mensagem</th>
 							<th></th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
+						<tr ng-repeat="m in $ctrl.mensagens">
 							<td>
+								{{m.data_criacao}}
 							</td>
 							<td>
+								{{m.texto}}
+							</td>
+							<td>
+								<button type="button" class="btn btn-sm btn-default" style="padding: 0 10px" ng-click="$ctrl.marcarcomolido(m.id);">Fechar</button>
 							</td>
 						</tr>
 					</tbody>

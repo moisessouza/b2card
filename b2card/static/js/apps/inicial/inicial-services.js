@@ -69,6 +69,10 @@ inicialservices.service('InicialService', function($resource){
 		buscarmensagensusuario: function (callback) {
 			var Mensagens = $resource(BASE_URL + 'mensagens/api/list');
 			return Mensagens.query({}, callback);
+		},
+		marcarmensagemcomolido: function(mensagem_id, callback){
+			var Mensagens = $resource(BASE_URL + 'mensagens/api/marcarcomolido/:mensagem_id/');
+			return Mensagens.get({'mensagem_id':mensagem_id}, callback);
 		}
 	}
 });

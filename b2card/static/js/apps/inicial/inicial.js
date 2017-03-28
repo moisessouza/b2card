@@ -448,9 +448,18 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 		
 	}
 	
-}).controller('MensagensController', function (InicialService, $uibModalInstance, $scope, $window) {
+}).controller('MensagensController', function (InicialService, $scope, $window) {
 	var $ctrl = this;
 	
 	$ctrl.mensagens = InicialService.buscarmensagensusuario();
+	
+	$ctrl.marcarcomolido = mensagem_id => {
+		InicialService.marcarmensagemcomolido(mensagem_id, function (data) {
+			InicialService.buscarmensagensusuario(function (data){
+				$ctrl.mensagens = data;
+			});
+		});
+	};
+	
 });
 
