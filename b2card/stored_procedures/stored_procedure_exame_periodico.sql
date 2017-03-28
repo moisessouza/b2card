@@ -27,7 +27,7 @@ BEGIN
 		JOIN cadastros_pessoa p ON (p.id = pf.pessoa_id)
 		JOIN cadastros_prestador pr ON (pf.id = pr.pessoa_fisica_id)
 		WHERE (pr.data_inicio <= NOW() AND (data_fim >= NOW() OR data_fim IS NULL))
-		AND data_ultimo_exame_periodico <= DATE_ADD(DATE_SUB(NOW(),INTERVAL 1 YEAR), INTERVAL 1 MONTH)
+		AND data_ultimo_exame_periodico <= DATE_ADD(DATE_SUB(CURDATE(),INTERVAL 1 YEAR), INTERVAL 1 MONTH)
 		AND pf.id NOT IN (SELECT pessoa_fisica_id FROM tbl_exame_periodico WHERE feito=FALSE OR feito IS NULL);
 		
 	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
