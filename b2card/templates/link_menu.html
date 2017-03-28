@@ -88,6 +88,11 @@
 							Tipo de despesa
 						</a>
 						{%endcheck_permittion%}
+						{% check_permittion 'mensagens:index' %}
+						<a href="{% url 'mensagens:index' %}">
+							Redirecionamento de mensagens
+						</a>
+						{%endcheck_permittion%}
 					</li>
         		</ul>
 			</li>

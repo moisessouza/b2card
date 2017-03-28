@@ -21,8 +21,11 @@ from . import views
 app_name='mensagens'
 
 urlpatterns = [
+    url(r'^$', views.index, name='index'),
+    url(r'^api/responsaveis/$', views.buscar_responsaveis),
     url(r'^api/list/$', views.list),
-    url(r'^api/marcarcomolido/(?P<mensagem_id>[0-9]+)/$', views.marcar_como_lido)
+    url(r'^api/marcarcomolido/(?P<mensagem_id>[0-9]+)/$', views.marcar_como_lido),
+    url(r'^api/gravarresponsaveis/$', views.gravar_responsaveis)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

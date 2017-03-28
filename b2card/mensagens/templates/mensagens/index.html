@@ -1,0 +1,80 @@
+<meta charset="utf-8">
+{% extends "base_page.html" %}
+
+{% block script %}
+	<script src="/static/js/apps/mensagens/mensagens.js"></script>
+	<script src="/static/js/apps/mensagens/mensagens-services.js"></script>
+	<script src="/static/js/apps/cadastros/pessoa/pessoa-services.js"></script>
+	<script src="/static/js/commons/commons.js"></script>
+	<script src="/static/js/angular/ui-bootstrap-tpls-2.2.0.min.js"></script>
+	<script src="/static/js/jquery/priceformat/jquery.priceformat.min.js"></script>
+{% endblock %}
+
+{%block content%}
+
+{%verbatim%}
+
+<style>
+	table tr {
+    	cursor: pointer;
+	}
+	button.margin {
+		margin-bottom: 1em;
+	}
+	span.red { 
+   		color:red;
+  	}
+</style>
+
+<h1>Redirecionamento de mensagens</h1>
+
+<form  name="mensagens" ng-app="mensagens" ng-controller="MensagensController as $ctrl" ng-show="$ctrl.show" class="ng-hide">
+  <div class="panel panel-default form-group-sm" >
+	  <div class="panel-body">
+	  
+	  	<table class="table">
+	  		<thead>
+	  			<tr>
+	  				<th>Destinatário</th>
+	  				<th>Tipo de mensagem</th>
+	  				<th style="text-align: center;">Ativado</th>
+	  				<th></th>
+	  			</tr>
+	  		</thead>
+	  		<tbody>
+	  			<tr ng-repeat="r in $ctrl.responsaveis">
+	  				<td>
+	  					<select id="responsavel" name="responsavel" class="form-control" ng-model="r.pessoa_fisica.id" ng-options="f.id as f.pessoa.nome_razao_social for f in $ctrl.listafuncionarios" required>
+		   					<option value="">Selecione um destinatário...</option>
+						</select>
+					</td>
+	  				<td>
+	  					<select id="tipo_mensagem" class="form-control" ng-model="r.tag" required>
+	  						<option value="">Selecione um tipo de mensagem...</option>
+	  						<option value="E">Exame Periódico</option>
+	  						<option value="N">Aniversarios</option>
+	  					</select>
+	  				</td>
+	  				<td style="text-align: center;">
+	  					<input type="checkbox" ng-model="r.ativo">
+	  				</td>
+	  				<td>
+	  					<button class="btn" style="padding: 5px;" ng-click="$ctrl.remover(r);">
+	  						<span class="glyphicon glyphicon-trash"></span>
+	  					</button>
+	  				</td>
+	  			</tr>
+	  		</tbody>
+	  	</table>
+	  	
+	  	<button class="btn btn-primary" style="padding: 5px;" ng-click="$ctrl.salvar();">
+	  		Salvar
+		</button>
+		  		 
+	 </div>
+  </div>
+</form>
+
+{%endverbatim%}
+
+{%endblock%}
