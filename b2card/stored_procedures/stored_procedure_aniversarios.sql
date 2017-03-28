@@ -16,7 +16,7 @@ BEGIN
 	
 	DECLARE id_responsaveis CURSOR FOR 
 		SELECT pessoa_fisica_id FROM mensagens_responsavel
-		WHERE tag = 'A';
+		WHERE tag = 'N';
 	
 	DECLARE funcionarios CURSOR FOR 
 		SELECT p.nome_razao_social, MONTH(pf.data_nascimento), DAY(pf.data_nascimento) FROM cadastros_pessoafisica pf
@@ -56,7 +56,7 @@ BEGIN
 		      LEAVE read_loop;
 		    END IF;
 		    INSERT INTO mensagens_mensagem(pessoa_fisica_id, texto, lido, tag) 
-			VALUES(id_responsavel, CONCAT('Aniversários: ', TEXTO), FALSE, 'E');
+			VALUES(id_responsavel, CONCAT('Aniversários: ', TEXTO), FALSE, 'N');
 		    
 		 END LOOP;
 		  
