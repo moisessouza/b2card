@@ -300,6 +300,11 @@ button.exclude {
 								<input type="text" class="form-control" ng-model="$ctrl.pessoa.pessoa_fisica.categoria_doc_militar" maxlength="2" ng-required="$ctrl.pessoa.tipo=='F' && $ctrl.pessoa.pessoa_fisica.sexo=='M'"/>
 							</div>
 						</div>
+						<div class="col-sm-1" style="width: 349px">
+							<div class="checkbox">
+								<label><input type="checkbox" ng-model="$ctrl.pessoa.pessoa_fisica.notificar_alocacao"/> <b>Notificar alocação</b> </label>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="panel panel-primary form-group-sm margin-top" ng-show="$ctrl.pessoa.tipo=='J'">

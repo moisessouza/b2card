@@ -124,6 +124,7 @@ class PessoaFisica(models.Model):
     secao = models.CharField(max_length=4, default=None)
     doc_militar = models.CharField(max_length = 30, default = None, null=True)
     categoria_doc_militar = models.CharField(max_length = 10, default = None, null=True)
+    notificar_alocacao = models.NullBooleanField()
     unidade_administrativas = models.ManyToManyField(UnidadeAdministrativa, default = None)
 
 class Arquivo(models.Model):

@@ -20,7 +20,8 @@ BEGIN
 			JOIN demandas_alocacaohoras ah ON (ah.atividade_profissional_id = ap.id)
 			WHERE (pr.data_inicio <= NOW() AND (data_fim >= NOW() OR data_fim IS NULL))
 			AND ah.data_informada = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
-			HAVING SUM(ah.horas_alocadas_milisegundos) >= 28800000); -- 28800000 equivale a 8 horas 
+			HAVING SUM(ah.horas_alocadas_milisegundos) >= 28800000)
+		 AND pf.notificar_alocacao=TRUE; 
 		
 	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 	
@@ -32,8 +33,8 @@ BEGIN
 	      LEAVE read_loop;
 	    END IF;
 	    SET TEXTO = CONCAT(nome,', você não alocou as 8 horas ontem, favor regularizar suas alocações. Obrigado.');
-	    INSERT INTO mensagens_mensagem(pessoa_fisica_id, CURDATE(), texto, lido, tag) 
-			VALUES(id, TEXTO , FALSE, 'A');
+	    INSERT INTO mensagens_mensagem(pessoa_fisica_id, data_criacao, texto, lido, tag) 
+			VALUES(id, CURDATE(), TEXTO , FALSE, 'A');
 	  END LOOP;
 	
 END $$
