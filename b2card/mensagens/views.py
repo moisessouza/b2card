@@ -57,4 +57,11 @@ def gravar_responsaveis(request, format=None):
         lista_responsavel.append(responsavel)
         
     return Response(ResponsavelSerializer(lista_responsavel, many=True).data)
-        
+
+@api_view(['GET'])
+def deletar_responsavel(request, responsavel_id, format=None):
+    
+    responsavel = Responsavel.objects.get(pk=responsavel_id)
+    responsavel.delete()
+    
+    return Response(ResponsavelSerializer(responsavel).data)

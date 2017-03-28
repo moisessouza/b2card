@@ -32,6 +32,10 @@
   <div class="panel panel-default form-group-sm" >
 	  <div class="panel-body">
 	  
+	  	<button class="btn btn-primary" style="padding: 5px;" ng-click="$ctrl.adicionar();">
+			<span class="glyphicon glyphicon-plus"></span> Adicionar
+		</button>
+	  	
 	  	<table class="table">
 	  		<thead>
 	  			<tr>
@@ -59,7 +63,7 @@
 	  					<input type="checkbox" ng-model="r.ativo">
 	  				</td>
 	  				<td>
-	  					<button class="btn" style="padding: 5px;" ng-click="$ctrl.remover(r);">
+	  					<button class="btn" style="padding: 5px;" ng-click="$ctrl.remover(r.id);">
 	  						<span class="glyphicon glyphicon-trash"></span>
 	  					</button>
 	  				</td>
@@ -67,7 +71,7 @@
 	  		</tbody>
 	  	</table>
 	  	
-	  	<button class="btn btn-primary" style="padding: 5px;" ng-click="$ctrl.salvar();">
+	  	<button class="btn btn-primary" style="padding: 5px;" ng-disabled="mensagens.$invalid" ng-click="$ctrl.salvar();">
 	  		Salvar
 		</button>
 		  		 

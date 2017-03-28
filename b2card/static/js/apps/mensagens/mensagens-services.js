@@ -15,7 +15,7 @@ mensagens.config(['$httpProvider', function($httpProvider) {
 mensagens.service('MensagensService', function($resource){
 	return {
 		buscarresponsaveis: function (callback) {
-			var Mensagens = $resource(BASE_URL + 'mensagens/api/responsaveis/')
+			var Mensagens = $resource(BASE_URL + 'mensagens/api/responsaveis/');
 			return Mensagens.query({}, callback);			
 		},
 		salvarresponsaveis: function (lista, callback) {
@@ -23,6 +23,10 @@ mensagens.service('MensagensService', function($resource){
 				  save: {method:'POST', isArray:true}
 			 });
 			return Mensagens.save({}, lista, callback);
+		},
+		remover: function(responsavel_id, callback) {
+			var Mensagens = $resource(BASE_URL + 'mensagens/api/deletarresponsaveis/:responsavel_id/');
+			return Mensagens.get({'responsavel_id':responsavel_id}, callback);
 		}
 	}
 });

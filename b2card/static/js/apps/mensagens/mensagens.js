@@ -8,9 +8,22 @@ mensagens.controller('MensagensController', function ($scope, $window, Mensagens
 	
 	$ctrl.listafuncionarios = PessoaService.buscarprofissionais();
 	$ctrl.responsaveis = MensagensService.buscarresponsaveis();
+
+	$ctrl.adicionar = () => {
+		if (!$ctrl.responsaveis) {
+			$ctrl.responsaveis = [];
+		}
+		$ctrl.responsaveis.push({});
+	};
 	
 	$ctrl.salvar = () => {
 		MensagensService.salvarresponsaveis($ctrl.responsaveis, function (data) {
+			$ctrl.responsaveis = MensagensService.buscarresponsaveis();
+		});
+	};
+	
+	$ctrl.remover = responsavel_id =>{
+		MensagensService.remover(responsavel_id, function (data) {
 			$ctrl.responsaveis = MensagensService.buscarresponsaveis();
 		});
 	};
