@@ -20,7 +20,7 @@ BEGIN
 	
 	DECLARE id_responsaveis CURSOR FOR 
 		SELECT pessoa_fisica_id FROM mensagens_responsavel
-		WHERE tag = 'E';
+		WHERE tag = 'E' AND ativo=TRUE;
 	
 	DECLARE funcionarios CURSOR FOR 
 		SELECT p.nome_razao_social, pf.id FROM cadastros_pessoafisica pf

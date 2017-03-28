@@ -16,7 +16,7 @@ BEGIN
 	
 	DECLARE id_responsaveis CURSOR FOR 
 		SELECT pessoa_fisica_id FROM mensagens_responsavel
-		WHERE tag = 'N';
+		WHERE tag = 'N' AND ativo=TRUE;
 	
 	DECLARE funcionarios CURSOR FOR 
 		SELECT p.nome_razao_social, MONTH(pf.data_nascimento), DAY(pf.data_nascimento) FROM cadastros_pessoafisica pf
