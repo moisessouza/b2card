@@ -448,4 +448,9 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 		
 	}
 	
+}).controller('MensagensController', function (InicialService, $uibModalInstance, $scope, $window) {
+	var $ctrl = this;
+	
+	$ctrl.mensagens = InicialService.buscarmensagensusuario();
 });
+

@@ -65,6 +65,10 @@ inicialservices.service('InicialService', function($resource){
 		buscarresumododia: function(data, callback){
 			var AlocacaoHoras = $resource(BASE_URL + 'inicial/api/total_horas_lancadas_dia/:data_informada/');
 			return AlocacaoHoras.get({'data_informada': data}, callback)
+		},
+		buscarmensagensusuario: function (callback) {
+			var Mensagens = $resource(BASE_URL + 'mensagens/api/list');
+			return Mensagens.query({}, callback);
 		}
 	}
 });

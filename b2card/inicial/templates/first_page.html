@@ -58,12 +58,34 @@
 <div id="first_page" class="ng-hide" ng-controller="InicialController as $ctrl" ng-show="$ctrl.show">
 
 	<ul class="nav nav-tabs">
-		<li class="active"><a data-toggle="tab" href="#atividadesalocadas">Atividades alocadas</a></li>
+		<li class="active"><a data-toggle="tab" href="#mensagens">Mensagens</a></li>
+		<li><a data-toggle="tab" href="#atividadesalocadas">Atividades alocadas</a></li>
 		<li><a data-toggle="tab" href="#atividadesinternas">Atividades internas</a></li>
 	</ul>
 
 	<div class="tab-content">
-		<div id="atividadesalocadas" class="tab-pane in active">
+		<div id="mensagens" class="tab-pane in active">
+			<div ng-controller="MensagensController as $ctrl">
+				<table>
+					<thead>
+						<tr>
+							<th>Mensagem</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+							</td>
+							<td>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		
+		</div>
+		<div id="atividadesalocadas" class="tab-pane">
 			<div class="panel panel-default" style="margin-bottom: 5px; margin-top: 0px;">
 				<div class="panel-heading" style="height: 22px; padding:2px; font-style: italic;">
 					<div class="col-sm-1" style="width: 1px;"></div>

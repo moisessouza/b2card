@@ -32,7 +32,7 @@ BEGIN
 	      LEAVE read_loop;
 	    END IF;
 	    SET TEXTO = CONCAT(nome,', você não alocou as 8 horas ontem, favor regularizar suas alocações. Obrigado.');
-	    INSERT INTO mensagens_mensagem(pessoa_fisica_id, texto, lido, tag) 
+	    INSERT INTO mensagens_mensagem(pessoa_fisica_id, CURDATE(), texto, lido, tag) 
 			VALUES(id, TEXTO , FALSE, 'A');
 	  END LOOP;
 	

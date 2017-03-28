@@ -55,7 +55,7 @@ BEGIN
 		    IF done THEN
 		      LEAVE read_loop;
 		    END IF;
-		    INSERT INTO mensagens_mensagem(pessoa_fisica_id, texto, lido, tag) 
+		    INSERT INTO mensagens_mensagem(pessoa_fisica_id, CURDATE(),  texto, lido, tag) 
 			VALUES(id_responsavel, CONCAT('Aniversários: ', TEXTO), FALSE, 'N');
 		    
 		 END LOOP;
