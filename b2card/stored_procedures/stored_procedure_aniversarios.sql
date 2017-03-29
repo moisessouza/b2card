@@ -75,3 +75,5 @@ CREATE EVENT aniversarios_event
     STARTS '2017-03-30 01:00:00' ON COMPLETION PRESERVE ENABLE 
   DO
   	CALL aniversarios;
+  	
+-- event_scheduler=on

@@ -75,14 +75,14 @@ BEGIN
 			JOIN cadastros_prestador pr ON (pf.id = pr.pessoa_fisica_id)
 			WHERE (pr.data_inicio <= NOW() AND (data_fim >= NOW() OR data_fim IS NULL))
 			AND data_ultimo_exame_periodico > NOW()
-		 );
+		 ) AND feito = FALSE;
 
 END $$
 DELIMITER ;
 
 CALL exame_periodico;
 
-
+DROP EVENT IF EXISTS exame_periodico_event;
 CREATE EVENT exame_periodico_event
   ON SCHEDULE
     EVERY 1 DAY
