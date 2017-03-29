@@ -68,3 +68,10 @@ END $$
 DELIMITER ;
 
 CALL aniversarios;
+
+CREATE EVENT aniversarios_event
+  ON SCHEDULE
+    EVERY 1 DAY
+    STARTS '2017-03-30 01:00:00' ON COMPLETION PRESERVE ENABLE 
+  DO
+  	CALL aniversarios;

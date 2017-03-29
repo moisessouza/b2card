@@ -41,3 +41,10 @@ END $$
 DELIMITER ;
 
 CALL lancamentos_dia_anterior;
+
+CREATE EVENT lancamentos_dia_anterior_event
+  ON SCHEDULE
+    EVERY 1 DAY
+    STARTS '2017-03-30 01:00:00' ON COMPLETION PRESERVE ENABLE 
+  DO
+  	CALL lancamentos_dia_anterior;

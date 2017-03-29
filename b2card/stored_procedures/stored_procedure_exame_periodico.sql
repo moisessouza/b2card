@@ -81,3 +81,11 @@ END $$
 DELIMITER ;
 
 CALL exame_periodico;
+
+
+CREATE EVENT exame_periodico_event
+  ON SCHEDULE
+    EVERY 1 DAY
+    STARTS '2017-03-30 01:00:00' ON COMPLETION PRESERVE ENABLE 
+  DO
+  	CALL exame_periodico;
