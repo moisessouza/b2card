@@ -24,8 +24,7 @@ def list(request, format=None):
 @api_view(['GET'])
 def marcar_como_lido(request, mensagem_id, format=None):
     mensagem = Mensagem.objects.get(pk=mensagem_id, pessoa_fisica__prestador__usuario__id = request.user.id)
-    mensagem.lido = True
-    mensagem.save();
+    mensagem.delete()
     
     mensagem = MensagemSerializer(mensagem).data
     mensagem['data_criacao'] = serializar_data(mensagem['data_criacao'])

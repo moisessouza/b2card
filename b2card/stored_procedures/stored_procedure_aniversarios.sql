@@ -69,6 +69,7 @@ DELIMITER ;
 
 CALL aniversarios;
 
+DROP EVENT IF EXISTS aniversarios_event;
 CREATE EVENT aniversarios_event
   ON SCHEDULE
     EVERY 1 DAY
