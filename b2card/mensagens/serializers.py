@@ -10,7 +10,7 @@ from cadastros.serializers_pessoa import PessoaFisicaSerializer
 class MensagemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mensagem
-        fields = ('id', 'data_criacao', 'texto', 'lido', 'tag')
+        fields = ('id', 'data_criacao', 'origem', 'texto', 'lido', 'tag')
     
 class ResponsavelSerializer(serializers.ModelSerializer):
     pessoa_fisica = PessoaFisicaSerializer()

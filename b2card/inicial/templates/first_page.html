@@ -69,12 +69,14 @@
 				<table class="table table-striped">
 					<thead>
 						<tr>
+							<th>Origem</th>
 							<th>Mensagem</th>
 							<th></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr ng-repeat="m in $ctrl.mensagens">
+							<td>{{m.origem}}</td>
 							<td>
 								{{m.texto}}
 							</td>

@@ -55,8 +55,8 @@ BEGIN
 		    IF done THEN
 		      LEAVE read_loop;
 		    END IF;
-		    INSERT INTO mensagens_mensagem(pessoa_fisica_id, data_criacao, texto, lido, tag) 
-			VALUES(id_responsavel, CURDATE(), CONCAT('Exames periódicos: ', TEXTO), FALSE, 'E');
+		    INSERT INTO mensagens_mensagem(pessoa_fisica_id, data_criacao, origem, texto, lido, tag) 
+			VALUES(id_responsavel, CURDATE(), 'SISTEMA', CONCAT('Exames periódicos: ', TEXTO), FALSE, 'E');
 		    
 		 END LOOP;
 		  

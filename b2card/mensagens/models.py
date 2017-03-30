@@ -12,6 +12,7 @@ TAG_MENSAGEM = (
 class Mensagem(models.Model):
     pessoa_fisica = models.ForeignKey(PessoaFisica, default = None)
     data_criacao = models.DateField(default = None)
+    origem =models.CharField(max_length=30, default="SISTEMA", null=True)
     texto = models.TextField(default = None)
     lido = models.NullBooleanField(default = False)
     tag = models.CharField(choices = TAG_MENSAGEM, max_length=1, default = None)

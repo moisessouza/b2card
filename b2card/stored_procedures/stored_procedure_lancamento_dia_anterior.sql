@@ -35,8 +35,8 @@ BEGIN
 	      LEAVE read_loop;
 	    END IF;
 	    SET TEXTO = CONCAT(nome,', você não alocou as 8 horas no dia ', DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 DAY), '%d/%m/%Y'),', favor regularizar suas alocações. Obrigado.');
-	    INSERT INTO mensagens_mensagem(pessoa_fisica_id, data_criacao, texto, lido, tag) 
-			VALUES(id, CURDATE(), TEXTO , FALSE, 'A');
+	    INSERT INTO mensagens_mensagem(pessoa_fisica_id, data_criacao, origem,texto, lido, tag) 
+			VALUES(id, CURDATE(), 'SISTEMA', TEXTO , FALSE, 'A');
 	  END LOOP;
 	
 END $$
