@@ -46,6 +46,7 @@ class Parcela(models.Model):
     data_previsto_pagamento = models.DateField(null=True, default = None)
     data_faturamento = models.DateField(null=True, default = None)
     data_pagamento = models.DateField(null=True, default = None)
+    nota_fiscal = models.CharField(max_length=20, default = None, null = True)
     
 class ParcelaFase(models.Model):
     parcela = models.ForeignKey(Parcela)

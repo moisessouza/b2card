@@ -151,6 +151,7 @@
 							{{demanda.status_demanda == 'H' ? 'Em homologação' : ''}}
 							{{demanda.status_demanda == 'I' ? 'Implantada' : ''}}
 							{{demanda.status_demanda == 'D' ? 'Em desenvolvimento' : ''}}
+							{{demanda.status_demanda == 'E' ? 'Deletado' : ''}}
 							<button type="button" class="btn btn-sm btn-default expandir" ng-click="$ctrl.abrirmodaldespesas(demanda);">$</button>
 						</div>
 					</div>
@@ -247,6 +248,7 @@
 							{{demanda.status_demanda == 'H' ? 'Em homologação' : ''}}
 							{{demanda.status_demanda == 'I' ? 'Implantada' : ''}}
 							{{demanda.status_demanda == 'D' ? 'Em desenvolvimento' : ''}}
+							{{demanda.status_demanda == 'E' ? 'Deletado' : ''}}
 						</div>
 					</div>
 					<div class="panel-body" style="margin: 0 0 0 50px; padding: 0 0 0 0;" ng-show="$ctrl.demandamap[demanda.$$hashKey].expandir">

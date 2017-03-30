@@ -67,14 +67,14 @@
 			<div class="col-sm-8">
 				<form name="parcelas" style="height: 75%; overflow-y: scroll; overflow-x: scroll;">
 					
-					<table class="table table-sm table-bordered table-striped table-highlight" style="width: 1400px">
+					<table class="table table-sm table-bordered table-striped table-highlight" style="width: 1800px">
 						<thead>
 							<tr class="active">
 								<th ng-show="$ctrl.lote_faturamento"></th>
 								<th>LoteFat</th>
 								<th width="6%">Parcela</th>
 								<th width="15%">Status</th>
-								<th width="9%">Data</th>
+								<th>Data</th>
 								<th width="9%">Fase</th>
 								<th width="18%">Perfil</th>
 								<th width="5%">Horas</th>
@@ -83,8 +83,8 @@
 								<th>Dt.Env.Aprov</th>
 								<th>Dt.Aprov.Fat</th>
 								<th>Dt.Prev.Pagto</th>
-								<th width="9%">Dt.Fat.</th>
-								<th width="9%">Dt.Pagto</th>
+								<th>Dt.Fat.</th>
+								<th>Dt.Pagto</th>
 								<th width="9%">NF</th>
 							</tr>
 						</thead>
@@ -161,7 +161,9 @@
 								<td>
 									<input type="text" class="form-control" ng-model="parcela.data_pagamento" ui-mask="99/99/9999" model-view-value="true"/>
 								</td>
-								<td></td>
+								<td>
+									<input type="text" class="form-control" ng-model="parcela.nota_fiscal" style="width: 150px;"/>
+								</td>
 							</tr>
 						</tbody>
 					</table>

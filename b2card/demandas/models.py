@@ -21,7 +21,8 @@ STATUS_DEMANDA = (
     ('C','Cancelada'), 
     ('H','Em homologação'), 
     ('I','Implantada'), 
-    ('D','Em desenvolvimento')
+    ('D','Em desenvolvimento'),
+    ('E','Deletado')
 )
 
 TIPO_PARCELA = (

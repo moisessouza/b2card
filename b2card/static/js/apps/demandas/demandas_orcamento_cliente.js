@@ -93,7 +93,7 @@ demandas.controller('OrcamentoClienteController', function($rootScope, $window, 
 		});
 			
 		modalInstance.result.then(function(data) {
-			configurardemanda(share.demanda.id);
+			// configurardemanda(share.demanda.id);
 		}, function() {
 			// $log.info('Modal dismissed at: ' + new Date());
 		});
