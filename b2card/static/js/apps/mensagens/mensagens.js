@@ -13,7 +13,9 @@ mensagens.controller('MensagensController', function ($scope, $window, Mensagens
 		if (!$ctrl.responsaveis) {
 			$ctrl.responsaveis = [];
 		}
-		$ctrl.responsaveis.push({});
+		$ctrl.responsaveis.push({
+			ativo: true
+		});
 	};
 	
 	$ctrl.salvar = () => {
