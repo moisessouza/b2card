@@ -6,7 +6,8 @@ from cadastros.models import PessoaFisica
 TAG_MENSAGEM = (
     ('E', 'Exame Periodico'),
     ('A', 'Alocacao de horas'),
-    ('N', 'Aniversarios')
+    ('N', 'Aniversarios'),
+    ('D', 'Não lancamento dois dias')
 )
 
 class Mensagem(models.Model):
