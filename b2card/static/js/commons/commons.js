@@ -74,9 +74,16 @@ commons.directive('gbMoney', function () {
 	return {
 		formatarnumero: function (numero) {
 			if (numero || numero == 0) {
-				return numero.toFixed(2).replace(/./g, function(c, i, a) {
+				let result = numero.toFixed(2).replace(/./g, function(c, i, a) {
 					return i && c !== "." && ((a.length - i) % 3 === 0) ? '.' + c : c === "." ? ',' : c;
 				}).replace('-.', '-');
+				
+				if (result == '-0,00') {
+					result = '0,00';
+				}
+				
+				return result;
+				
 			} else {
 				return null;
 			}
