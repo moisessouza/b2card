@@ -27,7 +27,7 @@ def pesquisar_alocacoes_horas(request, format=None):
     periodo = request.data['periodo']
     periodo = converter_string_para_data(periodo)
     
-    alocacao_horas = AlocacaoHoras.objects.filter(data_informada__month=periodo.month, data_informada__year=periodo.year).order_by('data_informada', 'hora_inicio')
+    alocacao_horas = AlocacaoHoras.objects.filter(data_informada__month=periodo.month, data_informada__year=periodo.year).order_by('-data_informada', 'hora_inicio')
     alocacao_horas = alocacao_horas.prefetch_related('atividade_profissional__pessoa_fisica__pessoa')
     alocacao_horas = alocacao_horas.prefetch_related('atividade_profissional__atividade__fase_atividade__demanda')
     
@@ -50,7 +50,7 @@ def pesquisar_alocacoes_horas(request, format=None):
             alocacao_horas = alocacao_horas.filter(atividade_profissional__pessoa_fisica__prestador__usuario__id = request.user.id)
         else:
             alocacao_horas = alocacao_horas.filter(atividade_profissional__atividade__fase_atividade__demanda__unidade_administrativa__pessoafisica__prestador__usuario__id = request.user.id)
-        
+    
     alocacao_hora_list = RelatorioAlocacaoHorasSerializer(alocacao_horas, many=True).data
     
     for i in alocacao_hora_list:
