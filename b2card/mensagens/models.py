@@ -10,7 +10,8 @@ TAG_MENSAGEM = (
     ('D', 'Nao lancamento dois dias'),
     ('F', 'Fim de fase'),
     ('R', 'Renegociacao'),
-    ('P', 'Propostas pendentes')
+    ('P', 'Propostas pendentes'),
+    ('G', 'Pagamento de nota')
 )
 
 class Mensagem(models.Model):
