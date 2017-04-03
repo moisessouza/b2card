@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from mensagens.serializers import MensagemSerializer, ResponsavelSerializer
 from utils.utils import serializar_data
 from cadastros.models import PessoaFisica, Pessoa
-from _datetime import datetime
+from datetime import datetime
 
 # Create your views here.
 
