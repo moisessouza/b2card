@@ -70,18 +70,23 @@
 					<thead>
 						<tr>
 							<th>Origem</th>
+							<th>Data</th>
 							<th>Mensagem</th>
 							<th></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr ng-repeat="m in $ctrl.mensagens">
-							<td>{{m.origem}}</td>
+							<td class="col-sm-2">{{m.origem}}</td>
+							<td class="col-sm-1">{{m.data_criacao}}</td>
 							<td>
 								{{m.texto}}
 							</td>
-							<td>
-								<button type="button" class="btn btn-sm btn-default" style="padding: 0 10px" ng-click="$ctrl.marcarcomolido(m.id);">Fechar</button>
+							<td class="col-sm-1">
+								<button type="button" class="btn btn-sm btn-danger" style="padding: 0 10px" ng-click="$ctrl.marcarcomolido(m.id);" ng-show="m.tag != 'T'">Fechar</button>
+								{%endverbatim%}
+									<a class="btn btn-sm btn-success" style="padding: 0 10px" href="{% url 'mensagens:tarefas' %}" ng-show="m.tag == 'T'">Tarefa</a>
+								{%verbatim%}
 							</td>
 						</tr>
 					</tbody>

@@ -1,0 +1,91 @@
+<meta charset="utf-8">
+{% extends "base_page.html" %}
+
+{% block script %}
+	<script src="/static/js/apps/mensagens/tarefa/tarefa.js"></script>
+	<script src="/static/js/apps/mensagens/tarefa/tarefa-services.js"></script>
+	<script src="/static/js/apps/cadastros/pessoa/pessoa-services.js"></script>
+	<script src="/static/js/commons/commons.js"></script>
+	<script src="/static/js/angular/ui-bootstrap-tpls-2.2.0.min.js"></script>
+	<script src="/static/js/jquery/priceformat/jquery.priceformat.min.js"></script>
+{% endblock %}
+
+{%block content%}
+
+{%verbatim%}
+
+<style>
+	table tr {
+    	cursor: pointer;
+	}
+	button.margin {
+		margin-bottom: 1em;
+	}
+	span.red { 
+   		color:red;
+  	}
+</style>
+
+<h1>Tarefas</h1>
+
+<form  name="tarefa" ng-app="tarefa" ng-controller="TarefaController as $ctrl" ng-show="$ctrl.show" class="ng-hide">
+  <div class="panel panel-default form-group-sm" >
+	  <div class="panel-body">
+		<div class="col-sm-2">
+			<div class="form-group">
+				<label for="nome">Destinatário</label>
+				<select id="responsavel" name="responsavel" class="form-control" ng-model="$ctrl.mensagem.pessoa_fisica.id" ng-options="f.id as f.pessoa.nome_razao_social for f in $ctrl.listafuncionarios" required>
+					<option value="">Selecione um destinatário...</option>
+				</select>
+			</div>
+		</div>
+		<div class="col-sm-2">
+			<label for="nome">Data</label>
+			<div class="input-group">
+				<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true"  ng-model = "$ctrl.mensagem.data_criacao" is-open="$ctrl.modaldata" current-text="Hoje" clear-text="Limpar" close-text="Fechar" required/>
+				<span class="input-group-btn">
+					<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodaldata()"><i class="glyphicon glyphicon-calendar"></i></button>
+				</span>
+			</div>
+		</div>
+		<div class="col-sm-12">
+			 <div class="form-group">
+			 	<label for="nome">Data</label>
+			 	<textarea class="form-control" ng-model="$ctrl.mensagem.texto" required></textarea>
+			 </div>
+		</div>
+		<div class="col-sm-12">
+			<button type="button" class="btn btn-default margin" ng-click="$ctrl.salvar()" ng-disabled="tarefa.$invalid">Salvar</button>
+			<button type="button" class="btn btn-default margin" ng-click="$ctrl.novo()" ng-show="$ctrl.mensagem.id">Novo</button>
+		</div>
+		<table class="table table-responsive table-bordered table-striped table-highlight" ng-show="$ctrl.tarefalist">
+			<thead>
+				<tr>
+			    	<th>Origem</th>
+			    	<th>Destino</th>
+			    	<th>Data</th>
+			    	<th>Texto</th>
+			    	<th></th>
+			    </tr>
+			</thead>
+			<tbody>
+			    <tr ng-repeat="tarefa in $ctrl.tarefalist">
+			        <td class="col-sm-2" ng-click="$ctrl.editar(tarefa);">{{tarefa.origem}}</td>
+			        <td class="col-sm-2" ng-click="$ctrl.editar(tarefa);">{{tarefa.pessoa_fisica.pessoa.nome_razao_social}}</td>
+					<td class="col-sm-1" ng-click="$ctrl.editar(tarefa);">{{tarefa.data_texto}}</td>
+					<td ng-click="$ctrl.editar(tarefa);">{{tarefa.texto}}</td>
+			        <td class="col-sm-1">
+			       		<button type="button" class="btn btn-default" ng-click="$ctrl.deletar(tarefa)">
+							<span class="glyphicon glyphicon-trash"></span>
+						</button>
+			        </td>
+			    </tr>
+			</tbody>
+		</table>
+	 </div>
+  </div>
+</form>
+
+{%endverbatim%}
+
+{%endblock%}

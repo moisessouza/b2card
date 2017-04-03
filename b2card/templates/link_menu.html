@@ -93,6 +93,11 @@
 							Redirecionamento de mensagens
 						</a>
 						{%endcheck_permittion%}
+						{% check_permittion 'mensagens:tarefas' %}
+						<a href="{% url 'mensagens:tarefas' %}">
+							Tarefas
+						</a>
+						{%endcheck_permittion%}
 					</li>
         		</ul>
 			</li>
