@@ -49,7 +49,7 @@ BEGIN
 		      LEAVE read_loop;
 		    END IF;
 		    INSERT INTO mensagens_mensagem(pessoa_fisica_id, data_criacao, origem, texto, lido, tag) 
-			VALUES(id_responsavel, CURDATE(), 'SISTEMA', CONCAT('RenegociaÃ§Ãµes pendentes: ', TEXTO), FALSE, 'R');
+			VALUES(id_responsavel, CURDATE(), 'SISTEMA', CONCAT('Renegociações pendentes: ', TEXTO), FALSE, 'R');
 		    
 		 END LOOP;
 		  
