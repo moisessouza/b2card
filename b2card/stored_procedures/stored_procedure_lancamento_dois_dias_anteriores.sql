@@ -27,7 +27,7 @@ BEGIN
 			JOIN demandas_atividadeprofissional ap ON (ap.pessoa_fisica_id = pf.id)
 			JOIN demandas_alocacaohoras ah ON (ah.atividade_profissional_id = ap.id)
 			WHERE (pr.data_inicio <= NOW() AND (data_fim >= NOW() OR data_fim IS NULL))
-			AND ah.data_informada = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+			AND ah.data_informada = DATE_SUB(CURDATE(), INTERVAL 2 DAY)
 			GROUP BY PF.ID
 			HAVING SUM(ah.horas_alocadas_milisegundos) >= 28200000); 
 		
