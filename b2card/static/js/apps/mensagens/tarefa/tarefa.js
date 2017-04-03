@@ -1,11 +1,15 @@
 "use strict";
 
-var tarefa = angular.module('tarefa', ['tarefa-services', 'pessoa-services', 'commons', 'ui.bootstrap', 'ui.mask']);
+var tarefa = angular.module('tarefa', ['tarefa-services', 'pessoa-services', 'relatorio_lancamentos-services', 'commons', 'ui.bootstrap', 'ui.mask']);
 
-tarefa.controller('TarefaController', function ($scope, $window, TarefaService, PessoaService, CommonsService){
+tarefa.controller('TarefaController', function ($scope, $window, TarefaService, PessoaService, RelatorioLancamentosService, CommonsService){
 	var $ctrl = this;
 	
 	$ctrl.tarefa = {}
+	
+	RelatorioLancamentosService.ehgestor(function (data){
+		$ctrl.eh_gestor = data.gestor;
+	});
 	
 	var ajustardados = data => {
 		for(let tarefa of data){

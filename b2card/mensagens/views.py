@@ -121,17 +121,22 @@ class TarefaList(APIView):
 class TarefaDetail(APIView):
     def post(self, request, format=None):
         
-        if request.user.is_superuser:
-            origem = "Super usuário"
+        if 'origem' not in request.data:
+            if request.user.is_superuser:
+                origem = "Super usuário"
+            else:
+                origem = Pessoa.objects.filter(pessoafisica__prestador__usuario__id = request.user.id)[0]
+                origem = origem.nome_razao_social
         else:
-            origem = Pessoa.objects.filter(pessoafisica__prestador__usuario__id = request.user.id)[0]
-            origem = origem.nome_razao_social
+            origem = request.data['origem']
         
         destino = None
         if 'pessoa_fisica' in request.data and request.data['pessoa_fisica']:
             if 'id' in request.data['pessoa_fisica']:
                 destino = PessoaFisica.objects.get(pk=request.data['pessoa_fisica']['id'])
             del request.data['pessoa_fisica']
+        else:
+            destino = PessoaFisica.objects.filter(prestador__usuario__id = request.user.id)[0]
             
         if 'data_texto' in request.data:
             del request.data['data_texto']

@@ -5,6 +5,7 @@
 	<script src="/static/js/apps/mensagens/tarefa/tarefa.js"></script>
 	<script src="/static/js/apps/mensagens/tarefa/tarefa-services.js"></script>
 	<script src="/static/js/apps/cadastros/pessoa/pessoa-services.js"></script>
+	<script src="/static/js/apps/relatorio_lancamentos/relatorio_lancamentos-services.js"></script>
 	<script src="/static/js/commons/commons.js"></script>
 	<script src="/static/js/angular/ui-bootstrap-tpls-2.2.0.min.js"></script>
 	<script src="/static/js/jquery/priceformat/jquery.priceformat.min.js"></script>
@@ -31,10 +32,10 @@
 <form  name="tarefa" ng-app="tarefa" ng-controller="TarefaController as $ctrl" ng-show="$ctrl.show" class="ng-hide">
   <div class="panel panel-default form-group-sm" >
 	  <div class="panel-body">
-		<div class="col-sm-2">
+		<div class="col-sm-2" ng-show="$ctrl.eh_gestor">
 			<div class="form-group">
 				<label for="nome">Destinatário</label>
-				<select id="responsavel" name="responsavel" class="form-control" ng-model="$ctrl.mensagem.pessoa_fisica.id" ng-options="f.id as f.pessoa.nome_razao_social for f in $ctrl.listafuncionarios" required>
+				<select id="responsavel" name="responsavel" class="form-control" ng-model="$ctrl.mensagem.pessoa_fisica.id" ng-options="f.id as f.pessoa.nome_razao_social for f in $ctrl.listafuncionarios" required ng-required="$ctrl.eh_gestor">
 					<option value="">Selecione um destinatário...</option>
 				</select>
 			</div>
@@ -50,7 +51,7 @@
 		</div>
 		<div class="col-sm-12">
 			 <div class="form-group">
-			 	<label for="nome">Data</label>
+			 	<label for="nome">Texto</label>
 			 	<textarea class="form-control" ng-model="$ctrl.mensagem.texto" required></textarea>
 			 </div>
 		</div>
