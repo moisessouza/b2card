@@ -1,100 +1,106 @@
 <meta charset="utf-8">
-<table width="100%" bgcolor='#FFFFFF' cellspacing='0' cellpadding='0' border='0' align='center'>
-<tr>
-<td width="05px"></td>
-<td>
-
-      <table width="100%" cellspacing='0' cellpadding='0' border='1'>
-      <tr>
-      <td width='200px' rowspan='3' style="text-align: center;"><img width='165px' src="/static/img/marca_cor_preta.png" align="middle"></td>
-      <td width='730px' >
-           <table cellspacing=0 cellpadding=0 border=0>
-           <tr> <td width='730px' align='center' valign='bottom'>&nbsp;</td></tr>
-           <tr> <td align='center' valign='top'><font size="3"> Controle de Horas</font> </td></tr>
-           <tr> <td align='center' valign='top'>&nbsp;</td></tr>
-           </table>
-       </td>
-       </tr>
-      </table>
-      <div id="cabecgd55a">
-      <table cellspacing='0' cellpadding='0' border='0'>
-      <tr>
-      <td width='500px' align='left'><font size="2">&nbsp;Data:&nbsp;{{data_atual}}</font></td>
-      <td width='500px' align='left'><font size="2">Hora:&nbsp;{{hora_atual}}</font></td>
-      <td width='260px' align='left'><font size="2">Período:&nbsp;{{periodo}}</font></td>
-      </tr>
-      </table>
-      </div>
-
-      <div id="relatorio">
-      <table width="100%"  cellspacing='0' cellpadding='0' border='0'>
-      <tr>
-      <td width='60px' align='center'><font size="1"><b>Dia</b></font></td>
-      <td width='80px' align='center'><font size="1"><b>Usuario</b></font></td>
-      <td width='110px' align='center'><font size="1"><b>Empresa</b></font></td>
-      <td width='120px' align='center'><font size="1"><b>Demanda</b></font></td>
-      <td width='270px' align='center'><font size="1"><b>Atividade</b></font></td>
-      <td width='420px' align='center'><font size="1"><b>Observação</b></font></td>
-      <td width='50px' align='center'><font size="1"><b>Hrs.Inicio</b></font></td>
-      <td width='50px' align='center'><font size="1"><b>Hrs.Final</b></font></td>
-      <td width='50px' align='center'><font size="1"><b>Total Hrs.</b></font></td>
-      <td width='50px' align='center'><font size="1"><b>Total Valor</b></font></td>
-      </tr>
-     
-                                       <tr>
-                                       <td><font size="1">  -------------------</font></td>
-                                       <td><font size="1">-------------------------------------------</font></td>
-                                       <td><font size="1">--------------------------------------</font></td>
-                                       <td><font size="1">--------------------------------------</font></td>
-                                       <td><font size="1">----------------------------------------------------------------------------------------</font></td>
-                                       <td><font size="1">-------------------------------------------------------------------------------------------------------------------------------------------</font></td>
-                                       <td><font size="1">----------------</font></td>
-                                       <td><font size="1">---------------</font></td>
-                                       <td align='center' class='hrs'><font size="1">--------------</font></td>
-                                       <td align='center' class='hrs'><font size="1">--------------</font></td>
-                                      </tr>
-       {% for o in lista %}
-       					{% for alocacao_prof in o.list_alocacao_prof %}
-                          <tr>
-	                          <td  align='center'><font size="1">{{alocacao_prof.data_informada}}</font></td>
-	                          <td  align='left'><font size="1">{{alocacao_prof.atividade_profissional__pessoa_fisica__pessoa__nome_razao_social}}</font></td>
-	                          <td  align='left'><font size="1">{{alocacao_prof.atividade_profissional__atividade__fase_atividade__demanda__cliente__nome_fantasia}}</font></td>
-	                          <td  align='left'><font size="1">{{alocacao_prof.atividade_profissional__atividade__fase_atividade__demanda__codigo_demanda}}</font></td>
-	                          <td  align='left'><font size="1">{{alocacao_prof.atividade_profissional__atividade__descricao}}</font></td>
-	                          <td  align='left'><font size="1">{{alocacao_prof.observacao}}</font></td>
-	                          <td  align='center'><font size="1">{{alocacao_prof.hora_inicio}}</font></td>
-	                          <td  align='center'><font size="1">{{alocacao_prof.hora_fim}}</font></td>
-	                          <td  align='center'><font size="1">{{alocacao_prof.horas_alocadas}}</font></td>
-	                          <td  align='center'><font size="1">{{alocacao_prof.valor_profissional}}</font></td>
-                          </tr>
-                        {% endfor %}
-                        <tr>
-	                         <td><font size="1">  -------------------</font></td>
-                             <td><font size="1">-------------------------------------------</font></td>
-                             <td><font size="1">--------------------------------------</font></td>
-                             <td><font size="1">--------------------------------------</font></td>
-                             <td><font size="1">----------------------------------------------------------------------------------------</font></td>
-                             <td><font size="1">-------------------------------------------------------------------------------------------------------------------------------------------</font></td>
-                             <td><font size="1">----------------</font></td>
-                             <td><font size="1">---------------</font></td>
-                       		 <td align='center' class='hrs'><font size="1"><b>{{o.total.total_horas_dia}}</b></font></td>
-                       		 <td align='center' class='hrs'><font size="1"><b>{{o.total_valor_dia}}</b></font></td>
-                        </tr>
-       {% endfor %}
-                        <tr>
-	                        <td colspan=5>&nbsp;</td>
-	                        <td colspan=3 align="center"><font size="1"><b>Total Horas do Periodo</b></font></td>
-	                        <td align='center' ><font size="1"><b>{{alocacao_mensal.total_horas_mes}}</b></font></td>
-	                        <td align='center' ><font size="1"><b>{{alocacao_mensal.valor_total}}</b></font></td>
-                        </tr>
-       
-      </table>
-
-
-      <br>
-      </div>
-
-</td>
-<td width="05px"></td>
-</tr>
-</table>
+<html>
+	<head>
+	</head>
+	<body>
+		<table width="1000px" bgcolor='#FFFFFF' cellspacing='0' cellpadding='0' border='0' align='center'>
+		<tr>
+		<td width="05px"></td>
+		<td>
+		
+		      <table width="100%" cellspacing='0' cellpadding='0' border='1'>
+		      <tr>
+		      <td width='200px' rowspan='3' style="text-align: center;"><img width='165px' src="/static/img/marca_cor_preta.png" align="middle"></td>
+		      <td width='730px' >
+		           <table cellspacing=0 cellpadding=0 border=0>
+		           <tr> <td width='730px' align='center' valign='bottom'>&nbsp;</td></tr>
+		           <tr> <td align='center' valign='top'><font size="3"> Controle de Horas</font> </td></tr>
+		           <tr> <td align='center' valign='top'>&nbsp;</td></tr>
+		           </table>
+		       </td>
+		       </tr>
+		      </table>
+		      <div id="cabecgd55a">
+		      <table cellspacing='0' cellpadding='0' border='0'>
+		      <tr>
+		      <td width='500px' align='left'><font size="2">&nbsp;Data:&nbsp;{{data_atual}}</font></td>
+		      <td width='500px' align='left'><font size="2">Hora:&nbsp;{{hora_atual}}</font></td>
+		      <td width='260px' align='left'><font size="2">Período:&nbsp;{{periodo}}</font></td>
+		      </tr>
+		      </table>
+		      </div>
+		
+		      <div id="relatorio">
+		      <table width="100%"  cellspacing='0' cellpadding='0' border='0'>
+		      <tr>
+		      <td align='center'><font size="1"><b>Dia</b></font></td>
+		      <td align='center'><font size="1"><b>Usuario</b></font></td>
+		      <td align='center'><font size="1"><b>Empresa</b></font></td>
+		      <td align='center'><font size="1"><b>Demanda</b></font></td>
+		      <td align='center'><font size="1"><b>Atividade</b></font></td>
+		      <td align='center'><font size="1"><b>Observação</b></font></td>
+		      <td align='center'><font size="1"><b>Hrs.Inicio</b></font></td>
+		      <td align='center'><font size="1"><b>Hrs.Final</b></font></td>
+		      <td align='center'><font size="1"><b>Total Hrs.</b></font></td>
+		      <td align='center'><font size="1"><b>Total Valor</b></font></td>
+		      </tr>
+		     
+		                                       <tr>
+		                                       <td><div style="border-bottom: 1px solid; margin-right: 5px"></div></td>
+		                                       <td><div style="border-bottom: 1px solid; margin-right: 5px"></div></td>
+		                                       <td><div style="border-bottom: 1px solid; margin-right: 5px"></div></td>
+		                                       <td><div style="border-bottom: 1px solid; margin-right: 5px"></div></td>
+		                                       <td><div style="border-bottom: 1px solid; margin-right: 5px"></div></td>
+		                                       <td><div style="border-bottom: 1px solid; margin-right: 5px"></div></td>
+		                                       <td><div style="border-bottom: 1px solid; margin-right: 5px"></div></td>
+		                                       <td><div style="border-bottom: 1px solid; margin-right: 5px"></div></td>
+		                                       <td align='center' class='hrs'><div style="border-bottom: 1px solid; margin-right: 5px"></div></td>
+		                                       <td align='center' class='hrs'><div style="border-bottom: 1px solid; margin-right: 5px"></div></td>
+		                                      </tr>
+		       {% for o in lista %}
+		       					{% for alocacao_prof in o.list_alocacao_prof %}
+		                          <tr>
+			                          <td  align='center'><font size="1">{{alocacao_prof.data_informada}}</font></td>
+			                          <td  align='left'><font size="1">{{alocacao_prof.atividade_profissional__pessoa_fisica__pessoa__nome_razao_social}}</font></td>
+			                          <td  align='left'><font size="1">{{alocacao_prof.atividade_profissional__atividade__fase_atividade__demanda__cliente__nome_fantasia}}</font></td>
+			                          <td  align='left'><font size="1">{{alocacao_prof.atividade_profissional__atividade__fase_atividade__demanda__codigo_demanda}}</font></td>
+			                          <td  align='left'><font size="1">{{alocacao_prof.atividade_profissional__atividade__descricao}}</font></td>
+			                          <td  align='left'><font size="1">{{alocacao_prof.observacao}}</font></td>
+			                          <td  align='center'><font size="1">{{alocacao_prof.hora_inicio}}</font></td>
+			                          <td  align='center'><font size="1">{{alocacao_prof.hora_fim}}</font></td>
+			                          <td  align='center'><font size="1">{{alocacao_prof.horas_alocadas}}</font></td>
+			                          <td  align='center'><font size="1">{{alocacao_prof.valor_profissional}}</font></td>
+		                          </tr>
+		                        {% endfor %}
+		                        <tr>
+			                         <td><div style="border-bottom: 1px solid; margin-right: 5px"></div></td>
+		                             <td><div style="border-bottom: 1px solid; margin-right: 5px"></div></td>
+		                             <td><div style="border-bottom: 1px solid; margin-right: 5px"></div></td>
+		                             <td><div style="border-bottom: 1px solid; margin-right: 5px"></div></td>
+		                             <td><div style="border-bottom: 1px solid; margin-right: 5px"></div></td>
+		                             <td><div style="border-bottom: 1px solid; margin-right: 5px"></div></td>
+		                             <td><div style="border-bottom: 1px solid; margin-right: 5px"></div></td>
+		                             <td><div style="border-bottom: 1px solid; margin-right: 5px"></div></td>
+		                       		 <td align='center' class='hrs'><font size="1"><b>{{o.total.total_horas_dia}}</b></font></td>
+		                       		 <td align='center' class='hrs'><font size="1"><b>{{o.total_valor_dia}}</b></font></td>
+		                        </tr>
+		       {% endfor %}
+		                        <tr>
+			                        <td colspan=5>&nbsp;</td>
+			                        <td colspan=3 align="center"><font size="1"><b>Total Horas do Periodo</b></font></td>
+			                        <td align='center' ><font size="1"><b>{{alocacao_mensal.total_horas_mes}}</b></font></td>
+			                        <td align='center' ><font size="1"><b>{{alocacao_mensal.valor_total}}</b></font></td>
+		                        </tr>
+		       
+		      </table>
+		
+		
+		      <br>
+		      </div>
+		
+		</td>
+		<td width="05px"></td>
+		</tr>
+		</table>
+	</body>
+</html>
