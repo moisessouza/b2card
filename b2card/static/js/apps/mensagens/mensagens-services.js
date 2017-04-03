@@ -27,6 +27,10 @@ mensagens.service('MensagensService', function($resource){
 		remover: function(responsavel_id, callback) {
 			var Mensagens = $resource(BASE_URL + 'mensagens/api/deletarresponsaveis/:responsavel_id/');
 			return Mensagens.get({'responsavel_id':responsavel_id}, callback);
+		},
+		enviarmensagem: function(data, callback) {
+			var Mensagens = $resource(BASE_URL + 'mensagens/api/enviar_mensagem/');
+			return Mensagens.save({}, data, callback);
 		}
 	}
 });
