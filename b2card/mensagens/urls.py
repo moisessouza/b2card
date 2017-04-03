@@ -22,11 +22,13 @@ app_name='mensagens'
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    url(r'^enviar_mensagem/$', views.enviar_mensagem, name='enviar_mensagem'),
     url(r'^api/responsaveis/$', views.buscar_responsaveis),
     url(r'^api/list/$', views.list),
     url(r'^api/marcarcomolido/(?P<mensagem_id>[0-9]+)/$', views.marcar_como_lido),
     url(r'^api/gravarresponsaveis/$', views.gravar_responsaveis),
-    url(r'^api/deletarresponsaveis/(?P<responsavel_id>[0-9]+)/$', views.deletar_responsavel)
+    url(r'^api/deletarresponsaveis/(?P<responsavel_id>[0-9]+)/$', views.deletar_responsavel),
+    url(r'^api/enviar_mensagem/$', views.enviar_mensagem_destinatario)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

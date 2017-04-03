@@ -29,4 +29,21 @@ mensagens.controller('MensagensController', function ($scope, $window, Mensagens
 			$ctrl.responsaveis = MensagensService.buscarresponsaveis();
 		});
 	};
+}).controller('EnviarMensagemController', function ($scope, $window, MensagensService, MessageService, PessoaService){
+	
+	var $ctrl = this;
+	$ctrl.show = true;
+	
+	$ctrl.listafuncionarios = PessoaService.buscarprofissionais();
+	
+	$ctrl.data = {};
+	
+	$ctrl.enviarmensagem = () => {
+		MessageService.clear();
+		MensagensService.enviarmensagem($ctrl.data, function (){
+			$ctrl.data = {};
+			MessageService.messagesuccess('Mensagem enviada.')
+		});
+	};
+	
 });

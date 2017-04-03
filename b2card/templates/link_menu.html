@@ -129,6 +129,13 @@
 				</a>
 			</li>
 			{%endcheck_permittion%}
+			{% check_permittion 'mensagens:enviar_mensagem' %}
+			<li>
+				<a href="{% url 'mensagens:enviar_mensagem' %}">
+					Enviar mensagem
+				</a>
+			</li>
+			{%endcheck_permittion%}
 		</ul>
 		<ul class="nav navbar-nav display-none pull-right">
 			<li>

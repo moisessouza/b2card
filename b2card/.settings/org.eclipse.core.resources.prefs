@@ -12,6 +12,7 @@ encoding//faturamento/migrations/0014_lotedespesa_valor_total.py=utf-8
 encoding//faturamento/models.py=utf-8
 encoding//gestor/views.py=utf-8
 encoding//inicial/views.py=utf-8
+encoding//mensagens/views.py=utf-8
 encoding//relatorio_lancamentos/views.py=utf-8
 encoding//utils/docxgen.py=utf-8
 encoding/teste.py=utf-8
