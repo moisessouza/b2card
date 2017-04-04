@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db.models import Q
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -6,7 +7,7 @@ from cadastros.models import ValorHora, Vigencia, CentroCusto, CentroResultado, 
     TipoHora
 from cadastros.serializers import ValorHoraSerializer, VigenciaSerializer
 from utils.utils import formatar_data, converter_string_para_float, converter_string_para_data,\
-    formatar_para_valor_monetario
+    formatar_para_valor_monetario, converter_data_url
 from rest_framework.decorators import api_view
 import datetime
 
@@ -122,12 +123,15 @@ class ValorHoraDetail(APIView):
         return Response('ok')
     
 @api_view(['GET'])
-def buscar_valor_hora_por_cliente(request, cliente_id):
+def buscar_valor_hora_por_cliente(request, cliente_id, data, format=None):
+    
+    data = converter_data_url(data)
+    
     valor_horas = ValorHora.objects.filter(centro_custo__apropriacao__pessoa__pessoajuridica__id = cliente_id);
     
     valor_hora_list = []
     for i in valor_horas:
-        vigencia = Vigencia.objects.filter(valor_hora=i, data_inicio__lte = datetime.date.today(), data_fim__gte = datetime.date.today())
+        vigencia = Vigencia.objects.filter(valor_hora=i, data_inicio__lte = data).filter(Q(data_fim__isnull=True) | Q(data_fim__gte = data))
         if vigencia:
             valor_hora_data = ValorHoraSerializer(i).data    
             valor_hora_data['vigencia'] = VigenciaSerializer(vigencia[0]).data
@@ -135,12 +139,14 @@ def buscar_valor_hora_por_cliente(request, cliente_id):
     return Response(valor_hora_list)
 
 @api_view(['GET'])
-def buscar_valor_hora_b2card(request):
+def buscar_valor_hora_b2card(request, data, format=None):
     valor_horas = ValorHora.objects.filter(centro_custo__nome='B2Card')
+    
+    data = converter_data_url(data)
     
     valor_hora_list = []
     for i in valor_horas:
-        vigencia = Vigencia.objects.filter(valor_hora=i, data_inicio__lte = datetime.date.today(), data_fim__gte = datetime.date.today())
+        vigencia = Vigencia.objects.filter(valor_hora=i, data_inicio__lte = data).filter(Q(data_fim__isnull=True) | Q(data_fim__gte = data))
         if vigencia:
             valor_hora_data = ValorHoraSerializer(i).data    
             valor_hora_data['vigencia'] = VigenciaSerializer(vigencia[0]).data

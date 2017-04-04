@@ -77,7 +77,9 @@ contasreceber.controller('ContasReceberController', function ($scope, $window, $
 				}
 			}
 			
-			ValorHoraService.buscarvalorhoraporcliente(demanda.cliente.id, function (data) {
+			let data = demanda.data_criacao ? demanda.data_criacao : new Date();
+			data = CommonsService.dataparaurl(data);
+			ValorHoraService.buscarvalorhoraporcliente(demanda.cliente.id, data, function (data) {
 				
 				var listavalorhora = data;
 				$ctrl.listavalorhora = data;

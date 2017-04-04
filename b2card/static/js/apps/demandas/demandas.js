@@ -93,11 +93,24 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 	
 	$ctrl.changecliente = function () {
 		if ($ctrl.demanda.cliente){
-			share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente($ctrl.demanda.cliente.id, function () {
+			
+			let data = $ctrl.demanda.data_criacao ? $ctrl.demanda.data_criacao : new Date();
+			data = CommonsService.dataparaurl(data);
+			share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente($ctrl.demanda.cliente.id, data, function () {
 				$rootScope.$emit('orcamentovalorhora');
 			});
 		}
 	}
+	
+	$ctrl.changedatacriacao = function () {
+		
+		let data = $ctrl.demanda.data_criacao ? $ctrl.demanda.data_criacao : new Date();
+		data = CommonsService.dataparaurl(data);
+		share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente($ctrl.demanda.cliente.id, data, function () {
+			$rootScope.$emit('orcamentovalorhora');
+		});
+		
+	};
 	
 	var configurardemanda = function (demanda_id) {
 	
@@ -117,7 +130,9 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 				}
 				
 				if (data.cliente.id) {
-					share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente(data.cliente.id, function () {
+					let data = $ctrl.demanda.data_criacao ? $ctrl.demanda.data_criacao : new Date();
+					data = CommonsService.dataparaurl(data);
+					share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente($ctrl.demanda.cliente.id, data, function () {
 						$rootScope.$emit('orcamentovalorhora');
 					});
 				}

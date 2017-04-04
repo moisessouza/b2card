@@ -26,13 +26,13 @@ valorhoraservice.service('ValorHoraService', function($resource){
 			var ValorHora = $resource(BASE_URL + 'cadastros/valorhora/api/:id/');
 			return ValorHora.remove({id: valor_hora_id}, callback)
 		},
-		buscarvalorhoraporcliente: function (cliente_id, callback) {
-			var ValorHora = $resource(BASE_URL + 'cadastros/valorhora/api/cliente/:id/');
-			return ValorHora.query({id: cliente_id}, callback)
+		buscarvalorhoraporcliente: function (cliente_id, data, callback) {
+			var ValorHora = $resource(BASE_URL + 'cadastros/valorhora/api/cliente/:id/:data/');
+			return ValorHora.query({id: cliente_id, 'data': data}, callback)
 		},
-		buscarvalorhorab2card: function(callback) {
-			var CentroCusto = $resource(BASE_URL + 'cadastros/valorhora/api/b2card/');
-			return CentroCusto.query(callback);
+		buscarvalorhorab2card: function(data, callback) {
+			var CentroCusto = $resource(BASE_URL + 'cadastros/valorhora/api/b2card/:data/');
+			return CentroCusto.query({'data': data}, callback);
 		},
 		buscarvalorhoras: function(callback) {
 			var ValorHora = $resource(BASE_URL + 'cadastros/valorhora/api/');

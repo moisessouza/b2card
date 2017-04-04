@@ -5,7 +5,18 @@ demandas.controller('OrcamentoAtividadeController', function($rootScope, ValorHo
 	$ctrl.share = share;
 
 	$ctrl.listafases = FaseService.buscarfases();
-	$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card();
+	
+	if (share.demanda.$promise) {
+		share.demanda.$promise.then(function (data) {
+			let data_criacao = share.demanda.data_criacao ? share.demanda.data_criacao : new Date();
+			data_criacao = CommonsService.dataparaurl(data_criacao);
+			$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card(data_criacao);
+		});
+	} else {
+		let data_criacao = share.demanda.data_criacao ? share.demanda.data_criacao : new Date();
+		data_criacao = CommonsService.dataparaurl(data_criacao);
+		$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card(data_criacao);
+	}
 	
 	$rootScope.$on('atividades', function(event, data) {
 		

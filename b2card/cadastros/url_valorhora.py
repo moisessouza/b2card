@@ -8,7 +8,7 @@ urlpatterns = [
     url(r'^(?P<valorhora_id>[0-9]+)/$', view_valorhora.editar, name='editar_valor_hora'),
     url(r'^api/detail/$', ValorHoraDetail.as_view()),
     url(r'^api/(?P<valorhora_id>[0-9]+)/$', ValorHoraDetail.as_view()),
-    url(r'^api/cliente/(?P<cliente_id>[0-9]+)/$', view_valorhora.buscar_valor_hora_por_cliente),
-    url(r'^api/b2card/$', view_valorhora.buscar_valor_hora_b2card),
+    url(r'^api/cliente/(?P<cliente_id>[0-9]+)/(?P<data>[0-9]+)/$', view_valorhora.buscar_valor_hora_por_cliente),
+    url(r'^api/b2card/(?P<data>[0-9]+)/$', view_valorhora.buscar_valor_hora_b2card),
     url(r'^api/$', view_valorhora.buscar_valor_horas),
 ]

@@ -212,7 +212,7 @@
 								<div class="form-group">
 									<label>Data de abertura</label> 
 									<p class="input-group">
-										<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true" ng-model="$ctrl.demanda.data_criacao" is-open="$ctrl.data_demanda" ng-required="true" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+										<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true" ng-model="$ctrl.demanda.data_criacao" ng-change="$ctrl.changedatacriacao();" is-open="$ctrl.data_demanda" ng-required="true" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
 										<span class="input-group-btn">
 											<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodaldatademanda()"><i class="glyphicon glyphicon-calendar"></i></button>
 										</span>

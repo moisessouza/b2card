@@ -6,38 +6,47 @@ demandas.controller('OrcamentoClienteController', function($rootScope, $window, 
 	
 	$ctrl.valorhoraporfasemap = {}
 	
-	$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card();
+	let data = share.demanda.data_criacao ? share.demanda.data_criacao : new Date();
+	data = CommonsService.dataparaurl(data);
+	$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card(data);
 	
 	
-	$rootScope.$on('orcamentovalorhora', function (evt, data) {
-		if (share.listavalorhora.$promise) {
-			share.listavalorhora.$promise.then(function (data) {
-				if ($ctrl.listavalorhorab2card.$promise){
-					$ctrl.listavalorhorab2card.$promise.then(function (data) {
-						$rootScope.$emit('calculardesejado');
-						$rootScope.$emit('calcularprojetado');
-						$rootScope.$emit('calcularproposto');
-						$rootScope.$emit('incluirfasesorcamento');		
-					});
-				}
-				
-				$ctrl.listafases = FaseService.buscarfases(function (data) {
-					if ($ctrl.share.listavalorhora) {
-						for (let fase of data) {
-							$ctrl.valorhoraporfasemap[fase.id] = [];
-							for (let valorhora of $ctrl.share.listavalorhora){
-								if (fase.centro_resultado && valorhora.centro_resultado) {
-									if (fase.centro_resultado.id == valorhora.centro_resultado.id){
-										$ctrl.valorhoraporfasemap[fase.id].push(valorhora);
+	$rootScope.$on('orcamentovalorhora', function (evt) {
+		
+		let data = share.demanda.data_criacao ? share.demanda.data_criacao : new Date();
+		data = CommonsService.dataparaurl(data);
+		$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card(data);
+		
+		$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card(data, function (data){
+			if (share.listavalorhora.$promise) {
+				share.listavalorhora.$promise.then(function (data) {
+					if ($ctrl.listavalorhorab2card.$promise){
+						$ctrl.listavalorhorab2card.$promise.then(function (data) {
+							$rootScope.$emit('calculardesejado');
+							$rootScope.$emit('calcularprojetado');
+							$rootScope.$emit('calcularproposto');
+							$rootScope.$emit('incluirfasesorcamento');		
+						});
+					}
+					
+					$ctrl.listafases = FaseService.buscarfases(function (data) {
+						if ($ctrl.share.listavalorhora) {
+							for (let fase of data) {
+								$ctrl.valorhoraporfasemap[fase.id] = [];
+								for (let valorhora of $ctrl.share.listavalorhora){
+									if (fase.centro_resultado && valorhora.centro_resultado) {
+										if (fase.centro_resultado.id == valorhora.centro_resultado.id){
+											$ctrl.valorhoraporfasemap[fase.id].push(valorhora);
+										}
 									}
 								}
 							}
 						}
-					}
+					});
+					
 				});
-				
-			});
-		}	
+			}
+		});
 	});
 	
 	$rootScope.$on('orcamento', function(event, data) {
