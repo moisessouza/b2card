@@ -9,7 +9,7 @@ from demandas.serializers import DemandaSerializer, AtividadeSerializer,\
     FaseAtividadeInicialSerializer, AtividadeProfissionalInicialSerializer
 from rest_framework.response import Response
 from cadastros.models import PessoaJuridica, TipoAlocacao, PessoaFisica,\
-    CustoPrestador
+    CustoPrestador, UnidadeAdministrativa
 from cadastros.serializers_pessoa import PessoaJuridicaSerializer,\
     PessoaJuridicaComPessoaSerializer
 from utils.utils import formatar_data, converter_string_para_data,\
@@ -33,6 +33,8 @@ def buscar_atividades_usuario(request, format=None):
         for k in request.data:
             if request.data[k]:
                 list_status.append(k)
+                
+    unidades_administrativas = UnidadeAdministrativa.objects.filter(pessoafisica__prestador__usuario__id = request.user.id)
 
     for c in clientes:
         
@@ -41,6 +43,9 @@ def buscar_atividades_usuario(request, format=None):
         else:
             demandas = Demanda.objects.filter(Q(tipo_demanda='E') | Q(tipo_demanda=None), cliente = c, faseatividade__atividade__atividadeprofissional__pessoa_fisica__prestador__usuario__id=request.user.id).distinct();
         demanda_list = []
+        
+        if unidades_administrativas:
+            demandas = demandas.filter(unidade_administrativa__in = unidades_administrativas)
 
         for i in demandas:
             demanda_dict = DemandaInicialSerializer(i).data
