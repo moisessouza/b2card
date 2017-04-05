@@ -98,8 +98,8 @@
 			<div class="panel panel-default" style="margin-bottom: 5px; margin-top: 0px;">
 				<div class="panel-heading" style="height: 22px; padding:2px; font-style: italic;">
 					<div class="col-sm-1" style="width: 1px;"></div>
-					<div class="col-sm-2"><strong>Código no cliente</strong></div>
 					<div class="col-sm-5"><strong>Demanda</strong></div>
+					<div class="col-sm-2"><strong>Código no cliente</strong></div>
 					<div class="col-sm-2">
 						<div style="float:left;">
 			        		<strong>Status</strong>
@@ -116,15 +116,6 @@
 								</div>
 								<div>
 									<input type="checkbox" ng-model="$ctrl.status['O']" ng-click="$ctrl.pesquisar();"> Em orçamentação
-								</div>
-								<div>
-									<input type="checkbox" ng-model="$ctrl.status['A']" ng-click="$ctrl.pesquisar();"> Aguardando aprovação
-								</div>
-								<div>
-									<input type="checkbox" ng-model="$ctrl.status['N']" ng-click="$ctrl.pesquisar();"> Não aprovada
-								</div>
-								<div>
-									<input type="checkbox" ng-model="$ctrl.status['C']" ng-click="$ctrl.pesquisar();"> Cancelada
 								</div>
 								<div>
 									<input type="checkbox" ng-model="$ctrl.status['H']" ng-click="$ctrl.pesquisar();"> Em homologação
@@ -145,8 +136,8 @@
 						<div class="col-sm-1" style="width: 1px;">
 							<button type="button" class="btn btn-sm btn-default expandir" ng-click="$ctrl.expandir(demanda);">{{!$ctrl.demandamap[demanda.$$hashKey].expandir ? '+' : '-'}}</button>
 						</div>
-						<div class="col-sm-2">{{demanda.codigo_demanda}}</div>
 						<div class="col-sm-5">{{demanda.id}} - {{demanda.nome_demanda}}</div>
+						<div class="col-sm-2">{{demanda.codigo_demanda}}</div>
 						<div class="col-sm-2">
 							{{demanda.status_demanda == 'O' ? 'Em orçamentação' : ''}}
 							{{demanda.status_demanda == 'A' ? 'Aguardando aprovação' : ''}}
@@ -192,8 +183,8 @@
 			<div class="panel panel-default" style="margin-bottom: 5px; margin-top: 0px;">
 				<div class="panel-heading" style="height: 22px; padding:2px; font-style: italic;">
 					<div class="col-sm-1" style="width: 1px;"></div>
-					<div class="col-sm-2"><strong>Código no cliente</strong></div>
 					<div class="col-sm-5"><strong>Demanda</strong></div>
+					<div class="col-sm-2"><strong>Código no cliente</strong></div>
 					<div class="col-sm-2">
 						<div style="float:left;">
 			        		<strong>Status</strong>
@@ -210,15 +201,6 @@
 								</div>
 								<div>
 									<input type="checkbox" ng-model="$ctrl.statusinterno['O']" ng-click="$ctrl.pesquisarinterno();"> Em orçamentação
-								</div>
-								<div>
-									<input type="checkbox" ng-model="$ctrl.statusinterno['A']" ng-click="$ctrl.pesquisarinterno();"> Aguardando aprovação
-								</div>
-								<div>
-									<input type="checkbox" ng-model="$ctrl.statusinterno['N']" ng-click="$ctrl.pesquisarinterno();"> Não aprovada
-								</div>
-								<div>
-									<input type="checkbox" ng-model="$ctrl.statusinterno['C']" ng-click="$ctrl.pesquisarinterno();"> Cancelada
 								</div>
 								<div>
 									<input type="checkbox" ng-model="$ctrl.statusinterno['H']" ng-click="$ctrl.pesquisarinterno();"> Em homologação
@@ -239,8 +221,8 @@
 						<div class="col-sm-1" style="width: 1px;">
 							<button type="button" class="btn btn-sm btn-default expandir" ng-click="$ctrl.expandirdemandainterna(demanda);">{{!$ctrl.demandamap[demanda.$$hashKey].expandir ? '+' : '-'}}</button>
 						</div>
-						<div class="col-sm-2">{{demanda.codigo_demanda}}</div>
 						<div class="col-sm-5">{{demanda.id}} - {{demanda.nome_demanda}}</div>
+						<div class="col-sm-2">{{demanda.codigo_demanda}}</div>
 						<div class="col-sm-2">
 							{{demanda.status_demanda == 'O' ? 'Em orçamentação' : ''}}
 							{{demanda.status_demanda == 'A' ? 'Aguardando aprovação' : ''}}
@@ -250,6 +232,7 @@
 							{{demanda.status_demanda == 'I' ? 'Implantada' : ''}}
 							{{demanda.status_demanda == 'D' ? 'Em desenvolvimento' : ''}}
 							{{demanda.status_demanda == 'E' ? 'Deletado' : ''}}
+							<button type="button" class="btn btn-sm btn-default expandir" ng-click="$ctrl.abrirmodaldespesas(demanda);">$</button>
 						</div>
 					</div>
 					<div class="panel-body" style="margin: 0 0 0 50px; padding: 0 0 0 0;" ng-show="$ctrl.demandamap[demanda.$$hashKey].expandir">
