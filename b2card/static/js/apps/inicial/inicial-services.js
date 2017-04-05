@@ -73,6 +73,10 @@ inicialservices.service('InicialService', function($resource){
 		marcarmensagemcomolido: function(mensagem_id, callback){
 			var Mensagens = $resource(BASE_URL + 'mensagens/api/marcarcomolido/:mensagem_id/');
 			return Mensagens.get({'mensagem_id':mensagem_id}, callback);
+		},
+		ajustarporcentagemprofissional: function(data, callback) {
+			var AtividadeProfissional = $resource(BASE_URL + 'inicial/api/ajustar_porcentagem_profissional/');
+			AtividadeProfissional.save({}, data, callback);
 		}
 	}
 });

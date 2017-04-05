@@ -99,7 +99,13 @@
 												{{atividade_profissional.horas_alocadas}}
 											</div>
 											<div class="col-sm-1" style="text-align: right; width:5%; padding: 0; margin: 0" ng-show="{{atividade_profissional.percentual_concluido}}">
-												{{atividade_profissional.percentual_concluido}}%
+												<div class="classe_modal" style="left: 0;" ng-show="$ctrl.modalpercentual[atividade_profissional.$$hashKey]">
+													<input type="text" ng-model="atividade_profissional.percentual_concluido"/>
+													<button ng-click="$ctrl.salvarporcentagem(atividade_profissional);">Salvar</button>
+												</div>
+												<span ng-click="$ctrl.abrirmodalporcentagem(atividade_profissional);">
+													{{atividade_profissional.percentual_concluido}}%
+												</span>
 											</div>
 										</div>
 									</div>

@@ -1,7 +1,8 @@
 "use strict";
 
-var demandas = angular.module('demandas', ['demandas-services', 'pessoa-services', 'centrocusto-services', 'naturezademanda-services', 'fase-services', 'valorhora-services', 'parcela', 'parcela-services',
-                                           'centroresultado-services', 'unidadeadministrativa-services', 'ui.bootstrap', 'commons', 'ui.mask',  'ngMaterial']);
+var demandas = angular.module('demandas', ['demandas-services', 'pessoa-services', 'centrocusto-services', 'naturezademanda-services', 'fase-services', 'valorhora-services', 
+                                           'parcela', 'parcela-services', 'centroresultado-services', 'unidadeadministrativa-services', 'inicial-services', 'ui.bootstrap', 'commons', 
+                                           'ui.mask',  'ngMaterial']);
 
 demandas.config(['$httpProvider', 'CommonsServiceProvider', function($httpProvider, CommonsServiceProvider) {  
     $httpProvider.interceptors.push(function () {
@@ -713,7 +714,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		$ctrl.modalatividademap[atividade.$$hashKey].ativo = false;
 	}
 	
-}).controller('ResumoController', function($rootScope, $scope, share, CommonsService ){
+}).controller('ResumoController', function($rootScope, $scope, share, CommonsService, InicialService, DemandaService){
 	var $ctrl = this;
 	$ctrl.share = share;
 	$scope.demanda = $ctrl.share.demanda;
@@ -735,6 +736,23 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 			}
 		}
 	}
+	
+	$ctrl.modalpercentual = {};
+	
+	$ctrl.abrirmodalporcentagem = atividade_profissional => {
+		$ctrl.modalpercentual[atividade_profissional.$$hashKey] = true;
+	};
+	
+	$ctrl.salvarporcentagem = atividade_profissional => {
+		InicialService.ajustarporcentagemprofissional(atividade_profissional, function () {
+			DemandaService.buscaratividadesdemanda($ctrl.share.demanda.id, function (data) {
+				$ctrl.share.demanda.fase_atividades = data;
+				$rootScope.$emit('configurarresumo', data);
+				alert('Porcentagem alterada!');
+				$ctrl.modalpercentual[atividade_profissional.$$hashKey] = false;
+			});
+		});
+	};
 	
 	$rootScope.$on('configurarresumo', function(e, data) {
 		configurarregistros(data);
