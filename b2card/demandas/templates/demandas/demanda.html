@@ -321,7 +321,12 @@
 				<tbody>
 					<tr ng-repeat="observacao in $ctrl.demanda.observacoes" ng-show="!observacao.remover">
 						<td class="col-sm-2">
-							<input type="text" ng-model="observacao.data_observacao" class="form-control" ui-mask="99/99/9999" model-view-value="true"/>
+							<p class="input-group">
+								<input type="text" class="form-control input-sm" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" model-view-value="true"  ng-model="observacao.data_observacao" is-open="$ctrl.modaldataobs[observacao.$$hashKey]" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-default" ng-click="$ctrl.abrirmodalobs(observacao)"><i class="glyphicon glyphicon-calendar"></i></button>
+								</span>
+							</p>
 						</td>
 						<td class="col-sm-12">
 							<textarea ng-model="observacao.observacao" class="form-control" placeholder="Observação"></textarea>

@@ -53,6 +53,12 @@ demandas.config(['$httpProvider', 'CommonsServiceProvider', function($httpProvid
 		        			}
 		        		}
 		        		
+		        		if(data.observacoes) {
+		        			for (let obs of data.observacoes) {
+		        				obs.data_observacao = CommonsService.stringparadata(obs.data_observacao);
+		        			}
+		        		}
+		        		
 	        		}
 	        	}
 	        	if (config.data instanceof Array) {
@@ -192,6 +198,12 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 	$ctrl.adicionarobservacao = function (){
 		$ctrl.demanda.observacoes.unshift({})
 	}
+	
+	$ctrl.modaldataobs = {};
+	
+	$ctrl.abrirmodalobs = function (observacao) {
+		$ctrl.modaldataobs[observacao.$$hashKey] = true;
+	};
 	
 	$ctrl.adicionarocorrencia = function () {
 		var ocorrencia = {'show': true};
