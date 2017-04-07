@@ -79,36 +79,15 @@
 		
 </style>
 <div ng-app="demandas" ng-controller="DemandaController as $ctrl" class="ng-hide" ng-show="$ctrl.show">
-	<div class="panel panel-primary form-group-sm margin-top">
-		<div class="panel-body">
-			<div class="form-horizontal">
-				<div class="col-sm-1">
-					<div class="form-group">
-						<label class="control-label col-sm-1" for="id">ID:</label>
-						<div class="col-sm-1">
-							<p class="form-control-static">{{$ctrl.demanda.id}}</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-4">
-					<div class="form-group">
-						<label class="control-label col-sm-6" for="id">Nome da demanda:</label>
-						<div class="col-sm-6">
-							<p class="form-control-static">{{$ctrl.demanda.nome_demanda}}</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-4">
-					<div class="form-group">
-						<label class="control-label col-sm-6" for="id">Código da demanda:</label>
-						<div class="col-sm-2">
-							<p class="form-control-static">{{$ctrl.demanda.codigo_demanda}}</p>
-						</div>
-					</div>
-				</div>
-			</div>
+	
+	<div class="col-sm-12">
+		<div class="form-group">
+			<h3>
+				<b>{{$ctrl.demanda.id|pad:5:'0'}} - {{$ctrl.demanda.codigo_demanda}} - {{$ctrl.demanda.nome_demanda}}</b>
+			</h3>
 		</div>
 	</div>
+		
 	
 	<ul class="nav nav-tabs">
 	  <li class="active" ng-show="$ctrl.verificardisponibilidadeaba('#dadosdemanda')"><a data-toggle="tab" href="#dadosdemanda">Dados da demanda</a></li>
