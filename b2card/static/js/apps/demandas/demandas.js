@@ -258,8 +258,47 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 	
 	$ctrl.listaabasautorizadas = AutenticationService.buscarabasautorizadas(abas);
 	
+	var validarquantidadehorasatividade = fase_atividades => {
+		
+		if (fase_atividades) {
+			
+			for (let fase_atividade of fase_atividades) {
+				
+				if (fase_atividade.atividades){
+					
+					for (let atividade of fase_atividade.atividades) {
+						
+						if (atividade.atividadeprofissionais) {
+							
+							for (let atividadeprofissional of atividade.atividadeprofissionais) {
+								
+								if (atividadeprofissional.quantidade_horas <= 0){
+									alert('Alocação de atividades não pode ser menor ou igual a zero!');
+									return false;
+								} 
+							}
+							
+						}
+						
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+		return true;
+		
+	};
+	
 	$ctrl.salvardemanda = function (){
 		MessageService.clear();
+		
+		if (!validarquantidadehorasatividade($ctrl.demanda.fase_atividades)) {
+			return;
+		}
+		
 		$ctrl.bloquearsalvar = true;
 		$ctrl.show_fase_atividades = false;
 		share.demanda = DemandaService.salvardemanda($ctrl.demanda, function(data){
