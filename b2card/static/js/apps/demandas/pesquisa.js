@@ -87,8 +87,8 @@ pesquisademanda.controller('PesquisaDemandaController', function (CommonsService
 				data_fim = CommonsService.stringparadata($ctrl.arguments.data_fim);
 			}
 			
-			if (data_inicio >= data_fim) {
-				alert("Data fim deve ser maior que data inicio.");
+			if (data_inicio > data_fim) {
+				alert("Data fim deve ser maior ou igual a data inicio.");
 				return;
 			}
 		}
