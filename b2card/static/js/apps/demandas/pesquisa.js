@@ -20,7 +20,7 @@ pesquisademanda.controller('PesquisaDemandaController', function (CommonsService
 	
 	$ctrl.arguments = {
 		pagina: 1,
-		ordenar: false
+		ordenar: true
 	}
 	
 	$ctrl.primeirapagina = () => {
