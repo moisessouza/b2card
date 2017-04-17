@@ -29,20 +29,26 @@ demandas.controller('OrcamentoClienteController', function($rootScope, $window, 
 						});
 					}
 					
-					$ctrl.listafases = FaseService.buscarfases(function (data) {
-						if ($ctrl.share.listavalorhora) {
-							for (let fase of data) {
-								$ctrl.valorhoraporfasemap[fase.id] = [];
-								for (let valorhora of $ctrl.share.listavalorhora){
-									if (fase.centro_resultado && valorhora.centro_resultado) {
-										if (fase.centro_resultado.id == valorhora.centro_resultado.id){
-											$ctrl.valorhoraporfasemap[fase.id].push(valorhora);
+					if (!$ctrl.listafases){
+						$ctrl.listafases = FaseService.buscarfases();
+					}
+					
+					if ($ctrl.listafases.$promise){
+						$ctrl.listafases.$promise.then(function (data) {
+							if ($ctrl.share.listavalorhora) {
+								for (let fase of data) {
+									$ctrl.valorhoraporfasemap[fase.id] = [];
+									for (let valorhora of $ctrl.share.listavalorhora){
+										if (fase.centro_resultado && valorhora.centro_resultado) {
+											if (fase.centro_resultado.id == valorhora.centro_resultado.id){
+												$ctrl.valorhoraporfasemap[fase.id].push(valorhora);
+											}
 										}
 									}
 								}
 							}
-						}
-					});
+						});
+					}
 					
 				});
 			}
