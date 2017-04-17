@@ -387,6 +387,7 @@ class DemandaDetail(APIView):
                     'descricao' in i and i['descricao'] and 
                     ('remover' not in i or i['remover'] is False)):
                 
+                
                     fase = None
                     if 'fase' in i:
                         if i['fase']:
