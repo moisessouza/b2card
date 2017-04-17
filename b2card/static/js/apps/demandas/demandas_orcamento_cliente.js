@@ -457,9 +457,6 @@ demandas.controller('OrcamentoClienteController', function($rootScope, $window, 
 		if (!$ctrl.share.demanda.orcamento) {
 			$ctrl.share.demanda.orcamento = {}	
 		}
-
-		// TODO buscar do banco em UN		
-		$ctrl.share.demanda.orcamento.imposto_devidos= 20	
 		
 		if ($ctrl.share.demanda.orcamento.despesas){
 
@@ -468,7 +465,7 @@ demandas.controller('OrcamentoClienteController', function($rootScope, $window, 
 				if (despesa.descricao && despesa.valor){
 					let valor = CommonsService.stringparafloat(despesa.valor);
 					if (despesa.a_faturar) {
-						valor = valor + (valor * ($ctrl.share.demanda.orcamento.imposto_devidos / 100));
+						valor = valor + (valor * (20 / 100));
 					}
 					total_despesas+=valor;
 				}
