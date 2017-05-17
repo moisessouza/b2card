@@ -29,8 +29,8 @@ class FaseDetail(APIView):
         serializer = serializers.FaseSerializer(fase)
         return Response(serializer.data)
     
-    def delete(self, request, tipohora_id, format=None):
-        fase = Fase.objects.get(pk=tipohora_id)
+    def delete(self, request, fase_id, format=None):
+        fase = Fase.objects.get(pk=fase_id)
         fase.delete()
         serializer = serializers.FaseSerializer(fase)
         return Response(serializer.data)    

@@ -127,8 +127,13 @@ commons.directive('gbMoney', function () {
 				var ano = data.getFullYear();
 				
 				return [dia, mes, ano].join('');
+			} else if (data.indexOf('-') > 0){
+				
+				data = data.split('-');
+				return ''.concat(data[2], data[1], data[0]);
+				
 			} else {
-				return data.replace(/\//g, '')
+				return data.replace(/\//g, '');
 			}
 		},
 		arredondar: function (numero){

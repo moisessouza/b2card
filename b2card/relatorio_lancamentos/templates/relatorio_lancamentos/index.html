@@ -103,7 +103,8 @@
 					<button class="btn btn-sm btn-default margin" ng-click="$ctrl.pesquisar();" ng-disabled="pesquisa.$invalid">Pesquisar</button>
 					<button class="btn btn-sm btn-default margin" name="gerar_relatorio" ng-disabled="pesquisa.$invalid" value="gerar_relatorio" ng-click="$ctrl.gerar_relatorio('gerar_relatorio')">Gerar relatório</button>
 					{%endverbatim%}
-					{% if user.is_superuser %}
+ 					{# % if user.is_superuser %#}
+ 					{% if user.is_staff %}
 					{%verbatim%}
 						<button class="btn btn-sm btn-default margin" name="gerar_relatorio_com_valor" ng-disabled="pesquisa.$invalid" value="gerar_relatorio_com_valor" ng-click="$ctrl.gerar_relatorio('gerar_relatorio_com_valor')" ng-if="$ctrl.eh_gestor">Gerar relatório com valor</button>
 					{%endverbatim%}
