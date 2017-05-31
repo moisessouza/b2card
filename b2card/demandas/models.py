@@ -15,14 +15,16 @@ STATUS = (
 )
 
 STATUS_DEMANDA = (
-    ('O','Em orçamentação'), 
-    ('A','Aguardando aprovação'), 
-    ('N','Não aprovada'), 
+    ('A','Aprovada'), 
     ('C','Cancelada'), 
-    ('H','Em homologação'), 
-    ('I','Implantada'), 
-    ('D','Em desenvolvimento'),
-    ('E','Deletado')
+    ('D','Disponibilizada'), 
+    ('E','Em execução'), 
+    ('O','Em orçamento'), 
+    ('X','Excluída'), 
+    ('F','Finalizada'),
+    ('P','Paralisada'),
+    ('S','Proposta enviada'),
+    ('R','Recusada')    
 )
 
 TIPO_PARCELA = (

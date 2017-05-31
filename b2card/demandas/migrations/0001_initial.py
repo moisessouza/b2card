@@ -39,7 +39,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('nome_demanda', models.CharField(default=None, max_length=30)),
                 ('descricao', models.TextField(default=None, null=True)),
-                ('status_demanda', models.CharField(choices=[(b'O', b'Em or\xc3\xa7amenta\xc3\xa7\xc3\xa3o'), (b'A', b'Aguardando aprova\xc3\xa7\xc3\xa3o'), (b'N', b'N\xc3\xa3o aprovada'), (b'C', b'Cancelada'), (b'H', b'Em homologa\xc3\xa7\xc3\xa3o'), (b'I', b'Implantada'), (b'D', b'Em desenvolvimento')], max_length=1, null=True)),
+                ('status_demanda', models.CharField(choices=[(b'A', b'Aprovada'),(b'C', b'Cancelada'),(b'D', b'Disponibilizada'),(b'E', b'Em execu\xc3\xa7\xc3\xa3o'),(b'O', b'Em or\xc3\xa7amento'),(b'X', b'Exclu\xc3\xadda'),(b'F', b'Finalizada'),(b'P', b'Paralisada'),(b'S', b'Proposta enviada'),(b'R', b'Recusada')], max_length=1, null=True)),
                 ('codigo_demanda', models.CharField(max_length=12, null=True)),
                 ('cliente', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to='cadastros.PessoaJuridica')),
                 ('unidade_administrativa', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='cadastros.UnidadeAdministrativa')),

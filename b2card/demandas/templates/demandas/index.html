@@ -134,26 +134,35 @@ div.modal-status {
 							</button>
 						</div>
 						<div>
-							<input type="checkbox" ng-model="$ctrl.status['O']" ng-click="$ctrl.pesquisar();"> Em orçamentação
-						</div>
-						<div>
-							<input type="checkbox" ng-model="$ctrl.status['A']" ng-click="$ctrl.pesquisar();"> Aguardando aprovação
-						</div>
-						<div>
-							<input type="checkbox" ng-model="$ctrl.status['N']" ng-click="$ctrl.pesquisar();"> Não aprovada
+							<input type="checkbox" ng-model="$ctrl.status['A']" ng-click="$ctrl.pesquisar();"> Aprovada
 						</div>
 						<div>
 							<input type="checkbox" ng-model="$ctrl.status['C']" ng-click="$ctrl.pesquisar();"> Cancelada
 						</div>
 						<div>
-							<input type="checkbox" ng-model="$ctrl.status['H']" ng-click="$ctrl.pesquisar();"> Em homologação
+							<input type="checkbox" ng-model="$ctrl.status['D']" ng-click="$ctrl.pesquisar();"> Disponibilizada
 						</div>
 						<div>
-							<input type="checkbox" ng-model="$ctrl.status['I']" ng-click="$ctrl.pesquisar();"> Implantada
+							<input type="checkbox" ng-model="$ctrl.status['E']" ng-click="$ctrl.pesquisar();"> Em execução
 						</div>
 						<div>
-							<input type="checkbox" ng-model="$ctrl.status['D']" ng-click="$ctrl.pesquisar();"> Em desenvolvimento
+							<input type="checkbox" ng-model="$ctrl.status['O']" ng-click="$ctrl.pesquisar();"> Em orçamento
 						</div>
+						<div>
+							<input type="checkbox" ng-model="$ctrl.status['X']" ng-click="$ctrl.pesquisar();"> Excluída
+						</div>
+						<div>
+							<input type="checkbox" ng-model="$ctrl.status['F']" ng-click="$ctrl.pesquisar();"> Finalizada
+						</div>	
+						<div>
+							<input type="checkbox" ng-model="$ctrl.status['P']" ng-click="$ctrl.pesquisar();"> Paralisada
+						</div>	
+						<div>
+							<input type="checkbox" ng-model="$ctrl.status['S']" ng-click="$ctrl.pesquisar();"> Proposta enviada
+						</div>	
+						<div>
+							<input type="checkbox" ng-model="$ctrl.status['R']" ng-click="$ctrl.pesquisar();"> Recusada
+						</div>								
 					</div>
 				</div>
 	        </th>
@@ -164,14 +173,16 @@ div.modal-status {
 	      	<td>{{demanda.descricao}}</td>
 	        <td>{{demanda.responsavel.pessoa.nome_razao_social}}</td>
 	        <td>
-	        	{{demanda.status_demanda == 'O' ? 'Em orçamentação' : ''}}
-				{{demanda.status_demanda == 'A' ? 'Aguardando aprovação' : ''}}
-				{{demanda.status_demanda == 'N' ? 'Não aprovada' : ''}}
+				{{demanda.status_demanda == 'A' ? 'Aprovada' : ''}}
 				{{demanda.status_demanda == 'C' ? 'Cancelada' : ''}}
-				{{demanda.status_demanda == 'H' ? 'Em homologação' : ''}}
-				{{demanda.status_demanda == 'I' ? 'Implantada' : ''}}
-				{{demanda.status_demanda == 'D' ? 'Em desenvolvimento' : ''}}
-				{{demanda.status_demanda == 'E' ? 'Deletado' : ''}}
+				{{demanda.status_demanda == 'D' ? 'Disponibilizada' : ''}}
+				{{demanda.status_demanda == 'E' ? 'Em execução' : ''}}
+				{{demanda.status_demanda == 'O' ? 'Em orçamento' : ''}}
+				{{demanda.status_demanda == 'X' ? 'Excluída' : ''}}
+				{{demanda.status_demanda == 'F' ? 'Finalizada' : ''}}
+				{{demanda.status_demanda == 'P' ? 'Paralisada' : ''}}
+				{{demanda.status_demanda == 'S' ? 'Proposta enviada' : ''}}
+				{{demanda.status_demanda == 'R' ? 'Recusada' : ''}}				
 			</td>
 	      </tr>
 	    </tbody>
