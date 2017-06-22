@@ -143,7 +143,7 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 						$rootScope.$emit('orcamentovalorhora');
 					});
 				}
-				
+			
 				if (!$ctrl.demanda.orcamento) {
 					$ctrl.demanda.orcamento = {};
 				}
@@ -336,8 +336,8 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		for (let unidade of $ctrl.listaunidadeadministrativas){
 			if ($ctrl.demanda.unidade_administrativa.id == 	unidade.id) {
 				!$ctrl.demanda.orcamento && ($ctrl.demanda.orcamento = {})
-				$ctrl.demanda.orcamento.margem_risco = unidade.margem_risco;
-				$ctrl.demanda.orcamento.lucro_desejado = unidade.lucro_desejado;
+		//		$ctrl.demanda.orcamento.margem_risco = unidade.margem_risco;
+		//		$ctrl.demanda.orcamento.lucro_desejado = unidade.lucro_desejado;
 				$ctrl.demanda.orcamento.imposto_devidos = unidade.imposto_devidos;
 			}
 		}

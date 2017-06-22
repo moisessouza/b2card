@@ -136,14 +136,17 @@ def buscar_valor_hora_por_cliente(request, cliente_id, data, format=None):
             valor_hora_data = ValorHoraSerializer(i).data    
             valor_hora_data['vigencia'] = VigenciaSerializer(vigencia[0]).data
             valor_hora_list.append(valor_hora_data)
+
     return Response(valor_hora_list)
 
 @api_view(['GET'])
 def buscar_valor_hora_b2card(request, data, format=None):
-    valor_horas = ValorHora.objects.filter(centro_custo__nome='B2Card')
+    valor_horas = ValorHora.objects.filter(Q(centro_custo__nome='B2Card') & Q(tipo_hora__descricao='Custo Medio Interno'))
+   # valor_horas = ValorHora.objects.filter(Q(centro_custo__nome='B2Card'))
+
     
     data = converter_data_url(data)
-    
+        
     valor_hora_list = []
     for i in valor_horas:
         vigencia = Vigencia.objects.filter(valor_hora=i, data_inicio__lte = data).filter(Q(data_fim__isnull=True) | Q(data_fim__gte = data))
@@ -153,6 +156,25 @@ def buscar_valor_hora_b2card(request, data, format=None):
             valor_hora_list.append(valor_hora_data)
     
     return Response(valor_hora_list)    
+
+# api para buscar custo administrativo e impostos - Nilson
+@api_view(['GET'])
+def buscar_valor_imposto_custoadmin_b2card(request, data, format=None):
+    valor_imposto_custoadmin = ValorHora.objects.filter(Q(centro_custo__nome='B2Card') & (Q(descricao='Valor % Custo Administrativo') | Q(descricao='Valor % Impostos')))
+    
+    data = converter_data_url(data)
+       
+    #valor_taxa_total = 0
+    valor_taxa_total = []
+    for i in valor_imposto_custoadmin:
+        vigencia = Vigencia.objects.filter(valor_hora=i, data_inicio__lte = data).filter(Q(data_fim__isnull=True) | Q(data_fim__gte = data))
+        if vigencia:
+            valor_taxa_data = ValorHoraSerializer(i).data    
+            valor_taxa_data['vigencia'] = VigenciaSerializer(vigencia[0]).data
+            valor_taxa_total.append(valor_taxa_data)
+    
+    return Response(valor_taxa_total)   
+
 
 @api_view(['GET'])
 def buscar_valor_horas(request):
