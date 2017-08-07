@@ -102,10 +102,14 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		if ($ctrl.demanda.cliente){
 			
 			let data = $ctrl.demanda.data_criacao ? $ctrl.demanda.data_criacao : new Date();
+			share.demanda.orcamento.lucro_desejado = null;
+			share.demanda.orcamento.margem_risco = null;
 			data = CommonsService.dataparaurl(data);
+			share.listavalorlucrorisco = ValorHoraService.buscarvalorlucroriscocliente($ctrl.demanda.cliente.id, data, function () {});				
 			share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente($ctrl.demanda.cliente.id, data, function () {
 				$rootScope.$emit('orcamentovalorhora');
 			});
+		
 		}
 	}
 	
@@ -113,10 +117,10 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		
 		let data = $ctrl.demanda.data_criacao ? $ctrl.demanda.data_criacao : new Date();
 		data = CommonsService.dataparaurl(data);
+		share.listavalorlucrorisco = ValorHoraService.buscarvalorlucroriscocliente($ctrl.demanda.cliente.id, data, function () {});					
 		share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente($ctrl.demanda.cliente.id, data, function () {
 			$rootScope.$emit('orcamentovalorhora');
 		});
-		
 	};
 	
 	var configurardemanda = function (demanda_id) {
@@ -139,9 +143,11 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 				if (data.cliente.id) {
 					let data = $ctrl.demanda.data_criacao ? $ctrl.demanda.data_criacao : new Date();
 					data = CommonsService.dataparaurl(data);
+ 					share.listavalorlucrorisco = ValorHoraService.buscarvalorlucroriscocliente($ctrl.demanda.cliente.id, data, function () {});								
 					share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente($ctrl.demanda.cliente.id, data, function () {
 						$rootScope.$emit('orcamentovalorhora');
 					});
+				
 				}
 			
 				if (!$ctrl.demanda.orcamento) {
@@ -169,8 +175,8 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 				'observacoes':[{}],
 				'ocorrencias':[{}],
 				'orcamento': {
-					'margem_risco': 0,
-					'lucro_desejado': 0,
+//					'margem_risco': 0,
+//					'lucro_desejado': 0,
 					'total_despesas': '0,00',
 					'imposto_devidos': 0
 				},

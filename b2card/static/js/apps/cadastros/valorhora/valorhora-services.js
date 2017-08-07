@@ -38,6 +38,10 @@ valorhoraservice.service('ValorHoraService', function($resource){
 			var ValorTaxa = $resource(BASE_URL + 'cadastros/valorhora/api/b2cardtx/:data/');
 			return ValorTaxa.query({'data': data}, callback);
 		},		
+		buscarvalorlucroriscocliente: function(cliente_id, data, callback) {
+			var ValorTaxa2 = $resource(BASE_URL + 'cadastros/valorhora/api/b2cardlr/:id/:data/');
+			return ValorTaxa2.query({id: cliente_id, 'data': data}, callback);
+		},				
 		buscarvalorhoras: function(callback) {
 			var ValorHora = $resource(BASE_URL + 'cadastros/valorhora/api/');
 			return ValorHora.query({}, callback);

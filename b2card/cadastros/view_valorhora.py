@@ -127,7 +127,24 @@ def buscar_valor_hora_por_cliente(request, cliente_id, data, format=None):
     
     data = converter_data_url(data)
     
-    valor_horas = ValorHora.objects.filter(centro_custo__apropriacao__pessoa__pessoajuridica__id = cliente_id);
+    valor_horas = ValorHora.objects.filter(Q(centro_custo__apropriacao__pessoa__pessoajuridica__id = cliente_id) & Q(tipo_hora__descricao = 'Valor de Venda para Clientes'));
+    
+    valor_hora_list = []
+    for i in valor_horas:
+        vigencia = Vigencia.objects.filter(valor_hora=i, data_inicio__lte = data).filter(Q(data_fim__isnull=True) | Q(data_fim__gte = data))
+        if vigencia:
+            valor_hora_data = ValorHoraSerializer(i).data    
+            valor_hora_data['vigencia'] = VigenciaSerializer(vigencia[0]).data
+            valor_hora_list.append(valor_hora_data)
+
+    return Response(valor_hora_list)
+
+@api_view(['GET'])
+def buscar_valor_lucro_risco_por_cliente(request, cliente_id, data, format=None):
+    
+    data = converter_data_url(data)
+    
+    valor_horas = ValorHora.objects.filter(Q(centro_custo__apropriacao__pessoa__pessoajuridica__id = cliente_id) & Q(centro_resultado__nome = 'B2Card'));
     
     valor_hora_list = []
     for i in valor_horas:

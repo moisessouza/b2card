@@ -3,7 +3,7 @@
 demandas.controller('OrcamentoClienteController', function($rootScope, $window, ValorHoraService, $uibModal, FaseService, CommonsService, share){
 	var $ctrl = this;
 	$ctrl.share = share;
-	
+
 	$ctrl.valorhoraporfasemap = {}
 	
 	let data = share.demanda.data_criacao ? share.demanda.data_criacao : new Date();
@@ -11,7 +11,7 @@ demandas.controller('OrcamentoClienteController', function($rootScope, $window, 
 	$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card(data);
 	
 	$ctrl.listavalortaxab2card = ValorHoraService.buscarvalortaxab2card(data);
-	
+
 	$rootScope.$on('orcamentovalorhora', function (evt) {
 		
 		let data = share.demanda.data_criacao ? share.demanda.data_criacao : new Date();
@@ -19,11 +19,11 @@ demandas.controller('OrcamentoClienteController', function($rootScope, $window, 
 		$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card(data);
 	
 		$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card(data, function (data){
-			if (share.listavalorhora.$promise) {
+			if (share.listavalorlucrorisco.$promise) {
 				// - busca valor % de lucro e margem de risco no cadastro de horas - Nilson
 				if ($ctrl.share.demanda.orcamento.lucro_desejado == null) {
-					if (share.listavalorhora) {
-						for (let valorlucro of share.listavalorhora) {
+					if (share.listavalorlucrorisco) {
+						for (let valorlucro of share.listavalorlucrorisco) {
 							if ((valorlucro.centro_resultado.nome == 'B2Card' && valorlucro.descricao == 'Valor % Lucro')) {
 								$ctrl.share.demanda.orcamento.lucro_desejado = valorlucro.vigencia.valor; 
 							}
@@ -31,8 +31,8 @@ demandas.controller('OrcamentoClienteController', function($rootScope, $window, 
 					}					
 				}
 				if ($ctrl.share.demanda.orcamento.margem_risco == null) {
-					if (share.listavalorhora) {
-						for (let valormargemrisco of share.listavalorhora) {
+					if (share.listavalorlucrorisco) {
+						for (let valormargemrisco of share.listavalorlucrorisco) {
 							if ((valormargemrisco.centro_resultado.nome == 'B2Card' && valormargemrisco.descricao == 'Valor % Margem Risco')) {
 								$ctrl.share.demanda.orcamento.margem_risco = valormargemrisco.vigencia.valor;
 							}
@@ -410,9 +410,8 @@ demandas.controller('OrcamentoClienteController', function($rootScope, $window, 
 		let valor_total = calcularatividadestotais();
 	  //let custo_sem_imposto = calcularcustosemimposto(valor_total);
 		let custo_sem_imposto = calcularcustosemimpostonovo(valor_total);
-
 		if ($ctrl.share.valor_imposto == null){
-			alert("\n                                !!!!!!       Atenção      !!!!!!\n\n - % Imposto - não encontrado no cadastro >Valor Hora< !");
+			alert("\n                                !!!!!!       Atenção      !!!!!!\n\n  % Imposto - não encontrado no cadastro >Valor Hora< !");
 			$ctrl.share.demanda.orcamento.valor_desejado = null;
 			$ctrl.share.demanda.orcamento.horas_desejado = null;
 			$ctrl.share.demanda.orcamento.lucro_calculado_desejado = null;
@@ -420,11 +419,25 @@ demandas.controller('OrcamentoClienteController', function($rootScope, $window, 
 		}
 
 		if ($ctrl.share.valor_custo_admin == null){
-			alert("\n                                !!!!!!       Atenção      !!!!!!\n\n - % Margem Risco - não encontrado no cadastro >Valor Hora< !");
+			alert("\n                                !!!!!!       Atenção      !!!!!!\n\n  % Custo Administrativo - não encontrado no cadastro >Valor Hora< !");
 			$ctrl.share.demanda.orcamento.valor_desejado = null;
 			$ctrl.share.demanda.orcamento.horas_desejado = null;
 			$ctrl.share.demanda.orcamento.lucro_calculado_desejado = null;
 			return;
+		}
+		
+		if ($ctrl.share.demanda.orcamento.lucro_desejado == null){
+			alert("\n                                !!!!!!       Atenção      !!!!!!\n\n  % Lucro Desejado - não encontrado no cadastro >Valor Hora< !");
+			$ctrl.share.demanda.orcamento.valor_desejado = null;
+			$ctrl.share.demanda.orcamento.horas_desejado = null;
+			$ctrl.share.demanda.orcamento.lucro_calculado_desejado = null;
+		}
+		
+		if ($ctrl.share.demanda.orcamento.margem_risco == null){
+			alert("\n                                !!!!!!       Atenção      !!!!!!\n\n  % Margem Risco - não encontrado no cadastro >Valor Hora< !");
+			$ctrl.share.demanda.orcamento.valor_desejado = null;
+			$ctrl.share.demanda.orcamento.horas_desejado = null;
+			$ctrl.share.demanda.orcamento.lucro_calculado_desejado = null;
 		}
 		
 		//if (($ctrl.share.demanda.orcamento.lucro_desejado || $ctrl.share.demanda.orcamento.lucro_desejado == 0) && ($ctrl.share.demanda.orcamento.imposto_devidos || $ctrl.share.demanda.orcamento.imposto_devidos == 0)) {
