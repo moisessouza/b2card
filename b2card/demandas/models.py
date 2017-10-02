@@ -48,6 +48,7 @@ class Demanda(models.Model):
     natureza_demanda = models.ForeignKey(NaturezaDemanda, default = None, null = True)
     responsavel_cliente = models.CharField(max_length=30, default = None, null = True)
     data_criacao = models.DateField(default=None)
+    data_finalizacao = models.DateField(default=None, null=True)
     data_inicio = models.DateField(default=None, null=True)
     data_fim = models.DateField(default=None, null=True)
     percentual_calculado = models.IntegerField(default = None, null = True)
@@ -73,6 +74,7 @@ class Atividade(models.Model):
     data_fim = models.DateField(default = None)
     percentual_calculado = models.IntegerField(default = None, null = True)
     percentual_concluido = models.IntegerField(default = None, null = True)
+    data_conclusao_atividade = models.DateField(default=None, null=True)
     
 class AtividadeProfissional(models.Model):
     atividade = models.ForeignKey(Atividade, default = None)

@@ -263,6 +263,9 @@ def alocar_horas(request, format=None):
     percentual_calculado = sum((a.percentual_calculado if a.percentual_calculado else 0) for a in atividades_profissionais) / len(atividades_profissionais);
     percentual_concluido = sum((a.percentual_concluido if a.percentual_concluido else 0) for a in atividades_profissionais) / len(atividades_profissionais);
 
+    if (atividade.percentual_concluido < 100 and percentual_concluido == 100 ):
+        atividade.data_conclusao_atividade = datetime.datetime.now()
+        
     atividade.percentual_calculado = percentual_calculado
     atividade.percentual_concluido = percentual_concluido
     atividade.save();

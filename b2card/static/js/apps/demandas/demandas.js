@@ -30,6 +30,11 @@ demandas.config(['$httpProvider', 'CommonsServiceProvider', function($httpProvid
 	        			if (data.data_criacao) {
 	        				data.data_criacao = CommonsService.stringparadata(data.data_criacao);
 	        			}
+	        			
+	        			if (data.data_finalizacao) {
+	        				data.data_finalizacao = CommonsService.stringparadata(data.data_finalizacao);
+	        			}
+	        			
 		        		if (data.fase_atividades){
 		        			for(let fase_atividade of data.fase_atividades){
 		        				if (fase_atividade.atividades){
@@ -121,6 +126,13 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente($ctrl.demanda.cliente.id, data, function () {
 			$rootScope.$emit('orcamentovalorhora');
 		});
+	};
+
+	$ctrl.changedatafinalizacao = function () {
+		if (($ctrl.demanda.status_demanda == 'F') || ($ctrl.demanda.status_demanda == "C") || ($ctrl.demanda.status_demanda == "X") || ($ctrl.demanda.status_demanda == "R")) {
+			let data = new Date();
+			$ctrl.demanda.data_finalizacao = data;
+		}
 	};
 	
 	var configurardemanda = function (demanda_id) {
