@@ -19,10 +19,13 @@ centroresultado.controller('CentroResultadoController', function ($scope, $windo
 	}
 	
 	$ctrl.deletar = function (data) {
-		CentroResultadoService.deletar(data, function () {
-			$ctrl.centroresultadolist = CentroResultadoService.buscarcentroresultados();
-		});
+		if(confirm(MESSAGE_EXCLUIR)) {
+			CentroResultadoService.deletar(data, function () {
+				$ctrl.centroresultadolist = CentroResultadoService.buscarcentroresultados();
+			});
+		}
 	}
+	
 	
 	$ctrl.editar = function (data) {
 		$ctrl.centroresultado = data;

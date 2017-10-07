@@ -115,13 +115,16 @@
 									</button>
 								</div>
 								<div>
-									<input type="checkbox" ng-model="$ctrl.status['O']" ng-click="$ctrl.pesquisar();"> Em orçamentação
+									<input type="checkbox" ng-model="$ctrl.status['A']" ng-click="$ctrl.pesquisar();"> Aprovada
 								</div>
 								<div>
-									<input type="checkbox" ng-model="$ctrl.status['H']" ng-click="$ctrl.pesquisar();"> Em homologação
+									<input type="checkbox" ng-model="$ctrl.status['D']" ng-click="$ctrl.pesquisar();"> Disponibilizada
 								</div>
 								<div>
-									<input type="checkbox" ng-model="$ctrl.status['D']" ng-click="$ctrl.pesquisar();"> Em desenvolvimento
+									<input type="checkbox" ng-model="$ctrl.status['E']" ng-click="$ctrl.pesquisar();"> Em execução
+								</div>
+								<div>
+									<input type="checkbox" ng-model="$ctrl.status['O']" ng-click="$ctrl.pesquisar();"> Em orçamento
 								</div>
 							</div>
 						</div>
@@ -139,14 +142,16 @@
 						<div class="col-sm-5">{{demanda.id}} - {{demanda.nome_demanda}}</div>
 						<div class="col-sm-2">{{demanda.codigo_demanda}}</div>
 						<div class="col-sm-2">
-							{{demanda.status_demanda == 'O' ? 'Em orçamentação' : ''}}
-							{{demanda.status_demanda == 'A' ? 'Aguardando aprovação' : ''}}
-							{{demanda.status_demanda == 'N' ? 'Não aprovada' : ''}}
+							{{demanda.status_demanda == 'A' ? 'Aprovada' : ''}}
 							{{demanda.status_demanda == 'C' ? 'Cancelada' : ''}}
-							{{demanda.status_demanda == 'H' ? 'Em homologação' : ''}}
-							{{demanda.status_demanda == 'I' ? 'Implantada' : ''}}
-							{{demanda.status_demanda == 'D' ? 'Em desenvolvimento' : ''}}
-							{{demanda.status_demanda == 'E' ? 'Deletado' : ''}}
+							{{demanda.status_demanda == 'D' ? 'Disponibilizada' : ''}}
+							{{demanda.status_demanda == 'E' ? 'Em execução' : ''}}
+							{{demanda.status_demanda == 'O' ? 'Em orçamento' : ''}}
+							{{demanda.status_demanda == 'X' ? 'Excluída' : ''}}
+							{{demanda.status_demanda == 'F' ? 'Finalizada' : ''}}
+							{{demanda.status_demanda == 'P' ? 'Paralisada' : ''}}
+							{{demanda.status_demanda == 'S' ? 'Proposta enviada' : ''}}
+							{{demanda.status_demanda == 'R' ? 'Recusada' : ''}}							
 							<button type="button" class="btn btn-sm btn-default expandir" ng-click="$ctrl.abrirmodaldespesas(demanda);">$</button>
 						</div>
 					</div>
@@ -200,14 +205,17 @@
 									</button>
 								</div>
 								<div>
-									<input type="checkbox" ng-model="$ctrl.statusinterno['O']" ng-click="$ctrl.pesquisarinterno();"> Em orçamentação
+									<input type="checkbox" ng-model="$ctrl.statusinterno['A']" ng-click="$ctrl.pesquisarinterno();"> Aprovada
 								</div>
 								<div>
-									<input type="checkbox" ng-model="$ctrl.statusinterno['H']" ng-click="$ctrl.pesquisarinterno();"> Em homologação
+									<input type="checkbox" ng-model="$ctrl.statusinterno['D']" ng-click="$ctrl.pesquisarinterno();"> Disponibilizada
 								</div>
 								<div>
-									<input type="checkbox" ng-model="$ctrl.statusinterno['D']" ng-click="$ctrl.pesquisarinterno();"> Em desenvolvimento
+									<input type="checkbox" ng-model="$ctrl.statusinterno['E']" ng-click="$ctrl.pesquisarinterno();"> Em execução
 								</div>
+								<div>
+									<input type="checkbox" ng-model="$ctrl.statusinterno['O']" ng-click="$ctrl.pesquisarinterno();"> Em orçamento
+								</div>								
 							</div>
 						</div>
 					</div>
@@ -224,14 +232,16 @@
 						<div class="col-sm-5">{{demanda.id}} - {{demanda.nome_demanda}}</div>
 						<div class="col-sm-2">{{demanda.codigo_demanda}}</div>
 						<div class="col-sm-2">
-							{{demanda.status_demanda == 'O' ? 'Em orçamentação' : ''}}
-							{{demanda.status_demanda == 'A' ? 'Aguardando aprovação' : ''}}
-							{{demanda.status_demanda == 'N' ? 'Não aprovada' : ''}}
+							{{demanda.status_demanda == 'A' ? 'Aprovada' : ''}}
 							{{demanda.status_demanda == 'C' ? 'Cancelada' : ''}}
-							{{demanda.status_demanda == 'H' ? 'Em homologação' : ''}}
-							{{demanda.status_demanda == 'I' ? 'Implantada' : ''}}
-							{{demanda.status_demanda == 'D' ? 'Em desenvolvimento' : ''}}
-							{{demanda.status_demanda == 'E' ? 'Deletado' : ''}}
+							{{demanda.status_demanda == 'D' ? 'Disponibilizada' : ''}}
+							{{demanda.status_demanda == 'E' ? 'Em execução' : ''}}
+							{{demanda.status_demanda == 'O' ? 'Em orçamento' : ''}}
+							{{demanda.status_demanda == 'X' ? 'Excluída' : ''}}
+							{{demanda.status_demanda == 'F' ? 'Finalizada' : ''}}
+							{{demanda.status_demanda == 'P' ? 'Paralisada' : ''}}
+							{{demanda.status_demanda == 'S' ? 'Proposta enviada' : ''}}
+							{{demanda.status_demanda == 'R' ? 'Recusada' : ''}}							
 							<button type="button" class="btn btn-sm btn-default expandir" ng-click="$ctrl.abrirmodaldespesas(demanda);">$</button>
 						</div>
 					</div>

@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='demanda',
             name='status_demanda',
-            field=models.CharField(choices=[('O', 'Em orçamentação'), ('A', 'Aguardando aprovação'), ('N', 'Não aprovada'), ('C', 'Cancelada'), ('H', 'Em homologação'), ('I', 'Implantada'), ('D', 'Em desenvolvimento'), ('E', 'Deletado')], max_length=1, null=True),
+            field=models.CharField(choices=[('A', 'Aprovada'), ('C', 'Cancelada'), ('D', 'Disponibilizada'), ('E', 'Em execução'), ('O', 'Em orçamento'), ('X', 'Excluída'), ('F', 'Finalizada'), ('P', 'Paralisada'), ('S', 'Proposta enviada'),  ('R', 'Recusada')], max_length=1, null=True),
         ),
     ]

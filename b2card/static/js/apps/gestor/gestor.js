@@ -43,10 +43,16 @@ gestor.controller('GestorController', function (GestorService, CommonsService, $
 	}
 	
 	$ctrl.status = {
-		'O': true,
-		'D': true,
 		'A': true,
-		'H': true
+		'C': true,
+		'D': true,
+		'E': true,
+		'O': true,
+		'X': true,
+		'F': true,
+		'P': true,
+		'S': true,
+		'R': true		
 	}
 	
 	$ctrl.demandamap = {} 

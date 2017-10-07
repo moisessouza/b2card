@@ -76,18 +76,17 @@
 	  min-height: 100%;
 	  border-radius: 0;
 	}
+	.h1 {
+	fonte-size: 16px;
+    }
 		
 </style>
 <div ng-app="demandas" ng-controller="DemandaController as $ctrl" class="ng-hide" ng-show="$ctrl.show">
-	
-	<div class="col-sm-12">
-		<div class="form-group">
-			<h3>
-				<b>{{$ctrl.demanda.id|pad:5:'0'}} - {{$ctrl.demanda.codigo_demanda}} - {{$ctrl.demanda.nome_demanda}}</b>
-			</h3>
-		</div>
+
+	<div class="cabecalho" style="word-spacing: 2px;">
+		<b>ID: {{$ctrl.demanda.id|pad:5:'0'}}&nbsp&nbsp&nbsp-&nbsp&nbsp&nbspCod. demanda: {{$ctrl.demanda.codigo_demanda}}&nbsp&nbsp&nbsp-&nbsp&nbsp&nbspNome demanda: {{$ctrl.demanda.nome_demanda}}</b>
 	</div>
-		
+	<div>&nbsp</div>
 	
 	<ul class="nav nav-tabs">
 	  <li class="active" ng-show="$ctrl.verificardisponibilidadeaba('#dadosdemanda')"><a data-toggle="tab" href="#dadosdemanda">Dados da demanda</a></li>
@@ -129,16 +128,18 @@
 							<div class="col-md-2">
 								<div class="form-group form-group-sm">
 									<label for="status_demanda"> Status da demanda</label> 
-								    <select id="status_demanda" name="status_demanda" ng-model="$ctrl.demanda.status_demanda" class="form-control" required>
+								    <select id="status_demanda" name="status_demanda" ng-model="$ctrl.demanda.status_demanda" class="form-control" ng-change="$ctrl.changedatafinalizacao();" required>
 							    		<option value="">Selecione um tipo...</option>
-							    		<option value="O">Em orçamentação</option>
-							    		<option value="A">Aguardando aprovação</option>
-							    		<option value="N">Não aprovada</option>
+							    		<option value="A">Aprovada</option>
 							    		<option value="C">Cancelada</option>
-							    		<option value="H">Em homologação</option>
-							    		<option value="I">Implantada</option>
-							    		<option value="D">Em desenvolvimento</option>
-							    		<option value="E">Deletado</option>
+							    		<option value="D">Disponibilizada</option>
+							    		<option value="E">Em execução</option>
+							    		<option value="O">Em orçamento</option>
+							    		<option value="X">Excluída</option>
+							    		<option value="F">Finalizada</option>
+							    		<option value="P">Paralisada</option>
+							    		<option value="S">Proposta enviada</option>
+							    		<option value="R">Recusada</option>					
 							    	</select>
 								</div>
 							</div>
@@ -151,7 +152,7 @@
 							<div class="col-md-3">
 								<div class="form-group">
 									<label>Tipo da demanda</label> 
-								    <select ng-model="$ctrl.demanda.tipo_demanda" class="form-control">
+								    <select ng-model="$ctrl.demanda.tipo_demanda" class="form-control" required>
 								    	<option value="">Selecione...</option>
 								    	<option value="E">Externo</option>
 								    	<option value="I">Interno</option>	
@@ -201,6 +202,12 @@
 							</div>
 							<div class="col-md-3" style="width: 150px">
 								<div class="form-group">
+									<label>Data de finalização</label> 
+									<input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ui-mask="99/99/9999" ng-model="$ctrl.demanda.data_finalizacao" disabled/>
+								</div>
+							</div>
+							<div class="col-md-3" style="width: 150px">
+								<div class="form-group">
 									<label>&nbsp;</label>
 									<p class="input-group">
 								 		<label><input type="checkbox" ng-model="$ctrl.demanda.recorrente">&nbsp;Recorrente</label>
@@ -211,7 +218,7 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div class="form-group">
-									<label for="descricao">Descrição</label> 
+									<label for="descricao">Descrição</label> <font color="FF0000" size="1">(Obs: O conteúdo deste campo será inserido na proposta.)</font> 
 								    <textarea id="descricao" name="descricao" ng-model="$ctrl.demanda.descricao" class="form-control" style="height: 125px;"></textarea>
 								</div>
 							</div>
@@ -219,7 +226,7 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div class="form-group">
-									<label for="descricao">Forma de pagamento</label> 
+									<label for="descricao">Forma de pagamento</label> <font color="FF0000" size="1">(Obs: Se preenchido, o conteúdo abaixo será inserido na proposta. Caso contrário, será utilizado a informação do cadastro unico PJ )</font>
 								    <textarea id="descricao" name="descricao" ng-model="$ctrl.demanda.forma_pagamento" class="form-control" style="height: 125px;"></textarea>
 								</div>
 							</div>
@@ -227,7 +234,7 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div class="form-group">
-									<label for="descricao">Particularidades da proposta</label> 
+									<label for="descricao">Particularidades da proposta</label>  <font color="FF0000" size="1">(Obs: Se preenchido, o conteúdo abaixo será inserido na proposta. Caso contrário, será utilizado a informação do cadastro unico PJ )</font>
 								    <textarea id="descricao" name="descricao" ng-model="$ctrl.demanda.particularidade_proposta" class="form-control" style="height: 125px;"></textarea>
 								</div>
 							</div>

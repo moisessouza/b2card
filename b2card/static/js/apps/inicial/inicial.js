@@ -40,9 +40,20 @@ inicial.controller('InicialController', function (InicialService, CommonsService
 	}
 	
 	$ctrl.status = {
+		'A': true,
 		'D': true,
-		'H': true,
+		'E': true,
+		'O': true
 	}
+
+	
+	$ctrl.statusinterno = {
+		'A': true,
+		'D': true,
+		'E': true,
+		'O': true
+	}
+
 	
 	$ctrl.abrirmodalalocacao = (ev, atividade) => {
 		

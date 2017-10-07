@@ -3,22 +3,44 @@
 demandas.controller('OrcamentoClienteController', function($rootScope, $window, ValorHoraService, $uibModal, FaseService, CommonsService, share){
 	var $ctrl = this;
 	$ctrl.share = share;
-	
+
 	$ctrl.valorhoraporfasemap = {}
 	
 	let data = share.demanda.data_criacao ? share.demanda.data_criacao : new Date();
 	data = CommonsService.dataparaurl(data);
 	$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card(data);
 	
-	
+	$ctrl.listavalortaxab2card = ValorHoraService.buscarvalortaxab2card(data);
+
 	$rootScope.$on('orcamentovalorhora', function (evt) {
 		
 		let data = share.demanda.data_criacao ? share.demanda.data_criacao : new Date();
 		data = CommonsService.dataparaurl(data);
 		$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card(data);
-		
+	
 		$ctrl.listavalorhorab2card = ValorHoraService.buscarvalorhorab2card(data, function (data){
-			if (share.listavalorhora.$promise) {
+			if (share.listavalorlucrorisco.$promise) {
+				// - busca valor % de lucro e margem de risco no cadastro de horas - Nilson
+				if ($ctrl.share.demanda.orcamento.lucro_desejado == null) {
+					if (share.listavalorlucrorisco) {
+						for (let valorlucro of share.listavalorlucrorisco) {
+							if ((valorlucro.centro_resultado.nome == 'B2Card' && valorlucro.descricao == 'Valor % Lucro')) {
+								$ctrl.share.demanda.orcamento.lucro_desejado = valorlucro.vigencia.valor; 
+							}
+						}
+					}					
+				}
+				if ($ctrl.share.demanda.orcamento.margem_risco == null) {
+					if (share.listavalorlucrorisco) {
+						for (let valormargemrisco of share.listavalorlucrorisco) {
+							if ((valormargemrisco.centro_resultado.nome == 'B2Card' && valormargemrisco.descricao == 'Valor % Margem Risco')) {
+								$ctrl.share.demanda.orcamento.margem_risco = valormargemrisco.vigencia.valor;
+							}
+						}
+					}
+				}	
+				// -#				
+				
 				share.listavalorhora.$promise.then(function (data) {
 					if ($ctrl.listavalorhorab2card.$promise){
 						$ctrl.listavalorhorab2card.$promise.then(function (data) {
@@ -28,11 +50,12 @@ demandas.controller('OrcamentoClienteController', function($rootScope, $window, 
 							$rootScope.$emit('incluirfasesorcamento');		
 						});
 					}
+	
 					
 					if (!$ctrl.listafases){
 						$ctrl.listafases = FaseService.buscarfases();
 					}
-					
+
 					if ($ctrl.listafases.$promise){
 						$ctrl.listafases.$promise.then(function (data) {
 							if ($ctrl.share.listavalorhora) {
@@ -54,6 +77,7 @@ demandas.controller('OrcamentoClienteController', function($rootScope, $window, 
 			}
 		});
 	});
+
 	
 	$rootScope.$on('orcamento', function(event, data) {
 		if (data.orcamento){
@@ -214,7 +238,6 @@ demandas.controller('OrcamentoClienteController', function($rootScope, $window, 
 		$ctrl.modaldespesasextras = !$ctrl.modaldespesasextras;
 	}
 	
-	
 	let buscarvalorhora = valor_hora_id => {
 	
 		if ($ctrl.listavalorhorab2card) {
@@ -236,6 +259,37 @@ demandas.controller('OrcamentoClienteController', function($rootScope, $window, 
 		return null;
 		
 	}
+	
+// - busca valor imposto e custo administrativo no cadastro de horas - Nilson
+
+	let buscarvalorimposto = idtaxa_id => {
+		var valor_imposto = null;
+		if ($ctrl.listavalortaxab2card) {
+			for (let valor_imp of $ctrl.listavalortaxab2card) {
+				if ((valor_imp.centro_resultado.nome == idtaxa_id && valor_imp.centro_custo.nome == idtaxa_id && valor_imp.descricao == 'Valor % Impostos')) {
+					valor_imposto = valor_imp.vigencia.valor;
+				}
+			}
+			return valor_imposto;
+		}
+		return null;
+	}
+	
+	let buscarvalorcustoadmin = idtaxa_id => {
+		
+		var valor_custoad = null;
+		if ($ctrl.listavalortaxab2card) {
+			for (let valor_cadm of $ctrl.listavalortaxab2card) {
+				if ((valor_cadm.centro_resultado.nome == idtaxa_id && valor_cadm.centro_custo.nome == idtaxa_id && valor_cadm.descricao == 'Valor % Custo Administrativo')) {
+					valor_custoad = valor_cadm.vigencia.valor;
+				}
+			}
+			return valor_custoad;
+		}
+		return null;
+	}	
+	
+//  	
 	
 	let calcularatividadestotaishoras = () => {
 		
@@ -312,30 +366,92 @@ demandas.controller('OrcamentoClienteController', function($rootScope, $window, 
 		let horas_totais = calcularatividadestotaishoras();
 		return (horas_totais + (horas_totais * ($ctrl.share.demanda.orcamento.margem_risco / 100))) * (unidadeadministrativa ? unidadeadministrativa.custo_operacao_hora : 0);
 	};
+
+	
+	// - Novo calculo para custo operacional - Nilson - 
+	var calcularcustooperacionalnew = function () {
+		let unidadeadministrativanew = null;
+		
+		if ($ctrl.share.demanda.unidade_administrativa){
+			if ($ctrl.share.listaunidadeadministrativas){
+				for(let un of $ctrl.share.listaunidadeadministrativas) {
+					if (un.id == $ctrl.share.demanda.unidade_administrativa.id) {
+						unidadeadministrativanew = un;
+						break;
+					}
+				}
+			}
+		}
+		
+		let horas_totaisnew = calcularatividadestotaishoras();
+		return (horas_totaisnew);
+	};	
 	
 	var calcularcustosemimposto = function (valor_total) {
-		let custo_operacional = calcularcustooperacional();
+	    let custo_operacional = calcularcustooperacional();
 		return (valor_total * (1 + ($ctrl.share.demanda.orcamento.margem_risco / 100)))  + custo_operacional;
 	};
 	
+
+	// - Novo calculo para custo total sem imposto - Nilson - 
+	var calcularcustosemimpostonovo = function (valor_total) {
+		let custo_operacionalnew = calcularcustooperacionalnew();
+		return (valor_total * (1 + ($ctrl.share.demanda.orcamento.margem_risco / 100)));
+	};	
+	
 	$rootScope.$on('calculardesejado', function (event, data) {
 
-		let valor_total = calcularatividadestotais();
-		let custo_sem_imposto = calcularcustosemimposto(valor_total);
+		var grupodtaxa = 'B2Card';
+		let valor_imposto = buscarvalorimposto(grupodtaxa);
+		let valor_custo_admin = buscarvalorcustoadmin(grupodtaxa);
+		$ctrl.share.valor_imposto = valor_imposto; 
+		$ctrl.share.valor_custo_admin = valor_custo_admin;
 		
-		if (($ctrl.share.demanda.orcamento.lucro_desejado || $ctrl.share.demanda.orcamento.lucro_desejado == 0) && ($ctrl.share.demanda.orcamento.imposto_devidos || $ctrl.share.demanda.orcamento.imposto_devidos == 0)) {
+		let valor_total = calcularatividadestotais();
+	  //let custo_sem_imposto = calcularcustosemimposto(valor_total);
+		let custo_sem_imposto = calcularcustosemimpostonovo(valor_total);
+		if ($ctrl.share.valor_imposto == null){
+			alert("\n                                !!!!!!       Atenção      !!!!!!\n\n  % Imposto - não encontrado no cadastro >Valor Hora< !");
+			$ctrl.share.demanda.orcamento.valor_desejado = null;
+			$ctrl.share.demanda.orcamento.horas_desejado = null;
+			$ctrl.share.demanda.orcamento.lucro_calculado_desejado = null;
+			return;
+		}
 
-			$ctrl.share.demanda.orcamento.valor_desejado = (custo_sem_imposto / (1 - (($ctrl.share.demanda.orcamento.lucro_desejado / 100) + ($ctrl.share.demanda.orcamento.imposto_devidos / 100)))) + CommonsService.stringparafloat($ctrl.share.demanda.orcamento.total_despesas ? $ctrl.share.demanda.orcamento.total_despesas : 0);
-			
+		if ($ctrl.share.valor_custo_admin == null){
+			alert("\n                                !!!!!!       Atenção      !!!!!!\n\n  % Custo Administrativo - não encontrado no cadastro >Valor Hora< !");
+			$ctrl.share.demanda.orcamento.valor_desejado = null;
+			$ctrl.share.demanda.orcamento.horas_desejado = null;
+			$ctrl.share.demanda.orcamento.lucro_calculado_desejado = null;
+			return;
+		}
+		
+		if ($ctrl.share.demanda.orcamento.lucro_desejado == null){
+			alert("\n                                !!!!!!       Atenção      !!!!!!\n\n  % Lucro Desejado - não encontrado no cadastro >Valor Hora< !");
+			$ctrl.share.demanda.orcamento.valor_desejado = null;
+			$ctrl.share.demanda.orcamento.horas_desejado = null;
+			$ctrl.share.demanda.orcamento.lucro_calculado_desejado = null;
+		}
+		
+		if ($ctrl.share.demanda.orcamento.margem_risco == null){
+			alert("\n                                !!!!!!       Atenção      !!!!!!\n\n  % Margem Risco - não encontrado no cadastro >Valor Hora< !");
+			$ctrl.share.demanda.orcamento.valor_desejado = null;
+			$ctrl.share.demanda.orcamento.horas_desejado = null;
+			$ctrl.share.demanda.orcamento.lucro_calculado_desejado = null;
+		}
+		
+		//if (($ctrl.share.demanda.orcamento.lucro_desejado || $ctrl.share.demanda.orcamento.lucro_desejado == 0) && ($ctrl.share.demanda.orcamento.imposto_devidos || $ctrl.share.demanda.orcamento.imposto_devidos == 0)) {
+		  if (($ctrl.share.demanda.orcamento.lucro_desejado || $ctrl.share.demanda.orcamento.lucro_desejado == 0) && ($ctrl.share.demanda.orcamento.imposto_devidos || $ctrl.share.demanda.orcamento.imposto_devidos == 0) && ($ctrl.share.valor_imposto || $ctrl.share.valor_imposto == 0) && ($ctrl.share.valor_custo_admin ||$ctrl.share.valor_custo_admin == 0)) {  
+		  //$ctrl.share.demanda.orcamento.valor_desejado = (custo_sem_imposto / (1 - (($ctrl.share.demanda.orcamento.lucro_desejado / 100) + ($ctrl.share.demanda.orcamento.imposto_devidos / 100)))) + CommonsService.stringparafloat($ctrl.share.demanda.orcamento.total_despesas ? $ctrl.share.demanda.orcamento.total_despesas : 0);
+			$ctrl.share.demanda.orcamento.valor_desejado = (custo_sem_imposto / (1 - ((($ctrl.share.valor_imposto + $ctrl.share.valor_custo_admin + $ctrl.share.demanda.orcamento.lucro_desejado) /100)))) + CommonsService.stringparafloat($ctrl.share.demanda.orcamento.total_despesas ? $ctrl.share.demanda.orcamento.total_despesas : 0);
 			if ($ctrl.share.demanda.orcamento.valor_hora_orcamento && $ctrl.share.demanda.orcamento.valor_hora_orcamento.id){
 				let valor_hora = buscarvalorhora($ctrl.share.demanda.orcamento.valor_hora_orcamento.id);
 				$ctrl.share.demanda.orcamento.horas_desejado =  ($ctrl.share.demanda.orcamento.valor_desejado / valor_hora.vigencia.valor).toFixed(2);
 			}
-			
 			if ($ctrl.share.demanda.orcamento.valor_desejado) {
-				$ctrl.share.demanda.orcamento.lucro_calculado_desejado = ((($ctrl.share.demanda.orcamento.valor_desejado - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_desejado * ($ctrl.share.demanda.orcamento.imposto_devidos / 100))) / $ctrl.share.demanda.orcamento.valor_desejado) * 100).toFixed(2);
+			  //$ctrl.share.demanda.orcamento.lucro_calculado_desejado = ((($ctrl.share.demanda.orcamento.valor_desejado - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_desejado * ($ctrl.share.demanda.orcamento.imposto_devidos / 100))) / $ctrl.share.demanda.orcamento.valor_desejado) * 100).toFixed(2);
+				$ctrl.share.demanda.orcamento.lucro_calculado_desejado = ((($ctrl.share.demanda.orcamento.valor_desejado - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_desejado * (($ctrl.share.valor_imposto + $ctrl.share.valor_custo_admin ) / 100))) / $ctrl.share.demanda.orcamento.valor_desejado) * 100).toFixed(2);
 			}
-			
 			$ctrl.share.demanda.orcamento.valor_desejado = CommonsService.formatarnumero($ctrl.share.demanda.orcamento.valor_desejado)
 		
 		}
@@ -343,16 +459,20 @@ demandas.controller('OrcamentoClienteController', function($rootScope, $window, 
 	});
 	
 	$rootScope.$on('calcularprojetado', function (event, data){
-		
+
+		var grupodtaxa = 'B2Card';
 		let valor_total = calcularatividadestotais();
-		let custo_sem_imposto = calcularcustosemimposto(valor_total);
+	  //let custo_sem_imposto = calcularcustosemimposto(valor_total);
+		let custo_sem_imposto = calcularcustosemimpostonovo(valor_total);
 		
 		if ($ctrl.share.demanda.orcamento.valor_hora_orcamento && $ctrl.share.demanda.orcamento.valor_hora_orcamento.id) {
 			let valor_hora = buscarvalorhora($ctrl.share.demanda.orcamento.valor_hora_orcamento.id);
 			$ctrl.share.demanda.orcamento.valor_projetado = (valor_hora.vigencia.valor * $ctrl.share.demanda.orcamento.horas_projetadas) + CommonsService.stringparafloat($ctrl.share.demanda.orcamento.total_despesas ? $ctrl.share.demanda.orcamento.total_despesas : 0);
 			
 			if ($ctrl.share.demanda.orcamento.valor_projetado) {
-				$ctrl.share.demanda.orcamento.lucro_calculado_projetado = ((($ctrl.share.demanda.orcamento.valor_projetado - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_projetado * ($ctrl.share.demanda.orcamento.imposto_devidos / 100))) / $ctrl.share.demanda.orcamento.valor_projetado) * 100).toFixed(2);
+			  //$ctrl.share.demanda.orcamento.lucro_calculado_projetado = ((($ctrl.share.demanda.orcamento.valor_projetado - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_projetado * ($ctrl.share.demanda.orcamento.imposto_devidos / 100))) / $ctrl.share.demanda.orcamento.valor_projetado) * 100).toFixed(2);
+				$ctrl.share.demanda.orcamento.lucro_calculado_projetado = ((($ctrl.share.demanda.orcamento.valor_projetado - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_projetado * (($ctrl.share.valor_imposto + $ctrl.share.valor_custo_admin ) / 100)))/ $ctrl.share.demanda.orcamento.valor_projetado) * 100).toFixed(2);
+
 			}
 			
 			$ctrl.share.demanda.orcamento.valor_projetado = CommonsService.formatarnumero($ctrl.share.demanda.orcamento.valor_projetado);
@@ -398,17 +518,21 @@ demandas.controller('OrcamentoClienteController', function($rootScope, $window, 
 	}
 	
 	$rootScope.$on('calcularproposto', function(event, data) {
+
+		var grupodtaxa = 'B2Card';
 		
 		let valor_total = selecionarfaseorcamentostotais();
-		let custo_sem_imposto = calcularcustosemimposto(calcularatividadestotais());
-		
+	  //let custo_sem_imposto = calcularcustosemimposto(calcularatividadestotais());
+		let custo_sem_imposto = calcularcustosemimpostonovo(calcularatividadestotais());
 		let horas_total = selecionarfaseorcamentostotaishoras()
 		
 		$ctrl.share.demanda.orcamento.valor_proposto = valor_total;
 		$ctrl.share.demanda.orcamento.horas_proposto = horas_total;
 		
 		if ($ctrl.share.demanda.orcamento.valor_proposto) {
-			$ctrl.share.demanda.orcamento.lucro_calculado_proposto = ((($ctrl.share.demanda.orcamento.valor_proposto - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_proposto * ($ctrl.share.demanda.orcamento.imposto_devidos / 100))) / $ctrl.share.demanda.orcamento.valor_proposto) * 100).toFixed(2);
+		  //$ctrl.share.demanda.orcamento.lucro_calculado_proposto = ((($ctrl.share.demanda.orcamento.valor_proposto - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_proposto * ($ctrl.share.demanda.orcamento.imposto_devidos / 100))) / $ctrl.share.demanda.orcamento.valor_proposto) * 100).toFixed(2);
+			$ctrl.share.demanda.orcamento.lucro_calculado_proposto = ((($ctrl.share.demanda.orcamento.valor_proposto - custo_sem_imposto - ($ctrl.share.demanda.orcamento.valor_proposto * (($ctrl.share.valor_imposto + $ctrl.share.valor_custo_admin ) / 100))) / $ctrl.share.demanda.orcamento.valor_proposto) * 100).toFixed(2);
+
 		}
 		
 		$ctrl.share.demanda.orcamento.valor_proposto = CommonsService.formatarnumero($ctrl.share.demanda.orcamento.valor_proposto);
@@ -465,13 +589,14 @@ demandas.controller('OrcamentoClienteController', function($rootScope, $window, 
 		}
 		
 		if ($ctrl.share.demanda.orcamento.despesas){
-
+			
 			let total_despesas = 0;
 			for (let despesa of $ctrl.share.demanda.orcamento.despesas) {
 				if (despesa.descricao && despesa.valor){
 					let valor = CommonsService.stringparafloat(despesa.valor);
 					if (despesa.a_faturar) {
-						valor = valor + (valor * (20 / 100));
+					  //valor = valor + (valor * (20 / 100));
+						valor = valor + (valor * ($ctrl.share.valor_imposto / 100));
 					}
 					total_despesas+=valor;
 				}

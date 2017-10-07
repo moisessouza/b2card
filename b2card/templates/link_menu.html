@@ -88,16 +88,6 @@
 							Tipo de despesa
 						</a>
 						{%endcheck_permittion%}
-						{% check_permittion 'mensagens:index' %}
-						<a href="{% url 'mensagens:index' %}">
-							Redirecionamento de mensagens
-						</a>
-						{%endcheck_permittion%}
-						{% check_permittion 'mensagens:tarefas' %}
-						<a href="{% url 'mensagens:tarefas' %}">
-							Tarefas
-						</a>
-						{%endcheck_permittion%}
 					</li>
         		</ul>
 			</li>
@@ -134,13 +124,29 @@
 				</a>
 			</li>
 			{%endcheck_permittion%}
-			{% check_permittion 'mensagens:enviar_mensagem' %}
-			<li>
-				<a href="{% url 'mensagens:enviar_mensagem' %}">
-					Enviar mensagem
-				</a>
-			</li>
-			{%endcheck_permittion%}
+			
+			<li class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#">Mensagens
+				<span class="caret"></span></a>
+				<ul class="dropdown-menu">
+          			<li>{% check_permittion 'mensagens:enviar_mensagem' %}
+          				<a href="{% url 'mensagens:enviar_mensagem' %}">
+							Enviar mensagem
+						</a>
+						{%endcheck_permittion%}
+						{% check_permittion 'mensagens:index' %}
+						<a href="{% url 'mensagens:index' %}">
+							Redirecionamento de mensagens
+						</a>
+						{%endcheck_permittion%}
+						{% check_permittion 'mensagens:tarefas' %}
+						<a href="{% url 'mensagens:tarefas' %}">
+							Tarefas
+						</a>
+						{%endcheck_permittion%}
+          			</li>
+          		</ul>
+          	</li>
 		</ul>
 		<ul class="nav navbar-nav display-none pull-right">
 			<li>

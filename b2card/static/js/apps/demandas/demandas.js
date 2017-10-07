@@ -30,6 +30,11 @@ demandas.config(['$httpProvider', 'CommonsServiceProvider', function($httpProvid
 	        			if (data.data_criacao) {
 	        				data.data_criacao = CommonsService.stringparadata(data.data_criacao);
 	        			}
+	        			
+	        			if (data.data_finalizacao) {
+	        				data.data_finalizacao = CommonsService.stringparadata(data.data_finalizacao);
+	        			}
+	        			
 		        		if (data.fase_atividades){
 		        			for(let fase_atividade of data.fase_atividades){
 		        				if (fase_atividade.atividades){
@@ -102,10 +107,14 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		if ($ctrl.demanda.cliente){
 			
 			let data = $ctrl.demanda.data_criacao ? $ctrl.demanda.data_criacao : new Date();
+			share.demanda.orcamento.lucro_desejado = null;
+			share.demanda.orcamento.margem_risco = null;
 			data = CommonsService.dataparaurl(data);
+			share.listavalorlucrorisco = ValorHoraService.buscarvalorlucroriscocliente($ctrl.demanda.cliente.id, data, function () {});				
 			share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente($ctrl.demanda.cliente.id, data, function () {
 				$rootScope.$emit('orcamentovalorhora');
 			});
+		
 		}
 	}
 	
@@ -113,10 +122,17 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		
 		let data = $ctrl.demanda.data_criacao ? $ctrl.demanda.data_criacao : new Date();
 		data = CommonsService.dataparaurl(data);
+		share.listavalorlucrorisco = ValorHoraService.buscarvalorlucroriscocliente($ctrl.demanda.cliente.id, data, function () {});					
 		share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente($ctrl.demanda.cliente.id, data, function () {
 			$rootScope.$emit('orcamentovalorhora');
 		});
-		
+	};
+
+	$ctrl.changedatafinalizacao = function () {
+		if (($ctrl.demanda.status_demanda == 'F') || ($ctrl.demanda.status_demanda == "C") || ($ctrl.demanda.status_demanda == "X") || ($ctrl.demanda.status_demanda == "R")) {
+			let data = new Date();
+			$ctrl.demanda.data_finalizacao = data;
+		}
 	};
 	
 	var configurardemanda = function (demanda_id) {
@@ -139,11 +155,13 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 				if (data.cliente.id) {
 					let data = $ctrl.demanda.data_criacao ? $ctrl.demanda.data_criacao : new Date();
 					data = CommonsService.dataparaurl(data);
+ 					share.listavalorlucrorisco = ValorHoraService.buscarvalorlucroriscocliente($ctrl.demanda.cliente.id, data, function () {});								
 					share.listavalorhora = ValorHoraService.buscarvalorhoraporcliente($ctrl.demanda.cliente.id, data, function () {
 						$rootScope.$emit('orcamentovalorhora');
 					});
-				}
 				
+				}
+			
 				if (!$ctrl.demanda.orcamento) {
 					$ctrl.demanda.orcamento = {};
 				}
@@ -169,8 +187,8 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 				'observacoes':[{}],
 				'ocorrencias':[{}],
 				'orcamento': {
-					'margem_risco': 0,
-					'lucro_desejado': 0,
+//					'margem_risco': 0,
+//					'lucro_desejado': 0,
 					'total_despesas': '0,00',
 					'imposto_devidos': 0
 				},
@@ -336,8 +354,8 @@ demandas.controller('DemandaController', function ($rootScope, $scope, $window, 
 		for (let unidade of $ctrl.listaunidadeadministrativas){
 			if ($ctrl.demanda.unidade_administrativa.id == 	unidade.id) {
 				!$ctrl.demanda.orcamento && ($ctrl.demanda.orcamento = {})
-				$ctrl.demanda.orcamento.margem_risco = unidade.margem_risco;
-				$ctrl.demanda.orcamento.lucro_desejado = unidade.lucro_desejado;
+		//		$ctrl.demanda.orcamento.margem_risco = unidade.margem_risco;
+		//		$ctrl.demanda.orcamento.lucro_desejado = unidade.lucro_desejado;
 				$ctrl.demanda.orcamento.imposto_devidos = unidade.imposto_devidos;
 			}
 		}

@@ -80,13 +80,16 @@
 							<label>Status da demanda</label>
 							 <select name="status_demanda" ng-model="$ctrl.arguments.status_demanda" class="form-control">
 					    		<option value="">Selecione um tipo...</option>
-					    		<option value="O">Em orçamentação</option>
-					    		<option value="A">Aguardando aprovação</option>
-					    		<option value="N">Não aprovada</option>
-					    		<option value="C">Cancelada</option>
-					    		<option value="H">Em homologação</option>
-					    		<option value="I">Implantada</option>
-					    		<option value="D">Em desenvolvimento</option>
+							    <option value="A">Aprovada</option>
+							    <option value="C">Cancelada</option>
+							    <option value="D">Disponibilizada</option>
+							    <option value="E">Em execução</option>
+							    <option value="O">Em orçamento</option>
+							    <option value="X">Excluída</option>
+							    <option value="F">Finalizada</option>
+							    <option value="P">Paralisada</option>
+							    <option value="S">Proposta enviada</option>
+							    <option value="R">Recusada</option>							    		
 					    	</select>
 						</div>
 					</div>
@@ -103,7 +106,8 @@
 					<button class="btn btn-sm btn-default margin" ng-click="$ctrl.pesquisar();" ng-disabled="pesquisa.$invalid">Pesquisar</button>
 					<button class="btn btn-sm btn-default margin" name="gerar_relatorio" ng-disabled="pesquisa.$invalid" value="gerar_relatorio" ng-click="$ctrl.gerar_relatorio('gerar_relatorio')">Gerar relatório</button>
 					{%endverbatim%}
-					{% if user.is_superuser %}
+ 					{# % if user.is_superuser %#}
+ 					{% if user.is_staff %}
 					{%verbatim%}
 						<button class="btn btn-sm btn-default margin" name="gerar_relatorio_com_valor" ng-disabled="pesquisa.$invalid" value="gerar_relatorio_com_valor" ng-click="$ctrl.gerar_relatorio('gerar_relatorio_com_valor')" ng-if="$ctrl.eh_gestor">Gerar relatório com valor</button>
 					{%endverbatim%}

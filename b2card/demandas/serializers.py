@@ -27,7 +27,7 @@ class DemandaSerializer (serializers.ModelSerializer):
     class Meta:
         model = Demanda
         fields = ('id', 'cliente','nome_demanda','descricao','status_demanda','codigo_demanda', 'unidade_administrativa', 'responsavel', 'tipo_demanda', 'responsavel_cliente', 
-                  'natureza_demanda', 'percentual_concluido', 'percentual_calculado', 'data_inicio', 'data_fim', 'data_criacao', 
+                  'natureza_demanda', 'percentual_concluido', 'percentual_calculado', 'data_inicio', 'data_fim', 'data_criacao', 'data_finalizacao',
                   'recorrente', 'forma_pagamento', 'particularidade_proposta')
         
 class PropostaSerializer(serializers.ModelSerializer):
@@ -90,7 +90,7 @@ class AlocacaoHorasSerializer(serializers.ModelSerializer):
         model = AlocacaoHoras
         fields = ('id', 'horas_alocadas_milisegundos', 'percentual_concluido', 'observacao', 'data_alocacao', 'tipo_alocacao',
                   'hora_inicio', 'hora_fim', 'data_alocacao', 'atividade_profissional')
-
+        
 class OrcamentoAtividadeSerializer(serializers.ModelSerializer):
     fase = FaseSerializer()
     class Meta:
@@ -130,7 +130,7 @@ class FaseAtividadeComDemandaSerializer(serializers.ModelSerializer):
 class AtividadeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Atividade
-        fields = ('id', 'descricao', 'data_inicio', 'data_fim', 'percentual_concluido', 'percentual_calculado')
+        fields = ('id', 'descricao', 'data_inicio', 'data_fim', 'percentual_concluido', 'percentual_calculado', 'data_conclusao_atividade')
         
 class AtividadeComFaseAtividadeSerializer(serializers.ModelSerializer):
     fase_atividade = FaseAtividadeComDemandaSerializer()
